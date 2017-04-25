@@ -20,7 +20,7 @@
         "description": "The name of the Administrator of the new VMs and Domain"
       }
     },
-    "environment":{
+    "deploymentPrefix":{
       "type": "string",
       "metadata": {
         "description": "The name of the Administrator of the new VMs and Domain"
@@ -28,7 +28,8 @@
       "allowedValues": [
         "stag",
         "prod"
-      ]
+      ],
+      "defaultValue": "prod"
     },
     "sasTokenTemplates": {
       "type": "string",
@@ -533,17 +534,17 @@
       "sqlLBName": "sqlLoadBalancer"
     },
     "subnetNames": {
-      "staticSubnetName": "[concat('dbdc', parameters('environment'))]",
-      "appSubnetName": "[concat('app', parameters('environment'))]",
-      "gatewaySubnetName": "[concat('GatewaySubnet', parameters('environment'))]",
-      "appGatewaySubnetName": "[concat('appGatewaySubnet', parameters('environment'))]"
+      "staticSubnetName": "[concat('dbdc', parameters('deploymentPrefix'))]",
+      "appSubnetName": "[concat('app', parameters('deploymentPrefix'))]",
+      "gatewaySubnetName": "[concat('GatewaySubnet', parameters('deploymentPrefix'))]",
+      "appGatewaySubnetName": "[concat('appGatewaySubnet', parameters('deploymentPrefix'))]"
     },
     "applicationGatewayNSGName": "applicationGatewayNSG",
-    "MGTNSGName": "[concat('MGTNSG', parameters('environment'))]",
-    "DCNSGName": "[concat('DCNSG', parameters('environment'))]",
-    "webNSGName": "[concat('WEBNSG', parameters('environment'))]",
-    "SQLNSGName": "[concat('SQLNSG', parameters('environment'))]",
-    "LBNSGName": "[concat('LBNSG', parameters('environment'))]",
+    "MGTNSGName": "[concat('MGTNSG', parameters('deploymentPrefix'))]",
+    "DCNSGName": "[concat('DCNSG', parameters('deploymentPrefix'))]",
+    "webNSGName": "[concat('WEBNSG', parameters('deploymentPrefix'))]",
+    "SQLNSGName": "[concat('SQLNSG', parameters('deploymentPrefix'))]",
+    "LBNSGName": "[concat('LBNSG', parameters('deploymentPrefix'))]",
     "numberOfWebInstances": "[length(parameters('WebNicIPAddresses'))]",
     "staticIPWEBStart": 6,
     "RDPNAT": "RDP",
@@ -554,19 +555,19 @@
     "sql0AddressName": "sql0IP",
     "vmSettings": {
       "availabilitySets": {
-        "sqlAvailabilitySetName": "[concat('sqlAvailabilitySet', parameters('environment'))]",
-        "adAvailabilitySetName": "[concat('adAvailabilitySet-', parameters('environment'))]",
-        "WebAvailabilitySetName": "[concat('WEB_AvailabilitySet-', parameters('environment'))]",
-        "MGTAvailbilitySetName": "[concat('MGT_AvailabilitySet-', parameters('environment'))]"
+        "sqlAvailabilitySetName": "[concat('sqlAvailabilitySet', parameters('deploymentPrefix'))]",
+        "adAvailabilitySetName": "[concat('adAvailabilitySet-', parameters('deploymentPrefix'))]",
+        "WebAvailabilitySetName": "[concat('WEB_AvailabilitySet-', parameters('deploymentPrefix'))]",
+        "MGTAvailbilitySetName": "[concat('MGT_AvailabilitySet-', parameters('deploymentPrefix'))]"
       },
       "noOfSqlVMs": 2,
       "vmContainerName": "vhds",
-      "adPDCVMName": "[concat('AZ-PDC-VM-', parameters('environment'))]",
-      "adBDCVMName": "[concat('AZ-BDC-VM-', parameters('environment'))]",
-      "sqlVMName": "[concat(parameters('environment'), 'sqlserver-')]",
-      "sqlwVMName": "[concat('cluster-fsw', parameters('environment'))]",
-      "WebVMName": "[concat('AZ-WEB-VM', parameters('environment'))]",
-      "MGTVMName": "[concat('AZ-MGT-VM', parameters('environment'))]",
+      "adPDCVMName": "[concat('AZ-PDC-VM-', parameters('deploymentPrefix'))]",
+      "adBDCVMName": "[concat('AZ-BDC-VM-', parameters('deploymentPrefix'))]",
+      "sqlVMName": "[concat(parameters('deploymentPrefix'), 'sqlserver-')]",
+      "sqlwVMName": "[concat('cluster-fsw', parameters('deploymentPrefix'))]",
+      "WebVMName": "[concat('AZ-WEB-VM', parameters('deploymentPrefix'))]",
+      "MGTVMName": "[concat('AZ-MGT-VM', parameters('deploymentPrefix'))]",
       "windowsImagePublisher": "MicrosoftWindowsServer",
       "windowsImageOffer": "WindowsServer",
       "windowsImageSKU": "2016-Datacenter",
@@ -581,12 +582,12 @@
     "sqlAOEPName": "[concat(parameters('deploymentPrefix'),'-hadr')]",
     "sharePath": "[concat(parameters('deploymentPrefix'),'-fsw')]",
     "clusterName": "[concat(parameters('deploymentPrefix'),'-fc')]",
-    "adPDCNicName": "[concat('adPDC-nic', parameters('environment'))]",
-    "adBDCNicName": "[concat('adBDC-nic', parameters('environment'))]",
-    "sqlwNicName": "[concat('sqlw-nic', parameters('environment'))]",
-    "sqlNicName": "[concat('sql-nic', parameters('environment'))]",
-    "WEBNICName": "[concat('WEB-nic', parameters('environment'))]",
-    "MGTNICName": "[concat('MGT-nic', parameters('environment'))]",
+    "adPDCNicName": "[concat('adPDC-nic', parameters('deploymentPrefix'))]",
+    "adBDCNicName": "[concat('adBDC-nic', parameters('deploymentPrefix'))]",
+    "sqlwNicName": "[concat('sqlw-nic', parameters('deploymentPrefix'))]",
+    "sqlNicName": "[concat('sql-nic', parameters('deploymentPrefix'))]",
+    "WEBNICName": "[concat('WEB-nic', parameters('deploymentPrefix'))]",
+    "MGTNICName": "[concat('MGT-nic', parameters('deploymentPrefix'))]",
     "VnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkNameWithSuffix'))]",
     "staticSubnetRef": "[concat(variables('VnetID'),'/subnets/',variables('subnetNames').staticSubnetName)]",
     "sqlSubnetRef": "[concat(variables('VnetID'),'/subnets/',variables('subnetNames').staticSubnetName)]",
@@ -647,11 +648,11 @@
     ],
     "virtualNetworkNameWithSuffix": "[concat(parameters('virtualNetworkName'), uniqueString(resourceGroup().id))]",
     "resourceNames": {
-      "sqlStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'sql', parameters('environment'))]",
-      "dcStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'dc', parameters('environment'))]",
-      "WebStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'web', parameters('environment'))]",
-      "MGTStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'mgt', parameters('environment'))]",
-      "appDiagStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'diag', parameters('environment'))]"
+      "sqlStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'sql', parameters('deploymentPrefix'))]",
+      "dcStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'dc', parameters('deploymentPrefix'))]",
+      "WebStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'web', parameters('deploymentPrefix'))]",
+      "MGTStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'mgt', parameters('deploymentPrefix'))]",
+      "appDiagStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'diag', parameters('deploymentPrefix'))]"
     },
     "configuration": {
       "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json', parameters('sasTokenTemplates'))]",
