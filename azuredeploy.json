@@ -405,14 +405,14 @@
       "metadata": {
         "description": "Linked Templates base url"
       },
-      "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-ntier-webapp/master/nestedtemplates"
+      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/nestedtemplates"
     },
     "scriptsBaseUrl": {
       "type": "string",
       "metadata": {
         "description": "DSC Scripts base url"
       },
-      "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-ntier-webapp/master/DSC"
+      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/DSC"
     },
     "autoPatchingDay": {
       "type": "string",
