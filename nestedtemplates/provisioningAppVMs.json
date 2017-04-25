@@ -160,7 +160,7 @@
           }
         ],
         "networkSecurityGroup": {
-            "id": "[parameters('delNSGid')]"
+            "id": "[parameters('webNSGid')]"
         }
       }
     },
