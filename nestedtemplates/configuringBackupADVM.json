@@ -1,0 +1,54 @@
+{
+   "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+   "contentVersion":"1.0.0.0",
+   "parameters":{
+      "adBDCVMName":{
+         "type":"string"
+      },
+      "location":{
+         "type":"string"
+      },
+      "adminUserName":{
+         "type":"string"
+      },
+      "adminPassword":{
+         "type":"securestring"
+      },
+      "domainName":{
+         "type":"string"
+      },
+      "adBDCConfigurationFunction":{
+         "type":"string"
+      },
+      "adBDCModulesURL":{
+         "type":"string"
+      },
+      "adPDCNICIPAddress": {
+        "type": "string"
+      }
+   },
+   "resources":[
+     {
+       "type": "Microsoft.Compute/virtualMachines/extensions",
+       "name": "[concat(parameters('adBDCVMName'),'/PrepareBDC')]",
+       "apiVersion": "2016-03-30",
+       "location": "[resourceGroup().location]",
+       "properties": {
+         "publisher": "Microsoft.Powershell",
+         "type": "DSC",
+         "typeHandlerVersion": "2.19",
+         "autoUpgradeMinorVersion": true,
+         "settings": {
+           "modulesURL":"[parameters('adBDCModulesURL')]",
+           "configurationFunction": "[parameters('adBDCConfigurationFunction')]",
+           "Properties": {
+             "DNSServer": "[parameters('adPDCNICIPAddress')]"
+           }
+         }
+       }
+     }
+   ],
+   "outputs":{
+
+   }
+}

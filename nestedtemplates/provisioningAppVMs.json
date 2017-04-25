@@ -1,0 +1,350 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "numberOfWebInstances": {
+      "type": "int",
+      "defaultValue": 2,
+      "minValue": 2,
+      "maxValue": 5
+    },
+    "WebVMName": {
+      "type": "string"
+    },
+    "MGTVMName": {
+      "type": "string"
+    },
+    "WebAvailabilitySetName": {
+      "type": "string"
+    },
+    "MGTAvailabilitySetName": {
+      "type": "string"
+    },
+    "WebStorageAccountName": {
+      "type": "string"
+    },
+    "MGTStorageAccountName": {
+      "type": "string"
+    },
+    "WebStorageAccountType": {
+      "type": "string"
+    },
+    "MGTStorageAccountType": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "WebVMSize": {
+      "type": "string"
+    },
+    "MGTVMSize": {
+      "type": "string"
+    },
+    "WEBNICName": {
+      "type": "string"
+    },
+    "MGTNICName": {
+      "type": "string"
+    },
+    "MGTNICIPAddress": {
+      "type": "string"
+    },
+    "adminUsername": {
+      "type": "string"
+    },
+    "adminPassword": {
+      "type": "securestring"
+    },
+    "appImagePublisher": {
+      "type": "string"
+    },
+    "appImageOffer": {
+      "type": "string"
+    },
+    "appImageSKU": {
+      "type": "string"
+    },
+    "vmContainerName": {
+      "type": "string"
+    },
+    "domainName": {
+      "type": "string"
+    },
+    "domainJoinUserName": {
+      "type": "string"
+    },
+    "iisModulesURL": {
+      "type": "string"
+    },
+    "iisConfigurationFunction": {
+      "type": "string"
+    },
+    "subnetRef": {
+      "type": "string"
+    },
+    "staticIPWEBStart": {
+      "type": "int"
+    },
+    "webNSGid": {
+      "type": "string"
+    },
+    "mgtNSGid": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "domainJoinOptions": 3,
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[parameters('WebStorageAccountName')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "accountType": "[parameters('WebStorageAccountType')]"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[parameters('MGTStorageAccountName')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "accountType": "[parameters('MGTStorageAccountType')]"
+      }
+    },
+    {
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[parameters('WebAvailabilitySetName')]",
+      "apiVersion": "2015-06-15",
+      "location": "[parameters('location')]",
+      "properties": {
+        "platformFaultDomainCount": "2",
+        "platformUpdateDomainCount": "2"
+      }
+    },
+    {
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[parameters('MGTAvailabilitySetName')]",
+      "apiVersion": "2015-06-15",
+      "location": "[parameters('location')]",
+      "properties": {
+        "platformFaultDomainCount": "2",
+        "platformUpdateDomainCount": "2"
+      }
+    },
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(parameters('WEBNICName'), copyindex())]",
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "nicLoopDEL",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
+      "dependsOn": [
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[concat('10.200.0.', add(copyindex(), parameters('staticIPWEBStart')))]",
+              "subnet": {
+                "id": "[parameters('subnetRef')]"
+              }
+            }
+          }
+        ],
+        "networkSecurityGroup": {
+            "id": "[parameters('delNSGid')]"
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(parameters('MGTNICName'))]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+               "privateIPAddress": "[parameters('MGTNICIPAddress')]",
+              "subnet": {
+                "id": "[parameters('subnetRef')]"
+              }
+            }
+          }
+        ],
+        "networkSecurityGroup": {
+            "id": "[parameters('mgtNSGid')]"
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(parameters('WebVMName'), copyindex())]",
+      "location": "[parameters('location')]",
+      "copy": {
+        "name": "vmLoopDEL",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', parameters('WebStorageAccountName'))]",
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('WebAvailabilitySetName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', concat(parameters('WEBNICName'), copyindex()))]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('WebVMSize')]"
+        },
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('WebAvailabilitySetName'))]"
+        },
+        "osProfile": {
+          "computername": "[replace(concat(parameters('WebVMName'), copyindex()),'-','')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('appImagePublisher')]",
+            "offer": "[parameters('appImageOffer')]",
+            "sku": "[parameters('appImageSKU')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://',parameters('WebStorageAccountName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('WebVMName'), copyindex(), '-osdisk.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces', concat(parameters('WEBNICName'), copyindex()))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[parameters('MGTVMName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', parameters('MGTStorageAccountName'))]",
+        "[concat('Microsoft.Compute/availabilitySets/',parameters('MGTAvailabilitySetName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', parameters('MGTNICName'))]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('MGTVMSize')]"
+        },
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('MGTAvailabilitySetName'))]"
+        },
+        "osProfile": {
+          "computername": "[replace(parameters('MGTVMName'),'-','')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('appImagePublisher')]",
+            "offer": "[parameters('appImageOffer')]",
+            "sku": "[parameters('appImageSKU')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://',parameters('MGTStorageAccountName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('MGTVMName'),'-osdisk.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('MGTNICName'))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+        "comments": "Join domain - JsonADDomainExtension",
+        "apiVersion": "2015-06-15",
+        "type": "Microsoft.Compute/virtualMachines/extensions",
+        "name": "[concat(parameters('MGTVMName'),'/joindomain')]",
+        "dependsOn": [
+          "[concat('Microsoft.Compute/virtualMachines/', parameters('MGTVMName'))]"
+        ],
+        "location": "[parameters('location')]",
+        "properties": {
+            "publisher": "Microsoft.Compute",
+            "type": "JsonADDomainExtension",
+            "typeHandlerVersion": "1.3",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+                "Name": "[parameters('domainName')]",
+                "User": "[parameters('domainJoinUserName')]",
+                "Restart": "true",
+                "Options": "[variables('domainJoinOptions')]",
+                "OUPath": ""
+            },
+            "protectedSettings": {
+                "Password": "[parameters('adminPassword')]"
+            }
+        }
+    },
+    {
+        "comments": "Join domain - JsonADDomainExtension",
+        "apiVersion": "2015-06-15",
+        "type": "Microsoft.Compute/virtualMachines/extensions",
+        "name": "[concat(parameters('WebVMName'), copyindex(), '/joindomain')]",
+        "copy": {
+          "name": "extensionLoopDEL",
+          "count": "[parameters('numberOfWebInstances')]"
+        },
+        "dependsOn": [
+          "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
+        ],
+        "location": "[parameters('location')]",
+        "properties": {
+            "publisher": "Microsoft.Compute",
+            "type": "JsonADDomainExtension",
+            "typeHandlerVersion": "1.3",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+                "Name": "[parameters('domainName')]",
+                "User": "[parameters('domainJoinUserName')]",
+                "Restart": "true",
+                "Options": "[variables('domainJoinOptions')]",
+                "OUPath": ""
+            },
+            "protectedSettings": {
+                "Password": "[parameters('adminPassword')]"
+            }
+        }
+    },
+  ],
+  "outputs": {
+
+  }
+}

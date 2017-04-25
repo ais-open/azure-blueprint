@@ -1,0 +1,104 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location1": {
+            "type": "string",
+            "metadata": {
+                "description": "Location where first VNET, Gateway, PublicIP and Connection will be deployed."
+            }
+        },
+        "location2": {
+            "type": "string",
+            "metadata": {
+                "description": "Location where second VNET, Gateway, PublicIP and Connection will be deployed."
+            }
+        },
+        "otherResourceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "Location where second VNET, Gateway, PublicIP and Connection will be deployed."
+            }
+        },
+        "virtualNetworkName1": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the first VNET."
+            }
+        },
+        "gatewayPublicIPName1": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the PublicIP attached to the first VirtualNetworkGateway."
+            }
+        },
+        "gatewayName1": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the first VirtualNetworkGateway."
+            }
+        },
+        "connectionName1": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the first connection, connecting the first VirtualNetworkGateway to the second VirtualNetworkGateway."
+            }
+        },
+        "virtualNetworkName2": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the second VNET."
+            }
+        },
+        "gatewayPublicIPName2": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the PublicIP attached to the second VirtualNetworkGateway."
+            }
+        },
+        "gatewayName2": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the second VirtualNetworkGateway."
+            }
+        },
+        "connectionName2": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the second connection, connecting the second VirtualNetworkGateway to the first VirtualNetworkGateway."
+            }
+        },
+        "sharedKey": {
+            "type": "string",
+            "metadata": {
+                "description": "The shared key used to establish connection between the two VirtualNetworkGateways."
+            }
+        }
+    },
+    "variables": {
+        "apiVersion": "2015-05-01-preview",
+        "vnetID1": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName1'))]",
+        "gatewaySubnetRef1": "[concat(variables('vnetID1'),'/subnets/','GatewaySubnet')]",
+        "vnetID2": "[resourceId(parameters('otherResourceGroup'), 'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName2'))]",
+        "gatewaySubnetRef2": "[concat(variables('vnetID2'),'/subnets/','GatewaySubnet')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "[variables('apiVersion')]",
+            "type": "Microsoft.Network/connections",
+            "name": "[parameters('connectionName1')]",
+            "location": "[parameters('location1')]",
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways',parameters('gatewayName1'))]"
+                },
+                "virtualNetworkGateway2": {
+                    "id": "[resourceId(parameters('otherResourceGroup'),'Microsoft.Network/virtualNetworkGateways',parameters('gatewayName2'))]"
+                },
+                "connectionType": "Vnet2Vnet",
+                "routingWeight": 3,
+                "sharedKey": "[parameters('sharedKey')]"
+            }
+        }
+    ]
+}
