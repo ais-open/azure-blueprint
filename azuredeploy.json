@@ -31,14 +31,6 @@
       ],
       "defaultValue": "prod"
     },
-    "sasTokenTemplates": {
-      "type": "string",
-      "defaultValue": ""
-    },
-    "sasTokenScripts": {
-      "type": "string",
-      "defaultValue": ""
-    },
     "numberOfWebInstances": {
       "type": "int",
       "defaultValue": 2,
@@ -655,28 +647,28 @@
       "appDiagStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'diag', parameters('prefix'))]"
     },
     "configuration": {
-      "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json', parameters('sasTokenTemplates'))]",
-      "nicTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateNic.json', parameters('sasTokenTemplates'))]",
-      "sqlLoadBalancerURL": "[concat(parameters('templatesBaseUrl'),'/sqlLoadBalancer.json', parameters('sasTokenTemplates'))]",
-      "applicationGatewayURL": "[concat(parameters('templatesBaseUrl'),'/provisioningApplicationGateway.json', parameters('sasTokenTemplates'))]",
-      "provisioningNICsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningNICsSQLAD.json', parameters('sasTokenTemplates'))]",
-      "virtualNetworkNSGURL": "[concat(parameters('templatesBaseUrl'),'/virtualNetworkNSG.json', parameters('sasTokenTemplates'))]",
-      "provisioningVMsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningVMsSQLAD.json', parameters('sasTokenTemplates'))]",
-      "provisioningAppVMsURL": "[concat(parameters('templatesBaseUrl'),'/provisioningAppVMs.json', parameters('sasTokenTemplates'))]",
-      "configuringBackupADVMURL": "[concat(parameters('templatesBaseUrl'),'/configuringBackupADVM.json', parameters('sasTokenTemplates'))]",
-      "preparingAlwaysOnSqlServerURL": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServer.json', parameters('sasTokenTemplates'))]",
-      "configuringAlwaysOnURL": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOn.json', parameters('sasTokenTemplates'))]",
-      "adPDCModulesURL": "[concat(parameters('scriptsBaseUrl'),'/CreateADPDC.ps1.zip', parameters('sasTokenScripts'))]",
+      "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
+      "nicTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateNic.json')]",
+      "sqlLoadBalancerURL": "[concat(parameters('templatesBaseUrl'),'/sqlLoadBalancer.json')]",
+      "applicationGatewayURL": "[concat(parameters('templatesBaseUrl'),'/provisioningApplicationGateway.json')]",
+      "provisioningNICsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningNICsSQLAD.json')]",
+      "virtualNetworkNSGURL": "[concat(parameters('templatesBaseUrl'),'/virtualNetworkNSG.json')]",
+      "provisioningVMsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningVMsSQLAD.json')]",
+      "provisioningAppVMsURL": "[concat(parameters('templatesBaseUrl'),'/provisioningAppVMs.json')]",
+      "configuringBackupADVMURL": "[concat(parameters('templatesBaseUrl'),'/configuringBackupADVM.json')]",
+      "preparingAlwaysOnSqlServerURL": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServer.json')]",
+      "configuringAlwaysOnURL": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOn.json')]",
+      "adPDCModulesURL": "[concat(parameters('scriptsBaseUrl'),'/CreateADPDC.ps1.zip')]",
       "adPDCConfigurationFunction": "CreateADPDC.ps1\\CreateADPDC",
-      "adBDCModulesURL": "[concat(parameters('scriptsBaseUrl'),'/PrepareADBDC.ps1.zip', parameters('sasTokenScripts'))]",
+      "adBDCModulesURL": "[concat(parameters('scriptsBaseUrl'),'/PrepareADBDC.ps1.zip')]",
       "adBDCConfigurationFunction": "PrepareADBDC.ps1\\PrepareADBDC",
-      "fswModulesURL": "[concat(parameters('scriptsBaseUrl'),'/CreateFileShareWitness.ps1.zip', parameters('sasTokenScripts'))]",
+      "fswModulesURL": "[concat(parameters('scriptsBaseUrl'),'/CreateFileShareWitness.ps1.zip')]",
       "fswConfigurationFunction": "CreateFileShareWitness.ps1\\CreateFileShareWitness",
-      "sqlAOPrepareModulesURL": "[concat(parameters('scriptsBaseUrl'),'/PrepareAlwaysOnSqlServer.ps1.zip', parameters('sasTokenScripts'))]",
+      "sqlAOPrepareModulesURL": "[concat(parameters('scriptsBaseUrl'),'/PrepareAlwaysOnSqlServer.ps1.zip')]",
       "sqlAOPrepareConfigurationFunction": "PrepareAlwaysOnSqlServer.ps1\\PrepareAlwaysOnSqlServer",
-      "createClusterModulesURL": "[concat(parameters('scriptsBaseUrl'),'/CreateFailoverCluster.ps1.zip', parameters('sasTokenScripts'))]",
+      "createClusterModulesURL": "[concat(parameters('scriptsBaseUrl'),'/CreateFailoverCluster.ps1.zip')]",
       "createClusterConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
-      "iisModulesURL":"[concat(parameters('scriptsBaseUrl'),'/ContosoWebsite.ps1.zip', parameters('sasTokenScripts'))]",
+      "iisModulesURL":"[concat(parameters('scriptsBaseUrl'),'/ContosoWebsite.ps1.zip')]",
       "iisConfigurationFunction":"ContosoWebsite.ps1\\ContosoWebsite"
     }
   },
