@@ -1368,7 +1368,7 @@
         },
         "parameters": {
           "numberOfWebInstances": {
-            "value": "[variables('numberOfWebInstances')]",
+            "value": "[variables('numberOfWebInstances')]"
           },
           "WebVMName": {
             "value": "[variables('vmSettings').WebVMName]"
