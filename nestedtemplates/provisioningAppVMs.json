@@ -211,7 +211,7 @@
           "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('WebAvailabilitySetName'))]"
         },
         "osProfile": {
-          "computername": "[replace(concat(parameters('WebVMName'), copyindex()),'-','')]",
+          "computername": "[parameters('WebVMName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
@@ -258,7 +258,7 @@
           "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('MGTAvailabilitySetName'))]"
         },
         "osProfile": {
-          "computername": "[replace(parameters('MGTVMName'),'-','')]",
+          "computername": "[parameters('MGTVMName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
@@ -342,7 +342,7 @@
                 "Password": "[parameters('adminPassword')]"
             }
         }
-    },
+    }
   ],
   "outputs": {
 
