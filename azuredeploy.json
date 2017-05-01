@@ -233,7 +233,7 @@
     },
     "domainJoinUserName": {
       "type": "string",
-      "defaultValue": "contoso\\adminuser"
+      "defaultValue": "contoso.local\\adminuser"
     },
     "sqlServerServiceAccountUserName": {
       "type": "string",
@@ -362,7 +362,7 @@
       "metadata": {
         "description": "The IP address of the new backup AD VM"
       },
-      "defaultValue": [{"IpAddress":"10.200.0.8"}, {"IpAddress":"10.200.0.9"}]
+      "defaultValue": [{"IpAddress":"10.200.0.4"}, {"IpAddress":"10.200.0.5"}]
     },
     "MGTNICIPAddress": {
       "type": "string",
@@ -397,14 +397,14 @@
       "metadata": {
         "description": "Linked Templates base url"
       },
-      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/nestedtemplates"
+      "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/nestedtemplates"
     },
     "scriptsBaseUrl": {
       "type": "string",
       "metadata": {
         "description": "DSC Scripts base url"
       },
-      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/DSC"
+      "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/DSC"
     },
     "autoPatchingDay": {
       "type": "string",

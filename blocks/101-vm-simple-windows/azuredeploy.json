@@ -34,6 +34,21 @@
       "metadata": {
         "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
       }
+    },
+    "osDiskVhdUri": {
+      "type": "string"
+    },
+    "userImageStorageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "This is the name of the your storage account"
+      }
+    },
+    "userImageStorageAccountResourceGroupName": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource group of the existing storage account"
+      }
     }
   },
   "variables": {
@@ -44,11 +59,13 @@
     "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'sawinvm')]",
     "nicName": "myVMNic",
     "addressPrefix": "10.0.0.0/16",
+    "apiVersion": "2015-06-15",
     "subnetName": "Subnet",
     "subnetPrefix": "10.0.0.0/24",
     "publicIPAddressName": "myPublicIP",
     "vmName": "SimpleWinVM",
     "virtualNetworkName": "MyVNET",
+    "vmStorageAccountContainerName": "vhds",
     "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
   },
   "resources": [
@@ -133,7 +150,7 @@
       ],
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_A2"
+          "vmSize": "Standard_DS1_v2"
         },
         "osProfile": {
           "computerName": "[variables('vmName')]",
@@ -141,9 +158,18 @@
           "adminPassword": "[parameters('adminPassword')]"
         },
         "storageProfile": {
-          "imageReference": {
-            "id": "[resourceId('Microsoft.Compute/images', 'ManagedImageName')]"
-          },
+          "osDisk": {
+            "name": "[concat(variables('vmName'),'-osDisk')]",
+            "osType": "Windows",
+            "caching": "ReadWrite",
+            "createOption": "FromImage",
+            "image": {
+              "uri": "[parameters('osDiskVhdUri')]"
+            },
+            "vhd": {
+              "uri": "[concat(reference(resourceId(parameters('userImageStorageAccountResourceGroupName'), 'Microsoft.Storage/storageAccounts/', parameters('userImageStorageAccountName')), variables('apiVersion')).primaryEndpoints.blob, 'vhds/',variables('vmName'), uniquestring(resourceGroup().id), 'osDisk.vhd')]"
+            }
+          }
         },
         "networkProfile": {
           "networkInterfaces": [
@@ -159,27 +185,7 @@
           }
         }
       }
-    },
-    {
-        "comments": "VM EXTENSION",
-        "apiVersion": "2015-06-15",
-        "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(variables('vmName'), '/configuration')]",
-        "dependsOn": [
-          "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
-        ],
-        "location": "[resourceGroup().location]",
-        "properties": {
-          "publisher": "Microsoft.Compute",
-          "type": "CustomScriptExtension",
-          "typeHandlerVersion": "1.8",
-          "autoUpgradeMinorVersion": true,
-          "settings": {
-               "fileUris": "[variables('fileUris')]",
-                "commandToExecute": "[variables('commandToExecute')]"
-            }
-        }
-    },
+    }
   ],
   "outputs": {
     "hostname": {
