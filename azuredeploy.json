@@ -1031,7 +1031,7 @@
 						"value": "[parameters('numberOfSqlVMDisks')]"
 					},
 					"workloadType": {
-						"value": "[varibales('vmSettings').sql.workloadType]"
+						"value": "[variables('vmSettings').sql.workloadType]"
 					}
 				}
 			}
