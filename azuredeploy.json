@@ -920,9 +920,6 @@
 					"mgtNSGid": {
 						"value": "[variables('derivedIds').mgtNSG]"
 					},
-          "domainName": {
-						"value": "[parameters('domainName')]"
-					},
           "updateVnetWithDNSTemplateURL": {
             "value": "[variables('artifacts').vnetwithDNSTemplateURL]"
           },
