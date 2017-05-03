@@ -11,10 +11,7 @@
     "adPDCNICIPAddress": {
       "type": "string"
     },
-    "staticSubnetRef": {
-      "type": "string"
-    },
-    "appSubnetRef": {
+    "dcSubnetRef": {
       "type": "string"
     },
     "adBEAddressPoolID": {
@@ -29,7 +26,10 @@
     "adBDCNICIPAddress": {
       "type": "string"
     },
-    "sqlNicName": {
+    "sql0NicName": {
+      "type": "string"
+    },
+    "sql1NicName": {
       "type": "string"
     },
     "sqlSubnetRef": {
@@ -55,6 +55,18 @@
     },
     "dcNSGid": {
       "type": "string"
+    },
+    "mgtNicName": {
+      "type": "string"
+    },
+    "mgtIPAddress": {
+      "type": "string"
+    },
+    "mgtNSGid": {
+      "type": "string"
+    },
+    "mgtSubnetRef": {
+      "type": "string"
     }
   },
   "resources": [
@@ -71,7 +83,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('adPDCNICIPAddress')]",
               "subnet": {
-                "id": "[parameters('staticSubnetRef')]"
+                "id": "[parameters('dcSubnetRef')]"
               }
             }
           }
@@ -94,7 +106,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('adBDCNICIPAddress')]",
               "subnet": {
-                "id": "[parameters('staticSubnetRef')]"
+                "id": "[parameters('dcSubnetRef')]"
               }
             }
           }
@@ -105,7 +117,7 @@
       }
     },
     {
-      "name": "[concat(parameters('sqlNicName'), '0-nic')]",
+      "name": "[parameters('sql0NicName')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
@@ -118,7 +130,7 @@
               "subnet": {
                 "id": "[parameters('sqlSubnetRef')]"
               },
-              "privateIPAddress": "[parameters('sql1IPAddress')]",
+              "privateIPAddress": "[parameters('sql0IPAddress')]",
               "loadBalancerBackendAddressPools": [
                 {
                   "id": "[parameters('sqlBEAddressPoolID')]"
@@ -133,7 +145,7 @@
       }
     },
     {
-      "name": "[concat(parameters('sqlNicName'), '1-nic')]",
+      "name": "[parameters('sql1NicName')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
@@ -146,7 +158,7 @@
               "subnet": {
                 "id": "[parameters('sqlSubnetRef')]"
               },
-              "privateIPAddress":"[parameters('sql0IPAddress')]",
+              "privateIPAddress":"[parameters('sql1IPAddress')]",
               "loadBalancerBackendAddressPools": [
                 {
                   "id": "[parameters('sqlBEAddressPoolID')]"
@@ -180,6 +192,29 @@
         ],
         "networkSecurityGroup": {
             "id": "[parameters('sqlNSGid')]"
+        }
+      }
+    },
+    {
+      "name": "[parameters('mgtNicName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[parameters('location')]",
+      "apiVersion": "2015-06-15",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress":"[parameters('mgtIPAddress')]",
+              "subnet": {
+                "id": "[parameters('mgtSubnetRef')]"
+              }
+            }
+          }
+        ],
+        "networkSecurityGroup": {
+            "id": "[parameters('mgtNSGid')]"
         }
       }
     }
