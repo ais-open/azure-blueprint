@@ -25,11 +25,7 @@
 			"metadata": {
 				"description": "Prefix for environement (production or staging). You can change the allowed values based on your preference."
 			},
-			"allowedValues": [
-				"stag",
-				"prod"
-			],
-			"defaultValue": "prod"
+			"defaultValue": ""
 		},
 		"numberOfWebInstances": {
 			"type": "int",
