@@ -562,8 +562,8 @@
 			},
 			"availabilitySets": {
 				"sql": "[concat('sqlAvailabilitySet', parameters('environmentPrefix'))]",
-				"ad": "[concat('adAvailabilitySet-', parameters('environmentPrefix'))]",
-				"web": "[concat('WEB_AvailabilitySet-', parameters('environmentPrefix'))]"
+				"ad": "[concat('adAvailabilitySet', parameters('environmentPrefix'))]",
+				"web": "[concat('webAvailabilitySet', parameters('environmentPrefix'))]"
 			}
 		},
 		"artifacts": {
