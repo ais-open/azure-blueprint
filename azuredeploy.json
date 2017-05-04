@@ -25,7 +25,6 @@
 			"metadata": {
 				"description": "Prefix for environement (production or staging). You can change the allowed values based on your preference."
 			},
-      "minLength": 0,
       "maxLength": 4,
 			"defaultValue": ""
 		},
