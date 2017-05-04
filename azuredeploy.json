@@ -536,8 +536,8 @@
 				"mgt": "[concat(uniqueString(resourceGroup().id), 'mgt', parameters('environmentPrefix'))]"
 			},
 			"vms": {
-				"adpdc": "[concat('AZ-PDC-VM-', parameters('environmentPrefix'))]",
-				"adbdc": "[concat('AZ-BDC-VM-', parameters('environmentPrefix'))]",
+				"adpdc": "[concat('AZ-PDC-VM', parameters('environmentPrefix'))]",
+				"adbdc": "[concat('AZ-BDC-VM', parameters('environmentPrefix'))]",
 				"sql": "[concat(parameters('environmentPrefix'), 'sqlserver-')]",
 				"sqlw": "[concat('cluster-fsw', parameters('environmentPrefix'))]",
 				"web": "[concat('AZ-WEB-VM', parameters('environmentPrefix'))]",
