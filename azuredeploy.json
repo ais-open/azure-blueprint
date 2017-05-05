@@ -2,22 +2,16 @@
 	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
+		"keyVaultName": {
+			"type": "string"
+		},
+		"keyVaultResourceGroupName": {
+			"type": "string"
+		},
 		"adminUsername": {
 			"type": "string",
 			"metadata": {
 				"description": "The name of the Administrator of the new VMs and Domain"
-			}
-		},
-		"adminPassword": {
-			"type": "securestring",
-			"metadata": {
-				"description": "Password for administrator accounts and domain join"
-			}
-		},
-		"sqlServerServiceAccountPassword": {
-			"type": "securestring",
-			"metadata": {
-				"description": "Password for SQL accounts"
 			}
 		},
 		"environmentPrefix": {
@@ -496,6 +490,7 @@
 		},
 		"VnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkNameWithSuffix'))]",
 		"derivedIds": {
+			"keyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]",
 			"dcSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('dcSubnet').name)]",
 			"sqlSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('sqlSubnet').name)]",
 			"webSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('webSubnet').name)]",
@@ -592,7 +587,8 @@
 			"iisConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite"
 		}
 	},
-	"resources": [{
+	"resources": [
+		{
 			"name": "VirtualNetworkNSG",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
@@ -810,7 +806,12 @@
 						"value": "[parameters('adminUsername')]"
 					},
 					"adminPassword": {
-						"value": "[parameters('adminPassword')]"
+						"reference": {
+              "keyVault": {
+                "id": "[variables('derivedIds').keyVaultId]"
+              },
+              "secretName": "adminPassword"
+            }
 					},
 					"adImagePublisher": {
 						"value": "[variables('vmSettings').dc.imagePublisher]"
@@ -980,7 +981,12 @@
 						"value": "[parameters('adminUsername')]"
 					},
 					"adminPassword": {
-						"value": "[parameters('adminPassword')]"
+						"reference": {
+              "keyVault": {
+                "id": "[variables('derivedIds').keyVaultId]"
+              },
+              "secretName": "adminPassword"
+            }
 					},
 					"domainName": {
 						"value": "[parameters('domainName')]"
@@ -998,7 +1004,12 @@
 						"value": "[parameters('sqlServerServiceAccountUserName')]"
 					},
 					"sqlServerServiceAccountPassword": {
-						"value": "[parameters('sqlServerServiceAccountPassword')]"
+						"reference": {
+              "keyVault": {
+                "id": "[variables('derivedIds').keyVaultId]"
+              },
+              "secretName": "sqlServerServiceAccountPassword"
+            }
 					},
 					"sharePath": {
 						"value": "[variables('vmSettings').sql.sharePath]"
@@ -1057,7 +1068,12 @@
 						"value": "[parameters('adminUsername')]"
 					},
 					"adminPassword": {
-						"value": "[parameters('adminPassword')]"
+						"reference": {
+              "keyVault": {
+                "id": "[variables('derivedIds').keyVaultId]"
+              },
+              "secretName": "adminPassword"
+            }
 					},
 					"domainName": {
 						"value": "[parameters('domainName')]"
@@ -1069,7 +1085,12 @@
 						"value": "[parameters('sqlServerServiceAccountUserName')]"
 					},
 					"sqlServerServiceAccountPassword": {
-						"value": "[parameters('sqlServerServiceAccountPassword')]"
+						"reference": {
+              "keyVault": {
+                "id": "[variables('derivedIds').keyVaultId]"
+              },
+              "secretName": "sqlServerServiceAccountPassword"
+            }
 					},
 					"createClusterModulesURL": {
 						"value": "[variables('artifacts').createClusterModulesURL]"
@@ -1164,7 +1185,12 @@
 						"value": "[parameters('adminUsername')]"
 					},
 					"adminPassword": {
-						"value": "[parameters('adminPassword')]"
+						"reference": {
+              "keyVault": {
+                "id": "[variables('derivedIds').keyVaultId]"
+              },
+              "secretName": "adminPassword"
+            }
 					},
 					"appImagePublisher": {
 						"value": "[variables('vmSettings').web.imagePublisher]"
