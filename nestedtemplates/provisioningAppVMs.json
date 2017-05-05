@@ -95,7 +95,12 @@
   },
   "variables": {
     "domainJoinOptions": 3,
-    "domainJoinUserName": "[concat(parameters('domainName'), '\\', parameters('adminUsername'))]"
+    "domainJoinUserName": "[concat(parameters('domainName'),'\\',parameters('adminUsername'))]",
+    "backupFabric": "Azure",
+    "v2VmType": "Microsoft.Compute/virtualMachines",
+    "v2VmContainer": "iaasvmcontainer;iaasvmcontainerv2;",
+    "v2VmContainerNamePrefix": "iaasvmcontainerv2;",
+    "v2Vm": "vm;iaasvmcontainerv2;"
   },
   "resources": [
     {
@@ -195,7 +200,24 @@
             }
           ]
         }
-      }
+      },
+      "resources": [
+        /*{
+          "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
+          "apiVersion": "2016-06-01",
+          "location": "[resourceGroup().location]",
+          "tags": {},
+          "dependsOn": [
+            "[concat(parameters('WebVMName'), copyindex())]"
+          ],
+          "name": "[concat(parameters('recoveryServicesVault'),'/',variables('backupFabric'),'/',variables('v2VmContainer'),concat(resourceGroup().name,';',variables('vmNamePrefix'), parameters('startingNumeral')[copyIndex()]),'/',variables('v2Vm'),concat(parameters('vmResourceGroupName'),';',variables('vmNamePrefix'), parameters('startingNumeral')[copyIndex()]))]",
+          "properties": {
+            "protectedItemType": "[variables('v2VmType')]",
+            "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('recoveryServicesVault'),parameters('backupPolicy'))]",
+            "sourceResourceId": "[resourceId(subscription().subscriptionId,parameters('vmResourceGroupName'),'Microsoft.Compute/virtualMachines',concat(variables('vmNamePrefix'), parameters('startingNumeral')[copyIndex()]))]"
+          }
+        }*/
+      ]
     },
     {
         "comments": "Join domain - JsonADDomainExtension",
