@@ -27,11 +27,11 @@
       "apiVersion": "2016-06-01",
       "name": "[parameters('vaultName')]",
       "location": "[resourceGroup().location]",
-      "properties": {
-        "sku": {
-          "name": "[parameters('skuName')]"
-        }
+      "sku": {
+        "name": "[parameters('skuName')]"
       }
+      "properties": {},
+      "tags": {}
     }
   ]
 }
