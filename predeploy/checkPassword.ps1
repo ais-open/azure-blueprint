@@ -27,7 +27,7 @@ Function checkPassword()    {
 			$isGood++
     }
 		If ($isGood -ge 3) {
-      return $pw2test
+      return 
     } Else {
       Throw "Password does not meet complexity requirements"
     }

@@ -7,7 +7,7 @@ This script will create a Key Vault inside a specified Azure subscription
 
 .Example
 $BaseSourceControl = 'C:\Users\davoodharun\Desktop'
-. "$BaseSourceControl\OD4Gov\Scripts\orchestration\Orchestration_InitialSetup.ps1" @MyParams -verbose
+. "$BaseSourceControl\azure-blueprint\predeploy\Orchestration_InitialSetup.ps1" @MyParams -verbose
 #>
 
 [cmdletbinding()]
@@ -33,7 +33,17 @@ try {
 	. "$BaseSourceControl\checkPassword.ps1" -password $result
 }
 catch {
-	Throw "Password did not meet the complexity requirements"
+	Throw "Administrator password did not meet the complexity requirements"
+}
+
+try {
+	$Ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToCoTaskMemUnicode($sqlServerServiceAccountPassword)
+	$result = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($Ptr)
+	[System.Runtime.InteropServices.Marshal]::ZeroFreeCoTaskMemUnicode($Ptr)
+	. "$BaseSourceControl\checkPassword.ps1" -password $result
+}
+catch {
+	Throw "sqlServerServiceAccountPassword  did not meet the complexity requirements"
 }
 
 $errorActionPreference = 'stop'
