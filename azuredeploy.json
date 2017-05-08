@@ -991,11 +991,8 @@
           "sqlSubnetRef": {
             "value": "[variables('derivedIds').sqlSubnet]"
           },
-          "rcVaultName": {
-            "value": "[parameters('recoveryServicesVaultName')]"
-          },
-          "backupPolicy": {
-            "value": "[parameters('backupPolicy')]"
+          "backupInfo": {
+            "value": "[variables('backupInfo')]"
           }
         }
       }
@@ -1284,11 +1281,8 @@
           "webSubnetAddressRange": {
             "value": "[parameters('webSubnet').properties.addressPrefix]"
           },
-          "rcVaultName": {
-            "value": "[parameters('recoveryServicesVaultName')]"
-          },
-          "backupPolicy": {
-            "value": "[parameters('backupPolicy')]"
+          "backupInfo": {
+            "value": "[variables('backupInfo')]"
           }
         }
       }
