@@ -96,8 +96,7 @@
       "type": "string"
     },
     "backupPolicy": {
-      "type": "string",
-      "defaultValue": "DefaultPolicy"
+      "type": "string"
     }
   },
   "variables": {

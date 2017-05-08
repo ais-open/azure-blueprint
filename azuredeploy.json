@@ -15,6 +15,13 @@
       },
       "defaultValue": "AZ-RCV-01"
     },
+    "backupPolicy": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure Backup policy to apply to VMs"
+      },
+      "defaultValue": "DefaultPolicy"
+    },
     "adminUsername": {
       "type": "string",
       "metadata": {
@@ -789,7 +796,8 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/ProvisioningNICsSQLADMGT"
+        "Microsoft.Resources/deployments/ProvisioningNICsSQLADMGT",
+        "Microsoft.Resources/deployments/RecoverServicesVault"
       ],
       "properties": {
         "mode": "Incremental",
@@ -978,7 +986,10 @@
             "value": "[variables('derivedIds').sqlSubnet]"
           },
           "rcVaultName": {
-            "value": "[parameters('recoveryServicesVaultName')]" 
+            "value": "[parameters('recoveryServicesVaultName')]"
+          },
+          "backupPolicy": {
+            "value": "[parameters('backupPolicy')]"
           }
         }
       }
@@ -1265,6 +1276,12 @@
           },
           "webSubnetAddressRange": {
             "value": "[parameters('webSubnet').properties.addressPrefix]"
+          },
+          "rcVaultName": {
+            "value": "[parameters('recoveryServicesVaultName')]"
+          },
+          "backupPolicy": {
+            "value": "[parameters('backupPolicy')]"
           }
         }
       }
@@ -1282,7 +1299,7 @@
         },
         "parameters": {
           "rcVaultName": {
-            "value": "[parameters('recoveryServicesVaultName')]" 
+            "value": "[parameters('recoveryServicesVaultName')]"
           }
         }
       }
