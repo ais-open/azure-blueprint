@@ -91,6 +91,13 @@
     },
     "mgtNSGid": {
       "type": "string"
+    },
+    "rcVaultName": {
+      "type": "string"
+    },
+    "backupPolicy": {
+      "type": "string",
+      "defaultValue": "DefaultPolicy"
     }
   },
   "variables": {
@@ -202,7 +209,7 @@
         }
       },
       "resources": [
-        /*{
+        {
           "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
           "apiVersion": "2016-06-01",
           "location": "[resourceGroup().location]",
@@ -210,13 +217,13 @@
           "dependsOn": [
             "[concat(parameters('WebVMName'), copyindex())]"
           ],
-          "name": "[concat(parameters('recoveryServicesVault'),'/',variables('backupFabric'),'/',variables('v2VmContainer'),concat(resourceGroup().name,';',variables('vmNamePrefix'), parameters('startingNumeral')[copyIndex()]),'/',variables('v2Vm'),concat(parameters('vmResourceGroupName'),';',variables('vmNamePrefix'), parameters('startingNumeral')[copyIndex()]))]",
+          "name": "[concat(parameters('rcVaultName'),'/',variables('backupFabric'),'/',variables('v2VmContainer'),concat(resourceGroup().name,';',parameters('WebVMName'), copyindex()),'/',variables('v2Vm'),concat(resourceGroup().name,';',parameters('WebVMName'), copyindex()))]",
           "properties": {
             "protectedItemType": "[variables('v2VmType')]",
-            "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('recoveryServicesVault'),parameters('backupPolicy'))]",
-            "sourceResourceId": "[resourceId(subscription().subscriptionId,parameters('vmResourceGroupName'),'Microsoft.Compute/virtualMachines',concat(variables('vmNamePrefix'), parameters('startingNumeral')[copyIndex()]))]"
+            "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('rcVaultName'),parameters('backupPolicy'))]",
+            "sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',concat(parameters('WebVMName'), copyindex()))]"
           }
-        }*/
+        }
       ]
     },
     {

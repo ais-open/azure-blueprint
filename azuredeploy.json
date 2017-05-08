@@ -8,6 +8,13 @@
     "keyVaultResourceGroupName": {
       "type": "string"
     },
+    "recoveryServicesVaultName": {
+      "type": "string",
+      "metadata": {
+        "desscription": "Name of the RecoveryServices Vault to store VM backups"
+      },
+      "defaultValue": "AZ-RCV-01"
+    },
     "adminUsername": {
       "type": "string",
       "metadata": {
@@ -969,6 +976,9 @@
           },
           "sqlSubnetRef": {
             "value": "[variables('derivedIds').sqlSubnet]"
+          },
+          "rcVaultName": {
+            "value": "[parameters('recoveryServicesVaultName')]" 
           }
         }
       }
@@ -1271,6 +1281,9 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
+          "rcVaultName": {
+            "value": "[parameters('recoveryServicesVaultName')]" 
+          }
         }
       }
     }
