@@ -179,11 +179,8 @@
     "sqlBEAddressPoolID": {
       "type": "string"
     },
-    "rcVaultName": {
-      "type": "string"
-    },
-    "backupPolicy": {
-      "type": "string"
+    "backupInfo": {
+      "type": "object"
     }
   },
   "variables": {
@@ -360,6 +357,29 @@
               }
             }
           }
+        },
+        {
+          "name": "BackupAdPDCVM",
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2015-01-01",
+          "dependsOn": [
+            "[parameters('adPDCVMName')]"
+          ],
+          "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[parameters('backupInfo').backupTemplateUrl]",
+              "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+              "backupInfo": {
+                "value": "[parameters('backupInfo')]"
+              },
+              "vmName": {
+                "value": "[parameters('adPDCVMName')]"
+              }
+            }
+          }
         }
       ]
     },
@@ -426,7 +446,32 @@
             "storageUri": "[concat('http://',variables('diagstorageNameDC'),'.blob.core.usgovcloudapi.net')]"
           }
         }
-      }
+      },
+      "resources": [
+        {
+          "name": "BackupAdBDCVM",
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2015-01-01",
+          "dependsOn": [
+            "[parameters('adBDCVMName')]"
+          ],
+          "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[parameters('backupInfo').backupTemplateUrl]",
+              "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+              "backupInfo": {
+                "value": "[parameters('backupInfo')]"
+              },
+              "vmName": {
+                "value": "[parameters('adBDCVMName')]"
+              }
+            }
+          }
+        }
+      ]
     },
     {
       "apiVersion": "2015-06-15",
@@ -505,7 +550,32 @@
             "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
           }
         }
-      }
+      },
+      "resources": [
+        {
+          "name": "BackupSqlVM",
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2015-01-01",
+          "dependsOn": [
+            "[concat(parameters('sqlVMName'), copyindex())]"
+          ],
+          "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[parameters('backupInfo').backupTemplateUrl]",
+              "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+              "backupInfo": {
+                "value": "[parameters('backupInfo')]"
+              },
+              "vmName": {
+                "value": "[concat(parameters('sqlVMName'), copyindex())]"
+              }
+            }
+          }
+        }
+      ]
     },
     {
       "apiVersion": "2015-06-15",
@@ -570,7 +640,32 @@
             "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
           }
         }
-      }
+      },
+      "resources": [
+        {
+          "name": "BackupSqlwVM",
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2015-01-01",
+          "dependsOn": [
+            "[parameters('sqlwVMName')]"
+          ],
+          "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[parameters('backupInfo').backupTemplateUrl]",
+              "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+              "backupInfo": {
+                "value": "[parameters('backupInfo')]"
+              },
+              "vmName": {
+                "value": "[parameters('sqlwVMName')]"
+              }
+            }
+          }
+        }
+      ]
     },
     {
 			"name": "UpdatingDNStoPrimaryADVM",
@@ -859,34 +954,59 @@
             }
           ]
         }
-      }
+      },
+      "resources": [
+        {
+          "name": "BackupMgtVM",
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2015-01-01",
+          "dependsOn": [
+            "[parameters('mgtVMName')]"
+          ],
+          "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[parameters('backupInfo').backupTemplateUrl]",
+              "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+              "backupInfo": {
+                "value": "[parameters('backupInfo')]"
+              },
+              "vmName": {
+                "value": "[parameters('mgtVMName')]"
+              }
+            }
+          }
+        }
+      ]
     },
     {
-        "comments": "Join domain - JsonADDomainExtension",
-        "apiVersion": "2015-06-15",
-        "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(parameters('mgtVMName'),'/joindomain')]",
-        "dependsOn": [
-          "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]"
-        ],
-        "location": "[parameters('location')]",
-        "properties": {
-            "publisher": "Microsoft.Compute",
-            "type": "JsonADDomainExtension",
-            "typeHandlerVersion": "1.3",
-            "autoUpgradeMinorVersion": true,
-            "settings": {
-                "Name": "[parameters('domainName')]",
-                "User": "[variables('domainJoinUserName')]",
-                "Restart": "true",
-                "Options": 3,
-                "OUPath": ""
-            },
-            "protectedSettings": {
-                "Password": "[parameters('adminPassword')]"
-            }
+      "comments": "Join domain - JsonADDomainExtension",
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('mgtVMName'),'/joindomain')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]"
+      ],
+      "location": "[parameters('location')]",
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "JsonADDomainExtension",
+        "typeHandlerVersion": "1.3",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "Name": "[parameters('domainName')]",
+          "User": "[variables('domainJoinUserName')]",
+          "Restart": "true",
+          "Options": 3,
+          "OUPath": ""
+        },
+        "protectedSettings": {
+          "Password": "[parameters('adminPassword')]"
         }
-    },
+      }
+    }
   ],
   "outputs": {
 

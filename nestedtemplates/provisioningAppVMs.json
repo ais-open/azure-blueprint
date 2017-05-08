@@ -92,21 +92,13 @@
     "mgtNSGid": {
       "type": "string"
     },
-    "rcVaultName": {
-      "type": "string"
-    },
-    "backupPolicy": {
-      "type": "string"
+    "backupInfo": {
+      "type": "object"
     }
   },
   "variables": {
     "domainJoinOptions": 3,
-    "domainJoinUserName": "[concat(parameters('domainName'),'\\',parameters('adminUsername'))]",
-    "backupFabric": "Azure",
-    "v2VmType": "Microsoft.Compute/virtualMachines",
-    "v2VmContainer": "iaasvmcontainer;iaasvmcontainerv2;",
-    "v2VmContainerNamePrefix": "iaasvmcontainerv2;",
-    "v2Vm": "vm;iaasvmcontainerv2;"
+    "domainJoinUserName": "[concat(parameters('domainName'),'\\',parameters('adminUsername'))]"
   },
   "resources": [
     {
@@ -209,18 +201,26 @@
       },
       "resources": [
         {
-          "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
-          "apiVersion": "2016-06-01",
-          "location": "[resourceGroup().location]",
-          "tags": {},
+          "name": "BackupWebVM",
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2015-01-01",
           "dependsOn": [
             "[concat(parameters('WebVMName'), copyindex())]"
           ],
-          "name": "[concat(parameters('rcVaultName'),'/',variables('backupFabric'),'/',variables('v2VmContainer'),concat(resourceGroup().name,';',parameters('WebVMName'), copyindex()),'/',variables('v2Vm'),concat(resourceGroup().name,';',parameters('WebVMName'), copyindex()))]",
           "properties": {
-            "protectedItemType": "[variables('v2VmType')]",
-            "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('rcVaultName'),parameters('backupPolicy'))]",
-            "sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',concat(parameters('WebVMName'), copyindex()))]"
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[parameters('backupInfo').backupTemplateUrl]",
+              "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+              "backupInfo": {
+                "value": "[parameters('backupInfo')]"
+              },
+              "vmName": {
+                "value": "[concat(parameters('WebVMName'), copyindex())]" 
+              }
+            }
           }
         }
       ]

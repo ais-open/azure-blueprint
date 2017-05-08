@@ -600,6 +600,7 @@
       "provisioningVMsSQLADURL": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/BackupVault/nestedtemplates','/provisioningVMsSQLAD.json')]",
       "provisioningAppVMsURL": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/BackupVault/nestedtemplates','/provisioningAppVMs.json')]",
       "provisioningRCV": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/BackupVault/nestedtemplates','/recoveryServicesVault.json')]",
+      "backupVMProtectedItem": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/BackupVault/nestedtemplates','/backupProtectedItems.json')]",
       "configuringBackupADVMURL": "[concat(parameters('templatesBaseUrl'),'/configuringBackupADVM.json')]",
       "preparingAlwaysOnSqlServerURL": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServer.json')]",
       "configuringAlwaysOnURL": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOn.json')]",
@@ -615,6 +616,11 @@
       "createClusterConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
       "iisModulesURL": "[concat(parameters('scriptsBaseUrl'),'/ContosoWebsite.ps1.zip')]",
       "iisConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite"
+    },
+    "backupInfo": {
+      "rcVaultName": "[parameters('recoveryServicesVaultName')]",
+      "backupPolicy": "[parameters('backupPolicy')]",
+      "backupTemplateUrl": "[variables('artifacts').backupVMProtectedItem]"
     }
 	},
   "resources": [
@@ -1176,7 +1182,8 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/ConfiguringAlwaysOn"
+        "Microsoft.Resources/deployments/ConfiguringAlwaysOn",
+        "Microsoft.Resources/deployments/RecoverServicesVault"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1298,8 +1305,8 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "rcVaultName": {
-            "value": "[parameters('recoveryServicesVaultName')]"
+          "backupInfo": {
+            "value": "[variables('backupInfo')]"
           }
         }
       }
