@@ -23,7 +23,7 @@
 
     "dataRetention": {
       "type": "int",
-      "defaultValue": 30,
+      "defaultValue": 365,
       "minValue": 7,
       "maxValue": 730,
       "metadata": {
