@@ -551,31 +551,34 @@
           }
         }
       },
-      "resources": [
-        {
-          "name": "[concat('BackupSqlVM-',copyIndex()]",
-          "type": "Microsoft.Resources/deployments",
-          "apiVersion": "2015-01-01",
-          "dependsOn": [
-            "[concat(parameters('sqlVMName'), copyindex())]"
-          ],
-          "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[parameters('backupInfo').backupTemplateUrl]",
-              "contentVersion": "1.0.0.0"
-            },
-            "parameters": {
-              "backupInfo": {
-                "value": "[parameters('backupInfo')]"
-              },
-              "vmName": {
-                "value": "[concat(parameters('sqlVMName'), copyindex())]"
-              }
-            }
+      "resources": []
+    },
+    {
+      "name": "BackupSqlVM",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "copy": {
+        "name": "backupSqlVMLoop",
+        "count": 2
+      },
+      "dependsOn": [
+        "[concat(parameters('sqlVMName'), copyindex())]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('backupInfo').backupTemplateUrl]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "backupInfo": {
+            "value": "[parameters('backupInfo')]"
+          },
+          "vmName": {
+            "value": "[concat(parameters('sqlVMName'), copyindex())]"
           }
         }
-      ]
+      }
     },
     {
       "apiVersion": "2015-06-15",
@@ -668,250 +671,260 @@
       ]
     },
     {
-			"name": "UpdatingDNStoPrimaryADVM",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
+      "name": "UpdatingDNStoPrimaryADVM",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
         "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '0')]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '1')]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[parameters('updateVnetWithDNSTemplateURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[parameters('location')]"
-					},
-					"virtualNetworkName": {
-						"value": "[parameters('virtualNetworkNameWithSuffix')]"
-					},
-					"virtualNetworkAddressRange": {
-						"value": "[parameters('virtualNetworkAddressRange')]"
-					},
-					"subnets": {
-						"value": "[parameters('subnets')]"
-					},
-					"DNSServerAddress": {
-						"value": [
-							"[parameters('adPDCNICIPAddress')]"
-						]
-					}
-				}
-			}
-		},
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('updateVnetWithDNSTemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "virtualNetworkName": {
+            "value": "[parameters('virtualNetworkNameWithSuffix')]"
+          },
+          "virtualNetworkAddressRange": {
+            "value": "[parameters('virtualNetworkAddressRange')]"
+          },
+          "subnets": {
+            "value": "[parameters('subnets')]"
+          },
+          "DNSServerAddress": {
+            "value": [
+              "[parameters('adPDCNICIPAddress')]"
+            ]
+          }
+        }
+      }
+    },
     {
-			"name": "ConfiguringBackupADVM",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
+      "name": "ConfiguringBackupADVM",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '0')]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '1')]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[parameters('configuringBackupADVMURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[resourceGroup().location]"
-					},
-					"adBDCVMName": {
-						"value": "[parameters('adBDCVMName')]"
-					},
-					"adminUserName": {
-						"value": "[parameters('adminUsername')]"
-					},
-					"adminPassword": {
-						"value": "[parameters('adminPassword')]"
-					},
-					"domainName": {
-						"value": "[parameters('domainName')]"
-					},
-					"adBDCConfigurationFunction": {
-						"value": "[parameters('adBDCConfigurationFunction')]"
-					},
-					"adBDCModulesURL": {
-						"value": "[parameters('adBDCModulesURL')]"
-					},
-					"adPDCNICIPAddress": {
-						"value": "[parameters('adPDCNICIPAddress')]"
-					}
-				}
-			}
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('configuringBackupADVMURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[resourceGroup().location]"
+          },
+          "adBDCVMName": {
+            "value": "[parameters('adBDCVMName')]"
+          },
+          "adminUserName": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "domainName": {
+            "value": "[parameters('domainName')]"
+          },
+          "adBDCConfigurationFunction": {
+            "value": "[parameters('adBDCConfigurationFunction')]"
+          },
+          "adBDCModulesURL": {
+            "value": "[parameters('adBDCModulesURL')]"
+          },
+          "adPDCNICIPAddress": {
+            "value": "[parameters('adPDCNICIPAddress')]"
+          }
+        }
+      }
     },
     {
-			"name": "UpdatingDNSwithBackupADVM",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/ConfiguringBackupADVM"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[parameters('updateVnetWithDNSTemplateURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[resourceGroup().location]"
-					},
-					"virtualNetworkName": {
-						"value": "[parameters('virtualNetworkNameWithSuffix')]"
-					},
-					"virtualNetworkAddressRange": {
-						"value": "[parameters('virtualNetworkAddressRange')]"
-					},
-					"subnets": {
-						"value": "[parameters('subnets')]"
-					},
-					"DNSServerAddress": {
-						"value": [
-							"[parameters('adPDCNICIPAddress')]",
-							"[parameters('adBDCNICIPAddress')]"
-						]
-					}
-				}
-			}
-		},
+      "name": "UpdatingDNSwithBackupADVM",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/ConfiguringBackupADVM"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('updateVnetWithDNSTemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[resourceGroup().location]"
+          },
+          "virtualNetworkName": {
+            "value": "[parameters('virtualNetworkNameWithSuffix')]"
+          },
+          "virtualNetworkAddressRange": {
+            "value": "[parameters('virtualNetworkAddressRange')]"
+          },
+          "subnets": {
+            "value": "[parameters('subnets')]"
+          },
+          "DNSServerAddress": {
+            "value": [
+              "[parameters('adPDCNICIPAddress')]",
+              "[parameters('adBDCNICIPAddress')]"
+            ]
+          }
+        }
+      }
+    },
     {
-			"name": "UpdatingSQLWNic",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/UpdatingDNStoPrimaryADVM"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[parameters('updateNicTemplateURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[parameters('location')]"
-					},
-					"nicName": {
-						"value": "[parameters('sqlwNicName')]"
-					},
-					"ipConfigurations": {
-						"value": [{
-							"name": "ipconfig1",
-							"properties": {
-								"privateIPAllocationMethod": "Dynamic",
-								"subnet": {
-									"id": "[parameters('sqlSubnetRef')]"
-								}
-							}
-						}]
-					},
-					"dnsServers": {
-						"value": [
-							"[parameters('adPDCNICIPAddress')]",
-							"[parameters('adBDCNICIPAddress')]"
-						]
-					}
-				}
-			}
-		},
-		{
-			"name": "UpdatingSQL0Nic",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/UpdatingSQLWNic"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[parameters('updateNicTemplateURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[resourceGroup().location]"
-					},
-					"nicName": {
-						"value": "[parameters('sql0NicName')]"
-					},
-					"ipConfigurations": {
-						"value": [{
-							"name": "ipconfig1",
-							"properties": {
-								"privateIPAllocationMethod": "Dynamic",
-								"subnet": {
-									"id": "[parameters('sqlSubnetRef')]"
-								},
-								"loadBalancerBackendAddressPools": [{
-									"id": "[parameters('sqlBEAddressPoolID')]"
-								}]
-							}
-						}]
-					},
-					"dnsServers": {
-						"value": [
-							"[parameters('adPDCNICIPAddress')]",
-							"[parameters('adBDCNICIPAddress')]"
-						]
-					}
-				}
-			}
-		},
-		{
-			"name": "UpdatingSQL1Nic",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/UpdatingSQL0Nic"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[parameters('updateNicTemplateURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[parameters('location')]"
-					},
-					"nicName": {
-						"value": "[parameters('sql1NicName')]"
-					},
-					"ipConfigurations": {
-						"value": [{
-							"name": "ipconfig1",
-							"properties": {
-                "privateIPAllocationMethod": "Dynamic",
-								"subnet": {
-									"id": "[parameters('sqlSubnetRef')]"
-								},
-								"loadBalancerBackendAddressPools": [{
-									"id": "[parameters('sqlBEAddressPoolID')]"
-								}]
-							}
-						}]
-					},
-					"dnsServers": {
-						"value": [
-							"[parameters('adPDCNICIPAddress')]",
-							"[parameters('adBDCNICIPAddress')]"
-						]
-					}
-				}
-			}
-		},
+      "name": "UpdatingSQLWNic",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/UpdatingDNStoPrimaryADVM"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('updateNicTemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "nicName": {
+            "value": "[parameters('sqlwNicName')]"
+          },
+          "ipConfigurations": {
+            "value": [
+              {
+                "name": "ipconfig1",
+                "properties": {
+                  "privateIPAllocationMethod": "Dynamic",
+                  "subnet": {
+                    "id": "[parameters('sqlSubnetRef')]"
+                  }
+                }
+              }
+            ]
+          },
+          "dnsServers": {
+            "value": [
+              "[parameters('adPDCNICIPAddress')]",
+              "[parameters('adBDCNICIPAddress')]"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "UpdatingSQL0Nic",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/UpdatingSQLWNic"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('updateNicTemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[resourceGroup().location]"
+          },
+          "nicName": {
+            "value": "[parameters('sql0NicName')]"
+          },
+          "ipConfigurations": {
+            "value": [
+              {
+                "name": "ipconfig1",
+                "properties": {
+                  "privateIPAllocationMethod": "Dynamic",
+                  "subnet": {
+                    "id": "[parameters('sqlSubnetRef')]"
+                  },
+                  "loadBalancerBackendAddressPools": [
+                    {
+                      "id": "[parameters('sqlBEAddressPoolID')]"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "dnsServers": {
+            "value": [
+              "[parameters('adPDCNICIPAddress')]",
+              "[parameters('adBDCNICIPAddress')]"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "UpdatingSQL1Nic",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/UpdatingSQL0Nic"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('updateNicTemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "nicName": {
+            "value": "[parameters('sql1NicName')]"
+          },
+          "ipConfigurations": {
+            "value": [
+              {
+                "name": "ipconfig1",
+                "properties": {
+                  "privateIPAllocationMethod": "Dynamic",
+                  "subnet": {
+                    "id": "[parameters('sqlSubnetRef')]"
+                  },
+                  "loadBalancerBackendAddressPools": [
+                    {
+                      "id": "[parameters('sqlBEAddressPoolID')]"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "dnsServers": {
+            "value": [
+              "[parameters('adPDCNICIPAddress')]",
+              "[parameters('adBDCNICIPAddress')]"
+            ]
+          }
+        }
+      }
+    },
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines",

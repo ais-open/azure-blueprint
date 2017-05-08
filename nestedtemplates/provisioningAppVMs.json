@@ -145,7 +145,7 @@
           }
         ],
         "networkSecurityGroup": {
-            "id": "[parameters('webNSGid')]"
+          "id": "[parameters('webNSGid')]"
         }
       }
     },
@@ -199,61 +199,64 @@
           ]
         }
       },
-      "resources": [
-        {
-          "name": "[concat('BackupWebVM-',copyIndex())]",
-          "type": "Microsoft.Resources/deployments",
-          "apiVersion": "2015-01-01",
-          "dependsOn": [
-            "[concat(parameters('WebVMName'), copyindex())]"
-          ],
-          "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[parameters('backupInfo').backupTemplateUrl]",
-              "contentVersion": "1.0.0.0"
-            },
-            "parameters": {
-              "backupInfo": {
-                "value": "[parameters('backupInfo')]"
-              },
-              "vmName": {
-                "value": "[concat(parameters('WebVMName'), copyindex())]" 
-              }
-            }
-          }
-        }
-      ]
+      "resources": []
     },
     {
-        "comments": "Join domain - JsonADDomainExtension",
-        "apiVersion": "2015-06-15",
-        "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(parameters('WebVMName'), copyindex(), '/joindomain')]",
-        "copy": {
-          "name": "extensionLoopDEL",
-          "count": "[parameters('numberOfWebInstances')]"
+      "name": "BackupWebVM",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "copy": {
+        "name": "backupWebVMLoop",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
+      "dependsOn": [
+        "[concat(parameters('WebVMName'), copyindex())]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('backupInfo').backupTemplateUrl]",
+          "contentVersion": "1.0.0.0"
         },
-        "dependsOn": [
-          "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
-        ],
-        "location": "[parameters('location')]",
-        "properties": {
-            "publisher": "Microsoft.Compute",
-            "type": "JsonADDomainExtension",
-            "typeHandlerVersion": "1.3",
-            "autoUpgradeMinorVersion": true,
-            "settings": {
-                "Name": "[parameters('domainName')]",
-                "User": "[variables('domainJoinUserName')]",
-                "Restart": "true",
-                "Options": "[variables('domainJoinOptions')]",
-                "OUPath": ""
-            },
-            "protectedSettings": {
-                "Password": "[parameters('adminPassword')]"
-            }
+        "parameters": {
+          "backupInfo": {
+            "value": "[parameters('backupInfo')]"
+          },
+          "vmName": {
+            "value": "[concat(parameters('WebVMName'), copyindex())]"
+          }
         }
+      }
+    },
+    {
+      "comments": "Join domain - JsonADDomainExtension",
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('WebVMName'), copyindex(), '/joindomain')]",
+      "copy": {
+        "name": "extensionLoopDEL",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
+      ],
+      "location": "[parameters('location')]",
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "JsonADDomainExtension",
+        "typeHandlerVersion": "1.3",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "Name": "[parameters('domainName')]",
+          "User": "[variables('domainJoinUserName')]",
+          "Restart": "true",
+          "Options": "[variables('domainJoinOptions')]",
+          "OUPath": ""
+        },
+        "protectedSettings": {
+          "Password": "[parameters('adminPassword')]"
+        }
+      }
     }
   ],
   "outputs": {
