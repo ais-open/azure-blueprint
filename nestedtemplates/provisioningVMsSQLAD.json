@@ -179,7 +179,7 @@
     "sqlBEAddressPoolID": {
       "type": "string"
     },
-    rcVaultName": {
+    "rcVaultName": {
       "type": "string"
     },
     "backupPolicy": {
