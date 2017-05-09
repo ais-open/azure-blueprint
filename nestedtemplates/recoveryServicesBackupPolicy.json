@@ -15,7 +15,81 @@
       "dependsOn": [],
       "location": "[resourceGroup().location]",
       "properties": {
-        "backupManagementType": "AzureIaasVM",
+        "backupManagementType": "AzureIaaSVM",
+        "schedulePolicy": {
+          "schedulePolicyType": "SimpleSchedulePolicy",
+          "scheduleRunType": "Daily",
+          "scheduleRunTimes": [
+            "2015-11-20T01:00:00"
+          ]
+        },
+        "retentionPolicy": {
+          "retentionPolicyType": "LongTermRetentionPolicy",
+          "dailySchedule": {
+            "retentionTimes": [
+              "2015-08-13T08:30:00Z"
+            ],
+            "retentionDuration": {
+              "count": 180,
+              "durationType": "Weeks"
+            }
+          },
+          "weeklySchedule": {
+            "daysOfTheWeek": [
+              "Sunday"
+            ],
+            "retentionTimes": [
+              "2015-08-13T08:30:00Z"
+            ],
+            "retentionDuraction": {
+              "count": 104,
+              "durationType:" "Days"
+            }
+          },
+          "monthlySchedule": {
+            "retentionScheduleFormat": "Weekly",
+            "retentionScheduleWeekly": {
+              "daysOfTheWeek": [
+                "Sunday"
+              ],
+              "weeksOfTheMonth": [
+                "Second"
+              ]
+            },
+            "retentionTimes": [
+              "2015-08-13T08:30:00Z"
+              "\"",
+            ],
+            "retentionDuration": {
+              "count": 60,
+              "durationType": "Months"
+            }
+          },
+          "yearlySchedule": {
+            "retentionScheduleFormat": "Weekly",
+            "monthsOfYear": [
+              "January"
+            ],
+            "retentionScheduleWeekly": {
+              "daysOfTheWeek": [
+                "Sunday"
+              ],
+              "weeksOfTheMonth": [
+                "Second"
+              ]
+            },
+            "retentionTimes": [
+              "2015-08-13T08:30:00Z"
+            ],
+            "retentionDuration": {
+              "retentionDuration": {
+                "count": 10,
+                "durationType": "Years"
+              }
+            }
+          }
+        }
+        /*"backupManagementType": "AzureIaasVM",
         "schedulePolicy": {
           "scheduleRunType": "Daily",
           //"scheduleRunDays": "[parameters('backupInfo').backupDaysOfTheWeek]",
@@ -39,8 +113,8 @@
             }
           },
           "monthlySchedule": {
-            "retentionScheduleFormatType": "Weekly",
-            /*"retentionScheduleDaily": {
+            "retentionScheduleFormatType": "Weekly",*/
+        /*"retentionScheduleDaily": {
                 "daysOfTheMonth": [
                   {
                     "date": 1,
@@ -48,6 +122,7 @@
                   }
                 ]
               },*/
+        /*
             "retentionScheduleWeekly": {
               "daysOfTheWeek": "[parameters('backupInfo').backupDaysOfTheWeek]",
               "weeksOfTheMonth": "[parameters('backupInfo').backupWeeksOfTheMonth]"
@@ -60,8 +135,8 @@
           },
           "yearlySchedule": {
             "retentionScheduleFormatType": "Weekly",
-            "monthsOfYear": "[parameters('backupInfo').backupMonthsOfYear]",
-            /*"retentionScheduleDaily": {
+            "monthsOfYear": "[parameters('backupInfo').backupMonthsOfYear]",*/
+        /*"retentionScheduleDaily": {
                 "daysOfTheMonth": [
                   {
                     "date": 1,
@@ -69,6 +144,7 @@
                   }
                 ]
               },*/
+        /*
             "retentionScheduleWeekly": {
               "daysOfTheWeek": "[parameters('backupInfo').backupDaysOfTheWeek]",
               "weeksOfTheMonth": "[parameters('backupInfo').backupWeeksOfTheMonth]"
@@ -80,7 +156,7 @@
             }
           },
           "retentionPolicyType": "LongTermRetentionPolicy"
-        }
+        }*/
       }
     }
   ]
