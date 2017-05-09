@@ -20,8 +20,7 @@
       "defaultValue": "CustomPolicy",
       "metadata": {
         "description": "Azure Backup policy to apply to VMs"
-      },
-      "defaultValue": "DefaultPolicy"
+      }
     },
     "backupScheduleRunTimes": {
       "type": "array",
