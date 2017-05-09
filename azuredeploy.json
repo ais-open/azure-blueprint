@@ -298,6 +298,18 @@
 				}
 			}
 		},
+		"appGatewaySubnet": {
+			"type": "object",
+			"metadata": {
+				"description": "The address range of the subnet static IPs are allocated from in the new VNET"
+			},
+			"defaultValue": {
+				"name": "appgateway",
+				"properties": {
+					"addressPrefix": "10.200.4.0/24"
+				}
+			}
+		},
 		"webSubnet": {
 			"type": "object",
 			"metadata": {
@@ -400,14 +412,14 @@
 			"metadata": {
 				"description": "Linked Templates base url"
 			},
-			"defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/nestedtemplates"
+			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/nestedtemplates"
 		},
 		"scriptsBaseUrl": {
 			"type": "string",
 			"metadata": {
 				"description": "DSC Scripts base url"
 			},
-			"defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/DSC"
+			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/DSC"
 		},
 		"sqlServerVersion": {
 			"type": "string",
@@ -433,6 +445,10 @@
 				"description": "The Sql VM Disk Size"
 			},
 			"defaultValue": "2"
+		},
+		"gatewaySkuName": {
+			"type": "string",
+			"defaultValue":"Standard_Small"
 		}
 	},
 	"variables": {
@@ -512,7 +528,8 @@
 			"[parameters('sqlSubnet')]",
 			"[parameters('dcSubnet')]",
 			"[parameters('webSubnet')]",
-			"[parameters('mgtSubnet')]"
+			"[parameters('mgtSubnet')]",
+			"[parameters('appGatewaySubnet')]"
 		],
 		"virtualNetworkNameWithSuffix": "[concat(parameters('virtualNetworkName'), uniqueString(resourceGroup().id))]",
 		"resourceNames": {
@@ -678,6 +695,47 @@
 				}
 			}
 		},
+		{
+      "name": "ProvisioningApplicationGateway",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+				"Microsoft.Resources/deployments/VirtualNetworkNSG"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').applicationGatewayURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "addressPrefix": {
+            "value":"[parameters('virtualNetworkAddressRange')]"
+          },
+          "virtualNetworkName": {
+            "value":"[variables('resourceNames').virtualNetworkNameWithSuffix]"
+          },
+          "subnetPrefix": {
+            "value":"[parameters('appGatewaySubnet').properties.addressPrefix]"
+          },
+          "skuName": {
+            "value":"[parameters('gatewaySkuName')]"
+          },
+          "capacity": {
+            "value": 2
+          },
+          "backendIpsForPathRuleWEB": {
+            "value":"[parameters('webIPAddresses')]"
+          },
+          "pathMatch1": {
+            "value":"/WEB"
+          },
+          "subnetName": {
+            "value": "[parameters('appGatewaySubnet').name]"
+          }
+        }
+      }
+    },
 		{
 			"name": "ProvisioningNICsSQLADMGT",
 			"type": "Microsoft.Resources/deployments",
