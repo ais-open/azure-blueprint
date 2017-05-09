@@ -17,10 +17,67 @@
     },
     "backupPolicy": {
       "type": "string",
+      "defaultValue": "CustomPolicy",
       "metadata": {
         "description": "Azure Backup policy to apply to VMs"
       },
       "defaultValue": "DefaultPolicy"
+    },
+    "backupScheduleRunTimes": {
+      "type": "array",
+      "defaultValue": [ "2017-05-09T23:00:00" ],
+      "metadata": {
+        "description": "Times in day when backup should be triggered. e.g. 01:00, 13:00. This will be used in LTR too for daily, weekly, monthly and yearly backup."
+      }
+    },
+    "backupDailyRetentionDurationCount": {
+      "type": "int",
+      "defaultValue": 30,
+      "metadata": {
+        "description": "Number of days you want to retain the backup"
+      }
+    },
+    "backupDaysOfTheWeek": {
+      "type": "array",
+      "defaultValue": [ "Sunday" ],
+      "metadata": {
+        "description": "Backup will run on array of Days like, Monday, Tuesday etc. Applies in Weekly retention only."
+      }
+    },
+    "backupWeeklyRetentionDurationCount": {
+      "type": "int",
+      "defaultValue": 104,
+      "metadata": {
+        "description": "Number of weeks you want to retain the backup"
+      }
+    },
+    "backupWeeksOfTheMonth": {
+      "type": "array",
+      "defaultValue": ["First"],
+      "metadata": {
+        "description": "The week in the month to run the backup"
+      }
+    },
+    "backupMonthlyRetentionDurationCount": {
+      "type": "int",
+      "defaultValue": 36,
+      "metadata": {
+        "description": "Number of months you want to retain the backup"
+      }
+    },
+    "backupMonthsOfYear": {
+      "type": "array",
+      "defaultValue": [ "January" ],
+      "metadata": {
+        "description": "Array of Months for Yearly Retention"
+      }
+    },
+    "backupYearlyRetentionDurationCount": {
+      "type": "int",
+      "defaultValue": 5,
+      "metadata": {
+        "description": "Number of years you want to retain the backup"
+      }
     },
     "adminUsername": {
       "type": "string",
@@ -601,6 +658,7 @@
       "provisioningAppVMsURL": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/BackupVault/nestedtemplates','/provisioningAppVMs.json')]",
       "provisioningRCV": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/BackupVault/nestedtemplates','/recoveryServicesVault.json')]",
       "backupVMProtectedItem": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/BackupVault/nestedtemplates','/backupProtectedItems.json')]",
+      "backupPolicy": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/BackupVault/nestedtemplates','/recoveryServicesBackupPolicy.json')]",
       "configuringBackupADVMURL": "[concat(parameters('templatesBaseUrl'),'/configuringBackupADVM.json')]",
       "preparingAlwaysOnSqlServerURL": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServer.json')]",
       "configuringAlwaysOnURL": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOn.json')]",
@@ -620,7 +678,16 @@
     "backupInfo": {
       "rcVaultName": "[parameters('recoveryServicesVaultName')]",
       "backupPolicy": "[parameters('backupPolicy')]",
-      "backupTemplateUrl": "[variables('artifacts').backupVMProtectedItem]"
+      "backupTemplateUrl": "[variables('artifacts').backupVMProtectedItem]",
+      "backupPolicyTemplateUrl": "[variables('artifacts').backupPolicy]",
+      "backupScheduleRunTimes": "[parameters('backupScheduleRunTimes')]",
+      "backupDailyRetentionDurationCount": "[parameters('backupDailyRetentionDurationCount')]",
+      "backupDaysOfTheWeek": "[parameters('backupDaysOfTheWeek')]",
+      "backupWeeklyRetentionDurationCount": "[parameters('backupWeeklyRetentionDurationCount')]",
+      "backupWeeksOfTheMonth": "[parameters('backupWeeksOfTheMonth')]",
+      "backupMonthlyRetentionDurationCount": "[parameters('backupMonthlyRetentionDurationCount')]",
+      "backupMonthsOfYear": "[parameters('backupMonthsOfYear')]",
+      "backupYearlyRetentionDurationCount": "[parameters('backupYearlyRetentionDurationCount')]"
     }
 	},
   "resources": [
@@ -803,7 +870,8 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "Microsoft.Resources/deployments/ProvisioningNICsSQLADMGT",
-        "Microsoft.Resources/deployments/RecoverServicesVault"
+        "Microsoft.Resources/deployments/RecoverServicesVault",
+        "Microsoft.Resources/deployments/BackupPolicyCustom"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1180,7 +1248,8 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "Microsoft.Resources/deployments/ConfiguringAlwaysOn",
-        "Microsoft.Resources/deployments/RecoverServicesVault"
+        "Microsoft.Resources/deployments/RecoverServicesVault",
+        "Microsoft.Resources/deployments/BackupPolicyCustom"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1296,6 +1365,24 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[variables('artifacts').provisioningRCV]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "backupInfo": {
+            "value": "[variables('backupInfo')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "BackupPolicyCustom",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').backupPolicy]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
