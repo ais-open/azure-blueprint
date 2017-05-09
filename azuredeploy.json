@@ -50,13 +50,6 @@
         "description": "Number of weeks you want to retain the backup"
       }
     },
-    "backupWeeksOfTheMonth": {
-      "type": "array",
-      "defaultValue": ["First"],
-      "metadata": {
-        "description": "The week in the month to run the backup"
-      }
-    },
     "backupMonthlyRetentionDurationCount": {
       "type": "int",
       "defaultValue": 36,
@@ -84,18 +77,6 @@
         "description": "The name of the Administrator of the new VMs and Domain"
       }
     },
-    /*"adminPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Password for administrator accounts and domain join"
-      }
-    },
-    "sqlServerServiceAccountPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Password for SQL accounts"
-      }
-    },*/
     "environmentPrefix": {
       "type": "string",
       "metadata": {
@@ -683,7 +664,6 @@
       "backupDailyRetentionDurationCount": "[parameters('backupDailyRetentionDurationCount')]",
       "backupDaysOfTheWeek": "[parameters('backupDaysOfTheWeek')]",
       "backupWeeklyRetentionDurationCount": "[parameters('backupWeeklyRetentionDurationCount')]",
-      "backupWeeksOfTheMonth": "[parameters('backupWeeksOfTheMonth')]",
       "backupMonthlyRetentionDurationCount": "[parameters('backupMonthlyRetentionDurationCount')]",
       "backupMonthsOfYear": "[parameters('backupMonthsOfYear')]",
       "backupYearlyRetentionDurationCount": "[parameters('backupYearlyRetentionDurationCount')]"
