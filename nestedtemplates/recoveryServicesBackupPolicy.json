@@ -17,7 +17,7 @@
       "properties": {
         "backupManagementType": "AzureIaasVM",
         "schedulePolicy": {
-          "scheduleRunFrequency": "Daily",
+          "scheduleRunType": "Daily",
           //"scheduleRunDays": "[parameters('backupInfo').backupDaysOfTheWeek]",
           "scheduleRunTimes": "[parameters('backupInfo').backupScheduleRunTimes]",
           "schedulePolicyType": "SimpleSchedulePolicy"
