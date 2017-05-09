@@ -6,13 +6,11 @@
       "type": "object"
     }
   },
-  "variables": {
-    "backupPolicyName": "[concat(parameters('backupInfo').rcVaultName, '/', parameters('backupInfo').backupPolicy)]"
-  },
+  "variables": {},
   "resources": [
     {
       "apiVersion": "2016-06-01",
-      "name": "[variables('backupPolicyName')]",
+      "name": "[concat(parameters('backupInfo').rcVaultName, '/', parameters('backupInfo').backupPolicy)]",
       "type": "Microsoft.RecoveryServices/vaults/backupPolicies",
       "dependsOn": [],
       "location": "[resourceGroup().location]",
