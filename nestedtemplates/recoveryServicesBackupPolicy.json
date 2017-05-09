@@ -41,7 +41,7 @@
             "retentionTimes": [
               "2015-08-13T08:30:00Z"
             ],
-            "retentionDuraction": {
+            "retentionDuration": {
               "count": 104,
               "durationType": "Days"
             }
