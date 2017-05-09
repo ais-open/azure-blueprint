@@ -412,14 +412,14 @@
 			"metadata": {
 				"description": "Linked Templates base url"
 			},
-			"defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/nestedtemplates"
+			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/nestedtemplates"
 		},
 		"scriptsBaseUrl": {
 			"type": "string",
 			"metadata": {
 				"description": "DSC Scripts base url"
 			},
-			"defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/DSC"
+			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/DSC"
 		},
 		"sqlServerVersion": {
 			"type": "string",
@@ -732,13 +732,7 @@
           },
           "subnetName": {
             "value": "[parameters('appGatewaySubnet').name]"
-          },
-					"iisModulesURL": {
-						"value": "[variables('artifacts').iisModulesURL]"
-					},
-					"iisConfigurationFunction": {
-						"value": "[variables('artifacts').iisConfigurationFunction]"
-					}
+          }
         }
       }
     },
