@@ -58,7 +58,6 @@
             },
             "retentionTimes": [
               "2015-08-13T08:30:00Z"
-              "\"",
             ],
             "retentionDuration": {
               "count": 60,
