@@ -3,30 +3,13 @@
 
 <#
 .Description
-Script needs to be run with elevated priveleges, as it interacts with the local file system (for generation of a certificate)
-Executes the initial setup script, creating a dedicated resource group, storage account, and azure automation account.
-Optionally uploads arm templtes and ps runbooks to created storage account (if path specified)
-Optionally publishes all ps runbooks in specified directory to azure automation account created by the process.
+This script will create a Key Vault inside a specified Azure subscription
 
 .Example
 $BaseSourceControl = 'C:\Users\davoodharun\Desktop'
-$MyParams = @{
-	environmentName = "AzureUSGovernment"
-	location = "USGov Virginia"
-	subscriptionId = "eee71d43-1ba6-4da6-a6c4-ab75f599c1dc"
-	resourceGroupName = "OrchestrationRG"
-	StorageAccountName = "orchestrationstorage"
-	armtemplatesLocalDir = "$BaseSourceControl\OD4Gov\Templates"
-	psrunbooksLocalDir = "$BaseSourceControl\OD4Gov\Scripts\orchestration\automationrunbooks"
-	scriptsLocalDir = "$BaseSourceControl\OD4Gov\Scripts\DSC"
-	automationAccountName = "OrchestrationAutomationUser"
-	keyVaultName = "OrchestrationKeyVault"
-	serverPrincipalCertPassword = New-QMAlphanumericSecurePassword
-}
-. "$BaseSourceControl\OD4Gov\Scripts\orchestration\Orchestration_InitialSetup.ps1" @MyParams -verbose
-
-
+. "$BaseSourceControl\azure-blueprint\predeploy\Orchestration_InitialSetup.ps1" @MyParams -verbose
 #>
+
 [cmdletbinding()]
 Param(
   [string]$environmentName = "AzureUSGovernment",
@@ -38,12 +21,31 @@ Param(
 	[Parameter(Mandatory=$true)]
   [string]$keyVaultName,
 	[Parameter(Mandatory=$true)]
-  [string]$adminUsername,
-	[Parameter(Mandatory=$true)]
   [SecureString]$adminPassword,
 	[Parameter(Mandatory=$true)]
   [SecureString]$sqlServerServiceAccountPassword
 )
+
+try {
+	$Ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToCoTaskMemUnicode($adminPassword)
+	$result = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($Ptr)
+	[System.Runtime.InteropServices.Marshal]::ZeroFreeCoTaskMemUnicode($Ptr)
+	. "$BaseSourceControl\checkPassword.ps1" -password $result
+}
+catch {
+	Throw "Administrator password did not meet the complexity requirements"
+}
+
+try {
+	$Ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToCoTaskMemUnicode($sqlServerServiceAccountPassword)
+	$result = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($Ptr)
+	[System.Runtime.InteropServices.Marshal]::ZeroFreeCoTaskMemUnicode($Ptr)
+	. "$BaseSourceControl\checkPassword.ps1" -password $result
+}
+catch {
+	Throw "sqlServerServiceAccountPassword  did not meet the complexity requirements"
+}
+
 $errorActionPreference = 'stop'
 
 try
@@ -64,13 +66,13 @@ if (-not $Exists)
 Write-Host "Selecting subscription as default"
 Select-AzureRmSubscription -SubscriptionId $SubscriptionId | Out-String | Write-Verbose
 
-Write-Host "Creating resource group '$($resourceGroupName)' to hold the automation account, key vault, and template storage account."
+Write-Host "Creating resource group '$($resourceGroupName)' to hold key vault."
 
 if (-not (Get-AzureRmResourceGroup -Name $resourceGroupName -Location $location -ErrorAction SilentlyContinue)) {
 	New-AzureRmResourceGroup -Name $resourceGroupName -Location $location  | Out-String | Write-Verbose
 }
 
-Write-Host "Create a keyVault '$($keyVaultName)' to store the service principal ids, key, certificate"
+Write-Host "Create a keyVault '$($keyVaultName)'"
 if (-not (Get-AzureRMKeyVault -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ErrorAction SilentlyContinue )) {
 	New-AzureRMKeyVault -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -EnabledForTemplateDeployment -Location $location | Out-String | Write-Verbose
 	$key = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name 'adminPassword' -Destination 'Software'
