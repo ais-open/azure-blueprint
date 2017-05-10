@@ -284,6 +284,36 @@
         },
         "protectedSettings": null
       }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('vmName'),'/', parameters('vmExtensionName'))]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Azure.Security",
+        "type": "IaaSAntimalware",
+        "typeHandlerVersion": "1.1",
+        "settings": {
+          "AntimalwareEnabled": "true",
+          "Exclusions": {
+            "Paths": "C:\\Users",
+            "Extensions": ".txt",
+            "Processes": "taskmgr.exe"
+          },
+          "RealtimeProtectionEnabled": "true",
+          "ScheduledScanSettings": {
+            "isEnabled": "true",
+            "scanType": "Quick",
+            "day": "7",
+            "time": "120"
+          }
+        },
+        "protectedSettings": null
+      }
     }
   ],
   "outputs": {}
