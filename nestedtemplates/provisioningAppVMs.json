@@ -135,7 +135,7 @@
     "resources": [{
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('WebStorageAccountName')]",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2016-01-01",
             "location": "[resourceGroup().location]",
             "properties": {
                 "accountType": "[parameters('webStorageAccountType')]",

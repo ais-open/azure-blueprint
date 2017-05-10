@@ -257,7 +257,7 @@
         {
             "name": "[parameters('sqlStorageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
             "properties": {
                 "accountType": "[parameters('SqlStorageAccountType')]",
@@ -274,7 +274,7 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('dcStorageAccountName')]",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
             "properties": {
                 "accountType": "[parameters('DcStorageAccountType')]",
@@ -291,7 +291,7 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[variables('fswstorageName')]",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
             "properties": {
                 "accountType": "Standard_LRS",
@@ -308,7 +308,7 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('mgtStorageAccountName')]",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2016-01-01",
             "location": "[resourceGroup().location]",
             "properties": {
                 "accountType": "[parameters('mgtStorageAccountType')]",
@@ -325,7 +325,7 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[variables('diagstorageNameSQL')]",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
             "properties": {
                 "accountType": "Standard_LRS",
@@ -342,7 +342,7 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[variables('diagstorageNameDC')]",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
             "properties": {
                 "accountType": "Standard_LRS",
