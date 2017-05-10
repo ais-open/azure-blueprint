@@ -1,888 +1,916 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "adPDCVMName": {
-      "type": "string"
-    },
-    "adAvailabilitySetName": {
-      "type": "string"
-    },
-    "adVMSize": {
-      "type": "string"
-    },
-    "adminUsername": {
-      "type": "string"
-    },
-    "environmentPrefix": {
-      "type": "string"
-    },
-    "adminPassword": {
-      "type": "securestring"
-    },
-    "adImagePublisher": {
-      "type": "string"
-    },
-    "adImageOffer": {
-      "type": "string"
-    },
-    "adImageSKU": {
-      "type": "string"
-    },
-    "adPDCNicName": {
-      "type": "string"
-    },
-    "adPDCConfigurationFunction": {
-      "type": "string"
-    },
-    "adPDCModulesURL": {
-      "type": "string"
-    },
-    "adBDCVMName": {
-      "type": "string"
-    },
-    "adBDCNicName": {
-      "type": "string"
-    },
-    "sqlVMName": {
-      "type": "string"
-    },
-    "location": {
-      "type": "string"
-    },
-    "sqlStorageAccountName": {
-      "type": "string"
-    },
-    "dcStorageAccountName": {
-      "type": "string"
-    },
-    "SqlStorageAccountType": {
-      "type": "string"
-    },
-    "DcStorageAccountType": {
-      "type": "string"
-    },
-    "sqlAvailabilitySetName": {
-      "type": "string"
-    },
-    "sqlVMSize": {
-      "type": "string"
-    },
-    "fswImagePublisher": {
-      "type": "string"
-    },
-    "fswImageOffer": {
-      "type": "string"
-    },
-    "fswImageSKU": {
-      "type": "string"
-    },
-    "vmContainerName": {
-      "type": "string"
-    },
-    "sqlImagePublisher": {
-      "type": "string"
-    },
-    "sqlImageOffer": {
-      "type": "string"
-    },
-    "sqlImageSKU": {
-      "type": "string"
-    },
-    "mgtImagePublisher": {
-      "type":"string"
-    },
-    "mgtImageOffer": {
-      "type":"string"
-    },
-    "mgtImageSKU": {
-      "type":"string"
-    },
-    "domainName": {
-      "type": "string"
-    },
-    "witnessVMSize": {
-      "type": "string"
-    },
-    "sqlwVMName": {
-      "type": "string"
-    },
-    "sqlwNicName": {
-      "type": "string"
-    },
-    "sql0NicName": {
-      "type": "string"
-    },
-    "sql1NicName": {
-      "type": "string"
-    },
-    "mgtVMName": {
-      "type": "string"
-    },
-    "mgtStorageAccountName": {
-      "type": "string"
-    },
-    "mgtStorageAccountType": {
-      "type": "string"
-    },
-    "mgtVMSize": {
-      "type": "string"
-    },
-    "mgtNICName": {
-      "type": "string"
-    },
-    "mgtIPAddress": {
-      "type": "string"
-    },
-    "mgtSubnetRef": {
-      "type": "string"
-    },
-    "mgtNSGid": {
-      "type": "string"
-    },
-    "domainName": {
-      "type": "string"
-    },
-    "updateVnetWithDNSTemplateURL": {
-      "type": "string"
-    },
-    "virtualNetworkNameWithSuffix": {
-      "type": "string"
-    },
-    "virtualNetworkAddressRange": {
-      "type": "string"
-    },
-    "subnets": {
-      "type": "array"
-    },
-    "adPDCNICIPAddress": {
-      "type": "string"
-    },
-    "adBDCConfigurationFunction": {
-      "type": "string"
-    },
-    "adBDCModulesURL": {
-      "type": "string"
-    },
-    "configuringBackupADVMURL": {
-      "type": "string"
-    },
-    "adBDCNICIPAddress": {
-      "type": "string"
-    },
-    "updateNicTemplateURL": {
-      "type": "string"
-    },
-    "sqlSubnetRef": {
-      "type": "string"
-    },
-    "sqlBEAddressPoolID": {
-      "type": "string"
-    }
-  },
-  "variables": {
-    "sqlstorageName": "[parameters('sqlStorageAccountName')]",
-    "dcstorageName": "[parameters('dcStorageAccountName')]",
-    "fswstorageName": "[concat(parameters('sqlStorageAccountName'), 'fsw')]",
-    "diagstorageNameSQL": "[concat(parameters('sqlStorageAccountName'), 'diag')]",
-    "diagstorageNameDC": "[concat(parameters('dcStorageAccountName'), 'diag')]",
-    "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]"
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Compute/availabilitySets",
-      "name": "[parameters('adAvailabilitySetName')]",
-      "apiVersion": "2015-06-15",
-      "location": "[parameters('location')]"
-    },
-    {
-      "type": "Microsoft.Compute/availabilitySets",
-      "name": "[parameters('sqlAvailabilitySetName')]",
-      "apiVersion": "2015-06-15",
-      "location": "[parameters('location')]",
-      "properties": {
-        "platformFaultDomainCount": "3",
-        "platformUpdateDomainCount": "3"
-      }
-    },
-    {
-      "name": "[parameters('sqlStorageAccountName')]",
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2015-05-01-preview",
-      "location": "[parameters('location')]",
-      "properties": {
-        "accountType": "[parameters('SqlStorageAccountType')]"
-      }
-    },
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[parameters('dcStorageAccountName')]",
-      "apiVersion": "2015-05-01-preview",
-      "location": "[parameters('location')]",
-      "properties": {
-        "accountType": "[parameters('DcStorageAccountType')]"
-      }
-    },
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('fswstorageName')]",
-      "apiVersion": "2015-05-01-preview",
-      "location": "[parameters('location')]",
-      "properties": {
-        "accountType": "Standard_LRS"
-      }
-    },
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[parameters('mgtStorageAccountName')]",
-      "apiVersion": "2015-05-01-preview",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "accountType": "[parameters('mgtStorageAccountType')]"
-      }
-    },
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('diagstorageNameSQL')]",
-      "apiVersion": "2015-05-01-preview",
-      "location": "[parameters('location')]",
-      "properties": {
-        "accountType": "Standard_LRS"
-      }
-    },
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('diagstorageNameDC')]",
-      "apiVersion": "2015-05-01-preview",
-      "location": "[parameters('location')]",
-      "properties": {
-        "accountType": "Standard_LRS"
-      }
-    },
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Compute/virtualMachines",
-      "name": "[parameters('adPDCVMName')]",
-      "location": "[parameters('location')]",
-      "dependsOn": [
-        "[concat('Microsoft.Compute/availabilitySets/',parameters('adAvailabilitySetName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('dcStorageAccountName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameDC'))]"
-      ],
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "[parameters('adVMSize')]"
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adPDCVMName": {
+            "type": "string"
         },
-        "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('adAvailabilitySetName'))]"
+        "adAvailabilitySetName": {
+            "type": "string"
         },
-        "osProfile": {
-          "computername": "[parameters('adPDCVMName')]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
+        "adVMSize": {
+            "type": "string"
         },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "[parameters('adImagePublisher')]",
-            "offer": "[parameters('adImageOffer')]",
-            "sku": "[parameters('adImageSKU')]",
-            "version": "latest"
-          },
-          "osDisk": {
-            "name": "osdisk",
-            "vhd": {
-              "uri": "[concat('http://',variables('dcstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('adPDCVMName'),'-osdisk.vhd')]"
-            },
-            "caching": "ReadWrite",
-            "createOption": "FromImage"
-          },
-          "dataDisks": [
-            {
-              "vhd": {
-                "uri": "[concat('http://',variables('dcstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/', parameters('adPDCVMName'),'data-1.vhd')]"
-              },
-              "name": "[concat(parameters('adPDCVMName'),'-data-disk1')]",
-              "createOption": "empty",
-              "caching": "None",
-              "diskSizeGB": 128,
-              "lun": 0
-            }
-          ]
+        "adminUsername": {
+            "type": "string"
         },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('adPDCNicName'))]"
-            }
-          ]
+        "environmentPrefix": {
+            "type": "string"
         },
-        "diagnosticsProfile": {
-          "bootDiagnostics": {
-            "enabled": "true",
-            "storageUri": "[concat('http://',variables('diagstorageNameDC'),'.blob.core.usgovcloudapi.net')]"
-          }
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "adImagePublisher": {
+            "type": "string"
+        },
+        "adImageOffer": {
+            "type": "string"
+        },
+        "adImageSKU": {
+            "type": "string"
+        },
+        "adPDCNicName": {
+            "type": "string"
+        },
+        "adPDCConfigurationFunction": {
+            "type": "string"
+        },
+        "adPDCModulesURL": {
+            "type": "string"
+        },
+        "adBDCVMName": {
+            "type": "string"
+        },
+        "adBDCNicName": {
+            "type": "string"
+        },
+        "sqlVMName": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "sqlStorageAccountName": {
+            "type": "string"
+        },
+        "dcStorageAccountName": {
+            "type": "string"
+        },
+        "SqlStorageAccountType": {
+            "type": "string"
+        },
+        "DcStorageAccountType": {
+            "type": "string"
+        },
+        "sqlAvailabilitySetName": {
+            "type": "string"
+        },
+        "sqlVMSize": {
+            "type": "string"
+        },
+        "fswImagePublisher": {
+            "type": "string"
+        },
+        "fswImageOffer": {
+            "type": "string"
+        },
+        "fswImageSKU": {
+            "type": "string"
+        },
+        "vmContainerName": {
+            "type": "string"
+        },
+        "sqlImagePublisher": {
+            "type": "string"
+        },
+        "sqlImageOffer": {
+            "type": "string"
+        },
+        "sqlImageSKU": {
+            "type": "string"
+        },
+        "mgtImagePublisher": {
+            "type": "string"
+        },
+        "mgtImageOffer": {
+            "type": "string"
+        },
+        "mgtImageSKU": {
+            "type": "string"
+        },
+        "domainName": {
+            "type": "string"
+        },
+        "witnessVMSize": {
+            "type": "string"
+        },
+        "sqlwVMName": {
+            "type": "string"
+        },
+        "sqlwNicName": {
+            "type": "string"
+        },
+        "sql0NicName": {
+            "type": "string"
+        },
+        "sql1NicName": {
+            "type": "string"
+        },
+        "mgtVMName": {
+            "type": "string"
+        },
+        "mgtStorageAccountName": {
+            "type": "string"
+        },
+        "mgtStorageAccountType": {
+            "type": "string"
+        },
+        "mgtVMSize": {
+            "type": "string"
+        },
+        "mgtNICName": {
+            "type": "string"
+        },
+        "mgtIPAddress": {
+            "type": "string"
+        },
+        "mgtSubnetRef": {
+            "type": "string"
+        },
+        "mgtNSGid": {
+            "type": "string"
+        },
+        "domainName": {
+            "type": "string"
+        },
+        "updateVnetWithDNSTemplateURL": {
+            "type": "string"
+        },
+        "virtualNetworkNameWithSuffix": {
+            "type": "string"
+        },
+        "virtualNetworkAddressRange": {
+            "type": "string"
+        },
+        "subnets": {
+            "type": "array"
+        },
+        "adPDCNICIPAddress": {
+            "type": "string"
+        },
+        "adBDCConfigurationFunction": {
+            "type": "string"
+        },
+        "adBDCModulesURL": {
+            "type": "string"
+        },
+        "configuringBackupADVMURL": {
+            "type": "string"
+        },
+        "adBDCNICIPAddress": {
+            "type": "string"
+        },
+        "updateNicTemplateURL": {
+            "type": "string"
+        },
+        "sqlSubnetRef": {
+            "type": "string"
+        },
+        "sqlBEAddressPoolID": {
+            "type": "string"
         }
-      },
-      "resources": [
+    },
+    "variables": {
+        "sqlstorageName": "[parameters('sqlStorageAccountName')]",
+        "dcstorageName": "[parameters('dcStorageAccountName')]",
+        "fswstorageName": "[concat(parameters('sqlStorageAccountName'), 'fsw')]",
+        "diagstorageNameSQL": "[concat(parameters('sqlStorageAccountName'), 'diag')]",
+        "diagstorageNameDC": "[concat(parameters('dcStorageAccountName'), 'diag')]",
+        "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]"
+    },
+    "resources": [{
+            "type": "Microsoft.Compute/availabilitySets",
+            "name": "[parameters('adAvailabilitySetName')]",
+            "apiVersion": "2015-06-15",
+            "location": "[parameters('location')]"
+        },
         {
-          "type": "Microsoft.Compute/virtualMachines/extensions",
-          "name": "[concat(parameters('adPDCVMName'),'/InstallDomainController')]",
-          "apiVersion": "2015-06-15",
-          "location": "[parameters('location')]",
-          "dependsOn": [
-            "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
-          ],
-          "properties": {
-            "publisher": "Microsoft.Powershell",
-            "type": "DSC",
-            "typeHandlerVersion": "2.19",
-            "autoUpgradeMinorVersion": false,
-            "settings": {
-              "modulesURL": "[parameters('adPDCModulesURL')]",
-              "configurationFunction": "[parameters('adPDCConfigurationFunction')]",
-              "properties": {
-                "domainName": "[parameters('domainName')]",
-                "adminCreds": {
-                  "userName": "[parameters('adminUserName')]",
-                  "password": "PrivateSettingsRef:adminPassword"
+            "type": "Microsoft.Compute/availabilitySets",
+            "name": "[parameters('sqlAvailabilitySetName')]",
+            "apiVersion": "2015-06-15",
+            "location": "[parameters('location')]",
+            "properties": {
+                "platformFaultDomainCount": "3",
+                "platformUpdateDomainCount": "3"
+            }
+        },
+        {
+            "name": "[parameters('sqlStorageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2015-05-01-preview",
+            "location": "[parameters('location')]",
+            "properties": {
+                "accountType": "[parameters('SqlStorageAccountType')]",
+                "encryption": {
+                    "services": {
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
                 }
-              }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('dcStorageAccountName')]",
+            "apiVersion": "2015-05-01-preview",
+            "location": "[parameters('location')]",
+            "properties": {
+                "accountType": "[parameters('DcStorageAccountType')]",
+                "encryption": {
+                    "services": {
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('fswstorageName')]",
+            "apiVersion": "2015-05-01-preview",
+            "location": "[parameters('location')]",
+            "properties": {
+                "accountType": "Standard_LRS",
+                "encryption": {
+                    "services": {
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('mgtStorageAccountName')]",
+            "apiVersion": "2015-05-01-preview",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "accountType": "[parameters('mgtStorageAccountType')]",
+                "encryption": {
+                    "services": {
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('diagstorageNameSQL')]",
+            "apiVersion": "2015-05-01-preview",
+            "location": "[parameters('location')]",
+            "properties": {
+                "accountType": "Standard_LRS",
+                "encryption": {
+                    "services": {
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('diagstorageNameDC')]",
+            "apiVersion": "2015-05-01-preview",
+            "location": "[parameters('location')]",
+            "properties": {
+                "accountType": "Standard_LRS",
+                "encryption": {
+                    "services": {
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            }
+        },
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('adPDCVMName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/availabilitySets/',parameters('adAvailabilitySetName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('dcStorageAccountName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameDC'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('adVMSize')]"
+                },
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('adAvailabilitySetName'))]"
+                },
+                "osProfile": {
+                    "computername": "[parameters('adPDCVMName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[parameters('adImagePublisher')]",
+                        "offer": "[parameters('adImageOffer')]",
+                        "sku": "[parameters('adImageSKU')]",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "osdisk",
+                        "vhd": {
+                            "uri": "[concat('http://',variables('dcstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('adPDCVMName'),'-osdisk.vhd')]"
+                        },
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    },
+                    "dataDisks": [{
+                        "vhd": {
+                            "uri": "[concat('http://',variables('dcstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/', parameters('adPDCVMName'),'data-1.vhd')]"
+                        },
+                        "name": "[concat(parameters('adPDCVMName'),'-data-disk1')]",
+                        "createOption": "empty",
+                        "caching": "None",
+                        "diskSizeGB": 128,
+                        "lun": 0
+                    }]
+                },
+                "networkProfile": {
+                    "networkInterfaces": [{
+                        "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('adPDCNicName'))]"
+                    }]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": "true",
+                        "storageUri": "[concat('http://',variables('diagstorageNameDC'),'.blob.core.usgovcloudapi.net')]"
+                    }
+                }
             },
-            "protectedSettings": {
-              "items": {
-                "adminPassword": "[parameters('adminPassword')]"
-              }
+            "resources": [{
+                "type": "Microsoft.Compute/virtualMachines/extensions",
+                "name": "[concat(parameters('adPDCVMName'),'/InstallDomainController')]",
+                "apiVersion": "2015-06-15",
+                "location": "[parameters('location')]",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
+                ],
+                "properties": {
+                    "publisher": "Microsoft.Powershell",
+                    "type": "DSC",
+                    "typeHandlerVersion": "2.19",
+                    "autoUpgradeMinorVersion": false,
+                    "settings": {
+                        "modulesURL": "[parameters('adPDCModulesURL')]",
+                        "configurationFunction": "[parameters('adPDCConfigurationFunction')]",
+                        "properties": {
+                            "domainName": "[parameters('domainName')]",
+                            "adminCreds": {
+                                "userName": "[parameters('adminUserName')]",
+                                "password": "PrivateSettingsRef:adminPassword"
+                            }
+                        }
+                    },
+                    "protectedSettings": {
+                        "items": {
+                            "adminPassword": "[parameters('adminPassword')]"
+                        }
+                    }
+                }
+            }]
+        },
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('adBDCVMName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/availabilitySets/',parameters('adAvailabilitySetName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('dcStorageAccountName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameDC'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('adVMSize')]"
+                },
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('adAvailabilitySetName'))]"
+                },
+                "osProfile": {
+                    "computername": "[parameters('adBDCVMName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[parameters('adImagePublisher')]",
+                        "offer": "[parameters('adImageOffer')]",
+                        "sku": "[parameters('adImageSKU')]",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "osdisk",
+                        "vhd": {
+                            "uri": "[concat('http://',variables('dcstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('adBDCVMName'),'-osdisk.vhd')]"
+                        },
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    },
+                    "dataDisks": [{
+                        "vhd": {
+                            "uri": "[concat('http://',variables('dcstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/', parameters('adBDCVMName'),'data-1.vhd')]"
+                        },
+                        "name": "[concat(parameters('adBDCVMName'),'-data-disk1')]",
+                        "createOption": "empty",
+                        "caching": "None",
+                        "diskSizeGB": 128,
+                        "lun": 0
+                    }]
+                },
+                "networkProfile": {
+                    "networkInterfaces": [{
+                        "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('adBDCNicName'))]"
+                    }]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": "true",
+                        "storageUri": "[concat('http://',variables('diagstorageNameDC'),'.blob.core.usgovcloudapi.net')]"
+                    }
+                }
             }
-          }
-        }
-      ]
-    },
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Compute/virtualMachines",
-      "name": "[parameters('adBDCVMName')]",
-      "location": "[parameters('location')]",
-      "dependsOn": [
-        "[concat('Microsoft.Compute/availabilitySets/',parameters('adAvailabilitySetName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('dcStorageAccountName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameDC'))]"
-      ],
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "[parameters('adVMSize')]"
         },
-        "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('adAvailabilitySetName'))]"
-        },
-        "osProfile": {
-          "computername": "[parameters('adBDCVMName')]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
-        },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "[parameters('adImagePublisher')]",
-            "offer": "[parameters('adImageOffer')]",
-            "sku": "[parameters('adImageSKU')]",
-            "version": "latest"
-          },
-          "osDisk": {
-            "name": "osdisk",
-            "vhd": {
-              "uri": "[concat('http://',variables('dcstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('adBDCVMName'),'-osdisk.vhd')]"
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[concat(parameters('sqlVMName'), copyindex())]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/availabilitySets/',parameters('sqlAvailabilitySetName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('sqlStorageAccountName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameSQL'))]"
+            ],
+            "copy": {
+                "name": "sqlvirtualMachineLoop",
+                "count": 2
             },
-            "caching": "ReadWrite",
-            "createOption": "FromImage"
-          },
-          "dataDisks": [
-            {
-              "vhd": {
-                "uri": "[concat('http://',variables('dcstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/', parameters('adBDCVMName'),'data-1.vhd')]"
-              },
-              "name": "[concat(parameters('adBDCVMName'),'-data-disk1')]",
-              "createOption": "empty",
-              "caching": "None",
-              "diskSizeGB": 128,
-              "lun": 0
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('sqlVMSize')]"
+                },
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('sqlAvailabilitySetName'))]"
+                },
+                "osProfile": {
+                    "computername": "[concat(parameters('sqlVMName'), copyindex())]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[parameters('sqlImagePublisher')]",
+                        "offer": "[parameters('sqlImageOffer')]",
+                        "sku": "[parameters('sqlImageSKU')]",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "osdisk",
+                        "vhd": {
+                            "uri": "[concat('http://',variables('sqlstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('sqlVMName'), copyindex(), '-osdisk.vhd')]"
+                        },
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    },
+                    "dataDisks": [{
+                            "vhd": {
+                                "uri": "[concat('http://',variables('sqlstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/', parameters('sqlVMName'), copyindex(), '-Data-1.vhd')]"
+                            },
+                            "name": "[concat(parameters('sqlVMName'), copyindex(),'-data-disk1')]",
+                            "caching": "None",
+                            "createOption": "empty",
+                            "diskSizeGB": 1000,
+                            "lun": 0
+                        },
+                        {
+                            "vhd": {
+                                "uri": "[concat('http://',variables('sqlstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/', parameters('sqlVMName'), copyindex(), '-Data-2.vhd')]"
+                            },
+                            "name": "[concat(parameters('sqlVMName'), copyindex(),'-data-disk2')]",
+                            "caching": "None",
+                            "createOption": "empty",
+                            "diskSizeGB": 1000,
+                            "lun": 1
+                        }
+                    ]
+                },
+                "networkProfile": {
+                    "networkInterfaces": [{
+                        "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces', concat('sql', copyindex(),'-nic', parameters('environmentPrefix')))]"
+                    }]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": "true",
+                        "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
+                    }
+                }
             }
-          ]
         },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('adBDCNicName'))]"
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('sqlwVMName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/availabilitySets/',parameters('sqlAvailabilitySetName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameSQL'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('fswstorageName'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('witnessVMSize')]"
+                },
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('sqlAvailabilitySetName'))]"
+                },
+                "osProfile": {
+                    "computername": "[parameters('sqlwVMName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[parameters('fswImagePublisher')]",
+                        "offer": "[parameters('fswImageOffer')]",
+                        "sku": "[parameters('fswImageSKU')]",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "osdisk",
+                        "vhd": {
+                            "uri": "[concat('http://',variables('fswstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('sqlwVMName'),'-osdisk.vhd')]"
+                        },
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    },
+                    "dataDisks": [{
+                        "vhd": {
+                            "uri": "[concat('http://',variables('fswstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('sqlwVMName'),'-data-1.vhd')]"
+                        },
+                        "name": "[concat(parameters('sqlwVMName'),'-data-disk1')]",
+                        "caching": "None",
+                        "createOption": "empty",
+                        "diskSizeGB": 128,
+                        "lun": 0
+                    }]
+                },
+                "networkProfile": {
+                    "networkInterfaces": [{
+                        "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('sqlwNicName'))]"
+                    }]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": "true",
+                        "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
+                    }
+                }
             }
-          ]
         },
-        "diagnosticsProfile": {
-          "bootDiagnostics": {
-            "enabled": "true",
-            "storageUri": "[concat('http://',variables('diagstorageNameDC'),'.blob.core.usgovcloudapi.net')]"
-          }
-        }
-      }
-    },
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(parameters('sqlVMName'), copyindex())]",
-      "location": "[parameters('location')]",
-      "dependsOn": [
-        "[concat('Microsoft.Compute/availabilitySets/',parameters('sqlAvailabilitySetName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('sqlStorageAccountName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameSQL'))]"
-      ],
-      "copy": {
-        "name": "sqlvirtualMachineLoop",
-        "count": 2
-      },
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "[parameters('sqlVMSize')]"
-        },
-        "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('sqlAvailabilitySetName'))]"
-        },
-        "osProfile": {
-          "computername": "[concat(parameters('sqlVMName'), copyindex())]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
-        },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "[parameters('sqlImagePublisher')]",
-            "offer": "[parameters('sqlImageOffer')]",
-            "sku": "[parameters('sqlImageSKU')]",
-            "version": "latest"
-          },
-          "osDisk": {
-            "name": "osdisk",
-            "vhd": {
-              "uri": "[concat('http://',variables('sqlstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('sqlVMName'), copyindex(), '-osdisk.vhd')]"
-            },
-            "caching": "ReadWrite",
-            "createOption": "FromImage"
-          },
-          "dataDisks": [
-            {
-              "vhd": {
-                "uri": "[concat('http://',variables('sqlstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/', parameters('sqlVMName'), copyindex(), '-Data-1.vhd')]"
-              },
-              "name": "[concat(parameters('sqlVMName'), copyindex(),'-data-disk1')]",
-              "caching": "None",
-              "createOption": "empty",
-              "diskSizeGB": 1000,
-              "lun": 0
-            },
-            {
-              "vhd": {
-                "uri": "[concat('http://',variables('sqlstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/', parameters('sqlVMName'), copyindex(), '-Data-2.vhd')]"
-              },
-              "name": "[concat(parameters('sqlVMName'), copyindex(),'-data-disk2')]",
-              "caching": "None",
-              "createOption": "empty",
-              "diskSizeGB": 1000,
-              "lun": 1
+        {
+            "name": "UpdatingDNStoPrimaryADVM",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]",
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '0')]",
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '1')]",
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[parameters('updateVnetWithDNSTemplateURL')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[parameters('virtualNetworkNameWithSuffix')]"
+                    },
+                    "virtualNetworkAddressRange": {
+                        "value": "[parameters('virtualNetworkAddressRange')]"
+                    },
+                    "subnets": {
+                        "value": "[parameters('subnets')]"
+                    },
+                    "DNSServerAddress": {
+                        "value": [
+                            "[parameters('adPDCNICIPAddress')]"
+                        ]
+                    }
+                }
             }
-          ]
         },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces', concat('sql', copyindex(),'-nic', parameters('environmentPrefix')))]"
+        {
+            "name": "ConfiguringBackupADVM",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '0')]",
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '1')]",
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[parameters('configuringBackupADVMURL')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[resourceGroup().location]"
+                    },
+                    "adBDCVMName": {
+                        "value": "[parameters('adBDCVMName')]"
+                    },
+                    "adminUserName": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "adBDCConfigurationFunction": {
+                        "value": "[parameters('adBDCConfigurationFunction')]"
+                    },
+                    "adBDCModulesURL": {
+                        "value": "[parameters('adBDCModulesURL')]"
+                    },
+                    "adPDCNICIPAddress": {
+                        "value": "[parameters('adPDCNICIPAddress')]"
+                    }
+                }
             }
-          ]
         },
-        "diagnosticsProfile": {
-          "bootDiagnostics": {
-            "enabled": "true",
-            "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
-          }
-        }
-      }
-    },
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Compute/virtualMachines",
-      "name": "[parameters('sqlwVMName')]",
-      "location": "[parameters('location')]",
-      "dependsOn": [
-        "[concat('Microsoft.Compute/availabilitySets/',parameters('sqlAvailabilitySetName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameSQL'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('fswstorageName'))]"
-      ],
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "[parameters('witnessVMSize')]"
-        },
-        "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('sqlAvailabilitySetName'))]"
-        },
-        "osProfile": {
-          "computername": "[parameters('sqlwVMName')]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
-        },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "[parameters('fswImagePublisher')]",
-            "offer": "[parameters('fswImageOffer')]",
-            "sku": "[parameters('fswImageSKU')]",
-            "version": "latest"
-          },
-          "osDisk": {
-            "name": "osdisk",
-            "vhd": {
-              "uri": "[concat('http://',variables('fswstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('sqlwVMName'),'-osdisk.vhd')]"
-            },
-            "caching": "ReadWrite",
-            "createOption": "FromImage"
-          },
-          "dataDisks": [
-            {
-              "vhd": {
-                "uri": "[concat('http://',variables('fswstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('sqlwVMName'),'-data-1.vhd')]"
-              },
-              "name": "[concat(parameters('sqlwVMName'),'-data-disk1')]",
-              "caching": "None",
-              "createOption": "empty",
-              "diskSizeGB": 128,
-              "lun": 0
+        {
+            "name": "UpdatingDNSwithBackupADVM",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/ConfiguringBackupADVM"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[parameters('updateVnetWithDNSTemplateURL')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[resourceGroup().location]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[parameters('virtualNetworkNameWithSuffix')]"
+                    },
+                    "virtualNetworkAddressRange": {
+                        "value": "[parameters('virtualNetworkAddressRange')]"
+                    },
+                    "subnets": {
+                        "value": "[parameters('subnets')]"
+                    },
+                    "DNSServerAddress": {
+                        "value": [
+                            "[parameters('adPDCNICIPAddress')]",
+                            "[parameters('adBDCNICIPAddress')]"
+                        ]
+                    }
+                }
             }
-          ]
         },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('sqlwNicName'))]"
+        {
+            "name": "UpdatingSQLWNic",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/UpdatingDNStoPrimaryADVM"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[parameters('updateNicTemplateURL')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "nicName": {
+                        "value": "[parameters('sqlwNicName')]"
+                    },
+                    "ipConfigurations": {
+                        "value": [{
+                            "name": "ipconfig1",
+                            "properties": {
+                                "privateIPAllocationMethod": "Dynamic",
+                                "subnet": {
+                                    "id": "[parameters('sqlSubnetRef')]"
+                                }
+                            }
+                        }]
+                    },
+                    "dnsServers": {
+                        "value": [
+                            "[parameters('adPDCNICIPAddress')]",
+                            "[parameters('adBDCNICIPAddress')]"
+                        ]
+                    }
+                }
             }
-          ]
         },
-        "diagnosticsProfile": {
-          "bootDiagnostics": {
-            "enabled": "true",
-            "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
-          }
-        }
-      }
-    },
-    {
-			"name": "UpdatingDNStoPrimaryADVM",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '0')]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '1')]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[parameters('updateVnetWithDNSTemplateURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[parameters('location')]"
-					},
-					"virtualNetworkName": {
-						"value": "[parameters('virtualNetworkNameWithSuffix')]"
-					},
-					"virtualNetworkAddressRange": {
-						"value": "[parameters('virtualNetworkAddressRange')]"
-					},
-					"subnets": {
-						"value": "[parameters('subnets')]"
-					},
-					"DNSServerAddress": {
-						"value": [
-							"[parameters('adPDCNICIPAddress')]"
-						]
-					}
-				}
-			}
-		},
-    {
-			"name": "ConfiguringBackupADVM",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '0')]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '1')]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[parameters('configuringBackupADVMURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[resourceGroup().location]"
-					},
-					"adBDCVMName": {
-						"value": "[parameters('adBDCVMName')]"
-					},
-					"adminUserName": {
-						"value": "[parameters('adminUsername')]"
-					},
-					"adminPassword": {
-						"value": "[parameters('adminPassword')]"
-					},
-					"domainName": {
-						"value": "[parameters('domainName')]"
-					},
-					"adBDCConfigurationFunction": {
-						"value": "[parameters('adBDCConfigurationFunction')]"
-					},
-					"adBDCModulesURL": {
-						"value": "[parameters('adBDCModulesURL')]"
-					},
-					"adPDCNICIPAddress": {
-						"value": "[parameters('adPDCNICIPAddress')]"
-					}
-				}
-			}
-    },
-    {
-			"name": "UpdatingDNSwithBackupADVM",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/ConfiguringBackupADVM"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[parameters('updateVnetWithDNSTemplateURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[resourceGroup().location]"
-					},
-					"virtualNetworkName": {
-						"value": "[parameters('virtualNetworkNameWithSuffix')]"
-					},
-					"virtualNetworkAddressRange": {
-						"value": "[parameters('virtualNetworkAddressRange')]"
-					},
-					"subnets": {
-						"value": "[parameters('subnets')]"
-					},
-					"DNSServerAddress": {
-						"value": [
-							"[parameters('adPDCNICIPAddress')]",
-							"[parameters('adBDCNICIPAddress')]"
-						]
-					}
-				}
-			}
-		},
-    {
-			"name": "UpdatingSQLWNic",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/UpdatingDNStoPrimaryADVM"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[parameters('updateNicTemplateURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[parameters('location')]"
-					},
-					"nicName": {
-						"value": "[parameters('sqlwNicName')]"
-					},
-					"ipConfigurations": {
-						"value": [{
-							"name": "ipconfig1",
-							"properties": {
-								"privateIPAllocationMethod": "Dynamic",
-								"subnet": {
-									"id": "[parameters('sqlSubnetRef')]"
-								}
-							}
-						}]
-					},
-					"dnsServers": {
-						"value": [
-							"[parameters('adPDCNICIPAddress')]",
-							"[parameters('adBDCNICIPAddress')]"
-						]
-					}
-				}
-			}
-		},
-		{
-			"name": "UpdatingSQL0Nic",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/UpdatingSQLWNic"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[parameters('updateNicTemplateURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[resourceGroup().location]"
-					},
-					"nicName": {
-						"value": "[parameters('sql0NicName')]"
-					},
-					"ipConfigurations": {
-						"value": [{
-							"name": "ipconfig1",
-							"properties": {
-								"privateIPAllocationMethod": "Dynamic",
-								"subnet": {
-									"id": "[parameters('sqlSubnetRef')]"
-								},
-								"loadBalancerBackendAddressPools": [{
-									"id": "[parameters('sqlBEAddressPoolID')]"
-								}]
-							}
-						}]
-					},
-					"dnsServers": {
-						"value": [
-							"[parameters('adPDCNICIPAddress')]",
-							"[parameters('adBDCNICIPAddress')]"
-						]
-					}
-				}
-			}
-		},
-		{
-			"name": "UpdatingSQL1Nic",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/UpdatingSQL0Nic"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[parameters('updateNicTemplateURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[parameters('location')]"
-					},
-					"nicName": {
-						"value": "[parameters('sql1NicName')]"
-					},
-					"ipConfigurations": {
-						"value": [{
-							"name": "ipconfig1",
-							"properties": {
-                "privateIPAllocationMethod": "Dynamic",
-								"subnet": {
-									"id": "[parameters('sqlSubnetRef')]"
-								},
-								"loadBalancerBackendAddressPools": [{
-									"id": "[parameters('sqlBEAddressPoolID')]"
-								}]
-							}
-						}]
-					},
-					"dnsServers": {
-						"value": [
-							"[parameters('adPDCNICIPAddress')]",
-							"[parameters('adBDCNICIPAddress')]"
-						]
-					}
-				}
-			}
-		},
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Compute/virtualMachines",
-      "name": "[parameters('mgtVMName')]",
-      "location": "[parameters('location')]",
-      "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('mgtStorageAccountName'))]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-        "Microsoft.Resources/deployments/UpdatingSQL1Nic"
-      ],
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "[parameters('mgtVMSize')]"
-        },
-        "osProfile": {
-          "computername": "[parameters('mgtVMName')]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
-        },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "[parameters('mgtImagePublisher')]",
-            "offer": "[parameters('mgtImageOffer')]",
-            "sku": "[parameters('mgtImageSKU')]",
-            "version": "latest"
-          },
-          "osDisk": {
-            "name": "osdisk",
-            "vhd": {
-              "uri": "[concat('http://',parameters('mgtStorageAccountName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('mgtVMName'),'-osdisk.vhd')]"
-            },
-            "caching": "ReadWrite",
-            "createOption": "FromImage"
-          }
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('mgtNICName'))]"
+        {
+            "name": "UpdatingSQL0Nic",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/UpdatingSQLWNic"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[parameters('updateNicTemplateURL')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[resourceGroup().location]"
+                    },
+                    "nicName": {
+                        "value": "[parameters('sql0NicName')]"
+                    },
+                    "ipConfigurations": {
+                        "value": [{
+                            "name": "ipconfig1",
+                            "properties": {
+                                "privateIPAllocationMethod": "Dynamic",
+                                "subnet": {
+                                    "id": "[parameters('sqlSubnetRef')]"
+                                },
+                                "loadBalancerBackendAddressPools": [{
+                                    "id": "[parameters('sqlBEAddressPoolID')]"
+                                }]
+                            }
+                        }]
+                    },
+                    "dnsServers": {
+                        "value": [
+                            "[parameters('adPDCNICIPAddress')]",
+                            "[parameters('adBDCNICIPAddress')]"
+                        ]
+                    }
+                }
             }
-          ]
-        }
-      }
-    },
-    {
-        "comments": "Join domain - JsonADDomainExtension",
-        "apiVersion": "2015-06-15",
-        "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(parameters('mgtVMName'),'/joindomain')]",
-        "dependsOn": [
-          "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]"
-        ],
-        "location": "[parameters('location')]",
-        "properties": {
-            "publisher": "Microsoft.Compute",
-            "type": "JsonADDomainExtension",
-            "typeHandlerVersion": "1.3",
-            "autoUpgradeMinorVersion": true,
-            "settings": {
-                "Name": "[parameters('domainName')]",
-                "User": "[variables('domainJoinUserName')]",
-                "Restart": "true",
-                "Options": 3,
-                "OUPath": ""
-            },
-            "protectedSettings": {
-                "Password": "[parameters('adminPassword')]"
+        },
+        {
+            "name": "UpdatingSQL1Nic",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/UpdatingSQL0Nic"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[parameters('updateNicTemplateURL')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "nicName": {
+                        "value": "[parameters('sql1NicName')]"
+                    },
+                    "ipConfigurations": {
+                        "value": [{
+                            "name": "ipconfig1",
+                            "properties": {
+                                "privateIPAllocationMethod": "Dynamic",
+                                "subnet": {
+                                    "id": "[parameters('sqlSubnetRef')]"
+                                },
+                                "loadBalancerBackendAddressPools": [{
+                                    "id": "[parameters('sqlBEAddressPoolID')]"
+                                }]
+                            }
+                        }]
+                    },
+                    "dnsServers": {
+                        "value": [
+                            "[parameters('adPDCNICIPAddress')]",
+                            "[parameters('adBDCNICIPAddress')]"
+                        ]
+                    }
+                }
             }
-        }
-    },
-  ],
-  "outputs": {
+        },
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('mgtVMName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('mgtStorageAccountName'))]",
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
+                "Microsoft.Resources/deployments/UpdatingSQL1Nic"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('mgtVMSize')]"
+                },
+                "osProfile": {
+                    "computername": "[parameters('mgtVMName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[parameters('mgtImagePublisher')]",
+                        "offer": "[parameters('mgtImageOffer')]",
+                        "sku": "[parameters('mgtImageSKU')]",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "osdisk",
+                        "vhd": {
+                            "uri": "[concat('http://',parameters('mgtStorageAccountName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('mgtVMName'),'-osdisk.vhd')]"
+                        },
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [{
+                        "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('mgtNICName'))]"
+                    }]
+                }
+            }
+        },
+        {
+            "comments": "Join domain - JsonADDomainExtension",
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('mgtVMName'),'/joindomain')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]"
+            ],
+            "location": "[parameters('location')]",
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "JsonADDomainExtension",
+                "typeHandlerVersion": "1.3",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "Name": "[parameters('domainName')]",
+                    "User": "[variables('domainJoinUserName')]",
+                    "Restart": "true",
+                    "Options": 3,
+                    "OUPath": ""
+                },
+                "protectedSettings": {
+                    "Password": "[parameters('adminPassword')]"
+                }
+            }
+        },
+    ],
+    "outputs": {
 
-  }
+    }
 }
