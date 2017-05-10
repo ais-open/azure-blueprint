@@ -262,6 +262,7 @@
             "sku": {
                 "name": "[parameters('SqlStorageAccountType')]"
             },
+            "kind": "Storage",
             "properties": {
                 "encryption": {
                     "services": {
@@ -281,6 +282,7 @@
             "sku": {
                 "name": "[parameters('DcStorageAccountType')]"
             },
+            "kind": "Storage",
             "properties": {
                 "encryption": {
                     "services": {
@@ -300,6 +302,7 @@
             "sku": {
                 "name": "Standard_LRS"
             },
+            "kind": "Storage",
             "properties": {
                 "encryption": {
                     "services": {
@@ -319,6 +322,7 @@
             "sku": {
                 "name": "[parameters('mgtStorageAccountType')]"
             },
+            "kind": "Storage",
             "properties": {
                 "encryption": {
                     "services": {
@@ -338,6 +342,7 @@
             "sku": {
                 "name": "Standard_LRS"
             },
+            "kind": "Storage",
             "properties": {
                 "encryption": {
                     "services": {
@@ -357,6 +362,7 @@
             "sku": {
                 "name": "Standard_LRS"
             },
+            "kind": "Storage",
             "properties": {
                 "encryption": {
                     "services": {

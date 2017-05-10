@@ -53,6 +53,7 @@
             "sku": {
                 "name": "[parameters('SqlStorageAccountType')]"
             },
+            "kind": "Storage",
             "properties": {
                 "encryption": {
                     "services": {
@@ -72,6 +73,7 @@
             "sku": {
                 "name": "[parameters('DcStorageAccountType')]"
             },
+            "kind": "Storage",
             "properties": {
                 "encryption": {
                     "services": {
@@ -86,11 +88,12 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[concat(uniquestring(parameters('sqlStorageAccountName')), 'fsw')]",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
             "sku": {
                 "name": "Standard_LRS"
             },
+            "kind": "Storage",
             "properties": {
                 "encryption": {
                     "services": {
@@ -105,11 +108,12 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[concat(uniquestring(parameters('sqlStorageAccountName')), 'diag')]",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
             "sku": {
                 "name": "Standard_LRS"
             },
+            "kind": "Storage",
             "properties": {
                 "encryption": {
                     "services": {

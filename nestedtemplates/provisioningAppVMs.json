@@ -140,6 +140,7 @@
             "sku": {
                 "name": "[parameters('webStorageAccountType')]"
             },
+            "kind": "Storage",
             "properties": {
                 "encryption": {
                     "services": {
