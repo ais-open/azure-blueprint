@@ -4,7 +4,6 @@
   "parameters": {
     "addressPrefix": {
       "type": "string",
-      "defaultValue": "10.0.0.0/16",
       "metadata": {
         "description": "Address prefix for the Virtual Network"
       }
@@ -17,7 +16,6 @@
     },
     "subnetPrefix": {
       "type": "string",
-      "defaultValue": "10.0.0.0/28",
       "metadata": {
         "description": "Subnet prefix"
       }
@@ -43,16 +41,10 @@
         "description": "Number of instances"
       }
     },
-    "backendIpsForPathRuleDEL": {
+    "backendIpsForPathRuleWEB": {
       "type": "array",
       "metadata": {
         "description": "IP Address of Backend Server for Path Rule 1 match"
-      }
-    },
-    "backendIpsForPathRuleSHR": {
-      "type": "array",
-      "metadata": {
-        "description": "IP Address of Backend Server for Path Rule 2 match"
       }
     },
     "pathMatch1": {
@@ -60,18 +52,6 @@
       "metadata": {
         "description": "Path match string for Path Rule 1"
       }
-    },
-    "pathMatch2": {
-      "type": "string",
-      "metadata": {
-        "description": "Path match string for Path Rule 2"
-      }
-    },
-    "staticIPSHRStart": {
-      "type": "int"
-    },
-    "staticIPDELStart": {
-      "type": "int"
     },
     "subnetName": {
       "type": "string"
@@ -144,19 +124,13 @@
         {
             "name": "appGatewayBackendPoolDefault",
             "properties": {
-              "BackendAddresses": "[parameters('backendIpsForPathRuleDEL')]"
+              "BackendAddresses": "[parameters('backendIpsForPathRuleWEB')]"
             }
         },
         {
             "name": "appGatewayBackendPool1",
             "properties": {
-              "BackendAddresses": "[parameters('backendIpsForPathRuleDEL')]"
-            }
-          },
-          {
-            "name": "appGatewayBackendPool2",
-            "properties": {
-              "BackendAddresses": "[parameters('backendIpsForPathRuleSHR')]"
+              "BackendAddresses": "[parameters('backendIpsForPathRuleWEB')]"
             }
           }
         ],
@@ -209,21 +183,7 @@
                       "id": "[concat(variables('applicationGatewayID'), '/backendHttpSettingsCollection/appGatewayBackendHttpSettings')]"
                     }
                   }
-                },
-                {
-                  "name": "pathRule2",
-                  "properties": {
-                    "paths": [
-                      "[parameters('pathMatch2')]"
-                    ],
-                    "backendAddressPool": {
-                      "id": "[concat(variables('applicationGatewayID'), '/backendAddressPools/appGatewayBackendPool2')]"
-                    },
-                    "backendHttpSettings": {
-                      "id": "[concat(variables('applicationGatewayID'), '/backendHttpSettingsCollection/appGatewayBackendHttpSettings')]"
-                    }
-                  }
-                }
+                }                
               ]
             }
           }
