@@ -614,9 +614,9 @@
             "encryptionOperation": "EnableEncryption",
             "keyEncryptionAlgorithm": "RSA-OAEP",
             "keyVaultURL": "[concat('https://', parameters('keyVaultName'), '.vault.azure.net/')]",
-            "provisioningVMAzureDiskEncryptionUrl": "[concat(parameters('_artifactsLocation'),'/nestedtemplates/configuringVMAzureDiskEncryption-', parameters('useExistingKek'),'.json', parameters('_artifactsLocationSasToken'))]",
-            "keyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]",
-            "keyVaultResourceID": "[concat(subscription().id,'/resourceGroups/',parameters('keyVaultResourceGroup'),'/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+            "provisioningVMAzureDiskEncryptionUrl": "[concat(parameters('templatesBaseUrl'),'/nestedtemplates/configuringVMAzureDiskEncryption-', parameters('useExistingKek'),'.json')]",
+            "keyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]",
+            "keyVaultResourceID": "[concat(subscription().id,'/resourceGroups/',parameters('keyVaultResourceGroupName'),'/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
         }
     },
     "resources": [{
