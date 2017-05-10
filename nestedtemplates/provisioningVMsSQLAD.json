@@ -259,8 +259,11 @@
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('SqlStorageAccountType')]"
+            },
             "properties": {
-                "accountType": "[parameters('SqlStorageAccountType')]",
+                //"accountType": "[parameters('SqlStorageAccountType')]",                
                 "encryption": {
                     "services": {
                         "blob": {
@@ -276,8 +279,11 @@
             "name": "[parameters('dcStorageAccountName')]",
             "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('DcStorageAccountType')]",
+            },
             "properties": {
-                "accountType": "[parameters('DcStorageAccountType')]",
+                //"accountType": "[parameters('DcStorageAccountType')]",
                 "encryption": {
                     "services": {
                         "blob": {
