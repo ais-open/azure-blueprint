@@ -31,8 +31,8 @@ $MyParams = @{
 #>
 [cmdletbinding()]
 Param(
-  [string]$environmentName = "AzureCloud",
-  [string]$location = "East US 2",
+  [string]$environmentName = "AzureUSGovernment",
+  [string]$location = "USGov Virginia",
   [Parameter(Mandatory=$true)]
   [string]$subscriptionId,
   [Parameter(Mandatory=$true)]
