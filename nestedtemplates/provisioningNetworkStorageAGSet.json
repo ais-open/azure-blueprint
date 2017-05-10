@@ -48,10 +48,12 @@
     "resources": [{
             "name": "[parameters('sqlStorageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('SqlStorageAccountType')]"
+            },
             "properties": {
-                "accountType": "[parameters('SqlStorageAccountType')]",
                 "encryption": {
                     "services": {
                         "blob": {
@@ -65,10 +67,12 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('dcStorageAccountName')]",
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('DcStorageAccountType')]"
+            },
             "properties": {
-                "accountType": "[parameters('DcStorageAccountType')]",
                 "encryption": {
                     "services": {
                         "blob": {
@@ -84,8 +88,10 @@
             "name": "[concat(uniquestring(parameters('sqlStorageAccountName')), 'fsw')]",
             "apiVersion": "2015-05-01-preview",
             "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard_LRS"
+            },
             "properties": {
-                "accountType": "Standard_LRS",
                 "encryption": {
                     "services": {
                         "blob": {
@@ -101,8 +107,10 @@
             "name": "[concat(uniquestring(parameters('sqlStorageAccountName')), 'diag')]",
             "apiVersion": "2015-05-01-preview",
             "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard_LRS"
+            },
             "properties": {
-                "accountType": "Standard_LRS",
                 "encryption": {
                     "services": {
                         "blob": {

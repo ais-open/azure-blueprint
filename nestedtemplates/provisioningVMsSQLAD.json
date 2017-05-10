@@ -297,8 +297,10 @@
             "name": "[variables('fswstorageName')]",
             "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard_LRS"
+            },
             "properties": {
-                "accountType": "Standard_LRS",
                 "encryption": {
                     "services": {
                         "blob": {
@@ -333,8 +335,10 @@
             "name": "[variables('diagstorageNameSQL')]",
             "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard_LRS"
+            },
             "properties": {
-                "accountType": "Standard_LRS",
                 "encryption": {
                     "services": {
                         "blob": {
