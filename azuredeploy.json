@@ -415,14 +415,14 @@
             "metadata": {
                 "description": "Linked Templates base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/nestedtemplates"
+            "defaultValue": "https://github.com/AppliedIS/azure-blueprint/blob/VMEncryption/nestedtemplates"
         },
         "scriptsBaseUrl": {
             "type": "string",
             "metadata": {
                 "description": "DSC Scripts base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/DSC"
+            "defaultValue": "https://github.com/AppliedIS/azure-blueprint/blob/VMEncryption/DSC"
         },
         "sqlServerVersion": {
             "type": "string",
