@@ -233,12 +233,14 @@
 			"type": "string",
 			"allowedValues": [
 				"Premium_LRS",
-				"Standard_LRS"
+				"Standard_LRS",
+				"Standard_GRS"
+
 			],
 			"metadata": {
 				"description": "The type of the Sql Server Storage Account created"
 			},
-			"defaultValue": "Standard_LRS"
+			"defaultValue": "Standard_GRS"
 		},
 		"dcStorageAccountType": {
 			"type": "string",
@@ -251,7 +253,7 @@
 			"metadata": {
 				"description": "The type of the DC Storage Account created"
 			},
-			"defaultValue": "Standard_LRS"
+			"defaultValue": "Standard_GRS"
 		},
 		"webStorageAccountType": {
 			"type": "string",
@@ -264,7 +266,7 @@
 			"metadata": {
 				"description": "The type of the DC Storage Account created"
 			},
-			"defaultValue": "Standard_LRS"
+			"defaultValue": "Standard_GRS"
 		},
 		"mgtStorageAccountType": {
 			"type": "string",
@@ -277,7 +279,7 @@
 			"metadata": {
 				"description": "The type of the DC Storage Account created"
 			},
-			"defaultValue": "Standard_LRS"
+			"defaultValue": "Standard_GRS"
 		},
 		"virtualNetworkAddressRange": {
 			"type": "string",
@@ -412,21 +414,21 @@
 			"metadata": {
 				"description": "Linked Templates base url"
 			},
-			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/nestedtemplates"
+			"defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/nestedtemplates"
 		},
 		"dscBaseUrl": {
 			"type": "string",
 			"metadata": {
 				"description": "DSC Scripts base url"
 			},
-			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/DSC"
+			"defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/DSC"
 		},
 		"scriptsBaseUrl": {
 			"type": "string",
 			"metadata": {
 				"description": "DSC Scripts base url"
 			},
-			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/postdeploy"
+			"defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/postdeploy"
 		},
 		"sqlServerVersion": {
 			"type": "string",
@@ -706,47 +708,6 @@
 			}
 		},
 		{
-      "name": "ProvisioningApplicationGateway",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-				"Microsoft.Resources/deployments/VirtualNetworkNSG"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('artifacts').applicationGatewayURL]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "addressPrefix": {
-            "value":"[parameters('virtualNetworkAddressRange')]"
-          },
-          "virtualNetworkName": {
-            "value":"[variables('resourceNames').virtualNetworkNameWithSuffix]"
-          },
-          "subnetPrefix": {
-            "value":"[parameters('appGatewaySubnet').properties.addressPrefix]"
-          },
-          "skuName": {
-            "value":"[parameters('gatewaySkuName')]"
-          },
-          "capacity": {
-            "value": 2
-          },
-          "backendIpsForPathRuleWEB": {
-            "value":"[parameters('webIPAddresses')]"
-          },
-          "pathMatch1": {
-            "value":"/WEB"
-          },
-          "subnetName": {
-            "value": "[parameters('appGatewaySubnet').name]"
-          }
-        }
-      }
-    },
-		{
 			"name": "ProvisioningNICsSQLADMGT",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
@@ -1021,7 +982,10 @@
           },
           "sqlSubnetRef": {
             "value": "[variables('derivedIds').sqlSubnet]"
-          }
+          },
+					"postDeployScriptUris": {
+						"value": "[variables('artifacts').postDeployScriptUris]"
+					}
 				}
 			}
 		},

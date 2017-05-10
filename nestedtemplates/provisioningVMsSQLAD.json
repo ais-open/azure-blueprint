@@ -178,6 +178,9 @@
     },
     "sqlBEAddressPoolID": {
       "type": "string"
+    },
+    "postDeployScriptUris": {
+      "type": "array"
     }
   },
   "variables": {
@@ -354,6 +357,32 @@
               }
             }
           }
+        },
+        {
+          "apiVersion": "2015-06-15",
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('adPDCVMName'), '/adcse-pwd')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
+          ],
+          "location": "[parameters('location')]",
+          "tags": {
+            "displayName": "adcse-pwd"
+          },
+          "properties": {
+            "publisher": "Microsoft.Compute",
+            "type": "CustomScriptExtension",
+            "typeHandlerVersion": "1.8",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "fileUris": "[parameters('postDeployScriptUris')]",
+              "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1"
+            },
+            "protectedSettings": {
+              "storageAccountName": "",
+              "storageAccountKey": ""
+            }
+          }
         }
       ]
     },
@@ -420,7 +449,35 @@
             "storageUri": "[concat('http://',variables('diagstorageNameDC'),'.blob.core.usgovcloudapi.net')]"
           }
         }
-      }
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-06-15",
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
+          "location": "[parameters('location')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]"
+          ],
+          "tags": {
+            "displayName": "adcse-pwd"
+          },
+          "properties": {
+            "publisher": "Microsoft.Compute",
+            "type": "CustomScriptExtension",
+            "typeHandlerVersion": "1.8",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "fileUris": "[parameters('postDeployScriptUris')]",
+              "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1"
+            },
+            "protectedSettings": {
+              "storageAccountName": "",
+              "storageAccountKey": ""
+            }
+          }
+        }
+      ]
     },
     {
       "apiVersion": "2015-06-15",
@@ -499,6 +556,39 @@
             "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
           }
         }
+      },
+      "resources": [
+
+      ]
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('sqlVMName'), copyindex(), '/adcse-pwd')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), copyindex())]",
+      ],
+      "copy": {
+        "name": "sqlvirtualExtLoop",
+        "count": 2
+      },
+      "tags": {
+        "displayName": "adcse-pwd"
+      },
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.8",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": "[parameters('postDeployScriptUris')]",
+          "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1"
+        },
+        "protectedSettings": {
+          "storageAccountName": "",
+          "storageAccountKey": ""
+        }
       }
     },
     {
@@ -564,7 +654,35 @@
             "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
           }
         }
-      }
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-06-15",
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('sqlwVMName'), '/adcse-pwd')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('sqlwVMName'))]"
+          ],
+          "location": "[parameters('location')]",
+          "tags": {
+            "displayName": "adcse-pwd"
+          },
+          "properties": {
+            "publisher": "Microsoft.Compute",
+            "type": "CustomScriptExtension",
+            "typeHandlerVersion": "1.8",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "fileUris": "[parameters('postDeployScriptUris')]",
+              "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1"
+            },
+            "protectedSettings": {
+              "storageAccountName": "",
+              "storageAccountKey": ""
+            }
+          }
+        },
+      ]
     },
     {
 			"name": "UpdatingDNStoPrimaryADVM",
@@ -853,7 +971,35 @@
             }
           ]
         }
-      }
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-06-15",
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('mgtVMName'), '/adcse-pwd')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]"
+          ],
+          "location": "[parameters('location')]",
+          "tags": {
+            "displayName": "adcse-pwd"
+          },
+          "properties": {
+            "publisher": "Microsoft.Compute",
+            "type": "CustomScriptExtension",
+            "typeHandlerVersion": "1.8",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "fileUris": "[parameters('postDeployScriptUris')]",
+              "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1"
+            },
+            "protectedSettings": {
+              "storageAccountName": "",
+              "storageAccountKey": ""
+            }
+          }
+        }
+      ]
     },
     {
         "comments": "Join domain - JsonADDomainExtension",
