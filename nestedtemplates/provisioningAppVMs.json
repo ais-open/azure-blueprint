@@ -197,64 +197,65 @@
         }
       },
       "resources": [
-        {
-            "comments": "Join domain - JsonADDomainExtension",
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('WebVMName'), copyindex(), '/joindomain')]",
-            "copy": {
-              "name": "extensionLoopDEL",
-              "count": "[parameters('numberOfWebInstances')]"
-            },
-            "dependsOn": [
-              "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
-            ],
-            "location": "[parameters('location')]",
-            "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "JsonADDomainExtension",
-                "typeHandlerVersion": "1.3",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "Name": "[parameters('domainName')]",
-                    "User": "[variables('domainJoinUserName')]",
-                    "Restart": "true",
-                    "Options": "[variables('domainJoinOptions')]",
-                    "OUPath": ""
-                },
-                "protectedSettings": {
-                    "Password": "[parameters('adminPassword')]"
-                }
-            }
+
+      ]
+    },
+    {
+        "comments": "Join domain - JsonADDomainExtension",
+        "apiVersion": "2015-06-15",
+        "type": "Microsoft.Compute/virtualMachines/extensions",
+        "name": "[concat(parameters('WebVMName'), copyindex(), '/joindomain')]",
+        "copy": {
+          "name": "extensionLoopDEL",
+          "count": "[parameters('numberOfWebInstances')]"
         },
-        {
-          "type": "Microsoft.Compute/virtualMachines/extensions",
-          "name": "[concat(parameters('WebVMName'), copyindex(), '/iis')]",
-          "apiVersion": "2015-05-01-preview",
-          "location": "[parameters('location')]",
-          "copy": {
-            "name": "extensionLoopDEL",
-            "count": "[parameters('numberOfWebInstances')]"
-          },
-          "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
-          ],
-          "properties": {
-            "publisher": "Microsoft.Powershell",
-            "type": "DSC",
-            "typeHandlerVersion": "2.19",
+        "dependsOn": [
+          "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
+        ],
+        "location": "[parameters('location')]",
+        "properties": {
+            "publisher": "Microsoft.Compute",
+            "type": "JsonADDomainExtension",
+            "typeHandlerVersion": "1.3",
             "autoUpgradeMinorVersion": true,
             "settings": {
-              "ModulesUrl": "[parameters('iisModulesURL')]",
-              "ConfigurationFunction": "[parameters('iisConfigurationFunction')]",
-              "Properties": {
-                "MachineName": "[parameters('WebVMName')]"
-              }
+                "Name": "[parameters('domainName')]",
+                "User": "[variables('domainJoinUserName')]",
+                "Restart": "true",
+                "Options": "[variables('domainJoinOptions')]",
+                "OUPath": ""
             },
-            "protectedSettings": null
-          }
+            "protectedSettings": {
+                "Password": "[parameters('adminPassword')]"
+            }
         }
-      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('WebVMName'), copyindex(), '/iis')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[parameters('location')]",
+      "copy": {
+        "name": "extensionLoopDEL",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.19",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "ModulesUrl": "[parameters('iisModulesURL')]",
+          "ConfigurationFunction": "[parameters('iisConfigurationFunction')]",
+          "Properties": {
+            "MachineName": "[parameters('WebVMName')]"
+          }
+        },
+        "protectedSettings": null
+      }
     }
   ],
   "outputs": {
