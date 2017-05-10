@@ -8,9 +8,6 @@
       "minValue": 2,
       "maxValue": 5
     },
-    "postDeployScriptUris": {
-      "type": "array"
-    },
     "WebVMName": {
       "type": "string"
     },
@@ -198,91 +195,66 @@
             }
           ]
         }
-      }
-    },
-    {
-        "comments": "Join domain - JsonADDomainExtension",
-        "apiVersion": "2015-06-15",
-        "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(parameters('WebVMName'), copyindex(), '/joindomain')]",
-        "copy": {
-          "name": "extensionLoopDEL",
-          "count": "[parameters('numberOfWebInstances')]"
+      },
+      "resources": [
+        {
+            "comments": "Join domain - JsonADDomainExtension",
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('WebVMName'), copyindex(), '/joindomain')]",
+            "copy": {
+              "name": "extensionLoopDEL",
+              "count": "[parameters('numberOfWebInstances')]"
+            },
+            "dependsOn": [
+              "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
+            ],
+            "location": "[parameters('location')]",
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "JsonADDomainExtension",
+                "typeHandlerVersion": "1.3",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "Name": "[parameters('domainName')]",
+                    "User": "[variables('domainJoinUserName')]",
+                    "Restart": "true",
+                    "Options": "[variables('domainJoinOptions')]",
+                    "OUPath": ""
+                },
+                "protectedSettings": {
+                    "Password": "[parameters('adminPassword')]"
+                }
+            }
         },
-        "dependsOn": [
-          "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
-        ],
-        "location": "[parameters('location')]",
-        "properties": {
-            "publisher": "Microsoft.Compute",
-            "type": "JsonADDomainExtension",
-            "typeHandlerVersion": "1.3",
+        {
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('WebVMName'), copyindex(), '/iis')]",
+          "apiVersion": "2015-05-01-preview",
+          "location": "[parameters('location')]",
+          "copy": {
+            "name": "extensionLoopDEL",
+            "count": "[parameters('numberOfWebInstances')]"
+          },
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.19",
             "autoUpgradeMinorVersion": true,
             "settings": {
-                "Name": "[parameters('domainName')]",
-                "User": "[variables('domainJoinUserName')]",
-                "Restart": "true",
-                "Options": "[variables('domainJoinOptions')]",
-                "OUPath": ""
+              "ModulesUrl": "[parameters('iisModulesURL')]",
+              "ConfigurationFunction": "[parameters('iisConfigurationFunction')]",
+              "Properties": {
+                "MachineName": "[parameters('WebVMName')]"
+              }
             },
-            "protectedSettings": {
-                "Password": "[parameters('adminPassword')]"
-            }
-        }
-    },
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('WebVMName'), copyindex(),'/adcse-pwd')]",
-      "location": "[parameters('location')]",
-      "copy": {
-        "name": "webloop",
-        "count": "[parameters('numberOfWebInstances')]"
-      },
-      "tags": {
-        "displayName": "adcse-pwd"
-      },
-      "properties": {
-        "publisher": "Microsoft.Compute",
-        "type": "CustomScriptExtension",
-        "typeHandlerVersion": "1.8",
-        "autoUpgradeMinorVersion": true,
-        "settings": {
-          "fileUris": "[parameters('postDeployScriptUris')]",
-          "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1"
-        },
-        "protectedSettings": {
-          "storageAccountName": "",
-          "storageAccountKey": ""
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('WebVMName'), copyindex(), '/iis')]",
-      "apiVersion": "2015-05-01-preview",
-      "location": "[parameters('location')]",
-      "copy": {
-        "name": "extensionLoopDEL",
-        "count": "[parameters('numberOfWebInstances')]"
-      },
-      "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
-      ],
-      "properties": {
-        "publisher": "Microsoft.Powershell",
-        "type": "DSC",
-        "typeHandlerVersion": "2.19",
-        "autoUpgradeMinorVersion": true,
-        "settings": {
-          "ModulesUrl": "[parameters('iisModulesURL')]",
-          "ConfigurationFunction": "[parameters('iisConfigurationFunction')]",
-          "Properties": {
-            "MachineName": "[parameters('WebVMName')]"
+            "protectedSettings": null
           }
-        },
-        "protectedSettings": null
-      }
+        }
+      ]
     }
   ],
   "outputs": {

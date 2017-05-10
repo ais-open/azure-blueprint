@@ -1271,10 +1271,7 @@
 					},
           "webSubnetAddressRange": {
             "value": "[parameters('webSubnet').properties.addressPrefix]"
-          },
-					"postDeployScriptUris": {
-						"value": "[variables('artifacts').postDeployScriptUris]"
-					}
+          }
 				}
 			}
 		}
