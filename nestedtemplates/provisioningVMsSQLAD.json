@@ -263,7 +263,6 @@
                 "name": "[parameters('SqlStorageAccountType')]"
             },
             "properties": {
-                //"accountType": "[parameters('SqlStorageAccountType')]",                
                 "encryption": {
                     "services": {
                         "blob": {
@@ -280,10 +279,9 @@
             "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
             "sku": {
-                "name": "[parameters('DcStorageAccountType')]",
+                "name": "[parameters('DcStorageAccountType')]"
             },
             "properties": {
-                //"accountType": "[parameters('DcStorageAccountType')]",
                 "encryption": {
                     "services": {
                         "blob": {
@@ -316,8 +314,10 @@
             "name": "[parameters('mgtStorageAccountName')]",
             "apiVersion": "2016-01-01",
             "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "[parameters('mgtStorageAccountType')]"
+            },
             "properties": {
-                "accountType": "[parameters('mgtStorageAccountType')]",
                 "encryption": {
                     "services": {
                         "blob": {
@@ -350,8 +350,10 @@
             "name": "[variables('diagstorageNameDC')]",
             "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard_LRS"
+            },
             "properties": {
-                "accountType": "Standard_LRS",
                 "encryption": {
                     "services": {
                         "blob": {

@@ -137,8 +137,10 @@
             "name": "[parameters('WebStorageAccountName')]",
             "apiVersion": "2016-01-01",
             "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "[parameters('webStorageAccountType')]"
+            },
             "properties": {
-                "accountType": "[parameters('webStorageAccountType')]",
                 "encryption": {
                     "services": {
                         "blob": {
