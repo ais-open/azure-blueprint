@@ -984,6 +984,39 @@
                     },
                     "sqlSubnetRef": {
                         "value": "[variables('derivedIds').sqlSubnet]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('keyVaultName')]"
+                    },
+                    "sequenceVersion": {
+                        "value": "[variables('vmEncryptionSettings').sequenceVersion]"
+                    },
+                    "volumeType": {
+                        "value": "[variables('vmEncryptionSettings').volumeType]"
+                    },
+                    "diskEncryptionExtensionName": {
+                        "value": "[variables('vmEncryptionSettings').diskEncryptionExtensionName]"
+                    },
+                    "diskEncryptionExtensionVersion": {
+                        "value": "[variables('vmEncryptionSettings').diskEncryptionExtensionVersion]"
+                    },
+                    "encryptionOperation": {
+                        "value": "[variables('vmEncryptionSettings').encryptionOperation]"
+                    },
+                    "keyEncryptionAlgorithm": {
+                        "value": "[variables('vmEncryptionSettings').keyEncryptionAlgorithm]"
+                    },
+                    "keyVaultURL": {
+                        "value": "[variables('vmEncryptionSettings').keyVaultURL]"
+                    },
+                    "keyVaultResourceID": {
+                        "value": "[variables('vmEncryptionSettings').keyVaultResourceID]"
+                    },
+                    "keyVaultId": {
+                        "value": "[variables('vmEncryptionSettings').keyVaultId]"
+                    },
+                    "provisioningVMAzureDiskEncryptionUrl": {
+                        "value": "[parameters('vmEncryptionSettings').provisioningVMAzureDiskEncryptionUrl]"
                     }
                 }
             }
@@ -1270,30 +1303,6 @@
                     },
                     "webSubnetAddressRange": {
                         "value": "[parameters('webSubnet').properties.addressPrefix]"
-                    }
-                }
-            }
-        },
-        {
-            "name": "ConfigurationVMEncryption",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines', variables('VMnames').VMs[copyIndex()].Name)]"
-            ],
-            "copy": {
-                "name": "vmNameLoop",
-                "count": "[length(variables('VMnames').VMs)]"
-            },
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('vmEncryptionSettings').provisioningVMAzureDiskEncryptionUrl]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "vmName": {
-                        "value": "[variables('VMnames').VMs[copyIndex()].Name]"
                     },
                     "keyVaultName": {
                         "value": "[parameters('keyVaultName')]"
@@ -1322,32 +1331,16 @@
                     "keyVaultResourceID": {
                         "value": "[variables('vmEncryptionSettings').keyVaultResourceID]"
                     },
-                    "aadClientID": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[variables('vmEncryptionSettings').keyVaultId]"
-                            },
-                            "secretName": "aadClientID"
-                        }
+                    "keyVaultId": {
+                        "value": "[variables('vmEncryptionSettings').keyVaultId]"
                     },
-                    "aadClientSecret": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[variables('vmEncryptionSettings').keyVaultId]"
-                            },
-                            "secretName": "aadClientSecret"
-                        }
-                    },
-                    "keyEncryptionKeyURL": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[variables('vmEncryptionSettings').keyVaultId]"
-                            },
-                            "secretName": "keyEncryptionKeyURL"
-                        }
+                    "provisioningVMAzureDiskEncryptionUrl": {
+                        "value": "[parameters('vmEncryptionSettings').provisioningVMAzureDiskEncryptionUrl]"
                     }
+
                 }
             }
         }
+
     ]
 }

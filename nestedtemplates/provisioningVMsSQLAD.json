@@ -178,6 +178,39 @@
         },
         "sqlBEAddressPoolID": {
             "type": "string"
+        },
+        "keyVaultName": {
+            "type": "string"
+        },
+        "sequenceVersion": {
+            "type": "string"
+        },
+        "volumeType": {
+            "type": "string"
+        },
+        "diskEncryptionExtensionName": {
+            "type": "string"
+        },
+        "diskEncryptionExtensionVersion": {
+            "type": "string"
+        },
+        "encryptionOperation": {
+            "type": "string"
+        },
+        "keyEncryptionAlgorithm": {
+            "type": "string"
+        },
+        "keyVaultURL": {
+            "type": "string"
+        },
+        "keyVaultResourceID": {
+            "type": "string"
+        },
+        "keyVaultId": {
+            "type": "string"
+        },
+        "provisioningVMAzureDiskEncryptionUrl": {
+            "type": "string"
         }
     },
     "variables": {
@@ -186,7 +219,24 @@
         "fswstorageName": "[concat(parameters('sqlStorageAccountName'), 'fsw')]",
         "diagstorageNameSQL": "[concat(parameters('sqlStorageAccountName'), 'diag')]",
         "diagstorageNameDC": "[concat(parameters('dcStorageAccountName'), 'diag')]",
-        "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]"
+        "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]",
+        "vmNames": {
+            "VMs": [{
+                    "Name": "[parameters('adPDCVMName')]"
+                }, {
+                    "Name": "[parameters('adBDCVMName')]"
+                }, {
+                    "Name": "[parameters('sqlwVMName')]"
+                }, {
+                    "Name": "[parameters('mgtVMName')]"
+                }, {
+                    "Name": "[concat(parameters('sqlVMName'),'1')]"
+                }, {
+                    "Name": "[concat(parameters('sqlVMName'),'2)]"
+                }
+
+            ]
+        }
     },
     "resources": [{
             "type": "Microsoft.Compute/availabilitySets",
@@ -909,6 +959,81 @@
                 }
             }
         },
+        {
+            "name": "[concat('ConfigurationVMEncryption', variables('VMnames').VMs[copyIndex()].Name)]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('VMnames').VMs[copyIndex()].Name))]"
+            ],
+            "copy": {
+                "name": "vmNameLoop",
+                "count": "[length(variables('VMnames').VMs)]"
+            },
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[parameters('provisioningVMAzureDiskEncryptionUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[variables('VMnames').VMs[copyIndex()].Name)]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('keyVaultName')]"
+                    },
+                    "sequenceVersion": {
+                        "value": "[parameters('sequenceVersion')]"
+                    },
+                    "volumeType": {
+                        "value": "[parameters('volumeType')]"
+                    },
+                    "diskEncryptionExtensionName": {
+                        "value": "[parameters('diskEncryptionExtensionName')]"
+                    },
+                    "diskEncryptionExtensionVersion": {
+                        "value": "[parameters('diskEncryptionExtensionVersion')]"
+                    },
+                    "encryptionOperation": {
+                        "value": "[parameters('encryptionOperation')]"
+                    },
+                    "keyEncryptionAlgorithm": {
+                        "value": "[parameters('keyEncryptionAlgorithm')]"
+                    },
+                    "keyVaultURL": {
+                        "value": "[parameters('keyVaultURL')]"
+                    },
+                    "keyVaultResourceID": {
+                        "value": "[parameters('keyVaultResourceID')]"
+                    },
+                    "aadClientID": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[parameters('keyVaultId')]"
+                            },
+                            "secretName": "aadClientID"
+                        }
+                    },
+                    "aadClientSecret": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[parameters('keyVaultId')]"
+                            },
+                            "secretName": "aadClientSecret"
+                        }
+                    },
+                    "keyEncryptionKeyURL": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[parameters('keyVaultId')]"
+                            },
+                            "secretName": "keyEncryptionKeyURL"
+                        }
+                    }
+                }
+            }
+        }
     ],
     "outputs": {
 
