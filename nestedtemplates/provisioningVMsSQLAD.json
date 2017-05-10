@@ -232,7 +232,7 @@
                 }, {
                     "Name": "[concat(parameters('sqlVMName'),'1')]"
                 }, {
-                    "Name": "[concat(parameters('sqlVMName'),'2)]"
+                    "Name": "[concat(parameters('sqlVMName'),'2')]"
                 }
 
             ]
@@ -964,7 +964,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines', variables('VMnames').VMs[copyIndex()].Name))]"
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('VMnames').VMs[copyIndex()].Name)]"
             ],
             "copy": {
                 "name": "vmNameLoop",
@@ -978,7 +978,7 @@
                 },
                 "parameters": {
                     "vmName": {
-                        "value": "[variables('VMnames').VMs[copyIndex()].Name)]"
+                        "value": "[variables('VMnames').VMs[copyIndex()].Name]"
                     },
                     "keyVaultName": {
                         "value": "[parameters('keyVaultName')]"

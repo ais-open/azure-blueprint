@@ -270,7 +270,7 @@
             "apiVersion": "2015-01-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Compute/virtualMachines', concat(parameters('WebVMName'), copyindex()))]",
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat(parameters('WebVMName'), copyindex(), '/joindomain')]"
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions/', concat(parameters('WebVMName'), copyindex(), '/joindomain'))]"
             ],
             "copy": {
                 "name": "vmNameLoop",
