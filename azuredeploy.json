@@ -601,11 +601,6 @@
             "iisModulesURL": "[concat(parameters('scriptsBaseUrl'),'/ContosoWebsite.ps1.zip')]",
             "iisConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite"
         },
-        "vmNames": {
-            "VMs": [{
-                "Name": "DCSTSWinVM"
-            }]
-        },
         "vmEncryptionSettings": {
             "sequenceVersion": "1.0",
             "volumeType": "All",
