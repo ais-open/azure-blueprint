@@ -230,9 +230,9 @@
                 }, {
                     "Name": "[parameters('mgtVMName')]"
                 }, {
-                    "Name": "[concat(parameters('sqlVMName'),'1')]"
+                    "Name": "[concat(parameters('sqlVMName'),'0')]"
                 }, {
-                    "Name": "[concat(parameters('sqlVMName'),'2')]"
+                    "Name": "[concat(parameters('sqlVMName'),'1')]"
                 }
 
             ]
