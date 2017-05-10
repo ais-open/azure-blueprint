@@ -414,12 +414,19 @@
 			},
 			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/nestedtemplates"
 		},
-		"scriptsBaseUrl": {
+		"dscBaseUrl": {
 			"type": "string",
 			"metadata": {
 				"description": "DSC Scripts base url"
 			},
 			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/DSC"
+		},
+		"scriptsBaseUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "DSC Scripts base url"
+			},
+			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/postdeploy"
 		},
 		"sqlServerVersion": {
 			"type": "string",
@@ -579,6 +586,9 @@
 			}
 		},
 		"artifacts": {
+			"postDeployScriptUris": [
+				"[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]"
+			],
 			"vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
 			"nicTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateNic.json')]",
 			"sqlLoadBalancerURL": "[concat(parameters('templatesBaseUrl'),'/sqlLoadBalancer.json')]",
@@ -590,17 +600,17 @@
 			"configuringBackupADVMURL": "[concat(parameters('templatesBaseUrl'),'/configuringBackupADVM.json')]",
 			"preparingAlwaysOnSqlServerURL": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServer.json')]",
 			"configuringAlwaysOnURL": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOn.json')]",
-			"adPDCModulesURL": "[concat(parameters('scriptsBaseUrl'),'/CreateADPDC.ps1.zip')]",
+			"adPDCModulesURL": "[concat(parameters('dscBaseUrl'),'/CreateADPDC.ps1.zip')]",
 			"adPDCConfigurationFunction": "CreateADPDC.ps1\\CreateADPDC",
-			"adBDCModulesURL": "[concat(parameters('scriptsBaseUrl'),'/PrepareADBDC.ps1.zip')]",
+			"adBDCModulesURL": "[concat(parameters('dscBaseUrl'),'/PrepareADBDC.ps1.zip')]",
 			"adBDCConfigurationFunction": "PrepareADBDC.ps1\\PrepareADBDC",
-			"fswModulesURL": "[concat(parameters('scriptsBaseUrl'),'/CreateFileShareWitness.ps1.zip')]",
+			"fswModulesURL": "[concat(parameters('dscBaseUrl'),'/CreateFileShareWitness.ps1.zip')]",
 			"fswConfigurationFunction": "CreateFileShareWitness.ps1\\CreateFileShareWitness",
-			"sqlAOPrepareModulesURL": "[concat(parameters('scriptsBaseUrl'),'/PrepareAlwaysOnSqlServer.ps1.zip')]",
+			"sqlAOPrepareModulesURL": "[concat(parameters('dscBaseUrl'),'/PrepareAlwaysOnSqlServer.ps1.zip')]",
 			"sqlAOPrepareConfigurationFunction": "PrepareAlwaysOnSqlServer.ps1\\PrepareAlwaysOnSqlServer",
-			"createClusterModulesURL": "[concat(parameters('scriptsBaseUrl'),'/CreateFailoverCluster.ps1.zip')]",
+			"createClusterModulesURL": "[concat(parameters('dscBaseUrl'),'/CreateFailoverCluster.ps1.zip')]",
 			"createClusterConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
-			"iisModulesURL": "[concat(parameters('scriptsBaseUrl'),'/ContosoWebsite.ps1.zip')]",
+			"iisModulesURL": "[concat(parameters('dscBaseUrl'),'/ContosoWebsite.ps1.zip')]",
 			"iisConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite"
 		}
 	},
@@ -1297,7 +1307,10 @@
 					},
           "webSubnetAddressRange": {
             "value": "[parameters('webSubnet').properties.addressPrefix]"
-          }
+          },
+					"postDeployScriptUris": {
+						"value": "[variables('artifacts').postDeployScriptUris]"
+					}
 				}
 			}
 		}
