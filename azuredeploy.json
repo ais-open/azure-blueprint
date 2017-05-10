@@ -1016,7 +1016,7 @@
                         "value": "[variables('vmEncryptionSettings').keyVaultId]"
                     },
                     "provisioningVMAzureDiskEncryptionUrl": {
-                        "value": "[parameters('vmEncryptionSettings').provisioningVMAzureDiskEncryptionUrl]"
+                        "value": "[variables('vmEncryptionSettings').provisioningVMAzureDiskEncryptionUrl]"
                     }
                 }
             }
@@ -1335,7 +1335,7 @@
                         "value": "[variables('vmEncryptionSettings').keyVaultId]"
                     },
                     "provisioningVMAzureDiskEncryptionUrl": {
-                        "value": "[parameters('vmEncryptionSettings').provisioningVMAzureDiskEncryptionUrl]"
+                        "value": "[variables('vmEncryptionSettings').provisioningVMAzureDiskEncryptionUrl]"
                     }
 
                 }
