@@ -360,10 +360,11 @@
         },
         {
     			"apiVersion": "2015-06-15",
-    			"type": "extensions  ",
+    			"type": "Microsoft.Compute/virtualMachines/extensions",
     			"name": "[concat(parameters('adPDCVMName'), '/adcse-pwd')]",
     			"dependsOn": [
-    				"[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
+    				"[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]",
+            "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]"
           ],
     			"location": "[resourceGroup().location]",
     			"tags": {
