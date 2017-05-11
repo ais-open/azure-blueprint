@@ -53,7 +53,7 @@
             "apiVersion": "2016-01-01",
             "location": "[resourceGroup().location]",
             "sku": {
-                "name": "Standard_LRS"
+                "name": "Standard_GRS"
             },
             "kind": "Storage",
             "properties": {

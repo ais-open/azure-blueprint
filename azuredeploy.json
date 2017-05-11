@@ -248,12 +248,13 @@
             "type": "string",
             "allowedValues": [
                 "Premium_LRS",
-                "Standard_LRS"
+                "Standard_LRS",
+                "Standard_GRS"
             ],
             "metadata": {
                 "description": "The type of the Sql Server Storage Account created"
             },
-            "defaultValue": "Standard_LRS"
+            "defaultValue": "Standard_GRS"
         },
         "dcStorageAccountType": {
             "type": "string",
@@ -266,7 +267,7 @@
             "metadata": {
                 "description": "The type of the DC Storage Account created"
             },
-            "defaultValue": "Standard_LRS"
+            "defaultValue": "Standard_GRS"
         },
         "webStorageAccountType": {
             "type": "string",
@@ -279,7 +280,7 @@
             "metadata": {
                 "description": "The type of the DC Storage Account created"
             },
-            "defaultValue": "Standard_LRS"
+            "defaultValue": "Standard_GRS"
         },
         "mgtStorageAccountType": {
             "type": "string",
@@ -292,7 +293,7 @@
             "metadata": {
                 "description": "The type of the DC Storage Account created"
             },
-            "defaultValue": "Standard_LRS"
+            "defaultValue": "Standard_GRS"
         },
         "virtualNetworkAddressRange": {
             "type": "string",

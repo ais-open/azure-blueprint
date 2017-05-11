@@ -300,7 +300,7 @@
             "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
             "sku": {
-                "name": "Standard_LRS"
+                "name": "Standard_GRS"
             },
             "kind": "Storage",
             "properties": {
@@ -340,7 +340,7 @@
             "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
             "sku": {
-                "name": "Standard_LRS"
+                "name": "Standard_GRS"
             },
             "kind": "Storage",
             "properties": {
@@ -360,7 +360,7 @@
             "apiVersion": "2016-01-01",
             "location": "[parameters('location')]",
             "sku": {
-                "name": "Standard_LRS"
+                "name": "Standard_GRS"
             },
             "kind": "Storage",
             "properties": {
