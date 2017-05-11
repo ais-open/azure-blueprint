@@ -90,13 +90,13 @@
       "type": "string"
     },
     "mgtImagePublisher": {
-      "type":"string"
+      "type": "string"
     },
     "mgtImageOffer": {
-      "type":"string"
+      "type": "string"
     },
     "mgtImageSKU": {
-      "type":"string"
+      "type": "string"
     },
     "domainName": {
       "type": "string"
@@ -181,6 +181,39 @@
     },
     "backupInfo": {
       "type": "object"
+    },
+    "keyVaultName": {
+      "type": "string"
+    },
+    "sequenceVersion": {
+      "type": "string"
+    },
+    "volumeType": {
+      "type": "string"
+    },
+    "diskEncryptionExtensionName": {
+      "type": "string"
+    },
+    "diskEncryptionExtensionVersion": {
+      "type": "string"
+    },
+    "encryptionOperation": {
+      "type": "string"
+    },
+    "keyEncryptionAlgorithm": {
+      "type": "string"
+    },
+    "keyVaultURL": {
+      "type": "string"
+    },
+    "keyVaultResourceID": {
+      "type": "string"
+    },
+    "keyVaultId": {
+      "type": "string"
+    },
+    "provisioningVMAzureDiskEncryptionUrl": {
+      "type": "string"
     }
   },
   "variables": {
@@ -189,7 +222,30 @@
     "fswstorageName": "[concat(parameters('sqlStorageAccountName'), 'fsw')]",
     "diagstorageNameSQL": "[concat(parameters('sqlStorageAccountName'), 'diag')]",
     "diagstorageNameDC": "[concat(parameters('dcStorageAccountName'), 'diag')]",
-    "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]"
+    "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]",
+    "vmNames": {
+      "VMs": [
+        {
+          "Name": "[parameters('adPDCVMName')]"
+        },
+        {
+          "Name": "[parameters('adBDCVMName')]"
+        },
+        {
+          "Name": "[parameters('sqlwVMName')]"
+        },
+        {
+          "Name": "[parameters('mgtVMName')]"
+        },
+        {
+          "Name": "[concat(parameters('sqlVMName'),'0')]"
+        },
+        {
+          "Name": "[concat(parameters('sqlVMName'),'1')]"
+        }
+
+      ]
+    }
   },
   "resources": [
     {
@@ -211,59 +267,125 @@
     {
       "name": "[parameters('sqlStorageAccountName')]",
       "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2016-01-01",
       "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('SqlStorageAccountType')]"
+      },
+      "kind": "Storage",
       "properties": {
-        "accountType": "[parameters('SqlStorageAccountType')]"
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
       }
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[parameters('dcStorageAccountName')]",
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2016-01-01",
       "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('DcStorageAccountType')]"
+      },
+      "kind": "Storage",
       "properties": {
-        "accountType": "[parameters('DcStorageAccountType')]"
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
       }
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('fswstorageName')]",
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2016-01-01",
       "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_GRS"
+      },
+      "kind": "Storage",
       "properties": {
-        "accountType": "Standard_LRS"
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
       }
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[parameters('mgtStorageAccountName')]",
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2016-01-01",
       "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[parameters('mgtStorageAccountType')]"
+      },
+      "kind": "Storage",
       "properties": {
-        "accountType": "[parameters('mgtStorageAccountType')]"
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
       }
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('diagstorageNameSQL')]",
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2016-01-01",
       "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_GRS"
+      },
+      "kind": "Storage",
       "properties": {
-        "accountType": "Standard_LRS"
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
       }
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('diagstorageNameDC')]",
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2016-01-01",
       "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_GRS"
+      },
+      "kind": "Storage",
       "properties": {
-        "accountType": "Standard_LRS"
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
       }
     },
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('adPDCVMName')]",
       "location": "[parameters('location')]",
@@ -384,7 +506,7 @@
       ]
     },
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('adBDCVMName')]",
       "location": "[parameters('location')]",
@@ -474,7 +596,7 @@
       ]
     },
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('sqlVMName'), copyindex())]",
       "location": "[parameters('location')]",
@@ -581,7 +703,7 @@
       }
     },
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('sqlwVMName')]",
       "location": "[parameters('location')]",
@@ -926,7 +1048,7 @@
       }
     },
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('mgtVMName')]",
       "location": "[parameters('location')]",
@@ -1017,6 +1139,81 @@
         },
         "protectedSettings": {
           "Password": "[parameters('adminPassword')]"
+        }
+      }
+    },
+    {
+      "name": "[concat('ConfigurationVMEncryption', variables('VMnames').VMs[copyIndex()].Name)]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', variables('VMnames').VMs[copyIndex()].Name)]"
+      ],
+      "copy": {
+        "name": "vmNameLoop",
+        "count": "[length(variables('VMnames').VMs)]"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('provisioningVMAzureDiskEncryptionUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": {
+            "value": "[variables('VMnames').VMs[copyIndex()].Name]"
+          },
+          "keyVaultName": {
+            "value": "[parameters('keyVaultName')]"
+          },
+          "sequenceVersion": {
+            "value": "[parameters('sequenceVersion')]"
+          },
+          "volumeType": {
+            "value": "[parameters('volumeType')]"
+          },
+          "diskEncryptionExtensionName": {
+            "value": "[parameters('diskEncryptionExtensionName')]"
+          },
+          "diskEncryptionExtensionVersion": {
+            "value": "[parameters('diskEncryptionExtensionVersion')]"
+          },
+          "encryptionOperation": {
+            "value": "[parameters('encryptionOperation')]"
+          },
+          "keyEncryptionAlgorithm": {
+            "value": "[parameters('keyEncryptionAlgorithm')]"
+          },
+          "keyVaultURL": {
+            "value": "[parameters('keyVaultURL')]"
+          },
+          "keyVaultResourceID": {
+            "value": "[parameters('keyVaultResourceID')]"
+          },
+          "aadClientID": {
+            "reference": {
+              "keyVault": {
+                "id": "[parameters('keyVaultId')]"
+              },
+              "secretName": "aadClientID"
+            }
+          },
+          "aadClientSecret": {
+            "reference": {
+              "keyVault": {
+                "id": "[parameters('keyVaultId')]"
+              },
+              "secretName": "aadClientSecret"
+            }
+          },
+          "keyEncryptionKeyURL": {
+            "reference": {
+              "keyVault": {
+                "id": "[parameters('keyVaultId')]"
+              },
+              "secretName": "keyEncryptionKeyURL"
+            }
+          }
         }
       }
     }

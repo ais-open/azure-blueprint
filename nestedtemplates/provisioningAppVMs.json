@@ -94,6 +94,39 @@
     },
     "backupInfo": {
       "type": "object"
+    },
+    "keyVaultName": {
+      "type": "string"
+    },
+    "sequenceVersion": {
+      "type": "string"
+    },
+    "volumeType": {
+      "type": "string"
+    },
+    "diskEncryptionExtensionName": {
+      "type": "string"
+    },
+    "diskEncryptionExtensionVersion": {
+      "type": "string"
+    },
+    "encryptionOperation": {
+      "type": "string"
+    },
+    "keyEncryptionAlgorithm": {
+      "type": "string"
+    },
+    "keyVaultURL": {
+      "type": "string"
+    },
+    "keyVaultResourceID": {
+      "type": "string"
+    },
+    "keyVaultId": {
+      "type": "string"
+    },
+    "provisioningVMAzureDiskEncryptionUrl": {
+      "type": "string"
     }
   },
   "variables": {
@@ -104,10 +137,21 @@
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[parameters('WebStorageAccountName')]",
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2016-01-01",
       "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[parameters('webStorageAccountType')]"
+      },
+      "kind": "Storage",
       "properties": {
-        "accountType": "[parameters('webStorageAccountType')]"
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
       }
     },
     {
@@ -129,8 +173,7 @@
         "name": "nicLoopDEL",
         "count": "[parameters('numberOfWebInstances')]"
       },
-      "dependsOn": [
-      ],
+      "dependsOn": [],
       "properties": {
         "ipConfigurations": [
           {
@@ -150,7 +193,7 @@
       }
     },
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('WebVMName'), copyindex())]",
       "location": "[parameters('location')]",
@@ -285,6 +328,7 @@
         "protectedSettings": null
       }
     },
+    /*
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('vmName'),'/', parameters('vmExtensionName'))]",
@@ -313,6 +357,82 @@
           }
         },
         "protectedSettings": null
+      }
+    },
+    */
+    {
+      "name": "[concat('ConfigurationVMEncryption_', parameters('WebVMName'), copyindex())]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', concat(parameters('WebVMName'), copyindex()))]"
+      ],
+      "copy": {
+        "name": "vmNameLoop",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('provisioningVMAzureDiskEncryptionUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": {
+            "value": "[concat(parameters('WebVMName'), copyindex())]"
+          },
+          "keyVaultName": {
+            "value": "[parameters('keyVaultName')]"
+          },
+          "sequenceVersion": {
+            "value": "[parameters('sequenceVersion')]"
+          },
+          "volumeType": {
+            "value": "[parameters('volumeType')]"
+          },
+          "diskEncryptionExtensionName": {
+            "value": "[parameters('diskEncryptionExtensionName')]"
+          },
+          "diskEncryptionExtensionVersion": {
+            "value": "[parameters('diskEncryptionExtensionVersion')]"
+          },
+          "encryptionOperation": {
+            "value": "[parameters('encryptionOperation')]"
+          },
+          "keyEncryptionAlgorithm": {
+            "value": "[parameters('keyEncryptionAlgorithm')]"
+          },
+          "keyVaultURL": {
+            "value": "[parameters('keyVaultURL')]"
+          },
+          "keyVaultResourceID": {
+            "value": "[parameters('keyVaultResourceID')]"
+          },
+          "aadClientID": {
+            "reference": {
+              "keyVault": {
+                "id": "[parameters('keyVaultId')]"
+              },
+              "secretName": "aadClientID"
+            }
+          },
+          "aadClientSecret": {
+            "reference": {
+              "keyVault": {
+                "id": "[parameters('keyVaultId')]"
+              },
+              "secretName": "aadClientSecret"
+            }
+          },
+          "keyEncryptionKeyURL": {
+            "reference": {
+              "keyVault": {
+                "id": "[parameters('keyVaultId')]"
+              },
+              "secretName": "keyEncryptionKeyURL"
+            }
+          }
+        }
       }
     }
   ],
