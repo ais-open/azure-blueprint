@@ -479,29 +479,6 @@
               }
             }
           }
-        },
-        {
-          "name": "BackupAdPDCVM",
-          "type": "Microsoft.Resources/deployments",
-          "apiVersion": "2015-01-01",
-          "dependsOn": [
-            "[parameters('adPDCVMName')]"
-          ],
-          "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[parameters('backupInfo').backupTemplateUrl]",
-              "contentVersion": "1.0.0.0"
-            },
-            "parameters": {
-              "backupInfo": {
-                "value": "[parameters('backupInfo')]"
-              },
-              "vmName": {
-                "value": "[parameters('adPDCVMName')]"
-              }
-            }
-          }
         }
       ]
     },
@@ -569,31 +546,7 @@
           }
         }
       },
-      "resources": [
-        {
-          "name": "BackupAdBDCVM",
-          "type": "Microsoft.Resources/deployments",
-          "apiVersion": "2015-01-01",
-          "dependsOn": [
-            "[parameters('adBDCVMName')]"
-          ],
-          "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[parameters('backupInfo').backupTemplateUrl]",
-              "contentVersion": "1.0.0.0"
-            },
-            "parameters": {
-              "backupInfo": {
-                "value": "[parameters('backupInfo')]"
-              },
-              "vmName": {
-                "value": "[parameters('adBDCVMName')]"
-              }
-            }
-          }
-        }
-      ]
+      "resources": []
     },
     {
       "apiVersion": "2016-04-30-preview",
@@ -676,33 +629,6 @@
       "resources": []
     },
     {
-      "name": "[concat('BackupSqlVM-',copyIndex())]",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "copy": {
-        "name": "backupSqlVMLoop",
-        "count": 2
-      },
-      "dependsOn": [
-        "[concat(parameters('sqlVMName'), copyindex())]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[parameters('backupInfo').backupTemplateUrl]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "backupInfo": {
-            "value": "[parameters('backupInfo')]"
-          },
-          "vmName": {
-            "value": "[concat(parameters('sqlVMName'), copyindex())]"
-          }
-        }
-      }
-    },
-    {
       "apiVersion": "2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('sqlwVMName')]",
@@ -766,31 +692,7 @@
           }
         }
       },
-      "resources": [
-        {
-          "name": "BackupSqlwVM",
-          "type": "Microsoft.Resources/deployments",
-          "apiVersion": "2015-01-01",
-          "dependsOn": [
-            "[parameters('sqlwVMName')]"
-          ],
-          "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[parameters('backupInfo').backupTemplateUrl]",
-              "contentVersion": "1.0.0.0"
-            },
-            "parameters": {
-              "backupInfo": {
-                "value": "[parameters('backupInfo')]"
-              },
-              "vmName": {
-                "value": "[parameters('sqlwVMName')]"
-              }
-            }
-          }
-        }
-      ]
+      "resources": []
     },
     {
       "name": "UpdatingDNStoPrimaryADVM",
@@ -1147,10 +1049,12 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines', variables('VMnames').VMs[copyIndex()].Name)]"
+        "[resourceId('Microsoft.Compute/virtualMachines', variables('VMnames').VMs[copyIndex()].Name)]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]",
+        "Microsoft.Resources/deployments/UpdatingSQL0Nic"
       ],
       "copy": {
-        "name": "vmNameLoop",
+        "name": "encryptVMLoop",
         "count": "[length(variables('VMnames').VMs)]"
       },
       "properties": {
@@ -1213,6 +1117,33 @@
               },
               "secretName": "keyEncryptionKeyURL"
             }
+          }
+        }
+      }
+    },
+    {
+      "name": "[concat('Backup-',variables('VMnames').VMs[copyIndex()].Name)]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "copy": {
+        "name": "backupVMLoop",
+        "count": "[length(variables('VMnames').VMs)]"
+      },
+      "dependsOn": [
+        "encryptVMLoop"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('backupInfo').backupTemplateUrl]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "backupInfo": {
+            "value": "[parameters('backupInfo')]"
+          },
+          "vmName": {
+            "value": "[variables('VMnames').VMs[copyIndex()].Name]"
           }
         }
       }
