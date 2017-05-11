@@ -2,6 +2,9 @@ Enable-PSRemoting -Force
 $Domain = (gwmi WIN32_ComputerSystem).Domain
 
 Import-Module ActiveDirectory
+Import-Module grouppolicy
+$dcs = $Domain.split(".")
+$target = "DC=" + $dcs[0]+ "," + "DC=" + $dcs[1]
 
 <#
 #Domain admin credentials
@@ -20,7 +23,7 @@ $AdminCredentials=New-object System.Management.Automation.PSCredential $UserDoma
 
 #this does not error out
 Set-ADDefaultDomainPasswordPolicy -Identity $Domain -AuthType Negotiate -MaxPasswordAge 60.00:00:00 -MinPasswordAge 1.00:00:00 -PasswordHistoryCount 24 -ComplexityEnabled $true -ReversibleEncryptionEnabled $true -MinPasswordLength 14
-
+Set-GPLink -Guid (Get-GPO -Name "Default Domain Policy").id -Target $target -LinkEnabled Yes -Enforced Yes
 
 
 #all users in the AD should change password at next logon- only keep this as an option
