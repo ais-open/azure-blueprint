@@ -168,7 +168,7 @@
           "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('WebAvailabilitySetName'))]"
         },
         "osProfile": {
-          "computername": "[parameters('WebVMName')]",
+          "computername": "[concat(parameters('WebVMName'), copyindex())]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
