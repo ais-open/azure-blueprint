@@ -390,7 +390,7 @@
       }
     },
     {
-      "apiVersion": "2016-04-30-preview",
+      "apiVersion": "2016-03-30",//"2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('adPDCVMName')]",
       "location": "[parameters('location')]",
@@ -488,7 +488,7 @@
       ]
     },
     {
-      "apiVersion": "2016-04-30-preview",
+      "apiVersion": "2016-03-30", //"2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('adBDCVMName')]",
       "location": "[parameters('location')]",
@@ -554,7 +554,7 @@
       "resources": []
     },
     {
-      "apiVersion": "2016-04-30-preview",
+      "apiVersion": "2016-03-30", //"2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('sqlVMName'), copyindex())]",
       "location": "[parameters('location')]",
@@ -634,7 +634,7 @@
       "resources": []
     },
     {
-      "apiVersion": "2016-04-30-preview",
+      "apiVersion": "2016-03-30", //"2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('sqlwVMName')]",
       "location": "[parameters('location')]",
@@ -955,7 +955,7 @@
       }
     },
     {
-      "apiVersion": "2016-04-30-preview",
+      "apiVersion": "2016-03-30", //"2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('mgtVMName')]",
       "location": "[parameters('location')]",
