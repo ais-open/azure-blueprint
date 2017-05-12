@@ -64,7 +64,7 @@
       ],
       "copy": {
         "name": "vmStgEncryptLoop",
-        "value": "[length(parameters('vmName'))]"
+        "count": "[length(parameters('vmName'))]"
       },
       "properties": {
         "storageProfile": {
