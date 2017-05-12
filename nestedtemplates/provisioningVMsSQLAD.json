@@ -181,9 +181,6 @@
     },
     "postDeployScriptUris": {
       "type": "array"
-    },
-    "mgtPublicIPName": {
-      "type": "string"
     }
   },
   "variables": {
