@@ -1340,7 +1340,7 @@
           }
         }
       }
-    },
+    },*/
     {
       "name": "WebTier",
       "type": "Microsoft.Resources/deployments",
@@ -1460,7 +1460,7 @@
           }
         }
       }
-    },*/
+    },
     {
       "name": "RecoverServicesVault",
       "type": "Microsoft.Resources/deployments",

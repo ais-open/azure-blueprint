@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "vmName": {
-      "type": "array"
+      "type": "string"
     },
     "keyVaultName": {
       "type": "string"
@@ -27,13 +27,9 @@
   "resources": [
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('vmName')[copyIndex()].Name,'/', parameters('vmEncryptionSettings').diskEncryptionExtensionName)]",
+      "name": "[concat(parameters('vmName'),'/', parameters('vmEncryptionSettings').diskEncryptionExtensionName)]",
       "apiVersion": "2016-04-30-preview",
       "location": "[resourceGroup().location]",
-      "copy": {
-        "name": "encryptVMLoop",
-        "count": "[length(parameters('vmName'))]"
-      },
       "properties": {
         "publisher": "Microsoft.Azure.Security",
         "type": "AzureDiskEncryption",
@@ -56,16 +52,11 @@
     {
       "apiVersion": "2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[parameters('vmName')[copyIndex()].Name]",
+      "name": "[parameters('vmName')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        //"[resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('vmName'), parameters('vmEncryptionSettings').diskEncryptionExtensionName)]"
-        "encryptVMLoop"
+        "[resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('vmName'), parameters('vmEncryptionSettings').diskEncryptionExtensionName)]"        
       ],
-      "copy": {
-        "name": "vmStgEncryptLoop",
-        "count": "[length(parameters('vmName'))]"
-      },
       "properties": {
         "storageProfile": {
           "osDisk": {
@@ -74,7 +65,7 @@
                 "sourceVault": {
                   "id": "[parameters('vmEncryptionSettings').keyVaultResourceID]"
                 },
-                "secretUrl": "[reference(resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('vmName')[copyIndex()].Name, parameters('vmEncryptionSettings').diskEncryptionExtensionName)).instanceView.statuses[0].message]"
+                "secretUrl": "[reference(resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('vmName'), parameters('vmEncryptionSettings').diskEncryptionExtensionName)).instanceView.statuses[0].message]"
               },
               "keyEncryptionKey": {
                 "sourceVault": {
@@ -89,15 +80,9 @@
     }
   ],
   "outputs": {
-    "vmName": {
-      "type": "array",
-      "value": "[parameters('vmName')]"
-    }
-    /*
     "BitLockerKey": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('vmName'), parameters('vmEncryptionSettings').diskEncryptionExtensionName)).instanceView.statuses[0].message]"
     }
-    */
   }
 }

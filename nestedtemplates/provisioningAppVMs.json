@@ -104,14 +104,7 @@
   },
   "variables": {
     "domainJoinOptions": 3,
-    "domainJoinUserName": "[concat(parameters('domainName'),'\\',parameters('adminUsername'))]",
-    "webVMNames": [
-      "[concat(parameters('WebVMName'),'0')]",
-      "[concat(parameters('WebVMName'),'1')]",
-      "[concat(parameters('WebVMName'),'2')]",
-      "[concat(parameters('WebVMName'),'3')]",
-      "[concat(parameters('WebVMName'),'4')]"
-    ]
+    "domainJoinUserName": "[concat(parameters('domainName'),'\\',parameters('adminUsername'))]"
   },
   "resources": [
     {
@@ -225,13 +218,15 @@
       "resources": []
     },
     {
-      "name": "BackupWEB",
+      "name": "[concat('Backup-WEB-',copyIndex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "copy": {
+        "name": "backupWebLoop",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
       "dependsOn": [
-        "vmLoopDEL",
-        "extensionLoopDEL",
-        "ConfigurationVMEncryption_WEB"
+        "encryptWebLoop"
       ],
       "properties": {
         "mode": "Incremental",
@@ -244,7 +239,7 @@
             "value": "[parameters('backupInfo')]"
           },
           "vmName": {
-            "value": "[take(variables('webVMNames'),parameters('numberOfWebInstances'))]"
+            "value": "[concat(parameters('WebVMName'), copyindex())]"
           }
         }
       }
@@ -339,9 +334,13 @@
     },
     */
     {
-      "name": "ConfigurationVMEncryption_WEB",
+      "name": "[concat('ConfigurationVMEncryption-WEB-',copyIndex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "copy": {
+        "name": "encryptWebLoop",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
       "dependsOn": [
         "vmLoopDEL",
         "extensionLoopDEL"
@@ -354,7 +353,7 @@
         },
         "parameters": {
           "vmName": {
-            "value": "[take(variables('webVMNames'),parameters('numberOfWebInstances'))]"
+            "value": "[concat(parameters('WebVMName'), copyindex())]"
           },
           "keyVaultName": {
             "value": "[parameters('keyVaultName')]"
