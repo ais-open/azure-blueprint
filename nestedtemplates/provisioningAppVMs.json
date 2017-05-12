@@ -381,6 +381,7 @@
             "Processes": ""
           },
           "Monitoring": "ON",
+          "StorageAccountName": "[parameters('WebStorageAccountName')]",
           "RealtimeProtectionEnabled": "true",
           "ScheduledScanSettings": {
             "isEnabled": "true",
