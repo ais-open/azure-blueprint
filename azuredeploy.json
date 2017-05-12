@@ -1553,7 +1553,7 @@
       }
     },
     {
-      "name": "[concat('Backup-',reference('ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value[copyIndex()].Name)]",
+      "name": "[concat('Backup-',copyIndex())]",//"[concat('Backup-',reference('ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value[copyIndex()].Name)]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "copy": {
