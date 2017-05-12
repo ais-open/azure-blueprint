@@ -727,6 +727,7 @@
     }
     },
   "resources": [
+    /*
     {
       "name": "VirtualNetworkNSG",
       "type": "Microsoft.Resources/deployments",
@@ -816,7 +817,7 @@
           }
         }
       }
-    },
+    },*/
     /*{
       "name": "ProvisioningApplicationGateway",
       "type": "Microsoft.Resources/deployments",
@@ -858,6 +859,7 @@
         }
       }
     },*/
+    /*
     {
       "name": "ProvisioningNICsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
@@ -940,7 +942,7 @@
           }
         }
       }
-    },
+    },*/
     /*{
       "name": "ProvisioningVMsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
@@ -1339,8 +1341,8 @@
       "dependsOn": [
         //"Microsoft.Resources/deployments/ConfiguringAlwaysOn",
         //"Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT",
-        "Microsoft.Resources/deployments/RecoverServicesVault",
-        "Microsoft.Resources/deployments/BackupPolicyCustom"
+        //"Microsoft.Resources/deployments/RecoverServicesVault",
+        //"Microsoft.Resources/deployments/BackupPolicyCustom"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1452,7 +1454,8 @@
           }
         }
       }
-    },
+    } /*,
+
     {
       "name": "RecoverServicesVault",
       "type": "Microsoft.Resources/deployments",
@@ -1491,6 +1494,7 @@
         }
       }
     }
+    */
     /*,
     {
       "name": "ConfigurationVMEncryption_SQL_MGMT",

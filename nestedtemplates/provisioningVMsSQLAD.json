@@ -1310,14 +1310,14 @@
       "properties": {
         "publisher": "Microsoft.Azure.Security",
         "type": "IaaSAntimalware",
-        "typeHandlerVersion": "1.1",
+        "typeHandlerVersion": "1.3",
         "settings": {
           "AntimalwareEnabled": "true",
-          "Exclusions": {
+          /*"Exclusions": {
             "Paths": "F:\\Data;F:\\Log",
             "Extensions": "",
             "Processes": ""
-          },
+          },*/
           "RealtimeProtectionEnabled": "true",
           "ScheduledScanSettings": {
             "isEnabled": "true",
