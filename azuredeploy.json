@@ -831,6 +831,9 @@
           "mgtNSGid": {
 						"value": "[variables('derivedIds').mgtNSG]"
 					},
+					"mgtPublicIPName": {
+						"value": "[varibales('resourceNames').publicIPs.mgt]"
+					}
 				}
 			}
 		},
@@ -1029,9 +1032,6 @@
           },
 					"postDeployScriptUris": {
 						"value": "[variables('artifacts').postDeployScriptUris]"
-					},
-					"mgtPublicIPName": {
-						"value": "[varibales('resourceNames').publicIPs.mgt]"
 					}
 				}
 			}
