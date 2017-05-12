@@ -198,7 +198,7 @@
     "fswstorageName": "[concat(parameters('sqlStorageAccountName'), 'fsw')]",
     "diagstorageNameSQL": "[concat(parameters('sqlStorageAccountName'), 'diag')]",
     "diagstorageNameDC": "[concat(parameters('dcStorageAccountName'), 'diag')]",
-    "domainJoinUserName": "[concat(split(parameters('domainName'),'.')[0],'\\',parameters('adminUsername'))]",
+    "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]",
     "vmNames": {
       "VMs": [
         {

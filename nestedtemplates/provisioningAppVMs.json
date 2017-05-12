@@ -104,7 +104,7 @@
   },
   "variables": {
     "domainJoinOptions": 3,
-    "domainJoinUserName": "[concat(parameters('domainName'),'\\',parameters('adminUsername'))]"
+    "domainJoinUserName": "[concat(split(parameters('domainName'),'.')[0],'\\',parameters('adminUsername'))]"
   },
   "resources": [     
     {
