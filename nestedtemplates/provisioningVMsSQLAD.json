@@ -993,6 +993,7 @@
         }
       },
       "resources": [
+        /*
         {
           "name": "BackupMgtVM",
           "type": "Microsoft.Resources/deployments",
@@ -1016,6 +1017,7 @@
             }
           }
         }
+        */
       ]
     },
     {
@@ -1043,7 +1045,8 @@
           "Password": "[parameters('adminPassword')]"
         }
       }
-    },
+    }//,
+    /*
     {
       "name": "[concat('ConfigurationVMEncryption', variables('VMnames').VMs[copyIndex()].Name)]",
       "type": "Microsoft.Resources/deployments",
@@ -1120,36 +1123,13 @@
           }
         }
       }
-    },
-    {
-      "name": "[concat('Backup-',variables('VMnames').VMs[copyIndex()].Name)]",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "copy": {
-        "name": "backupVMLoop",
-        "count": "[length(variables('VMnames').VMs)]"
-      },
-      "dependsOn": [
-        "encryptVMLoop"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[parameters('backupInfo').backupTemplateUrl]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "backupInfo": {
-            "value": "[parameters('backupInfo')]"
-          },
-          "vmName": {
-            "value": "[variables('VMnames').VMs[copyIndex()].Name]"
-          }
-        }
-      }
     }
+    */
   ],
   "outputs": {
-
+    "sqlADVMNames": {
+      "type": "object",
+      "value": "[variables('vmNames').VMs]"
+    } 
   }
 }
