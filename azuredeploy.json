@@ -1162,7 +1162,7 @@
           }
         }
       }
-    }
+    },
     /*
     {
       "name": "PreparingAlwaysOnSqlServer",
@@ -1460,7 +1460,7 @@
           }
         }
       }
-    },
+    },*/
     {
       "name": "RecoverServicesVault",
       "type": "Microsoft.Resources/deployments",
@@ -1478,7 +1478,7 @@
           }
         }
       }
-    },
+    }/*,
     {
       "name": "BackupPolicyCustom",
       "type": "Microsoft.Resources/deployments",
