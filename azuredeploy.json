@@ -1517,7 +1517,7 @@
         },
         "parameters": {
           "vmName": {
-            "value": "[reference('Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value[copyIndex()].Name]"
+            "value": "Test"//"[reference('Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value[copyIndex()].Name]"
           },
           "keyVaultName": {
             "value": "[parameters('keyVaultName')]"
