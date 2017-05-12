@@ -82,6 +82,139 @@
             "accountType":"Standard_LRS"
          }
       },
+      
+      
+      
+
+    {
+      "type": "microsoft.insights/alertrules",
+      "name": "capacity alert1",
+      "apiVersion": "2014-04-01",
+      "location": "[parameters('location')]",
+
+      "properties": {
+        "name": "capacity alert",
+        "description": "usage more than 450 TB",
+        "isEnabled": true,
+        "condition": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+            "resourceUri": "[concat(resourceId('Microsoft.Storage/storageAccounts', parameters('sqlStorageAccountName')), '/services/blob')]",
+            "metricName": "Capacity"
+          },
+          "threshold": 4500000000000,
+          "windowSize": "P1D"
+        },
+        "action": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('sqlStorageAccountName'))]"
+      ]
+    },
+
+
+    {
+      "type": "microsoft.insights/alertrules",
+      "name": "capacity alert2",
+      "apiVersion": "2014-04-01",
+      "location": "[parameters('location')]",
+
+      "properties": {
+        "name": "capacity alert",
+        "description": "usage more than 450 TB",
+        "isEnabled": true,
+        "condition": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+            "resourceUri": "[concat(resourceId('Microsoft.Storage/storageAccounts', parameters('dcStorageAccountName')), '/services/blob')]",
+            "metricName": "Capacity"
+          },
+          "threshold": 4500000000000,
+          "windowSize": "P1D"
+        },
+        "action": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('dcStorageAccountName'))]"
+      ]
+    },
+
+
+    {
+      "type": "microsoft.insights/alertrules",
+      "name": "capacity alert3",
+      "apiVersion": "2014-04-01",
+      "location": "[parameters('location')]",
+
+      "properties": {
+        "name": "capacity alert4",
+        "description": "usage more than 450 TB",
+        "isEnabled": true,
+        "condition": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+            "resourceUri": "[concat(resourceId('Microsoft.Storage/storageAccounts', concat(uniquestring(parameters('sqlStorageAccountName')), 'fsw')), '/services/blob')]",
+            "metricName": "Capacity"
+          },
+          "threshold": 4500000000000,
+          "windowSize": "P1D"
+        },
+        "action": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', concat(uniquestring(parameters('sqlStorageAccountName')), 'fsw'))]"
+      ]
+    },
+
+
+    {
+      "type": "microsoft.insights/alertrules",
+      "name": "capacity alert4",
+      "apiVersion": "2014-04-01",
+      "location": "[parameters('location')]",
+
+      "properties": {
+        "name": "capacity alert",
+        "description": "usage more than 450 TB",
+        "isEnabled": true,
+        "condition": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+            "resourceUri": "[concat(resourceId('Microsoft.Storage/storageAccounts', concat(uniquestring(parameters('sqlStorageAccountName')), 'diag')), '/services/blob')]",
+            "metricName": "Capacity"
+          },
+          "threshold": 4500000000000,
+          "windowSize": "P1D"
+        },
+        "action": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts',concat(uniquestring(parameters('sqlStorageAccountName')), 'diag'))]"
+      ]
+    },
+      
+      
+      
       {  
          "apiVersion":"2015-06-15",
          "type":"Microsoft.Network/publicIPAddresses",
