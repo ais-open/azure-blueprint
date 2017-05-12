@@ -744,7 +744,7 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-        "[concat(parameters('adPDCVMName'),'/InstallDomainController')]",
+        "InstallDomainController",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]"
       ],
       "properties": {
