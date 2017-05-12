@@ -223,11 +223,12 @@
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('WebVMName'), copyindex(), '/joindomain')]",
       "copy": {
-        "name": "extensionLoopDEL",
+        "name": "joinDomainLoop",
         "count": "[parameters('numberOfWebInstances')]"
       },
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
+        //"[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
+        "vmLoopDEL"
       ],
       "location": "[parameters('location')]",
       "properties": {
@@ -253,11 +254,12 @@
       "apiVersion": "2015-05-01-preview",
       "location": "[parameters('location')]",
       "copy": {
-        "name": "extensionLoopDEL",
+        "name": "configIISLoop",
         "count": "[parameters('numberOfWebInstances')]"
       },
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
+        //"[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
+        "joinDomainLoop"
       ],
       "properties": {
         "publisher": "Microsoft.Powershell",
@@ -283,8 +285,7 @@
         "count": "[parameters('numberOfWebInstances')]"
       },
       "dependsOn": [
-        "vmLoopDEL",
-        "extensionLoopDEL"
+        "configIISLoop"
       ],
       "properties": {
         "mode": "Incremental",

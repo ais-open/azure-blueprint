@@ -1024,8 +1024,8 @@
           "Password": "[parameters('adminPassword')]"
         }
       }
-    }//,
-    /*{
+    },
+    {
       "name": "PreparingAlwaysOnSqlServer",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1113,8 +1113,8 @@
           }
         }
       }
-    },*/
-    /*{
+    },
+    {
       "name": "ConfiguringAlwaysOn",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1203,7 +1203,7 @@
           }
         }
       }
-    },*/    
+    }, 
     /*{
       "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
       "type": "Microsoft.Resources/deployments",
