@@ -1106,8 +1106,7 @@
           }
         }
       }
-    }
-    /*
+    },
     {
       "name": "ConfiguringAlwaysOn",
       "type": "Microsoft.Resources/deployments",
@@ -1197,7 +1196,7 @@
           }
         }
       }
-    },*/ 
+    }
     /*{
       "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
       "type": "Microsoft.Resources/deployments",
