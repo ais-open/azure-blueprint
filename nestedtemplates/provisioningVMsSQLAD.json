@@ -202,22 +202,52 @@
     "vmNames": {
       "VMs": [
         {
-          "Name": "[parameters('adPDCVMName')]"
+          "Name": "[parameters('adPDCVMName')]",
+          "Exclusions": {
+            "Paths": "",
+            "Extensions": "",
+            "Processes": ""
+          }
         },
         {
-          "Name": "[parameters('adBDCVMName')]"
+          "Name": "[parameters('adBDCVMName')]",
+          "Exclusions": {
+            "Paths": "",
+            "Extensions": "",
+            "Processes": ""
+          }
         },
         {
-          "Name": "[parameters('sqlwVMName')]"
+          "Name": "[parameters('sqlwVMName')]",
+          "Exclusions": {
+            "Paths": "",
+            "Extensions": "",
+            "Processes": ""
+          }
         },
         {
-          "Name": "[parameters('mgtVMName')]"
+          "Name": "[parameters('mgtVMName')]",
+          "Exclusions": {
+            "Paths": "",
+            "Extensions": "",
+            "Processes": ""
+          }
         },
         {
-          "Name": "[concat(parameters('sqlVMName'),'0')]"
+          "Name": "[concat(parameters('sqlVMName'),'0')]",
+          "Exclusions": {
+            "Paths": "",
+            "Extensions": "",
+            "Processes": ""
+          }
         },
         {
-          "Name": "[concat(parameters('sqlVMName'),'1')]"
+          "Name": "[concat(parameters('sqlVMName'),'1')]",
+          "Exclusions": {
+            "Paths": "",
+            "Extensions": "",
+            "Processes": ""
+          }
         }
       ]
     }
