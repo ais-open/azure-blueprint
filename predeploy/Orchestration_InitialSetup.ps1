@@ -6,8 +6,8 @@
 This script will create a Key Vault inside a specified Azure subscription
 
 .Example
-$BaseSourceControl = 'C:\Users\davoodharun\Desktop'
-. "$BaseSourceControl\azure-blueprint\predeploy\Orchestration_InitialSetup.ps1" @MyParams -verbose
+$BaseSourceControl = 'C:\Users\davoodharun\Desktop\azure-blueprint'
+. "$BaseSourceControl\predeploy\Orchestration_InitialSetup.ps1" @MyParams -verbose
 #>
 
 [cmdletbinding()]

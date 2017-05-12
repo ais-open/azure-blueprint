@@ -233,12 +233,14 @@
 			"type": "string",
 			"allowedValues": [
 				"Premium_LRS",
-				"Standard_LRS"
+				"Standard_LRS",
+				"Standard_GRS"
+
 			],
 			"metadata": {
 				"description": "The type of the Sql Server Storage Account created"
 			},
-			"defaultValue": "Standard_LRS"
+			"defaultValue": "Standard_GRS"
 		},
 		"dcStorageAccountType": {
 			"type": "string",
@@ -251,7 +253,7 @@
 			"metadata": {
 				"description": "The type of the DC Storage Account created"
 			},
-			"defaultValue": "Standard_LRS"
+			"defaultValue": "Standard_GRS"
 		},
 		"webStorageAccountType": {
 			"type": "string",
@@ -264,7 +266,7 @@
 			"metadata": {
 				"description": "The type of the DC Storage Account created"
 			},
-			"defaultValue": "Standard_LRS"
+			"defaultValue": "Standard_GRS"
 		},
 		"mgtStorageAccountType": {
 			"type": "string",
@@ -277,7 +279,7 @@
 			"metadata": {
 				"description": "The type of the DC Storage Account created"
 			},
-			"defaultValue": "Standard_LRS"
+			"defaultValue": "Standard_GRS"
 		},
 		"virtualNetworkAddressRange": {
 			"type": "string",
@@ -414,12 +416,19 @@
 			},
 			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/nestedtemplates"
 		},
-		"scriptsBaseUrl": {
+		"dscBaseUrl": {
 			"type": "string",
 			"metadata": {
 				"description": "DSC Scripts base url"
 			},
 			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/DSC"
+		},
+		"scriptsBaseUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "DSC Scripts base url"
+			},
+			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/postdeploy"
 		},
 		"sqlServerVersion": {
 			"type": "string",
@@ -576,9 +585,15 @@
 				"sql": "[concat('sqlAvailabilitySet', parameters('environmentPrefix'))]",
 				"ad": "[concat('adAvailabilitySet', parameters('environmentPrefix'))]",
 				"web": "[concat('webAvailabilitySet', parameters('environmentPrefix'))]"
+			},
+			"publicIPs": {
+				"mgt": "mgtpublicip"
 			}
 		},
 		"artifacts": {
+			"postDeployScriptUris": [
+				"[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]"
+			],
 			"vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
 			"nicTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateNic.json')]",
 			"sqlLoadBalancerURL": "[concat(parameters('templatesBaseUrl'),'/sqlLoadBalancer.json')]",
@@ -590,17 +605,17 @@
 			"configuringBackupADVMURL": "[concat(parameters('templatesBaseUrl'),'/configuringBackupADVM.json')]",
 			"preparingAlwaysOnSqlServerURL": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServer.json')]",
 			"configuringAlwaysOnURL": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOn.json')]",
-			"adPDCModulesURL": "[concat(parameters('scriptsBaseUrl'),'/CreateADPDC.ps1.zip')]",
+			"adPDCModulesURL": "[concat(parameters('dscBaseUrl'),'/CreateADPDC.ps1.zip')]",
 			"adPDCConfigurationFunction": "CreateADPDC.ps1\\CreateADPDC",
-			"adBDCModulesURL": "[concat(parameters('scriptsBaseUrl'),'/PrepareADBDC.ps1.zip')]",
+			"adBDCModulesURL": "[concat(parameters('dscBaseUrl'),'/PrepareADBDC.ps1.zip')]",
 			"adBDCConfigurationFunction": "PrepareADBDC.ps1\\PrepareADBDC",
-			"fswModulesURL": "[concat(parameters('scriptsBaseUrl'),'/CreateFileShareWitness.ps1.zip')]",
+			"fswModulesURL": "[concat(parameters('dscBaseUrl'),'/CreateFileShareWitness.ps1.zip')]",
 			"fswConfigurationFunction": "CreateFileShareWitness.ps1\\CreateFileShareWitness",
-			"sqlAOPrepareModulesURL": "[concat(parameters('scriptsBaseUrl'),'/PrepareAlwaysOnSqlServer.ps1.zip')]",
+			"sqlAOPrepareModulesURL": "[concat(parameters('dscBaseUrl'),'/PrepareAlwaysOnSqlServer.ps1.zip')]",
 			"sqlAOPrepareConfigurationFunction": "PrepareAlwaysOnSqlServer.ps1\\PrepareAlwaysOnSqlServer",
-			"createClusterModulesURL": "[concat(parameters('scriptsBaseUrl'),'/CreateFailoverCluster.ps1.zip')]",
+			"createClusterModulesURL": "[concat(parameters('dscBaseUrl'),'/CreateFailoverCluster.ps1.zip')]",
 			"createClusterConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
-			"iisModulesURL": "[concat(parameters('scriptsBaseUrl'),'/ContosoWebsite.ps1.zip')]",
+			"iisModulesURL": "[concat(parameters('dscBaseUrl'),'/ContosoWebsite.ps1.zip')]",
 			"iisConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite"
 		}
 	},
@@ -696,46 +711,46 @@
 			}
 		},
 		{
-      "name": "ProvisioningApplicationGateway",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-				"Microsoft.Resources/deployments/VirtualNetworkNSG"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('artifacts').applicationGatewayURL]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "addressPrefix": {
-            "value":"[parameters('virtualNetworkAddressRange')]"
-          },
-          "virtualNetworkName": {
-            "value":"[variables('resourceNames').virtualNetworkNameWithSuffix]"
-          },
-          "subnetPrefix": {
-            "value":"[parameters('appGatewaySubnet').properties.addressPrefix]"
-          },
-          "skuName": {
-            "value":"[parameters('gatewaySkuName')]"
-          },
-          "capacity": {
-            "value": 2
-          },
-          "backendIpsForPathRuleWEB": {
-            "value":"[parameters('webIPAddresses')]"
-          },
-          "pathMatch1": {
-            "value":"/WEB"
-          },
-          "subnetName": {
-            "value": "[parameters('appGatewaySubnet').name]"
-          }
-        }
-      }
-    },
+		  "name": "ProvisioningApplicationGateway",
+		  "type": "Microsoft.Resources/deployments",
+		  "apiVersion": "2015-01-01",
+		  "dependsOn": [
+		    "Microsoft.Resources/deployments/VirtualNetworkNSG"
+		  ],
+		  "properties": {
+		    "mode": "Incremental",
+		    "templateLink": {
+		      "uri": "[variables('artifacts').applicationGatewayURL]",
+		      "contentVersion": "1.0.0.0"
+		    },
+		    "parameters": {
+		      "addressPrefix": {
+		        "value":"[parameters('virtualNetworkAddressRange')]"
+		      },
+		      "virtualNetworkName": {
+		        "value":"[variables('resourceNames').virtualNetworkNameWithSuffix]"
+		      },
+		      "subnetPrefix": {
+		        "value":"[parameters('appGatewaySubnet').properties.addressPrefix]"
+		      },
+		      "skuName": {
+		        "value":"[parameters('gatewaySkuName')]"
+		      },
+		      "capacity": {
+		        "value": 2
+		      },
+		      "backendIpsForPathRuleWEB": {
+		        "value":"[parameters('webIPAddresses')]"
+		      },
+		      "pathMatch1": {
+		        "value":"/WEB"
+		      },
+		      "subnetName": {
+		        "value": "[parameters('appGatewaySubnet').name]"
+		      }
+		    }
+		  }
+		},
 		{
 			"name": "ProvisioningNICsSQLADMGT",
 			"type": "Microsoft.Resources/deployments",
@@ -816,6 +831,9 @@
           "mgtNSGid": {
 						"value": "[variables('derivedIds').mgtNSG]"
 					},
+					"mgtPublicIPName": {
+						"value": "[varibales('resourceNames').publicIPs.mgt]"
+					}
 				}
 			}
 		},
@@ -1011,7 +1029,10 @@
           },
           "sqlSubnetRef": {
             "value": "[variables('derivedIds').sqlSubnet]"
-          }
+          },
+					"postDeployScriptUris": {
+						"value": "[variables('artifacts').postDeployScriptUris]"
+					}
 				}
 			}
 		},
