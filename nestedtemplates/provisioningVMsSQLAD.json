@@ -819,7 +819,6 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        //"Microsoft.Resources/deployments/UpdatingDNStoPrimaryADVM"
         "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
       ],
       "properties": {
@@ -1020,15 +1019,13 @@
           "Password": "[parameters('adminPassword')]"
         }
       }
-    }
-    /*{
+    },
+    {
       "name": "PreparingAlwaysOnSqlServer",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        //"Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT"
-        "sqlvirtualMachineLoop",
-        "[parameters('sqlwVMName')]"
+        "Microsoft.Resources/deployments/UpdatingSQL1Nic"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1109,7 +1106,8 @@
           }
         }
       }
-    },
+    }
+    /*
     {
       "name": "ConfiguringAlwaysOn",
       "type": "Microsoft.Resources/deployments",
