@@ -1312,18 +1312,18 @@
         "type": "IaaSAntimalware",
         "typeHandlerVersion": "1.3",
         "settings": {
-          "AntimalwareEnabled": "true",
-          /*"Exclusions": {
+          /*"AntimalwareEnabled": "true",
+          "Exclusions": {
             "Paths": "F:\\Data;F:\\Log",
             "Extensions": "",
             "Processes": ""
           },*/
-          "RealtimeProtectionEnabled": "true",
-          "ScheduledScanSettings": {
+          "RealtimeProtectionEnabled": "true"
+          /*"ScheduledScanSettings": {
             "isEnabled": "true",
             "scanType": "Quick",
             "day": "0",
-            "time": "120"
+            "time": "120"*/
           }
         },
         "protectedSettings": null
