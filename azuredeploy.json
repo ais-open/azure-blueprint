@@ -585,6 +585,9 @@
 				"sql": "[concat('sqlAvailabilitySet', parameters('environmentPrefix'))]",
 				"ad": "[concat('adAvailabilitySet', parameters('environmentPrefix'))]",
 				"web": "[concat('webAvailabilitySet', parameters('environmentPrefix'))]"
+			},
+			"publicIPs": {
+				"mgt": "mgtpublicip"
 			}
 		},
 		"artifacts": {
@@ -1026,6 +1029,9 @@
           },
 					"postDeployScriptUris": {
 						"value": "[variables('artifacts').postDeployScriptUris]"
+					},
+					"mgtPublicIPName": {
+						"value": "[varibales('resourceNames').publicIPs.mgt]"
 					}
 				}
 			}
