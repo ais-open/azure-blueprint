@@ -699,13 +699,12 @@
       },
       "resources": []
     },
-    {
+    /*{
       "name": "UpdatingDNStoPrimaryADVM",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'), '/extensions/InstallDomainController')]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '0')]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '1')]",
@@ -737,14 +736,13 @@
           }
         }
       }
-    },
+    },*/
     {
       "name": "ConfiguringBackupADVM",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-        "[concat('Microsoft.Compute/virtualMachines/',parameters('adPDCVMName'),'/extensions/InstallDomainController')]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'), '/extensions/InstallDomainController')]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]"
       ],
       "properties": {
@@ -821,7 +819,8 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/UpdatingDNStoPrimaryADVM"
+        //"Microsoft.Resources/deployments/UpdatingDNStoPrimaryADVM"
+        "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
       ],
       "properties": {
         "mode": "Incremental",
