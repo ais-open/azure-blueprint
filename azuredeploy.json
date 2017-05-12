@@ -1478,7 +1478,7 @@
           }
         }
       }
-    }/*,
+    },
     {
       "name": "BackupPolicyCustom",
       "type": "Microsoft.Resources/deployments",
@@ -1498,7 +1498,7 @@
           }
         }
       }
-    },
+    }/*,
     {
       "name": "ConfigurationVMEncryption_SQL_MGMT",
       "type": "Microsoft.Resources/deployments",
