@@ -1346,7 +1346,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/ConfiguringAlwaysOn",
+        //"Microsoft.Resources/deployments/ConfiguringAlwaysOn",
         "Microsoft.Resources/deployments/RecoverServicesVault",
         "Microsoft.Resources/deployments/BackupPolicyCustom"
       ],
@@ -1498,7 +1498,8 @@
           }
         }
       }
-    }/*,
+    }
+    /*,
     {
       "name": "ConfigurationVMEncryption_SQL_MGMT",
       "type": "Microsoft.Resources/deployments",
