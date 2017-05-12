@@ -744,10 +744,8 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '0')]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '1')]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]"
+        "[concat(parameters('adPDCVMName'),'/InstallDomainController')]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -960,9 +958,7 @@
       "name": "[parameters('mgtVMName')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('mgtStorageAccountName'))]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-        "Microsoft.Resources/deployments/UpdatingSQL1Nic"
+        "[concat('Microsoft.Storage/storageAccounts/', parameters('mgtStorageAccountName'))]"
       ],
       "properties": {
         "hardwareProfile": {
@@ -1005,7 +1001,8 @@
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('mgtVMName'),'/joindomain')]",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]",
+        "Microsoft.Resources/deployments/ConfiguringBackupADVM"
       ],
       "location": "[parameters('location')]",
       "properties": {
