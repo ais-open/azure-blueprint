@@ -110,10 +110,7 @@
       "[concat(parameters('WebVMName'),'1')]",
       "[concat(parameters('WebVMName'),'2')]",
       "[concat(parameters('WebVMName'),'3')]",
-      "[concat(parameters('WebVMName'),'4')]",
-      "[concat(parameters('WebVMName'),'5')]",
-      "[concat(parameters('WebVMName'),'6')]",
-      "[concat(parameters('WebVMName'),'7')]"
+      "[concat(parameters('WebVMName'),'4')]"
     ]
   },
   "resources": [

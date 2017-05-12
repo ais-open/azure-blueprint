@@ -79,6 +79,10 @@
     }
   ],
   "outputs": {
+    "vmName": {
+      "type": "array",
+      "value": "[parameters('vmName')]"
+    }
     /*
     "BitLockerKey": {
       "type": "string",
