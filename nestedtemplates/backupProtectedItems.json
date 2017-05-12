@@ -24,7 +24,7 @@
       "name": "[concat(parameters('backupInfo').rcVaultName,'/',variables('backupFabric'),'/',variables('v2VmContainer'),concat(resourceGroup().name,';',parameters('vmName')[copyIndex()].Name),'/',variables('v2Vm'),concat(resourceGroup().name,';',parameters('vmName')[copyIndex()].Name))]",
       "copy": {
         "name": "backupCopyLoop",
-        "value": 1 //"[length(parameters('vmName'))]"
+        "count": "[length(parameters('vmName'))]"
       },
       "properties": {
         "protectedItemType": "[variables('v2VmType')]",

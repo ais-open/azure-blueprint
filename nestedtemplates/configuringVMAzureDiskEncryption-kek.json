@@ -32,7 +32,7 @@
       "location": "[resourceGroup().location]",
       "copy": {
         "name": "encryptVMLoop",
-        "value": 1//"[length(parameters('vmName'))]"
+        "count": "[length(parameters('vmName'))]"
       },
       "properties": {
         "publisher": "Microsoft.Azure.Security",
