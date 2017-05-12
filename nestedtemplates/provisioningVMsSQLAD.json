@@ -140,9 +140,6 @@
     "mgtNSGid": {
       "type": "string"
     },
-    "domainName": {
-      "type": "string"
-    },
     "updateVnetWithDNSTemplateURL": {
       "type": "string"
     },
@@ -222,7 +219,6 @@
         {
           "Name": "[concat(parameters('sqlVMName'),'1')]"
         }
-
       ]
     }
   },
@@ -1177,89 +1173,38 @@
           }
         }
       }
-    }
-    /*{
-      "name": "BackupMgtVM",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "copy": {
-        "name": "backupSQLMGMTADLoop",
-        "count": "[length(variables('vmNames'))]"
-      },
-      "dependsOn": [
-        "[concat(parameters('mgtVMName'),'/joindomain')]",
-        "[parameters('sqlwVMName')]",
-        "sqlvirtualMachineLoop",
-        "[parameters('adBDCVMName')]",
-        "[parameters('adPDCVMName')]",
-        "encryptSQLMGMTADLoop"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[parameters('backupInfo').backupTemplateUrl]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "backupInfo": {
-            "value": "[parameters('backupInfo')]"
-          },
-          "vmName": {
-            "value": "[variables('vmNames')[copyIndex()]]"
-          }
-        }
-      }
-    }*/
-    /*
+    },    
     {
-      "name": "[concat('ConfigurationVMEncryption', variables('VMnames').VMs[copyIndex()].Name)]",
+      "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines', variables('VMnames').VMs[copyIndex()].Name)]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]",
-        "Microsoft.Resources/deployments/UpdatingSQL0Nic"
+        "[parameters('adPDCVMName')]",
+        "[parameters('adBDCVMName')]",
+        "sqlvirtualMachineLoop",
+        "[parameters('sqlwVMName')]",
+        "[parameters('mgtVMName')]",
+        "ConfiguringAlwaysOn"
       ],
       "copy": {
         "name": "encryptSQLMGMTADLoop",
-        "count": "[length(variables('VMnames').VMs)]"
+        "count": "[length(variables('vmNames').VMs)]"
       },
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[parameters('provisioningVMAzureDiskEncryptionUrl')]",
+          "uri": "[parameters('vmEncryptionSettings').provisioningVMAzureDiskEncryptionUrl]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
           "vmName": {
-            "value": "[variables('VMnames').VMs[copyIndex()].Name]"
+            "value": "[variables('vmNames').VMs[copyIndex()].Name]"
           },
           "keyVaultName": {
             "value": "[parameters('keyVaultName')]"
           },
-          "sequenceVersion": {
-            "value": "[parameters('vmEncryptionSettings').sequenceVersion]"
-          },
-          "volumeType": {
-            "value": "[parameters('vmEncryptionSettings').volumeType]"
-          },
-          "diskEncryptionExtensionName": {
-            "value": "[parameters('vmEncryptionSettings').diskEncryptionExtensionName]"
-          },
-          "diskEncryptionExtensionVersion": {
-            "value": "[parameters('vmEncryptionSettings').diskEncryptionExtensionVersion]"
-          },
-          "encryptionOperation": {
-            "value": "[parameters('vmEncryptionSettings').encryptionOperation]"
-          },
-          "keyEncryptionAlgorithm": {
-            "value": "[parameters('vmEncryptionSettings').keyEncryptionAlgorithm]"
-          },
-          "keyVaultURL": {
-            "value": "[parameters('vmEncryptionSettings').keyVaultURL]"
-          },
-          "keyVaultResourceID": {
-            "value": "[parameters('vmEncryptionSettings').keyVaultResourceID]"
+          "vmEncryptionSettings": {
+            "value": "[parameters('vmEncryptionSettings')]"
           },
           "aadClientID": {
             "reference": {
@@ -1287,8 +1232,73 @@
           }
         }
       }
+    },
+    {
+      "name": "[concat('BackupVM-',variables('vmNames').VMs[copyIndex()].Name)]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "copy": {
+        "name": "backupSQLMGMTADLoop",
+        "count": "[length(variables('vmNames').VMs)]"
+      },
+      "dependsOn": [
+        "[concat(parameters('mgtVMName'),'/joindomain')]",
+        "[parameters('sqlwVMName')]",
+        "sqlvirtualMachineLoop",
+        "[parameters('adBDCVMName')]",
+        "[parameters('adPDCVMName')]",
+        "encryptSQLMGMTADLoop"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('backupInfo').backupTemplateUrl]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "backupInfo": {
+            "value": "[parameters('backupInfo')]"
+          },
+          "vmName": {
+            "value": "[variables('vmNames')[copyIndex()]]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('vmNames').VMs[copyindex()].Name,'/malware')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "malwareSQLMGMTADLoop",
+        "count": "[length(variables('vmNames').VMs)]"
+      },
+      "dependsOn": [
+        "backupSQLMGMTADLoop"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Azure.Security",
+        "type": "IaaSAntimalware",
+        "typeHandlerVersion": "1.1",
+        "settings": {
+          "AntimalwareEnabled": "true",
+          "Exclusions": {
+            "Paths": "F:\\Data;F:\\Log",
+            "Extensions": "",
+            "Processes": ""
+          },
+          "RealtimeProtectionEnabled": "true",
+          "ScheduledScanSettings": {
+            "isEnabled": "true",
+            "scanType": "Quick",
+            "day": "0",
+            "time": "120"
+          }
+        },
+        "protectedSettings": null
+      }
     }
-    */
   ],
   "outputs": {}
 }

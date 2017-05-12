@@ -218,33 +218,6 @@
       "resources": []
     },
     {
-      "name": "[concat('Backup-WEB-',copyIndex())]",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "copy": {
-        "name": "backupWebLoop",
-        "count": "[parameters('numberOfWebInstances')]"
-      },
-      "dependsOn": [
-        "encryptWebLoop"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[parameters('backupInfo').backupTemplateUrl]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "backupInfo": {
-            "value": "[parameters('backupInfo')]"
-          },
-          "vmName": {
-            "value": "[concat(parameters('WebVMName'), copyindex())]"
-          }
-        }
-      }
-    },
-    {
       "comments": "Join domain - JsonADDomainExtension",
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -301,38 +274,6 @@
         "protectedSettings": null
       }
     },
-    /*
-    {
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('WebVMName'), copyindex(),'/malware')]",
-      "apiVersion": "2015-05-01-preview",
-      "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
-      ],
-      "properties": {
-        "publisher": "Microsoft.Azure.Security",
-        "type": "IaaSAntimalware",
-        "typeHandlerVersion": "1.1",
-        "settings": {
-          "AntimalwareEnabled": "true",
-          "Exclusions": {
-            "Paths": "C:\\Users",
-            "Extensions": ".txt",
-            "Processes": "taskmgr.exe"
-          },
-          "RealtimeProtectionEnabled": "true",
-          "ScheduledScanSettings": {
-            "isEnabled": "true",
-            "scanType": "Quick",
-            "day": "7",
-            "time": "120"
-          }
-        },
-        "protectedSettings": null
-      }
-    },
-    */
     {
       "name": "[concat('ConfigurationVMEncryption-WEB-',copyIndex())]",
       "type": "Microsoft.Resources/deployments",
@@ -386,6 +327,67 @@
             }
           }
         }
+      }
+    },
+    {
+      "name": "[concat('Backup-WEB-',copyIndex())]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "copy": {
+        "name": "backupWebLoop",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
+      "dependsOn": [
+        "encryptWebLoop"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('backupInfo').backupTemplateUrl]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "backupInfo": {
+            "value": "[parameters('backupInfo')]"
+          },
+          "vmName": {
+            "value": "[concat(parameters('WebVMName'), copyindex())]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('WebVMName'), copyindex(),'/malware')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "malwareWebLoop",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
+      "dependsOn": [
+        "backupWebLoop"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Azure.Security",
+        "type": "IaaSAntimalware",
+        "typeHandlerVersion": "1.1",
+        "settings": {
+          "AntimalwareEnabled": "true",
+          "Exclusions": {
+            "Paths": "C:\\inetpub\\wwwroot",
+            "Extensions": "",
+            "Processes": "w3wp.exe"
+          },
+          "RealtimeProtectionEnabled": "true",
+          "ScheduledScanSettings": {
+            "isEnabled": "true",
+            "scanType": "Quick",
+            "day": "0",
+            "time": "120"
+          }
+        },
+        "protectedSettings": null
       }
     }
   ],

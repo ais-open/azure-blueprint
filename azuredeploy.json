@@ -941,7 +941,7 @@
         }
       }
     },
-    {
+    /*{
       "name": "ProvisioningVMsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1153,7 +1153,7 @@
           }
           }
         }
-    },
+    },*/
     /*
     {
       "name": "PreparingAlwaysOnSqlServer",
@@ -1338,7 +1338,7 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         //"Microsoft.Resources/deployments/ConfiguringAlwaysOn",
-        "Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT",
+        //"Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT",
         "Microsoft.Resources/deployments/RecoverServicesVault",
         "Microsoft.Resources/deployments/BackupPolicyCustom"
       ],
