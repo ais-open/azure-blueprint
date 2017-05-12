@@ -697,7 +697,8 @@
       "numberOfSqlVMDisks": "[parameters('numberOfSqlVMDisks')]"
     },
     "configuringAlwaysOnInfo": {
-
+      "lbSettings": "[variables('lbSettings')]",
+      "sqlLBIPAddress": "[parameters('sqlLBIPAddress')]"
     },
     "backupInfo": {
       "rcVaultName": "[parameters('recoveryServicesVaultName')]",
