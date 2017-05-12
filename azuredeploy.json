@@ -1507,7 +1507,7 @@
       ],
       "copy": {
         "name": "encryptVMLoop",
-        "count": "[length(reference('Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value)]"
+        "count": 5//"[length(reference('Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value)]"
       },
       "properties": {
         "mode": "Incremental",
@@ -1517,7 +1517,7 @@
         },
         "parameters": {
           "vmName": {
-            "value": "Test"//"[reference('Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value[copyIndex()].Name]"
+            "value": "[reference('Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value[copyIndex()].Name]"
           },
           "keyVaultName": {
             "value": "[parameters('keyVaultName')]"
