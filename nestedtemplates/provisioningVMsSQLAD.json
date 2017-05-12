@@ -1128,7 +1128,7 @@
   ],
   "outputs": {
     "sqlADVMNames": {
-      "type": "object",
+      "type": "array",
       "value": "[variables('vmNames').VMs]"
     } 
   }
