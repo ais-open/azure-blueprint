@@ -832,7 +832,7 @@
 						"value": "[variables('derivedIds').mgtNSG]"
 					},
 					"mgtPublicIPName": {
-						"value": "[varibales('resourceNames').publicIPs.mgt]"
+						"value": "[variables('resourceNames').publicIPs.mgt]"
 					}
 				}
 			}
