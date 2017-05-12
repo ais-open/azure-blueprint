@@ -688,6 +688,17 @@
       "iisModulesURL": "[concat(parameters('scriptsBaseUrl'),'/ContosoWebsite.ps1.zip')]",
       "iisConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite"
     },
+    "prepareAlwaysOnSQLInfo": {
+      "artifacts": "[variables('artifacts')]",
+      "resourceNames": "[variables('resourceNames')]",
+      "derivedIds": "[variables('derivedIds')]",
+      "vmSettings": "[variables('vmSettings')]",
+      "sqlServerServiceAccountUserName": "[parameters('sqlServerServiceAccountUserName')]",
+      "numberOfSqlVMDisks": "[parameters('numberOfSqlVMDisks')]"
+    },
+    "configuringAlwaysOnInfo": {
+
+    },
     "backupInfo": {
       "rcVaultName": "[parameters('recoveryServicesVaultName')]",
       "backupPolicy": "[parameters('backupPolicy')]",
@@ -1124,44 +1135,23 @@
           "sqlSubnetRef": {
             "value": "[variables('derivedIds').sqlSubnet]"
           },
+          "prepareAlwaysOnSQLInfo": {
+            "value": "[variables('prepareAlwaysOnSQLInfo')]"
+          },
+          "configuringAlwaysOnInfo": {
+            "value": "[variables('configuringAlwaysOnInfo')]"
+          },
           "backupInfo": {
             "value": "[variables('backupInfo')]"
           },
           "keyVaultName": {
             "value": "[parameters('keyVaultName')]"
           },
-          "sequenceVersion": {
-            "value": "[variables('vmEncryptionSettings').sequenceVersion]"
-          },
-          "volumeType": {
-            "value": "[variables('vmEncryptionSettings').volumeType]"
-          },
-          "diskEncryptionExtensionName": {
-            "value": "[variables('vmEncryptionSettings').diskEncryptionExtensionName]"
-          },
-          "diskEncryptionExtensionVersion": {
-            "value": "[variables('vmEncryptionSettings').diskEncryptionExtensionVersion]"
-          },
-          "encryptionOperation": {
-            "value": "[variables('vmEncryptionSettings').encryptionOperation]"
-          },
-          "keyEncryptionAlgorithm": {
-            "value": "[variables('vmEncryptionSettings').keyEncryptionAlgorithm]"
-          },
-          "keyVaultURL": {
-            "value": "[variables('vmEncryptionSettings').keyVaultURL]"
-          },
-          "keyVaultResourceID": {
-            "value": "[variables('vmEncryptionSettings').keyVaultResourceID]"
-          },
-          "keyVaultId": {
-            "value": "[variables('vmEncryptionSettings').keyVaultId]"
-          },
-          "provisioningVMAzureDiskEncryptionUrl": {
-            "value": "[variables('vmEncryptionSettings').provisioningVMAzureDiskEncryptionUrl]"
+          "vmEncryptionSettings": {
+            "value": "[variables('vmEncryptionSettings')]"
+          }
           }
         }
-      }
     },
     /*
     {
@@ -1347,6 +1337,7 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         //"Microsoft.Resources/deployments/ConfiguringAlwaysOn",
+        "Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT",
         "Microsoft.Resources/deployments/RecoverServicesVault",
         "Microsoft.Resources/deployments/BackupPolicyCustom"
       ],
