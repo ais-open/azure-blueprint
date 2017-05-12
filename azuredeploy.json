@@ -1499,7 +1499,7 @@
       }
     },
     {
-      "name": "[concat('ConfigurationVMEncryption_',reference('ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value[copyIndex()].Name)]",
+      "name": "[concat('ConfigurationVMEncryption_',copyIndex())]", //"[concat('ConfigurationVMEncryption_',reference('ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value[copyIndex()].Name)]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
@@ -1524,7 +1524,7 @@
           },
           "vmEncryptionSettings": {
             "value": "[variables('vmEncryptionSettings')]"
-          },          
+          },
           "aadClientID": {
             "reference": {
               "keyVault": {
