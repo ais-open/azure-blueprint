@@ -1558,7 +1558,7 @@
       "apiVersion": "2015-01-01",
       "copy": {
         "name": "backupVMLoop",
-        "count": "[length(reference('ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value)]"
+        "count": 5//"[length(reference('ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value)]"
       },
       "dependsOn": [
         "encryptVMLoop"
