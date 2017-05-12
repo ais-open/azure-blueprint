@@ -1294,7 +1294,8 @@
           }
         }
       }
-    },
+    }
+    /*,
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(variables('vmNames').VMs[copyindex()].Name,'/malware')]",
@@ -1312,23 +1313,23 @@
         "type": "IaaSAntimalware",
         "typeHandlerVersion": "1.5",
         "settings": {
-          /*"AntimalwareEnabled": "true",
+          "AntimalwareEnabled": "true",
           "Exclusions": {
             "Paths": "F:\\Data;F:\\Log",
             "Extensions": "",
             "Processes": ""
-          },*/
-          "RealtimeProtectionEnabled": "true"
-          /*"ScheduledScanSettings": {
+          },
+          "RealtimeProtectionEnabled": "true",
+          "ScheduledScanSettings": {
             "isEnabled": "true",
             "scanType": "Quick",
             "day": "0",
-            "time": "120"*/
+            "time": "120"
           }
         },
         "protectedSettings": null
       }
-    }
+    }*/
   ],
   "outputs": {}
 }
