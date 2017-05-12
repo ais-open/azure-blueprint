@@ -74,7 +74,7 @@
   },
   "resources": [
     {
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[parameters('mgtPublicIPName')]",
       "location": "[resourceGroup().location]",
