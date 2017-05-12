@@ -1272,7 +1272,7 @@
         "count": "[length(variables('vmNames').VMs)]"
       },
       "dependsOn": [
-        "[concat(parameters('mgtVMName'),'/joindomain')]",
+        "[parameters('mgtVMName')]",
         "[parameters('sqlwVMName')]",
         "sqlvirtualMachineLoop",
         "[parameters('adBDCVMName')]",
