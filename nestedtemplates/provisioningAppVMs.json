@@ -104,7 +104,17 @@
   },
   "variables": {
     "domainJoinOptions": 3,
-    "domainJoinUserName": "[concat(parameters('domainName'),'\\',parameters('adminUsername'))]"
+    "domainJoinUserName": "[concat(parameters('domainName'),'\\',parameters('adminUsername'))]",
+    "webVMNames": [
+      "[concat(parameters('WebVMName'),'0')]",
+      "[concat(parameters('WebVMName'),'1')]",
+      "[concat(parameters('WebVMName'),'2')]",
+      "[concat(parameters('WebVMName'),'3')]",
+      "[concat(parameters('WebVMName'),'4')]",
+      "[concat(parameters('WebVMName'),'5')]",
+      "[concat(parameters('WebVMName'),'6')]",
+      "[concat(parameters('WebVMName'),'7')]"
+    ]
   },
   "resources": [
     {
@@ -218,17 +228,13 @@
       "resources": []
     },
     {
-      "name": "[concat('BackupWebVM-',copyIndex())]",
+      "name": "BackupWEB",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "copy": {
-        "name": "backupWebVMLoop",
-        "count": "[parameters('numberOfWebInstances')]"
-      },
       "dependsOn": [
         "vmLoopDEL",
         "extensionLoopDEL",
-        "encryptVMLoop"
+        "ConfigurationVMEncryption_WEB"
       ],
       "properties": {
         "mode": "Incremental",
@@ -241,7 +247,7 @@
             "value": "[parameters('backupInfo')]"
           },
           "vmName": {
-            "value": "[concat(parameters('WebVMName'), copyindex())]"
+            "value": "[take(variables('webVMNames'),parameters('numberOfWebInstances'))]"
           }
         }
       }
@@ -336,17 +342,13 @@
     },
     */
     {
-      "name": "[concat('ConfigurationVMEncryption_', parameters('WebVMName'), copyindex())]",
+      "name": "ConfigurationVMEncryption_WEB",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines', concat(parameters('WebVMName'), copyindex()))]",
+        "vmLoopDEL",
         "extensionLoopDEL"
       ],
-      "copy": {
-        "name": "encryptVMLoop",
-        "count": "[parameters('numberOfWebInstances')]"
-      },
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -355,7 +357,7 @@
         },
         "parameters": {
           "vmName": {
-            "value": "[concat(parameters('WebVMName'), copyindex())]"
+            "value": "[take(variables('webVMNames'),parameters('numberOfWebInstances'))]"
           },
           "keyVaultName": {
             "value": "[parameters('keyVaultName')]"

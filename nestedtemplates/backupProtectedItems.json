@@ -6,7 +6,7 @@
       "type": "object"
     },
     "vmName": {
-      "type": "string"
+      "type": "array"
     }
   },
   "variables": {
@@ -21,11 +21,15 @@
       "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
       "apiVersion": "2016-06-01",
       "location": "[resourceGroup().location]",
-      "name": "[concat(parameters('backupInfo').rcVaultName,'/',variables('backupFabric'),'/',variables('v2VmContainer'),concat(resourceGroup().name,';',parameters('vmName')),'/',variables('v2Vm'),concat(resourceGroup().name,';',parameters('vmName')))]",
+      "name": "[concat(parameters('backupInfo').rcVaultName,'/',variables('backupFabric'),'/',variables('v2VmContainer'),concat(resourceGroup().name,';',parameters('vmName')[copyIndex()].Name),'/',variables('v2Vm'),concat(resourceGroup().name,';',parameters('vmName')[copyIndex()].Name))]",
+      "copy": {
+        "name": "backupCopyLoop",
+        "value": "[length(parameters('vmName'))]"
+      },
       "properties": {
         "protectedItemType": "[variables('v2VmType')]",
         "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('backupInfo').rcVaultName,parameters('backupInfo').backupPolicy)]",
-        "sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('vmName'))]"
+        "sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('vmName')[copyIndex()].Name)]"
       }
     }
   ]

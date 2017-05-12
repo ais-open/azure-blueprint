@@ -1499,16 +1499,12 @@
       }
     },
     {
-      "name": "[concat('ConfigurationVMEncryption_',copyIndex())]", //"[concat('ConfigurationVMEncryption_',reference('ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value[copyIndex()].Name)]",
+      "name": "ConfigurationVMEncryption_SQL_MGMT",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "Microsoft.Resources/deployments/ConfiguringAlwaysOn"
       ],
-      "copy": {
-        "name": "encryptVMLoop",
-        "count": 5//"[length(reference('Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value)]"
-      },
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -1517,7 +1513,7 @@
         },
         "parameters": {
           "vmName": {
-            "value": "[reference('Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value[copyIndex()].Name]"
+            "value": "[reference('Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value]"
           },
           "keyVaultName": {
             "value": "[parameters('keyVaultName')]"
@@ -1553,15 +1549,11 @@
       }
     },
     {
-      "name": "[concat('Backup-',copyIndex())]",//"[concat('Backup-',reference('ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value[copyIndex()].Name)]",
+      "name": "Backup_SQL_MGMT",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "copy": {
-        "name": "backupVMLoop",
-        "count": 5//"[length(reference('ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value)]"
-      },
       "dependsOn": [
-        "encryptVMLoop"
+        "ConfigurationVMEncryption_SQL_MGMT"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1574,7 +1566,7 @@
             "value": "[variables('backupInfo')]"
           },
           "vmName": {
-            "value": "[reference('ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value[copyIndex()].Name]"
+            "value": "[reference('ProvisioningVMsSQLADMGT').outputs.sqlADVMNames.value]"
           }
         }
       }
