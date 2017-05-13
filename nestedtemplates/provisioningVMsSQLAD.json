@@ -587,11 +587,20 @@
       },
       "resources": [
         {
+<<<<<<< HEAD
           "apiVersion": "2015-06-15",
           "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
           "dependsOn": [
             "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]"
+=======
+    			"apiVersion": "2015-06-15",
+    			"type": "Microsoft.Compute/virtualMachines/extensions",
+    			"name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
+    			"dependsOn": [
+				 "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]",
+    				"[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]"
+>>>>>>> dependency hotfix
           ],
           "location": "[resourceGroup().location]",
           "tags": {
@@ -802,6 +811,7 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
+<<<<<<< HEAD
         "UpdatingDNStoPrimaryADVM"
       ],
       "properties": {
@@ -837,6 +847,47 @@
           }
         }
       }
+=======
+	"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adBDCVMName'), 'adcse-pwd')]",
+	"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '0')]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '1')]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[parameters('configuringBackupADVMURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[resourceGroup().location]"
+					},
+					"adBDCVMName": {
+						"value": "[parameters('adBDCVMName')]"
+					},
+					"adminUserName": {
+						"value": "[parameters('adminUsername')]"
+					},
+					"adminPassword": {
+						"value": "[parameters('adminPassword')]"
+					},
+					"domainName": {
+						"value": "[parameters('domainName')]"
+					},
+					"adBDCConfigurationFunction": {
+						"value": "[parameters('adBDCConfigurationFunction')]"
+					},
+					"adBDCModulesURL": {
+						"value": "[parameters('adBDCModulesURL')]"
+					},
+					"adPDCNICIPAddress": {
+						"value": "[parameters('adPDCNICIPAddress')]"
+					}
+				}
+			}
+>>>>>>> dependency hotfix
     },
     {
       "name": "UpdatingDNSwithBackupADVM",

@@ -13,7 +13,7 @@
             "metadata": {
                 "description": "SQL Server Auto Backup Retention Period"
             },
-            "allowedValues":[  
+            "allowedValues":[
             "1",
             "2",
             "3",
@@ -54,10 +54,22 @@
             }
         },
         "sqlAutobackupEncryptionPassword": {
-            "type": "string",
+            "type": "securestring",
             "metadata": {
                 "description": "SQL Server Auto Backup Encryption Password"
             }
+        },
+        "sqlCredentialName": {
+          "type": "string"
+        },
+        "sqlAkvUrl": {
+          "type": "string"
+        },
+        "servicePrincipalName": {
+          "type": "securestring"
+        },
+        "servicePrincipalSecret": {
+          "type": "securestring"
         }
     },
     "resources": [
@@ -76,9 +88,25 @@
                         "Enable": true,
                         "RetentionPeriod": "[parameters('sqlAutobackupRetentionPeriod')]",
                         "EnableEncryption": true
+                    },
+                    "AutoPatchingSettings":{
+                       "PatchCategory":"WindowsMandatoryUpdates",
+                       "Enable":true,
+                       "DayOfWeek":"Sunday",
+                       "MaintenanceWindowStartingHour":2,
+                       "MaintenanceWindowDuration":"60"
+                    },
+                    "KeyVaultCredentialSettings": {
+                        "Enable": true,
+                        "CredentialName": "[parameters('sqlCredentialName')]"
                     }
                 },
                 "protectedSettings": {
+                  "PrivateKeyVaultCredentialSettings": {
+                      "AzureKeyVaultUrl": "[parameters('sqlAkvUrl')]",
+                      "ServicePrincipalName": "[parameters('servicePrincipalName')]",
+                      "ServicePrincipalSecret": "[parameters('servicePrincipalSecret')]"
+                  },
                     "StorageUrl": "[reference(resourceId('Microsoft.Storage/storageAccounts', parameters('sqlAutobackupStorageAccountName')), '2015-06-15').primaryEndpoints['blob']]",
                     "StorageAccessKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('sqlAutobackupStorageAccountName')), '2015-06-15').key1]",
                     "Password": "[parameters('sqlAutobackupEncryptionPassword')]"
