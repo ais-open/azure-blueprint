@@ -240,7 +240,8 @@
         "count": "[parameters('numberOfWebInstances')]"
       },
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('WebVMName'), copyindex())]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('WebVMName'), copyindex())]",
+        "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat(parameters('WebVMName'), copyindex()), 'joindomain')]"
       ],
       "properties": {
         "publisher": "Microsoft.Powershell",
