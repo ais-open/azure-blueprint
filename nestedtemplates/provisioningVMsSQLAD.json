@@ -1211,7 +1211,7 @@
       ],
       "copy": {
         "name": "encryptSQLMGMTADLoop",
-        "count": 1//"[length(variables('vmNames').VMs)]"
+        "count": "[length(variables('vmNames').VMs)]"
       },
       "properties": {
         "mode": "Incremental",
