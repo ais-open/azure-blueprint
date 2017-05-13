@@ -1202,11 +1202,11 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[parameters('adPDCVMName')]",
-        "[parameters('adBDCVMName')]",
-        "sqlvirtualMachineLoop",
-        "[parameters('sqlwVMName')]",
-        "[parameters('mgtVMName')]",
+        //"[parameters('adPDCVMName')]",
+        //"[parameters('adBDCVMName')]",
+        //"sqlvirtualMachineLoop",
+        //"[parameters('sqlwVMName')]",
+        //"[parameters('mgtVMName')]",
         "ConfiguringAlwaysOn"
       ],
       "copy": {
