@@ -81,3 +81,8 @@ if (-not (Get-AzureRMKeyVault -VaultName $keyVaultName -ResourceGroupName $resou
 	$key = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name 'sqlServerServiceAccountPassword' -Destination 'Software'
 	$secret = Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'sqlServerServiceAccountPassword' -SecretValue $sqlServerServiceAccountPassword
 }
+
+& "$($PSScriptRoot)\Create-AzureServicePrincipalForClient.ps1" `
+    -SubscriptionId $SubscriptionId `
+    -ApplicationDisplayName "AzureBluePrint" `
+    -backupKeyVaultName $keyVaultName

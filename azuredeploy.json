@@ -14,6 +14,9 @@
 				"description": "The name of the Administrator of the new VMs and Domain"
 			}
 		},
+		"appName": {
+			"type": "string"
+		},
 		"environmentPrefix": {
 			"type": "string",
 			"metadata": {
@@ -414,33 +417,35 @@
 			"metadata": {
 				"description": "Linked Templates base url"
 			},
-			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/nestedtemplates"
+			"defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/nestedtemplates"
 		},
 		"dscBaseUrl": {
 			"type": "string",
 			"metadata": {
 				"description": "DSC Scripts base url"
 			},
-			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/DSC"
+			"defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/DSC"
 		},
 		"scriptsBaseUrl": {
 			"type": "string",
 			"metadata": {
 				"description": "DSC Scripts base url"
 			},
-			"defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/postdeploy"
+			"defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/master/postdeploy"
 		},
 		"sqlServerVersion": {
 			"type": "string",
 			"allowedValues": [
 				"SQL2012SP3-WS2012R2",
 				"SQL2014SP1-WS2012R2",
-				"SQL2016-WS2012R2"
+				"SQL2014SP2-WS2012R2",
+				"SQL2016-WS2012R2",
+				"SQL2016SP1-WS2016"
 			],
 			"metadata": {
 				"description": "The Sql Server Version"
 			},
-			"defaultValue": "SQL2016-WS2012R2"
+			"defaultValue": "SQL2014SP2-WS2012R2"
 		},
 		"numberOfSqlVMDisks": {
 			"type": "string",
@@ -457,10 +462,17 @@
 		},
 		"gatewaySkuName": {
 			"type": "string",
-			"defaultValue":"Standard_Small"
+			"allowedValues": [
+			 "WAF_Medium",
+			 "WAF_Large"
+		 ],
+		 "defaultValue": "WAF_Medium"
 		}
 	},
 	"variables": {
+		"applicationDisplayName": "[parameters('appName')]",
+		"appID": "[concat(parameters('appName'), 'AppId')]",
+		"appSecret": "[concat(parameters('appName'), 'Key')]",
 		"lbSettings": {
 			"rdpLBFEName": "rdpLBFE",
 			"sqlLBFEName": "sqlLBFE",
@@ -468,6 +480,12 @@
 			"sqlLBBEName": "sqlLBBE",
 			"rdpLBName": "rdpLoadBalancer",
 			"sqlLBName": "sqlLoadBalancer"
+		},
+		"wafSettings": {
+			"wafMode": "Prevention",
+	    "wafRuleSetType": "OWASP",
+	    "wafRuleSetVersion": "3.0",
+			"wafEnabled": true
 		},
 		"numberOfWebInstances": "[length(parameters('webIPAddresses'))]",
 		"staticIPWEBStart": 5,
@@ -485,7 +503,7 @@
         "imageSKU": "Enterprise",
         "autoPatchingEnable": true,
         "autoPatchingDay": "Sunday",
-        "autoPatchingStartHour": "2",
+        "autoPatchingStartHour": 2,
         "sqlAOListenerPort": "1433",
         "sqlAOAGName": "alwayson-ag",
         "workloadType": "GENERAL",
@@ -493,6 +511,7 @@
         "sqlAOEPName": "[concat(parameters('deploymentPrefix'),'-hadr')]",
     		"sharePath": "[concat(parameters('deploymentPrefix'),'-fsw')]",
     		"clusterName": "[concat(parameters('deploymentPrefix'),'-fc')]",
+				"sqlAutobackupRetentionPeriod":"2"
       },
       "sqlw": {
         "imagePublisher": "MicrosoftWindowsServer",
@@ -515,6 +534,7 @@
 		},
 		"VnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkNameWithSuffix'))]",
 		"derivedIds": {
+			"keyVaultUrl": "[concat('https://', parameters('keyVaultName') ,'.vault.usgovcloudapi.net/')]",
 			"keyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]",
 			"dcSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('dcSubnet').name)]",
 			"sqlSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('sqlSubnet').name)]",
@@ -713,7 +733,7 @@
 		{
 		  "name": "ProvisioningApplicationGateway",
 		  "type": "Microsoft.Resources/deployments",
-		  "apiVersion": "2015-01-01",
+		  "apiVersion": "2016-02-01",
 		  "dependsOn": [
 		    "Microsoft.Resources/deployments/VirtualNetworkNSG"
 		  ],
@@ -747,7 +767,19 @@
 		      },
 		      "subnetName": {
 		        "value": "[parameters('appGatewaySubnet').name]"
-		      }
+		      },
+					"wafMode": {
+						"value": "[variables('wafSettings').wafMode]"
+					},
+          "wafRuleSetType": {
+						"value": "[variables('wafSettings').wafRuleSetType]"
+					},
+          "wafRuleSetVersion": {
+						"value": "[variables('wafSettings').wafRuleSetVersion]"
+					},
+					"wafEnabled": {
+						"value": "[variables('wafSettings').wafEnabled]"
+					}
 		    }
 		  }
 		},
@@ -1119,6 +1151,45 @@
 					},
 					"workloadType": {
 						"value": "[variables('vmSettings').sql.workloadType]"
+					},
+					"sqlAutobackupRetentionPeriod": {
+			      "value":"[variables('vmSettings').sql.sqlAutobackupRetentionPeriod",
+			    },
+			    "sqlAutobackupEncryptionPassword": {
+						"reference": {
+              "keyVault": {
+                "id": "[variables('derivedIds').keyVaultId]"
+              },
+              "secretName": "sqlServerServiceAccountPassword"
+            }
+			    },
+					"sqlCredentialName": {
+			      "value": "[parameters('sqlServerServiceAccountUserName')]"
+			    },
+			    "sqlAkvUrl": {
+			      "value": "[variables('derivedIds').keyVaultUrl]"
+			    },
+			    "servicePrincipalName": {
+						"reference": {
+              "keyVault": {
+                "id": "[variables('derivedIds').keyVaultId]"
+              },
+              "secretName": "[variables('appID')]"
+            }
+			    },
+			    "servicePrincipalSecret": {
+						"reference": {
+              "keyVault": {
+                "id": "[variables('derivedIds').keyVaultId]"
+              },
+              "secretName": "[variables('appSecret')]"
+            }
+			    },
+					"sqlStorageAccountName": {
+						"value": "[variables('resourceNames').storageAccounts.sql]"
+					},
+					"sqlStorageAccountType": {
+						"value": "[parameters('sqlStorageAccountType')]"
 					}
 				}
 			}
@@ -1218,7 +1289,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
-				"Microsoft.Resources/deployments/ConfiguringAlwaysOn"
+				"Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT"
 			],
 			"properties": {
 				"mode": "Incremental",
