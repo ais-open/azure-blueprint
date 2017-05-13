@@ -670,6 +670,8 @@
 			"dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
+	"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adBDCVMName'), 'adcse-pwd')]"
+	"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]"
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '0')]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '1')]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]"
