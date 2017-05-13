@@ -513,14 +513,16 @@
     "sqlServerVersion": {
       "type": "string",
       "allowedValues": [
-        "SQL2012SP3-WS2012R2",
-        "SQL2014SP1-WS2012R2",
-        "SQL2016-WS2012R2"
+				"SQL2012SP3-WS2012R2",
+				"SQL2014SP1-WS2012R2",
+				"SQL2014SP2-WS2012R2",
+				"SQL2016-WS2012R2",
+				"SQL2016SP1-WS2016"
       ],
       "metadata": {
         "description": "The Sql Server Version"
       },
-      "defaultValue": "SQL2016-WS2012R2"
+      "defaultValue": "SQL2014SP2-WS2012R2"
     },
     "numberOfSqlVMDisks": {
       "type": "string",
