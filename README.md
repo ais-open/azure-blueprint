@@ -12,7 +12,7 @@
 5. Run /predeploy/Orchestration_InitialSetup.ps1 to create a new Resource Group with a new Key Vault that will contain the administrator passwords that you enter.
 ```
 # Example
-$BaseSourceControl = 'C:\Users\davoodharun\Desktop'
-. "$BaseSourceControl\azure-blueprint\predeploy\Orchestration_InitialSetup.ps1" @MyParams -verbose
+$BaseSourceControl = 'C:\Users\USERNAME\Desktop\azure-blueprint'
+. "$BaseSourceControl\predeploy\Orchestration_InitialSetup.ps1"
 ```
 6. After the script has completed, click the Deploy to Azure button above, login into Azure Gov, and complete the form to begin the deployment process.

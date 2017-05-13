@@ -95,7 +95,7 @@
   },
   "variables": {
     "domainJoinOptions": 3,
-    "domainJoinUserName": "[concat(parameters('domainName'), '\\', parameters('adminUsername'))]"
+    "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]"
   },
   "resources": [
     {
@@ -168,7 +168,7 @@
           "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('WebAvailabilitySetName'))]"
         },
         "osProfile": {
-          "computername": "[parameters('WebVMName')]",
+          "computername": "[concat(parameters('WebVMName'), copyindex())]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
@@ -195,7 +195,10 @@
             }
           ]
         }
-      }
+      },
+      "resources": [
+
+      ]
     },
     {
         "comments": "Join domain - JsonADDomainExtension",
@@ -203,11 +206,11 @@
         "type": "Microsoft.Compute/virtualMachines/extensions",
         "name": "[concat(parameters('WebVMName'), copyindex(), '/joindomain')]",
         "copy": {
-          "name": "extensionLoopDEL",
+          "name": "joinDEL",
           "count": "[parameters('numberOfWebInstances')]"
         },
         "dependsOn": [
-          "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
+          "[concat('Microsoft.Compute/virtualMachines/', parameters('WebVMName'), copyindex())]"
         ],
         "location": "[parameters('location')]",
         "properties": {
@@ -237,7 +240,7 @@
         "count": "[parameters('numberOfWebInstances')]"
       },
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('WebVMName'), copyindex())]"
       ],
       "properties": {
         "publisher": "Microsoft.Powershell",
@@ -248,7 +251,7 @@
           "ModulesUrl": "[parameters('iisModulesURL')]",
           "ConfigurationFunction": "[parameters('iisConfigurationFunction')]",
           "Properties": {
-            "MachineName": "[parameters('WebVMName')]"
+            "MachineName": "[concat(parameters('WebVMName'), copyindex())]"
           }
         },
         "protectedSettings": null
