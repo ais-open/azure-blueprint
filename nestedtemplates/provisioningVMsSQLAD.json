@@ -1283,7 +1283,7 @@
             "value": "[parameters('backupInfo')]"
           },
           "vmName": {
-            "value": "[variables('vmNames').VMs[copyIndex()]]"
+            "value": "[variables('vmNames').VMs[copyIndex()].Name]"
           }
         }
       }
