@@ -356,8 +356,8 @@
           }
         }
       }
-    }
-    /*{
+    },
+    {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('WebVMName'), copyindex(),'/malware')]",
       "apiVersion": "2015-05-01-preview",
@@ -367,30 +367,30 @@
         "count": "[parameters('numberOfWebInstances')]"
       },
       "dependsOn": [
-        //"backupWebLoop"
+        "backupWebLoop"
       ],
       "properties": {
         "publisher": "Microsoft.Azure.Security",
         "type": "IaaSAntimalware",
         "typeHandlerVersion": "1.3",
         "settings": {
-          "AntimalwareEnabled": "true",
+          "AntimalwareEnabled": true,
           "Exclusions": {
-            "Paths": "",
-            "Extensions": ".txt",
-            "Processes": ""
+            "Paths": null,
+            "Extensions": null,
+            "Processes": null
           },
           "RealtimeProtectionEnabled": "true",
           "ScheduledScanSettings": {
             "isEnabled": "true",
             "scanType": "Full",
-            "day": "7",
-            "time": "60"
+            "day": "0",
+            "time": "120"
           }
         },
         "protectedSettings": null
       }
-    }*/
+    }
   ],
   "outputs": {}
 }
