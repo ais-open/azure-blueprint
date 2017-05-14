@@ -995,7 +995,7 @@
       },
       "resources": []
     },
-    {
+    /*{
       "comments": "Join domain - JsonADDomainExtension",
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -1021,7 +1021,7 @@
           "Password": "[parameters('adminPassword')]"
         }
       }
-    },
+    },*/
     {
       "name": "PreparingAlwaysOnSqlServer",
       "type": "Microsoft.Resources/deployments",
@@ -1289,8 +1289,7 @@
           }
         }
       }
-    }
-    /*,
+    },
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(variables('vmNames').VMs[copyindex()].Name,'/malware')]",
@@ -1310,7 +1309,7 @@
         "settings": {
           "AntimalwareEnabled": "true",
           "Exclusions": {
-            "Paths": "F:\\Data;F:\\Log",
+            "Paths": "",
             "Extensions": "",
             "Processes": ""
           },
@@ -1324,7 +1323,7 @@
         },
         "protectedSettings": null
       }
-    }*/
+    }
   ],
   "outputs": {}
 }
