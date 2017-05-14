@@ -658,6 +658,9 @@
         "sql": "[concat('sqlAvailabilitySet', parameters('environmentPrefix'))]",
         "ad": "[concat('adAvailabilitySet', parameters('environmentPrefix'))]",
         "web": "[concat('webAvailabilitySet', parameters('environmentPrefix'))]"
+      },
+      "publicIPs": {
+        "mgt": "mgtpublicip"
       }
     },
     "artifacts": {
@@ -937,6 +940,9 @@
           },
           "mgtNSGid": {
             "value": "[variables('derivedIds').mgtNSG]"
+          },
+          "mgtPublicIPName": {
+            "value": "[variables('resourceNames').publicIPs.mgt]"
           }
         }
       }
