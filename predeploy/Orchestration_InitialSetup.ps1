@@ -25,7 +25,11 @@ Param(
 	[Parameter(Mandatory=$true)]
 	[SecureString]$adminPassword,
 	[Parameter(Mandatory=$true)]
-	[SecureString]$sqlServerServiceAccountPassword
+	[SecureString]$sqlServerServiceAccountPassword,
+	[Parameter(Mandatory = $true)]
+	[string]$aadAppName,
+	[Parameter(Mandatory = $true)]
+	[string]$keyEncryptionKeyName
 )
 
 try {
