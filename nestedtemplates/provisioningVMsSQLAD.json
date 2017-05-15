@@ -1022,7 +1022,7 @@
         }
       }
     },*/
-    {
+    /*{
       "name": "PreparingAlwaysOnSqlServer",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1289,7 +1289,7 @@
           }
         }
       }
-    },
+    },*/
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(variables('vmNames').VMs[copyindex()].Name,'/malware')]",
@@ -1300,7 +1300,8 @@
         "count": "[length(variables('vmNames').VMs)]"
       },
       "dependsOn": [
-        "backupSQLMGMTADLoop"
+        //"backupSQLMGMTADLoop"
+        "Microsoft.Resources/deployments/UpdatingSQL0Nic"
       ],
       "properties": {
         "publisher": "Microsoft.Azure.Security",
