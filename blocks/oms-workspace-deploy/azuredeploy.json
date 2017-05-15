@@ -161,6 +161,22 @@
             "counterName": "Available MBytes"
           }
         },
+        
+         {
+          "apiVersion": "2015-11-01-preview",
+          "type": "datasources",
+          "name": "sampleWindowsPerfCounter2",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          ],
+          "kind": "WindowsPerformanceCounter",
+          "properties": {
+            "objectName": "LogicalDisk",
+            "instanceName": "*",
+            "intervalSeconds": 10,
+            "counterName": "% Free Space"
+          }
+        },
         {
           "apiVersion": "2015-11-01-preview",
           "type": "datasources",
