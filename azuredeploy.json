@@ -772,7 +772,7 @@
         }
       }
     },
-    /*{
+    {
       "name": "SQLLoadBalancer",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -819,7 +819,7 @@
           }
         }
       }
-    },*/
+    },
     /*{
       "name": "ProvisioningApplicationGateway",
       "type": "Microsoft.Resources/deployments",
@@ -866,7 +866,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        //"Microsoft.Resources/deployments/SQLLoadBalancer"
+        "Microsoft.Resources/deployments/SQLLoadBalancer"
       ],
       "properties": {
         "mode": "Incremental",
