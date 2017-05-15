@@ -525,7 +525,11 @@
       "dependsOn": [
         "[concat('Microsoft.Compute/availabilitySets/',parameters('adAvailabilitySetName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', parameters('dcStorageAccountName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameDC'))]"
+        "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameDC'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
+        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'), '/extensions/InstallDomainController')]",
+        "UpdatingDNStoPrimaryADVM"
       ],
       "properties": {
         "hardwareProfile": {
@@ -618,7 +622,8 @@
       "dependsOn": [
         "[concat('Microsoft.Compute/availabilitySets/',parameters('sqlAvailabilitySetName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', parameters('sqlStorageAccountName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameSQL'))]"
+        "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameSQL'))]",
+        "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
       ],
       "copy": {
         "name": "sqlvirtualMachineLoop",
@@ -697,7 +702,8 @@
       "dependsOn": [
         "[concat('Microsoft.Compute/availabilitySets/',parameters('sqlAvailabilitySetName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameSQL'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('fswstorageName'))]"
+        "[concat('Microsoft.Storage/storageAccounts/', variables('fswstorageName'))]",
+        "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
       ],
       "properties": {
         "hardwareProfile": {
@@ -761,12 +767,7 @@
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
         "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'), '/extensions/InstallDomainController')]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '0')]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), '1')]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'), '/extensions/InstallDomainController')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -800,6 +801,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
         "UpdatingDNStoPrimaryADVM"
       ],
       "properties": {
@@ -876,6 +878,8 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
+        "sqlvirtualMachineLoop",        
         "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
       ],
       "properties": {
@@ -1013,7 +1017,8 @@
       "name": "[parameters('mgtVMName')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('mgtStorageAccountName'))]"
+        "[concat('Microsoft.Storage/storageAccounts/', parameters('mgtStorageAccountName'))]",
+        "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
       ],
       "properties": {
         "hardwareProfile": {
@@ -1056,7 +1061,7 @@
       "name": "[concat(parameters('mgtVMName'),'/joindomain')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]",
-        "Microsoft.Resources/deployments/ConfiguringBackupADVM"
+        "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
       ],
       "location": "[parameters('location')]",
       "properties": {
@@ -1258,11 +1263,11 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        //"[parameters('adPDCVMName')]",
-        //"[parameters('adBDCVMName')]",
-        //"sqlvirtualMachineLoop",
-        //"[parameters('sqlwVMName')]",
-        //"[parameters('mgtVMName')]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
+        "sqlvirtualMachineLoop",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]",
         "ConfiguringAlwaysOn"
       ],
       "copy": {
@@ -1321,11 +1326,11 @@
         "count": "[length(variables('vmNames').VMs)]"
       },
       "dependsOn": [
-        "[parameters('mgtVMName')]",
-        "[parameters('sqlwVMName')]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
         "sqlvirtualMachineLoop",
-        "[parameters('adBDCVMName')]",
-        "[parameters('adPDCVMName')]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
         "encryptSQLMGMTADLoop"
       ],
       "properties": {
