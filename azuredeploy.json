@@ -772,7 +772,7 @@
         }
       }
     },
-    {
+    /*{
       "name": "SQLLoadBalancer",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -819,7 +819,7 @@
           }
         }
       }
-    },
+    },*/
     /*{
       "name": "ProvisioningApplicationGateway",
       "type": "Microsoft.Resources/deployments",
@@ -860,7 +860,7 @@
           }
         }
       }
-    },*/    
+    },*/
     {
       "name": "ProvisioningNICsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
@@ -1155,10 +1155,10 @@
           "vmEncryptionSettings": {
             "value": "[variables('vmEncryptionSettings')]"
           }
-          }
         }
-    },
-    {
+      }
+    }
+    /*{
       "name": "WebTier",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1275,8 +1275,8 @@
           }
         }
       }
-    },
-    {
+    },*/
+    /*{
       "name": "RecoverServicesVault",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1293,8 +1293,8 @@
           }
         }
       }
-    },
-    {
+    },*/
+    /*{
       "name": "BackupPolicyCustom",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1313,6 +1313,7 @@
           }
         }
       }
-    }
-  ]
+    }*/
+  ],
+  "outputs": {}
   }
