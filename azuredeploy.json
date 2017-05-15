@@ -866,7 +866,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/SQLLoadBalancer"
+        //"Microsoft.Resources/deployments/SQLLoadBalancer"
       ],
       "properties": {
         "mode": "Incremental",
@@ -952,7 +952,8 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/BackupPolicyCustom"
+        //"Microsoft.Resources/deployments/BackupPolicyCustom"
+        "ProvisioningNICsSQLADMGT"
       ],
       "properties": {
         "mode": "Incremental",

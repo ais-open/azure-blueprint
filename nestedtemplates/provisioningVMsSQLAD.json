@@ -454,7 +454,7 @@
         }
       },
       "resources": [
-        {
+        /*{
           "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "[concat(parameters('adPDCVMName'),'/InstallDomainController')]",
           "apiVersion": "2015-06-15",
@@ -484,7 +484,7 @@
               }
             }
           }
-        }
+        }*/
       ]
     },
     {
@@ -699,7 +699,7 @@
       },
       "resources": []
     },
-    {
+    /*{
       "name": "UpdatingDNStoPrimaryADVM",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -737,8 +737,8 @@
           }
         }
       }
-    },
-    {
+    },*/
+    /*{
       "name": "ConfiguringBackupADVM",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -780,8 +780,8 @@
           }
         }
       }
-    },
-    {
+    },*/
+    /*{
       "name": "UpdatingDNSwithBackupADVM",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -815,8 +815,8 @@
           }
         }
       }
-    },
-    {
+    },*/
+    /*{
       "name": "UpdatingSQLWNic",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -857,8 +857,8 @@
           }
         }
       }
-    },
-    {
+    },*/
+    /*{
       "name": "UpdatingSQL0Nic",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -904,8 +904,8 @@
           }
         }
       }
-    },
-    {
+    },*/
+    /*{
       "name": "UpdatingSQL1Nic",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -951,7 +951,7 @@
           }
         }
       }
-    },
+    },*/
     {
       "apiVersion": "2016-03-30", //"2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
@@ -1301,7 +1301,11 @@
       },
       "dependsOn": [
         //"backupSQLMGMTADLoop"
-        "Microsoft.Resources/deployments/UpdatingSQL0Nic"
+        //"Microsoft.Resources/deployments/UpdatingSQL0Nic"
+        "[parameters('adPDCVMName')]",
+        "[parameters('adBDCVMName')]",
+        "sqlvirtualMachineLoop",        
+        "[parameters('mgtVMName')]"
       ],
       "properties": {
         "publisher": "Microsoft.Azure.Security",
