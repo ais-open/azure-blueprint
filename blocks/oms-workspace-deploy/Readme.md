@@ -9,3 +9,6 @@ This is an ARM template which deploys OMS workspace in a resource group and seve
 ##Retains data for 1 year   
 
 After deploying the workspace it deploys the OMS extension onto the all 5 VMs so that the VMs are connected to the provisioned workspace. 
+
+
+##Has logical disk space alert configured for low disk space in VMs
