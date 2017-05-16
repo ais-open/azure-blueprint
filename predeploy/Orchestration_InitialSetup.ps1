@@ -3,18 +3,35 @@
 
 <#
 .Description
-This script will create a Key Vault inside a specified Azure subscription
+This script will create a Key Vault with a Key Encryption Key for VM DIsk Encryption and Azure AD Application Service Principal inside a specified Azure subscription
 
 .Example
 $BaseSourceControl = 'C:\Users\davoodharun\Desktop\azure-blueprint'
 . "$BaseSourceControl\predeploy\Orchestration_InitialSetup.ps1" @MyParams -verbose
+
+.Parameter BaseSourceControl
+Should be the string path to the predeploy directory in the format c:\path\to\source\control\predeploy
+
+.Parameter recoveryServicesAADServicePrincipalName
+This is the ApplicationId for the BackupFairfax (usgovvirginia) AzureAD Service Principal
+Azure commercial Backup Management Service ApplicationId is 262044b1-e2ce-469f-a196-69ab7ada62d3
+
+.Parameter adminPassword
+Must meet complexity requirements
+14+ characters, 2 numbers, 2 upper and lower case, and 2 special chars
+
+.Parameter sqlServerServiceAccountPassword
+Must meet complexity requirements
+14+ characters, 2 numbers, 2 upper and lower case, and 2 special chars
 #>
 
 [cmdletbinding()]
 Param(
 	[string]$environmentName = "AzureUSGovernment",
 	[string]$location = "USGov Virginia",
-	[string]$recoveryServicesAADServicePrincipalName = "ff281ffe-705c-4f53-9f37-a40e6f2c68f3", #Commercial use "262044b1-e2ce-469f-a196-69ab7ada62d3"
+	[string]$recoveryServicesAADServicePrincipalName = "ff281ffe-705c-4f53-9f37-a40e6f2c68f3",
+    [Parameter(Mandatory=$true)]
+    [string]$BaseSourceControl,
 	[Parameter(Mandatory=$true)]
 	[string]$subscriptionId,
 	[Parameter(Mandatory=$true)]
@@ -37,7 +54,7 @@ try {
 	$Ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToCoTaskMemUnicode($adminPassword)
 	$result = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($Ptr)
 	[System.Runtime.InteropServices.Marshal]::ZeroFreeCoTaskMemUnicode($Ptr)
-	. "$BaseSourceControl\checkPassword.ps1" -password $result
+	& "$BaseSourceControl\checkPassword.ps1" -password $result
 }
 catch {
 	Throw "Administrator password did not meet the complexity requirements"
@@ -47,7 +64,7 @@ try {
 	$Ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToCoTaskMemUnicode($sqlServerServiceAccountPassword)
 	$result = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($Ptr)
 	[System.Runtime.InteropServices.Marshal]::ZeroFreeCoTaskMemUnicode($Ptr)
-	. "$BaseSourceControl\checkPassword.ps1" -password $result
+	& "$BaseSourceControl\checkPassword.ps1" -password $result
 }
 catch {
 	Throw "sqlServerServiceAccountPassword  did not meet the complexity requirements"
