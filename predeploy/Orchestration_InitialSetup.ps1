@@ -14,6 +14,7 @@ $BaseSourceControl = 'C:\Users\davoodharun\Desktop\azure-blueprint'
 Param(
 	[string]$environmentName = "AzureUSGovernment",
 	[string]$location = "USGov Virginia",
+	[string]$recoveryServicesAADServicePrincipalName = "ff281ffe-705c-4f53-9f37-a40e6f2c68f3", #Commercial use "262044b1-e2ce-469f-a196-69ab7ada62d3"
 	[Parameter(Mandatory=$true)]
 	[string]$subscriptionId,
 	[Parameter(Mandatory=$true)]
@@ -25,7 +26,11 @@ Param(
 	[Parameter(Mandatory=$true)]
 	[SecureString]$adminPassword,
 	[Parameter(Mandatory=$true)]
-	[SecureString]$sqlServerServiceAccountPassword
+	[SecureString]$sqlServerServiceAccountPassword,
+	[Parameter(Mandatory = $true)]
+	[string]$aadAppName,
+	[Parameter(Mandatory = $true)]
+	[string]$keyEncryptionKeyName
 )
 
 try {
@@ -130,7 +135,7 @@ if (-not (Get-AzureRMKeyVault -VaultName $keyVaultName -ResourceGroupName $resou
 	# Specify privileges to the vault for the AAD application - https://msdn.microsoft.com/en-us/library/mt603625.aspx
      Write-Host "Set Azure Key Vault Access Policy. Set ServicePrincipalName: $aadClientID in Key Vault: $keyVaultName";
     Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ServicePrincipalName $aadClientID -PermissionsToKeys wrapKey -PermissionsToSecrets set;
-
+	Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ServicePrincipalName $recoveryServicesAADServicePrincipalName -PermissionsToKeys backup,get,list -PermissionsToSecrets get,list;
     Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -EnabledForDiskEncryption;
 
     if($keyEncryptionKeyName)
