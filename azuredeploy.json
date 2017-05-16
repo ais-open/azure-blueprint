@@ -699,7 +699,9 @@
       "createClusterModulesURL": "[concat(parameters('dscBaseUrl'),'/CreateFailoverCluster.ps1.zip')]",
       "createClusterConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
       "iisModulesURL": "[concat(parameters('dscBaseUrl'),'/ContosoWebsite.ps1.zip')]",
-      "iisConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite"
+      "iisConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite",
+      "configureAntimalwareDSCUrl": "[concat(parameters('dscBaseUrl'),'/ConfigureWindowsDefender.ps1.zip')]",
+      "configureAntimalwareDSCFunction": "ConfigureWindowsDefender.ps1\\ConfigureWindowsDefender"
     },
     "prepareAlwaysOnSQLInfo": {
       "artifacts": "[variables('artifacts')]",
@@ -1167,6 +1169,12 @@
           },
           "vmEncryptionSettings": {
             "value": "[variables('vmEncryptionSettings')]"
+          },
+          "configAntimalwareDSCUrl": {
+            "value": "[variables('artifacts').configureAntimalwareDSCUrl]"
+          },
+          "configAntimalwareDSCFunction": {
+            "value": "[variables('artifacts').configureAntimalwareDSCFunction]"
           }
         }
       }
@@ -1184,96 +1192,96 @@
 					"uri": "[variables('artifacts').provisioningAppVMsURL]",
 					"contentVersion": "1.0.0.0"
 				},
-				"parameters": {
-					"numberOfWebInstances": {
-						"value": "[variables('numberOfWebInstances')]"
-					},
-					"WebVMName": {
-						"value": "[variables('resourceNames').vms.web]"
-					},
-					"MGTVMName": {
-						"value": "[variables('resourceNames').vms.mgt]"
-					},
-					"WebAvailabilitySetName": {
-						"value": "[variables('resourceNames').availabilitySets.web]"
-					},
-					"WebStorageAccountName": {
-						"value": "[variables('resourceNames').storageAccounts.web]"
-					},
-					"MGTStorageAccountName": {
-						"value": "[variables('resourceNames').storageAccounts.mgt]"
-					},
-					"webStorageAccountType": {
-						"value": "[parameters('webStorageAccountType')]"
-					},
-					"mgtStorageAccountType": {
-						"value": "[parameters('mgtStorageAccountType')]"
-					},
-					"location": {
-						"value": "[resourceGroup().location]"
-					},
-					"WebVMSize": {
-						"value": "[parameters('webVMSize')]"
-					},
-					"MGTVMSize": {
-						"value": "[parameters('mgtVMSize')]"
-					},
-					"adminUsername": {
-						"value": "[parameters('adminUsername')]"
-					},
-					"adminPassword": {
-						"reference": {
+        "parameters": {
+          "numberOfWebInstances": {
+            "value": "[variables('numberOfWebInstances')]"
+          },
+          "WebVMName": {
+            "value": "[variables('resourceNames').vms.web]"
+          },
+          "MGTVMName": {
+            "value": "[variables('resourceNames').vms.mgt]"
+          },
+          "WebAvailabilitySetName": {
+            "value": "[variables('resourceNames').availabilitySets.web]"
+          },
+          "WebStorageAccountName": {
+            "value": "[variables('resourceNames').storageAccounts.web]"
+          },
+          "MGTStorageAccountName": {
+            "value": "[variables('resourceNames').storageAccounts.mgt]"
+          },
+          "webStorageAccountType": {
+            "value": "[parameters('webStorageAccountType')]"
+          },
+          "mgtStorageAccountType": {
+            "value": "[parameters('mgtStorageAccountType')]"
+          },
+          "location": {
+            "value": "[resourceGroup().location]"
+          },
+          "WebVMSize": {
+            "value": "[parameters('webVMSize')]"
+          },
+          "MGTVMSize": {
+            "value": "[parameters('mgtVMSize')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "reference": {
               "keyVault": {
                 "id": "[variables('derivedIds').keyVaultId]"
               },
               "secretName": "adminPassword"
             }
-					},
-					"appImagePublisher": {
-						"value": "[variables('vmSettings').web.imagePublisher]"
-					},
-					"appImageOffer": {
-						"value": "[variables('vmSettings').web.imageOffer]"
-					},
-					"appImageSKU": {
-						"value": "[variables('vmSettings').web.imageSKU]"
-					},
-					"vmContainerName": {
-						"value": "[variables('vmSettings').vmContainerName]"
-					},
-					"WEBNICName": {
-						"value": "[variables('resourceNames').nics.web]"
-					},
-					"MGTNICName": {
-						"value": "[variables('resourceNames').nics.mgt]"
-					},
-					"mgtIPAddress": {
-						"value": "[parameters('mgtIPAddress')]"
-					},
-					"subnetRef": {
-						"value": "[variables('derivedIds').webSubnet]"
-					},
+          },
+          "appImagePublisher": {
+            "value": "[variables('vmSettings').web.imagePublisher]"
+          },
+          "appImageOffer": {
+            "value": "[variables('vmSettings').web.imageOffer]"
+          },
+          "appImageSKU": {
+            "value": "[variables('vmSettings').web.imageSKU]"
+          },
+          "vmContainerName": {
+            "value": "[variables('vmSettings').vmContainerName]"
+          },
+          "WEBNICName": {
+            "value": "[variables('resourceNames').nics.web]"
+          },
+          "MGTNICName": {
+            "value": "[variables('resourceNames').nics.mgt]"
+          },
+          "mgtIPAddress": {
+            "value": "[parameters('mgtIPAddress')]"
+          },
+          "subnetRef": {
+            "value": "[variables('derivedIds').webSubnet]"
+          },
           "mgtSubnetRef": {
             "value": "[variables('derivedIds').mgtSubnet]"
           },
-					"mgtNSGid": {
-						"value": "[variables('derivedIds').mgtNSG]"
-					},
-					"webNSGid": {
-						"value": "[variables('derivedIds').webNSG]"
-					},
-					"domainName": {
-						"value": "[parameters('domainName')]"
-					},
-					"iisModulesURL": {
-						"value": "[variables('artifacts').iisModulesURL]"
-					},
-					"iisConfigurationFunction": {
-						"value": "[variables('artifacts').iisConfigurationFunction]"
-					},
-					"staticIPWEBStart": {
-						"value": "[variables('staticIPWEBStart')]"
-					},
+          "mgtNSGid": {
+            "value": "[variables('derivedIds').mgtNSG]"
+          },
+          "webNSGid": {
+            "value": "[variables('derivedIds').webNSG]"
+          },
+          "domainName": {
+            "value": "[parameters('domainName')]"
+          },
+          "iisModulesURL": {
+            "value": "[variables('artifacts').iisModulesURL]"
+          },
+          "iisConfigurationFunction": {
+            "value": "[variables('artifacts').iisConfigurationFunction]"
+          },
+          "staticIPWEBStart": {
+            "value": "[variables('staticIPWEBStart')]"
+          },
           "webSubnetAddressRange": {
             "value": "[parameters('webSubnet').properties.addressPrefix]"
           },
@@ -1285,6 +1293,12 @@
           },
           "vmEncryptionSettings": {
             "value": "[variables('vmEncryptionSettings')]"
+          },
+          "configAntimalwareDSCUrl": {
+            "value": "[variables('artifacts').configureAntimalwareDSCUrl]"
+          },
+          "configAntimalwareDSCFunction": {
+            "value": "[variables('artifacts').configureAntimalwareDSCFunction]"
           }
         }
       }

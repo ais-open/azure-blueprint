@@ -193,6 +193,12 @@
     },
     "vmEncryptionSettings": {
       "type": "object"
+    },
+    "configAntimalwareDSCUrl": {
+      "type": "string"
+    },
+    "configAntimalwareDSCFunction": {
+      "type": "string"
     }
   },
   "variables": {
@@ -879,7 +885,7 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
-        "sqlvirtualMachineLoop",        
+        "sqlvirtualMachineLoop",
         "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
       ],
       "properties": {
@@ -1346,6 +1352,37 @@
           "vmName": {
             "value": "[variables('vmNames').VMs[copyIndex()].Name]"
           }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('mgtVMName'),'/ConfigureAntimalware')]",
+      "apiVersion": "2015-06-15",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.19",
+        "autoUpgradeMinorVersion": false,
+        "settings": {
+          "modulesURL": "[parameters('configAntimalwareDSCUrl')]",
+          "configurationFunction": "[parameters('configAntimalwareDSCFunction')]",
+          "properties": {
+            /*"domainName": "[parameters('domainName')]",
+            "adminCreds": {
+              "userName": "[parameters('adminUserName')]",
+              "password": "PrivateSettingsRef:adminPassword"            
+            }*/
+          }
+        },
+        "protectedSettings": {
+          /*"items": {
+            "adminPassword": "[parameters('adminPassword')]"
+          }*/
         }
       }
     }

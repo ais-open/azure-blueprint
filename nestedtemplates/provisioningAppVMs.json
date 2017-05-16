@@ -100,6 +100,12 @@
     },
     "vmEncryptionSettings": {
       "type": "object"
+    },
+    "configAntimalwareDSCUrl": {
+      "type": "string"
+    },
+    "configAntimalwareDSCFunction": {
+      "type": "string"
     }
   },
   "variables": {
