@@ -4,7 +4,7 @@ Param(
   [string]$password
 )
 
-
+$password
 Function checkPassword()    {
   Param(
     [Parameter(Mandatory=$true)]
@@ -44,7 +44,8 @@ Function checkPassword()    {
       "Password must contain an uppercase character"
         Throw "Password does not meet complexity requirements"
     }
-		If ($isGood -ge 3) {
+		If ($isGood -ge 4) {
+
       return
     } Else {
       Throw "Password does not meet complexity requirements"
