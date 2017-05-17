@@ -1284,7 +1284,7 @@
 						"value": "[variables('vmSettings').sql.workloadType]"
 					},
 					"sqlAutobackupRetentionPeriod": {
-			      "value":"[variables('vmSettings').sql.sqlAutobackupRetentionPeriod",
+			      "value":"[variables('vmSettings').sql.sqlAutobackupRetentionPeriod]",
 			    },
 			    "sqlAutobackupEncryptionPassword": {
 						"reference": {
