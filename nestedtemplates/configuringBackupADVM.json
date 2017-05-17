@@ -28,25 +28,28 @@
       }
    },
    "resources":[
-     {
-       "type": "Microsoft.Compute/virtualMachines/extensions",
-       "name": "[concat(parameters('adBDCVMName'),'/PrepareBDC')]",
-       "apiVersion": "2016-03-30",
-       "location": "[resourceGroup().location]",
-       "properties": {
-         "publisher": "Microsoft.Powershell",
-         "type": "DSC",
-         "typeHandlerVersion": "2.19",
-         "autoUpgradeMinorVersion": true,
-         "settings": {
-           "modulesURL":"[parameters('adBDCModulesURL')]",
-           "configurationFunction": "[parameters('adBDCConfigurationFunction')]",
-           "Properties": {
-             "DNSServer": "[parameters('adPDCNICIPAddress')]"
-           }
-         }
-       }
-     }
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('adBDCVMName'),'/PrepareBDC')]",
+      "apiVersion": "2016-03-30",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.19",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "modulesURL": "[parameters('adBDCModulesURL')]",
+          "configurationFunction": "[parameters('adBDCConfigurationFunction')]",
+          "Properties": {
+            "DNSServer": "[parameters('adPDCNICIPAddress')]"
+          }
+        }
+      }
+    }
    ],
    "outputs":{
 

@@ -302,9 +302,6 @@
       "name": "[concat('ConfigurationVMEncryption-WEB-',copyIndex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "copy": {
         "name": "encryptWebLoop",
         "count": "[parameters('numberOfWebInstances')]"
@@ -359,9 +356,6 @@
       "name": "[concat('Backup-WEB-',copyIndex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "copy": {
         "name": "backupWebLoop",
         "count": "[parameters('numberOfWebInstances')]"

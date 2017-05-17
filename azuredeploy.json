@@ -494,14 +494,14 @@
       "metadata": {
         "description": "Linked Templates base url"
       },
-      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/nestedtemplates"
+      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/Malware/nestedtemplates"
     },
     "dscBaseUrl": {
       "type": "string",
       "metadata": {
         "description": "DSC Scripts base url"
       },
-      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/DSC"
+      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/Malware/DSC"
     },
     "scriptsBaseUrl": {
       "type": "string",
@@ -680,8 +680,8 @@
       "applicationGatewayURL": "[concat(parameters('templatesBaseUrl'),'/provisioningApplicationGateway.json')]",
       "provisioningNICsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningNICsSQLAD.json')]",
       "virtualNetworkNSGURL": "[concat(parameters('templatesBaseUrl'),'/virtualNetworkNSG.json')]",
-      "provisioningVMsSQLADURL": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/Malware/nestedtemplates','/provisioningVMsSQLAD.json')]",
-      "provisioningAppVMsURL": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/Malware/nestedtemplates','/provisioningAppVMs.json')]",
+      "provisioningVMsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningVMsSQLAD.json')]",
+      "provisioningAppVMsURL": "[concat(parameters('templatesBaseUrl'),'/provisioningAppVMs.json')]",
       "provisioningRCV": "[concat(parameters('templatesBaseUrl'),'/recoveryServicesVault.json')]",
       "backupVMProtectedItem": "[concat(parameters('templatesBaseUrl'),'/backupProtectedItems.json')]",
       "backupPolicy": "[concat(parameters('templatesBaseUrl'),'/recoveryServicesBackupPolicy.json')]",
@@ -700,7 +700,7 @@
       "createClusterConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
       "iisModulesURL": "[concat(parameters('dscBaseUrl'),'/ContosoWebsite.ps1.zip')]",
       "iisConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite",
-      "configureAntimalwareDSCUrl": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/Malware/DSC','/ConfigureWindowsDefender.ps1.zip')]",
+      "configureAntimalwareDSCUrl": "[concat(parameters('dscBaseUrl'),'/ConfigureWindowsDefender.ps1.zip')]",
       "configureAntimalwareDSCFunction": "ConfigureWindowsDefender.ps1\\ConfigureWindowsDefender"
     },
     "prepareAlwaysOnSQLInfo": {
@@ -746,9 +746,6 @@
       "name": "VirtualNetworkNSG",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "comments": "This resource will create storage accounts for Active Directory, SQL Server, File Share Witness and Diagnostics. It will also create the Virtual Network and public IP addresses",
       "properties": {
         "mode": "Incremental",
@@ -791,9 +788,6 @@
       "name": "SQLLoadBalancer",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "comments": "Create Load Balancers for SQL and DC",
       "dependsOn": [
         "Microsoft.Resources/deployments/VirtualNetworkNSG"
@@ -842,9 +836,6 @@
       "name": "ProvisioningApplicationGateway",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [
         "Microsoft.Resources/deployments/VirtualNetworkNSG"
       ],
@@ -886,9 +877,6 @@
       "name": "ProvisioningNICsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [
         "Microsoft.Resources/deployments/SQLLoadBalancer"
       ],
@@ -975,9 +963,6 @@
       "name": "ProvisioningVMsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [
         "Microsoft.Resources/deployments/BackupPolicyCustom"
       ],
@@ -1198,9 +1183,6 @@
       "name": "WebTier",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [
         "Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT"
       ],
@@ -1325,9 +1307,6 @@
       "name": "RecoverServicesVault",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [],
       "properties": {
         "mode": "Incremental",
@@ -1346,9 +1325,6 @@
       "name": "BackupPolicyCustom",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [
         "Microsoft.Resources/deployments/RecoverServicesVault"
       ],

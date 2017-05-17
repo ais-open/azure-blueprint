@@ -811,9 +811,6 @@
       "name": "UpdatingDNStoPrimaryADVM",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
         "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]",
@@ -854,9 +851,6 @@
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
         "UpdatingDNStoPrimaryADVM"
       ],
-      "tags": {
-        "Project": "BluePrint"
-      },
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -895,9 +889,6 @@
       "name": "UpdatingDNSwithBackupADVM",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [
         "Microsoft.Resources/deployments/ConfiguringBackupADVM"
       ],
@@ -933,9 +924,6 @@
       "name": "UpdatingSQLWNic",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
         "sqlvirtualMachineLoop",
@@ -980,9 +968,6 @@
       "name": "UpdatingSQL0Nic",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [
         "Microsoft.Resources/deployments/UpdatingSQLWNic"
       ],
@@ -1030,9 +1015,6 @@
       "name": "UpdatingSQL1Nic",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [
         "Microsoft.Resources/deployments/UpdatingSQL0Nic"
       ],
@@ -1156,9 +1138,6 @@
       "name": "PreparingAlwaysOnSqlServer",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [
         "Microsoft.Resources/deployments/UpdatingSQL1Nic"
       ],
@@ -1246,9 +1225,6 @@
       "name": "ConfiguringAlwaysOn",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [
         "Microsoft.Resources/deployments/PreparingAlwaysOnSqlServer"
       ],
@@ -1339,9 +1315,6 @@
       "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
@@ -1401,9 +1374,6 @@
       "name": "[concat('BackupVM-',variables('vmNames').VMs[copyIndex()].Name)]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "tags": {
-        "Project": "BluePrint"
-      },
       "copy": {
         "name": "backupSQLMGMTADLoop",
         "count": "[length(variables('vmNames').VMs)]"

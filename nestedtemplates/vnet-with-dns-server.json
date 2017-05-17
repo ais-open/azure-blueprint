@@ -41,6 +41,9 @@
       "type": "Microsoft.Network/virtualNetworks",
       "location": "[resourceGroup().location]",
       "apiVersion": "2016-10-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "properties": {
         "addressSpace": {
           "addressPrefixes": [

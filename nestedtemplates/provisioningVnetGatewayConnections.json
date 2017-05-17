@@ -83,22 +83,25 @@
         "gatewaySubnetRef2": "[concat(variables('vnetID2'),'/subnets/','GatewaySubnet')]"
     },
     "resources": [
-        {
-            "apiVersion": "[variables('apiVersion')]",
-            "type": "Microsoft.Network/connections",
-            "name": "[parameters('connectionName1')]",
-            "location": "[parameters('location1')]",
-            "properties": {
-                "virtualNetworkGateway1": {
-                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways',parameters('gatewayName1'))]"
-                },
-                "virtualNetworkGateway2": {
-                    "id": "[resourceId(parameters('otherResourceGroup'),'Microsoft.Network/virtualNetworkGateways',parameters('gatewayName2'))]"
-                },
-                "connectionType": "Vnet2Vnet",
-                "routingWeight": 3,
-                "sharedKey": "[parameters('sharedKey')]"
-            }
+      {
+        "apiVersion": "[variables('apiVersion')]",
+        "type": "Microsoft.Network/connections",
+        "name": "[parameters('connectionName1')]",
+        "location": "[parameters('location1')]",
+        "tags": {
+          "Project": "BluePrint"
+        },
+        "properties": {
+          "virtualNetworkGateway1": {
+            "id": "[resourceId('Microsoft.Network/virtualNetworkGateways',parameters('gatewayName1'))]"
+          },
+          "virtualNetworkGateway2": {
+            "id": "[resourceId(parameters('otherResourceGroup'),'Microsoft.Network/virtualNetworkGateways',parameters('gatewayName2'))]"
+          },
+          "connectionType": "Vnet2Vnet",
+          "routingWeight": 3,
+          "sharedKey": "[parameters('sharedKey')]"
         }
+      }
     ]
 }

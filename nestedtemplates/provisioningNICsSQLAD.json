@@ -78,6 +78,9 @@
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[parameters('mgtPublicIPName')]",
       "location": "[resourceGroup().location]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "properties": {
         "publicIPAllocationMethod": "Dynamic"
       }
@@ -87,6 +90,9 @@
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "properties": {
         "ipConfigurations": [
           {
@@ -101,7 +107,7 @@
           }
         ],
         "networkSecurityGroup": {
-            "id": "[parameters('dcNSGid')]"
+          "id": "[parameters('dcNSGid')]"
         }
       }
     },
@@ -110,6 +116,9 @@
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "properties": {
         "ipConfigurations": [
           {
@@ -124,7 +133,7 @@
           }
         ],
         "networkSecurityGroup": {
-            "id": "[parameters('dcNSGid')]"
+          "id": "[parameters('dcNSGid')]"
         }
       }
     },
@@ -133,6 +142,9 @@
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "properties": {
         "ipConfigurations": [
           {
@@ -152,7 +164,7 @@
           }
         ],
         "networkSecurityGroup": {
-            "id": "[parameters('sqlNSGid')]"
+          "id": "[parameters('sqlNSGid')]"
         }
       }
     },
@@ -161,6 +173,9 @@
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "properties": {
         "ipConfigurations": [
           {
@@ -170,7 +185,7 @@
               "subnet": {
                 "id": "[parameters('sqlSubnetRef')]"
               },
-              "privateIPAddress":"[parameters('sql1IPAddress')]",
+              "privateIPAddress": "[parameters('sql1IPAddress')]",
               "loadBalancerBackendAddressPools": [
                 {
                   "id": "[parameters('sqlBEAddressPoolID')]"
@@ -180,7 +195,7 @@
           }
         ],
         "networkSecurityGroup": {
-            "id": "[parameters('sqlNSGid')]"
+          "id": "[parameters('sqlNSGid')]"
         }
       }
     },
@@ -189,13 +204,16 @@
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "properties": {
         "ipConfigurations": [
           {
             "name": "ipconfig1",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress":"[parameters('sqlwIPAddress')]",
+              "privateIPAddress": "[parameters('sqlwIPAddress')]",
               "subnet": {
                 "id": "[parameters('sqlSubnetRef')]"
               }
@@ -203,7 +221,7 @@
           }
         ],
         "networkSecurityGroup": {
-            "id": "[parameters('sqlNSGid')]"
+          "id": "[parameters('sqlNSGid')]"
         }
       }
     },
@@ -212,9 +230,12 @@
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIPAddresses/', parameters('mgtPublicIPName'))]",
+        "[resourceId('Microsoft.Network/publicIPAddresses/', parameters('mgtPublicIPName'))]"
       ],
       "apiVersion": "2015-06-15",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "properties": {
         "ipConfigurations": [
           {
@@ -224,7 +245,7 @@
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('mgtPublicIPName'))]"
               },
-              "privateIPAddress":"[parameters('mgtIPAddress')]",
+              "privateIPAddress": "[parameters('mgtIPAddress')]",
               "subnet": {
                 "id": "[parameters('mgtSubnetRef')]"
               }
@@ -232,7 +253,7 @@
           }
         ],
         "networkSecurityGroup": {
-            "id": "[parameters('mgtNSGid')]"
+          "id": "[parameters('mgtNSGid')]"
         }
       }
     }

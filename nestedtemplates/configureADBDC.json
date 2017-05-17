@@ -29,6 +29,9 @@
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('adBDCVMName'),'/PrepareBDC')]",
       "apiVersion": "2016-03-30",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]",
       "properties": {
         "publisher": "Microsoft.Powershell",
