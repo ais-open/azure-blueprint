@@ -165,6 +165,11 @@
             "typeHandlerVersion":"1.2",
             "autoUpgradeMinorVersion":"true",
             "settings":{
+              "AutoBackupSettings": {
+                  "Enable": true,
+                  "RetentionPeriod": "2",
+                  "EnableEncryption": true
+              },
                "AutoPatchingSettings":{
                   "PatchCategory":"WindowsMandatoryUpdates",
                   "Enable":"[parameters('autoPatchingEnable')]",
