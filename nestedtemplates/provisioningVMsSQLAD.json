@@ -266,12 +266,18 @@
       "type": "Microsoft.Compute/availabilitySets",
       "name": "[parameters('adAvailabilitySetName')]",
       "apiVersion": "2015-06-15",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]"
     },
     {
       "type": "Microsoft.Compute/availabilitySets",
       "name": "[parameters('sqlAvailabilitySetName')]",
       "apiVersion": "2015-06-15",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]",
       "properties": {
         "platformFaultDomainCount": "3",
@@ -282,6 +288,9 @@
       "name": "[parameters('sqlStorageAccountName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]",
       "sku": {
         "name": "[parameters('SqlStorageAccountType')]"
@@ -302,6 +311,9 @@
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[parameters('dcStorageAccountName')]",
       "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]",
       "sku": {
         "name": "[parameters('DcStorageAccountType')]"
@@ -322,6 +334,9 @@
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('fswstorageName')]",
       "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]",
       "sku": {
         "name": "Standard_GRS"
@@ -342,6 +357,9 @@
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[parameters('mgtStorageAccountName')]",
       "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[resourceGroup().location]",
       "sku": {
         "name": "[parameters('mgtStorageAccountType')]"
@@ -362,6 +380,9 @@
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('diagstorageNameSQL')]",
       "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]",
       "sku": {
         "name": "Standard_GRS"
@@ -382,6 +403,9 @@
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('diagstorageNameDC')]",
       "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]",
       "sku": {
         "name": "Standard_GRS"
@@ -403,6 +427,9 @@
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('adPDCVMName')]",
       "location": "[parameters('location')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "[concat('Microsoft.Compute/availabilitySets/',parameters('adAvailabilitySetName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', parameters('dcStorageAccountName'))]",
@@ -467,6 +494,9 @@
           "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "[concat(parameters('adPDCVMName'),'/InstallDomainController')]",
           "apiVersion": "2015-06-15",
+          "tags": {
+            "Project": "BluePrint"
+          },
           "location": "[parameters('location')]",
           "dependsOn": [
             "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
@@ -504,7 +534,8 @@
           ],
           "location": "[resourceGroup().location]",
           "tags": {
-            "displayName": "adcse-pwd"
+            "displayName": "adcse-pwd",
+            "Project": "BluePrint"
           },
           "properties": {
             "publisher": "Microsoft.Compute",
@@ -528,6 +559,9 @@
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('adBDCVMName')]",
       "location": "[parameters('location')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "[concat('Microsoft.Compute/availabilitySets/',parameters('adAvailabilitySetName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', parameters('dcStorageAccountName'))]",
@@ -601,7 +635,8 @@
           ],
           "location": "[resourceGroup().location]",
           "tags": {
-            "displayName": "adcse-pwd"
+            "displayName": "adcse-pwd",
+            "Project": "BluePrint"
           },
           "properties": {
             "publisher": "Microsoft.Compute",
@@ -625,6 +660,9 @@
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('sqlVMName'), copyindex())]",
       "location": "[parameters('location')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "[concat('Microsoft.Compute/availabilitySets/',parameters('sqlAvailabilitySetName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', parameters('sqlStorageAccountName'))]",
@@ -705,6 +743,9 @@
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('sqlwVMName')]",
       "location": "[parameters('location')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "[concat('Microsoft.Compute/availabilitySets/',parameters('sqlAvailabilitySetName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameSQL'))]",
@@ -770,6 +811,9 @@
       "name": "UpdatingDNStoPrimaryADVM",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
         "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]",
@@ -810,6 +854,9 @@
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
         "UpdatingDNStoPrimaryADVM"
       ],
+      "tags": {
+        "Project": "BluePrint"
+      },
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -848,6 +895,9 @@
       "name": "UpdatingDNSwithBackupADVM",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "Microsoft.Resources/deployments/ConfiguringBackupADVM"
       ],
@@ -883,6 +933,9 @@
       "name": "UpdatingSQLWNic",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
         "sqlvirtualMachineLoop",
@@ -927,6 +980,9 @@
       "name": "UpdatingSQL0Nic",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "Microsoft.Resources/deployments/UpdatingSQLWNic"
       ],
@@ -974,6 +1030,9 @@
       "name": "UpdatingSQL1Nic",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "Microsoft.Resources/deployments/UpdatingSQL0Nic"
       ],
@@ -1022,6 +1081,9 @@
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('mgtVMName')]",
       "location": "[parameters('location')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "[concat('Microsoft.Storage/storageAccounts/', parameters('mgtStorageAccountName'))]",
         "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
@@ -1065,6 +1127,9 @@
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('mgtVMName'),'/joindomain')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]",
         "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
@@ -1091,6 +1156,9 @@
       "name": "PreparingAlwaysOnSqlServer",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "Microsoft.Resources/deployments/UpdatingSQL1Nic"
       ],
@@ -1178,6 +1246,9 @@
       "name": "ConfiguringAlwaysOn",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "Microsoft.Resources/deployments/PreparingAlwaysOnSqlServer"
       ],
@@ -1268,6 +1339,9 @@
       "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
@@ -1327,6 +1401,9 @@
       "name": "[concat('BackupVM-',variables('vmNames').VMs[copyIndex()].Name)]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "copy": {
         "name": "backupSQLMGMTADLoop",
         "count": "[length(variables('vmNames').VMs)]"
@@ -1360,6 +1437,9 @@
       "name": "[concat(parameters('mgtVMName'),'/ConfigureAntimalware')]",
       "apiVersion": "2015-06-15",
       "location": "[parameters('location')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]"
       ],

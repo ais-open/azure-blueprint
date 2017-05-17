@@ -117,6 +117,9 @@
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[parameters('WebStorageAccountName')]",
       "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[resourceGroup().location]",
       "sku": {
         "name": "[parameters('webStorageAccountType')]"
@@ -137,6 +140,9 @@
       "type": "Microsoft.Compute/availabilitySets",
       "name": "[parameters('WebAvailabilitySetName')]",
       "apiVersion": "2015-06-15",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]",
       "properties": {
         "platformFaultDomainCount": "2",
@@ -148,6 +154,9 @@
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[concat(parameters('WEBNICName'), copyindex())]",
       "location": "[resourceGroup().location]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "copy": {
         "name": "nicLoopDEL",
         "count": "[parameters('numberOfWebInstances')]"
@@ -176,6 +185,9 @@
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('WebVMName'), copyindex())]",
       "location": "[parameters('location')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "copy": {
         "name": "vmLoopDEL",
         "count": "[parameters('numberOfWebInstances')]"
@@ -228,6 +240,9 @@
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('WebVMName'), copyindex(), '/joindomain')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "copy": {
         "name": "joinDomainLoop",
         "count": "[parameters('numberOfWebInstances')]"
@@ -257,6 +272,9 @@
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('WebVMName'), copyindex(), '/iis')]",
       "apiVersion": "2015-05-01-preview",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]",
       "copy": {
         "name": "configIISLoop",
@@ -284,6 +302,9 @@
       "name": "[concat('ConfigurationVMEncryption-WEB-',copyIndex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "copy": {
         "name": "encryptWebLoop",
         "count": "[parameters('numberOfWebInstances')]"
@@ -338,6 +359,9 @@
       "name": "[concat('Backup-WEB-',copyIndex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "copy": {
         "name": "backupWebLoop",
         "count": "[parameters('numberOfWebInstances')]"

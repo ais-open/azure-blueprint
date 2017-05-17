@@ -680,8 +680,8 @@
       "applicationGatewayURL": "[concat(parameters('templatesBaseUrl'),'/provisioningApplicationGateway.json')]",
       "provisioningNICsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningNICsSQLAD.json')]",
       "virtualNetworkNSGURL": "[concat(parameters('templatesBaseUrl'),'/virtualNetworkNSG.json')]",
-      "provisioningVMsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningVMsSQLAD.json')]",
-      "provisioningAppVMsURL": "[concat(parameters('templatesBaseUrl'),'/provisioningAppVMs.json')]",
+      "provisioningVMsSQLADURL": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/Malware/nestedtemplates','/provisioningVMsSQLAD.json')]",
+      "provisioningAppVMsURL": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/Malware/nestedtemplates','/provisioningAppVMs.json')]",
       "provisioningRCV": "[concat(parameters('templatesBaseUrl'),'/recoveryServicesVault.json')]",
       "backupVMProtectedItem": "[concat(parameters('templatesBaseUrl'),'/backupProtectedItems.json')]",
       "backupPolicy": "[concat(parameters('templatesBaseUrl'),'/recoveryServicesBackupPolicy.json')]",
@@ -700,7 +700,7 @@
       "createClusterConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
       "iisModulesURL": "[concat(parameters('dscBaseUrl'),'/ContosoWebsite.ps1.zip')]",
       "iisConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite",
-      "configureAntimalwareDSCUrl": "[concat(parameters('dscBaseUrl'),'/ConfigureWindowsDefender.ps1.zip')]",
+      "configureAntimalwareDSCUrl": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/Malware/DSC','/ConfigureWindowsDefender.ps1.zip')]",
       "configureAntimalwareDSCFunction": "ConfigureWindowsDefender.ps1\\ConfigureWindowsDefender"
     },
     "prepareAlwaysOnSQLInfo": {
@@ -742,227 +742,242 @@
     }
 	},
 	"resources": [
-		{
-			"name": "VirtualNetworkNSG",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"comments": "This resource will create storage accounts for Active Directory, SQL Server, File Share Witness and Diagnostics. It will also create the Virtual Network and public IP addresses",
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('artifacts').virtualNetworkNSGURL]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[resourceGroup().location]"
-					},
-					"virtualNetworkName": {
-						"value": "[variables('virtualNetworkNameWithSuffix')]"
-					},
-					"virtualNetworkAddressRange": {
-						"value": "[parameters('virtualNetworkAddressRange')]"
-					},
-					"subnets": {
-						"value": "[variables('subnets')]"
-					},
-					"dcNSGName": {
-						"value": "[variables('resourceNames').nsgs.dc]"
-					},
-					"sqlNSGName": {
-						"value": "[variables('resourceNames').nsgs.sql]"
-					},
-					"webNSGName": {
-						"value": "[variables('resourceNames').nsgs.web]"
-					},
-					"mgtNSGName": {
-						"value": "[variables('resourceNames').nsgs.mgt]"
-					},
-					"lbNSGName": {
-						"value": "[variables('resourceNames').nsgs.lb]"
-					}
-				}
-			}
-		},
-		{
-			"name": "SQLLoadBalancer",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"comments": "Create Load Balancers for SQL and DC",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/VirtualNetworkNSG"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('artifacts').sqlLoadBalancerURL]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[resourceGroup().location]"
-					},
-					"sqlLBName": {
-						"value": "[variables('lbSettings').sqlLBName]"
-					},
-					"sqlLBFEName": {
-						"value": "[variables('lbSettings').sqlLBFEName]"
-					},
-					"sqlLBIPAddress": {
-						"value": "[parameters('sqlLBIPAddress')]"
-					},
-					"sqlSubnetRef": {
-						"value": "[variables('derivedIds').sqlSubnet]"
-					},
-					"sqlLBBEName": {
-						"value": "[variables('lbSettings').sqlLBBEName]"
-					},
-					"sqlLBBEID": {
-						"value": "[variables('derivedIds').sqlBEAddressPoolID]"
-					},
-					"sqllbFEConfigID": {
-						"value": "[variables('derivedIds').sqllbFEConfigID]"
-					},
-					"sqllbProbeID": {
-						"value": "[variables('derivedIds').sqllbProbeID]"
-					},
-					"SQLAOProbe": {
-						"value": "[variables('SQLAOProbe')]"
-					}
-				}
-			}
-		},
-		{
-		  "name": "ProvisioningApplicationGateway",
-		  "type": "Microsoft.Resources/deployments",
-		  "apiVersion": "2015-01-01",
-		  "dependsOn": [
-		    "Microsoft.Resources/deployments/VirtualNetworkNSG"
-		  ],
-		  "properties": {
-		    "mode": "Incremental",
-		    "templateLink": {
-		      "uri": "[variables('artifacts').applicationGatewayURL]",
-		      "contentVersion": "1.0.0.0"
-		    },
-		    "parameters": {
-		      "addressPrefix": {
-		        "value": "[parameters('virtualNetworkAddressRange')]"
-		      },
-		      "virtualNetworkName": {
-		        "value": "[variables('resourceNames').virtualNetworkNameWithSuffix]"
-		      },
-		      "subnetPrefix": {
-		        "value": "[parameters('appGatewaySubnet').properties.addressPrefix]"
-		      },
-		      "skuName": {
-		        "value": "[parameters('gatewaySkuName')]"
-		      },
-		      "capacity": {
-		        "value": 2
-		      },
-		      "backendIpsForPathRuleWEB": {
-		        "value": "[parameters('webIPAddresses')]"
-		      },
-		      "pathMatch1": {
-		        "value": "/WEB"
-		      },
-		      "subnetName": {
-		        "value": "[parameters('appGatewaySubnet').name]"
-		      }
-		    }
-		  }
-		},
-		{
-			"name": "ProvisioningNICsSQLADMGT",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/SQLLoadBalancer"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('artifacts').provisioningNICsSQLADURL]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[resourceGroup().location]"
-					},
-					"adPDCNicName": {
-						"value": "[variables('resourceNames').nics.adpdc]"
-					},
-					"adPDCNICIPAddress": {
-						"value": "[parameters('adPDCNICIPAddress')]"
-					},
-					"sqlSubnetRef": {
-						"value": "[variables('derivedIds').sqlSubnet]"
-					},
-					"dcSubnetRef": {
-						"value": "[variables('derivedIds').dcSubnet]"
-					},
+    {
+      "name": "VirtualNetworkNSG",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "comments": "This resource will create storage accounts for Active Directory, SQL Server, File Share Witness and Diagnostics. It will also create the Virtual Network and public IP addresses",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').virtualNetworkNSGURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[resourceGroup().location]"
+          },
+          "virtualNetworkName": {
+            "value": "[variables('virtualNetworkNameWithSuffix')]"
+          },
+          "virtualNetworkAddressRange": {
+            "value": "[parameters('virtualNetworkAddressRange')]"
+          },
+          "subnets": {
+            "value": "[variables('subnets')]"
+          },
+          "dcNSGName": {
+            "value": "[variables('resourceNames').nsgs.dc]"
+          },
+          "sqlNSGName": {
+            "value": "[variables('resourceNames').nsgs.sql]"
+          },
+          "webNSGName": {
+            "value": "[variables('resourceNames').nsgs.web]"
+          },
+          "mgtNSGName": {
+            "value": "[variables('resourceNames').nsgs.mgt]"
+          },
+          "lbNSGName": {
+            "value": "[variables('resourceNames').nsgs.lb]"
+          }
+        }
+      }
+    },
+    {
+      "name": "SQLLoadBalancer",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "comments": "Create Load Balancers for SQL and DC",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/VirtualNetworkNSG"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').sqlLoadBalancerURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[resourceGroup().location]"
+          },
+          "sqlLBName": {
+            "value": "[variables('lbSettings').sqlLBName]"
+          },
+          "sqlLBFEName": {
+            "value": "[variables('lbSettings').sqlLBFEName]"
+          },
+          "sqlLBIPAddress": {
+            "value": "[parameters('sqlLBIPAddress')]"
+          },
+          "sqlSubnetRef": {
+            "value": "[variables('derivedIds').sqlSubnet]"
+          },
+          "sqlLBBEName": {
+            "value": "[variables('lbSettings').sqlLBBEName]"
+          },
+          "sqlLBBEID": {
+            "value": "[variables('derivedIds').sqlBEAddressPoolID]"
+          },
+          "sqllbFEConfigID": {
+            "value": "[variables('derivedIds').sqllbFEConfigID]"
+          },
+          "sqllbProbeID": {
+            "value": "[variables('derivedIds').sqllbProbeID]"
+          },
+          "SQLAOProbe": {
+            "value": "[variables('SQLAOProbe')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "ProvisioningApplicationGateway",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "dependsOn": [
+        "Microsoft.Resources/deployments/VirtualNetworkNSG"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').applicationGatewayURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "addressPrefix": {
+            "value": "[parameters('virtualNetworkAddressRange')]"
+          },
+          "virtualNetworkName": {
+            "value": "[variables('resourceNames').virtualNetworkNameWithSuffix]"
+          },
+          "subnetPrefix": {
+            "value": "[parameters('appGatewaySubnet').properties.addressPrefix]"
+          },
+          "skuName": {
+            "value": "[parameters('gatewaySkuName')]"
+          },
+          "capacity": {
+            "value": 2
+          },
+          "backendIpsForPathRuleWEB": {
+            "value": "[parameters('webIPAddresses')]"
+          },
+          "pathMatch1": {
+            "value": "/WEB"
+          },
+          "subnetName": {
+            "value": "[parameters('appGatewaySubnet').name]"
+          }
+        }
+      }
+    },
+    {
+      "name": "ProvisioningNICsSQLADMGT",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "dependsOn": [
+        "Microsoft.Resources/deployments/SQLLoadBalancer"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').provisioningNICsSQLADURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[resourceGroup().location]"
+          },
+          "adPDCNicName": {
+            "value": "[variables('resourceNames').nics.adpdc]"
+          },
+          "adPDCNICIPAddress": {
+            "value": "[parameters('adPDCNICIPAddress')]"
+          },
+          "sqlSubnetRef": {
+            "value": "[variables('derivedIds').sqlSubnet]"
+          },
+          "dcSubnetRef": {
+            "value": "[variables('derivedIds').dcSubnet]"
+          },
           "mgtSubnetRef": {
-						"value": "[variables('derivedIds').mgtSubnet]"
-					},
-					"adBEAddressPoolID": {
-						"value": "[variables('derivedIds').adBEAddressPoolID]"
-					},
-					"adRDPNATRuleID": {
-						"value": "[variables('derivedIds').adRDPNATRuleID]"
-					},
-					"adBDCNicName": {
-						"value": "[variables('resourceNames').nics.adbdc]"
-					},
-					"adBDCNICIPAddress": {
-						"value": "[parameters('adBDCNICIPAddress')]"
-					},
-					"sqlBEAddressPoolID": {
-						"value": "[variables('derivedIds').sqlBEAddressPoolID]"
-					},
-					"sqlwNicName": {
-						"value": "[variables('resourceNames').nics.sqlw]"
-					},
-					"sql0NicName": {
-						"value": "[variables('resourceNames').nics.sql0]"
-					},
+            "value": "[variables('derivedIds').mgtSubnet]"
+          },
+          "adBEAddressPoolID": {
+            "value": "[variables('derivedIds').adBEAddressPoolID]"
+          },
+          "adRDPNATRuleID": {
+            "value": "[variables('derivedIds').adRDPNATRuleID]"
+          },
+          "adBDCNicName": {
+            "value": "[variables('resourceNames').nics.adbdc]"
+          },
+          "adBDCNICIPAddress": {
+            "value": "[parameters('adBDCNICIPAddress')]"
+          },
+          "sqlBEAddressPoolID": {
+            "value": "[variables('derivedIds').sqlBEAddressPoolID]"
+          },
+          "sqlwNicName": {
+            "value": "[variables('resourceNames').nics.sqlw]"
+          },
+          "sql0NicName": {
+            "value": "[variables('resourceNames').nics.sql0]"
+          },
           "sql1NicName": {
-						"value": "[variables('resourceNames').nics.sql1]"
-					},
-					"sql0IPAddress": {
-						"value": "[parameters('sql0IPAddress')]"
-					},
-					"sql1IPAddress": {
-						"value": "[parameters('sql1IPAddress')]"
-					},
-					"sqlwIPAddress": {
-						"value": "[parameters('sqlwIPAddress')]"
-					},
-					"sqlNSGid": {
-						"value": "[variables('derivedIds').sqlNSG]"
-					},
-					"dcNSGid": {
-						"value": "[variables('derivedIds').dcNSG]"
-					},
+            "value": "[variables('resourceNames').nics.sql1]"
+          },
+          "sql0IPAddress": {
+            "value": "[parameters('sql0IPAddress')]"
+          },
+          "sql1IPAddress": {
+            "value": "[parameters('sql1IPAddress')]"
+          },
+          "sqlwIPAddress": {
+            "value": "[parameters('sqlwIPAddress')]"
+          },
+          "sqlNSGid": {
+            "value": "[variables('derivedIds').sqlNSG]"
+          },
+          "dcNSGid": {
+            "value": "[variables('derivedIds').dcNSG]"
+          },
           "mgtNICName": {
-						"value": "[variables('resourceNames').nics.mgt]"
-					},
+            "value": "[variables('resourceNames').nics.mgt]"
+          },
           "mgtIPAddress": {
-						"value": "[parameters('mgtIPAddress')]"
-					},
+            "value": "[parameters('mgtIPAddress')]"
+          },
           "mgtNSGid": {
-						"value": "[variables('derivedIds').mgtNSG]"
-					},
-					"mgtPublicIPName": {
-						"value": "[variables('resourceNames').publicIPs.mgt]"
-					}
-				}
-			}
-		},
+            "value": "[variables('derivedIds').mgtNSG]"
+          },
+          "mgtPublicIPName": {
+            "value": "[variables('resourceNames').publicIPs.mgt]"
+          }
+        }
+      }
+    },
     {
       "name": "ProvisioningVMsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "Microsoft.Resources/deployments/BackupPolicyCustom"
       ],
@@ -1179,19 +1194,22 @@
         }
       }
     },
-		{
-			"name": "WebTier",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
+    {
+      "name": "WebTier",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT"
       ],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('artifacts').provisioningAppVMsURL]",
-					"contentVersion": "1.0.0.0"
-				},
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').provisioningAppVMsURL]",
+          "contentVersion": "1.0.0.0"
+        },
         "parameters": {
           "numberOfWebInstances": {
             "value": "[variables('numberOfWebInstances')]"
@@ -1307,6 +1325,9 @@
       "name": "RecoverServicesVault",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [],
       "properties": {
         "mode": "Incremental",
@@ -1325,6 +1346,9 @@
       "name": "BackupPolicyCustom",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "Microsoft.Resources/deployments/RecoverServicesVault"
       ],
@@ -1338,8 +1362,8 @@
           "backupInfo": {
             "value": "[variables('backupInfo')]"
           }
-				}
-			}
-		}
+        }
+      }
+    }
 	]
 }
