@@ -1311,7 +1311,7 @@
         }
       }
     },
-    {
+    /*{
       "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1401,7 +1401,7 @@
           }
         }
       }
-    },
+    },*/
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('mgtVMName'),'/ConfigureAntimalware')]",

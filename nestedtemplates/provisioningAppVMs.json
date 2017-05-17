@@ -297,8 +297,8 @@
         },
         "protectedSettings": null
       }
-    },
-    {
+    }//,
+    /*{
       "name": "[concat('ConfigurationVMEncryption-WEB-',copyIndex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -378,7 +378,7 @@
           }
         }
       }
-    }
+    }*/
   ],
   "outputs": {
 
