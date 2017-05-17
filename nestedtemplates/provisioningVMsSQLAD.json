@@ -1425,7 +1425,9 @@
             "ExclusionPath": "c:\\Users",
             "ExclusionExtension": ".txt",
             "ExclusionProcess": "w3wp.exe",
+            "RealTimeScanDirection": "Both",
             "RemediationScheduleDay": "Everyday",
+            "ScanScheduleDay": "Everyday",
             "DisableRealtimeMonitoring": false
           }
         },
