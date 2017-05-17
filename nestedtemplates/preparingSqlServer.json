@@ -63,7 +63,8 @@
          "type":"string"
       },
       "sqlAutobackupRetentionPeriod": {
-        "type": "string"
+        "type": "string",
+        "defaultValue": "2"
       },
       "sqlAutobackupEncryptionPassword": {
         "type": "securestring"
