@@ -545,8 +545,8 @@
   },
 	"variables": {
 		"applicationDisplayName": "[parameters('appName')]",
-		"appID": "[concat(parameters('appName'), 'AppId')]",
-		"appSecret": "[concat(parameters('appName'), 'Key')]",
+		"appID": "aadClientID",
+		"appSecret": "aadClientSecret",
 		"lbSettings": {
 			"rdpLBFEName": "rdpLBFE",
 			"sqlLBFEName": "sqlLBFE",
