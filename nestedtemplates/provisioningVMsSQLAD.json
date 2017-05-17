@@ -1419,14 +1419,14 @@
         "typeHandlerVersion": "2.19",
         "autoUpgradeMinorVersion": false,
         "settings": {
-          "modulesURL": "[parameters('configAntimalwareDSCUrl')]",
+          "modulesUrl": "[parameters('configAntimalwareDSCUrl')]",
           "configurationFunction": "[parameters('configAntimalwareDSCFunction')]",
           "properties": {
-            /*"domainName": "[parameters('domainName')]",
-            "adminCreds": {
-              "userName": "[parameters('adminUserName')]",
-              "password": "PrivateSettingsRef:adminPassword"            
-            }*/
+            "ExclusionPath": "c:\\Users",
+            "ExclusionExtension": ".txt",
+            "ExclusionProcess": "w3wp.exe",
+            "RemediationScheduleDay": "Everyday",
+            "DisableRealtimeMonitoring": false
           }
         },
         "protectedSettings": {
