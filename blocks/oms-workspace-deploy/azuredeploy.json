@@ -9,6 +9,14 @@
         "description": "workspaceName"
       }
     },
+      "recipients": {
+        "type": "string",
+        "defaultValue": "",
+        "metadata": {
+          "description": "email id for recipient of alert email"
+        }
+      
+    },
     "serviceTier": {
       "type": "string",
       "allowedValues": [
@@ -59,7 +67,7 @@
         }
       ]
     },
-    
+
     "Updates": {
       "Name": "[Concat('Updates', '(', parameters('workspaceName'), ')')]",
       "GalleryName": "Updates"
@@ -86,8 +94,48 @@
       "Name": "[Concat('SQLAssessment', '(', parameters('workspaceName'), ')')]",
       "GalleryName": "SQLAssessment"
     },
-    "diagnosticsStorageAccount": "[resourceId(resourceGroup().Name, 'Microsoft.Storage/storageAccounts', parameters('applicationDiagnosticsStorageAccountName'))]"
-  },
+
+    "MySearch": {
+      "displayName": "free disk space",
+      "query": "Type= Perf CounterName=% Free Space ObjectName =LogicalDisk InstanceName=C: | measure Max(CounterValue) by Computer interval 60MINUTE",
+      "category": "logical disk",
+      "Name": "logical disk space search"
+    },
+
+    "MyAlert": {
+      "Name": "Logical Disk quota critical",
+      "Description": "Logical C drive limit in each VM less than 15%",
+      "Severity": "Critical",
+      "query": "Type= Perf CounterName=% Free Space ObjectName =LogicalDisk InstanceName=C: | measure Max(CounterValue) by Computer interval 60MINUTE ",
+      "ThresholdOperator": "lt",
+      "ThresholdValue": 15,
+      "ThrottleInMinutes": 60,
+      "alertBreach": 1,
+      "scheduleIntervalInMinutes": 60,
+      "scheduleQueryTimeSpan": 60,
+      "DisplayName": "Logical Disk space quota critical",
+      "Schedule": {
+        "Name": "[toLower(concat('myschedule-',uniqueString(resourceGroup().id, deployment().name)))]",
+        "Interval": 15,
+        "TimeSpan": 60
+      },
+      "MetricsTrigger": {
+        "TriggerCondition": "Consecutive",
+        "Operator": "lt",
+        "Value": 15
+      },
+      "ThrottleMinutes": 60,
+      "Notification": {
+        "Recipients": [
+          "[parameters('recipients')]"
+        ],
+        "Subject": "logical disk alert"
+      }
+    },
+
+
+      "diagnosticsStorageAccount": "[resourceId(resourceGroup().Name, 'Microsoft.Storage/storageAccounts', parameters('applicationDiagnosticsStorageAccountName'))]"
+    },
   "resources": [
     {
 
@@ -159,6 +207,22 @@
             "instanceName": "*",
             "intervalSeconds": 10,
             "counterName": "Available MBytes"
+          }
+        },
+
+        {
+          "apiVersion": "2015-11-01-preview",
+          "type": "datasources",
+          "name": "sampleWindowsPerfCounter2",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+          ],
+          "kind": "WindowsPerformanceCounter",
+          "properties": {
+            "objectName": "LogicalDisk",
+            "instanceName": "*",
+            "intervalSeconds": 10,
+            "counterName": "% Free Space"
           }
         },
         {
@@ -275,34 +339,95 @@
             "promotionCode": ""
           }
         },
-
         {
-          "apiVersion": "2015-11-01-preview",
-          "location": "[resourceGroup().location]",
-          "name": "[variables('SQLAssessment').Name]",
-          "type": "Microsoft.OperationsManagement/solutions",
-          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationsManagement/solutions/', variables('SQLAssessment').Name)]",
+          "name": "[concat(parameters('workspaceName'), '/', variables('MySearch').Name)]",
+          "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+          "apiVersion": "2015-03-20",
+          "dependsOn": [ "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]" ],
+          "tags": {},
+          "properties": {
+            "etag": "*",
+            "query": "[variables('MySearch').query]",
+            "displayName": "[variables('MySearch').displayName]",
+            "category": "[variables('MySearch').category]"
+          }
+        },
+        {
+          "name": "[concat(parameters('workspaceName'), '/', variables('MySearch').Name, '/', variables('MyAlert').Schedule.Name)]",
+          "type": "Microsoft.OperationalInsights/workspaces/savedSearches/schedules/",
+          "apiVersion": "2015-03-20",
           "dependsOn": [
-            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]",
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'), '/savedSearches/', variables('MySearch').Name)]"
           ],
           "properties": {
-            "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
-          },
-          "plan": {
-            "name": "[variables('SQLAssessment').Name]",
-            "publisher": "Microsoft",
-            "product": "[Concat('OMSGallery/', variables('SQLAssessment').GalleryName)]",
-            "promotionCode": ""
+            "etag": "*",
+            "interval": "[variables('MyAlert').Schedule.Interval]",
+            "queryTimeSpan": "[variables('MyAlert').Schedule.TimeSpan]",
+            "enabled": true
           }
-        }
-      ]
+        },
+        {
+          "name": "[concat(parameters('workspaceName'), '/', variables('MySearch').Name, '/',  variables('MyAlert').Schedule.Name, '/',  variables('MyAlert').Name)]",
+          "type": "Microsoft.OperationalInsights/workspaces/savedSearches/schedules/actions",
+          "apiVersion": "2015-03-20",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]",
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'), '/savedSearches/',  variables('MySearch').Name, '/schedules/', variables('MyAlert').Schedule.Name)]"
+          ],
+          "properties": {
+            "etag": "*",
+            "Type": "Alert",
+            "Name": "[variables('MyAlert').DisplayName]",
+            "Description": "[variables('MyAlert').Description]",
+            "Severity": "[variables('MyAlert').Severity]",
+            "Threshold": {
+              "Operator": "[variables('MyAlert').ThresholdOperator]",
+              "Value": "[variables('MyAlert').ThresholdValue]",
+              "MetricsTrigger": {
+                "TriggerCondition": "[variables('MyAlert').MetricsTrigger.TriggerCondition]",
+                "Operator": "[variables('MyAlert').MetricsTrigger.Operator]",
+                "Value": "[variables('MyAlert').MetricsTrigger.Value]"
+              }
+            },
+            "Throttling": {
+              "DurationInMinutes": "[variables('MyAlert').ThrottleMinutes]"
+            },
+            "EmailNotification": {
+              "Recipients": "[variables('MyAlert').Notification.Recipients]",
+              "Subject": "[variables('MyAlert').Notification.Subject]",
+              "Attachment": "None"
+            }
+          }
+        },
+            {
+              "apiVersion": "2015-11-01-preview",
+              "location": "[resourceGroup().location]",
+              "name": "[variables('SQLAssessment').Name]",
+              "type": "Microsoft.OperationsManagement/solutions",
+              "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationsManagement/solutions/', variables('SQLAssessment').Name)]",
+              "dependsOn": [
+                "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+              ],
+              "properties": {
+                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+              },
+              "plan": {
+                "name": "[variables('SQLAssessment').Name]",
+                "publisher": "Microsoft",
+                "product": "[Concat('OMSGallery/', variables('SQLAssessment').GalleryName)]",
+                "promotionCode": ""
+              }
+            }
+          
+            ]
 
-    }
-  ],
-  "outputs": {
-    "workspaceOutput": {
-      "value": "[reference(concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-11-01-preview')]",
-      "type": "object"
-    }
-  }
+          }],
+
+          "outputs": {
+            "workspaceOutput": {
+              "value": "[reference(concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-11-01-preview')]",
+              "type": "object"
+            }
+          }
 }
