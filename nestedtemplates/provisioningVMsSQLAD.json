@@ -1408,7 +1408,7 @@
         "Project": "BluePrint"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]"
+        //"[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]"
       ],
       "properties": {
         "publisher": "Microsoft.Powershell",
