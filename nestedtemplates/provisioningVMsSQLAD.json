@@ -349,7 +349,7 @@
           "keySource": "Microsoft.Storage"
         }
       }
-    },
+    },*/
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[parameters('mgtStorageAccountName')]",
@@ -373,7 +373,7 @@
         }
       }
     },
-    {
+    /*{
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('diagstorageNameSQL')]",
       "apiVersion": "2016-01-01",
@@ -1054,7 +1054,7 @@
           }
         }
       }
-    },
+    },*/
     {
       "apiVersion": "2016-03-30",
       "type": "Microsoft.Compute/virtualMachines",
@@ -1065,7 +1065,7 @@
       },
       "dependsOn": [
         "[concat('Microsoft.Storage/storageAccounts/', parameters('mgtStorageAccountName'))]",
-        "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
+        //"Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
       ],
       "properties": {
         "hardwareProfile": {
@@ -1101,7 +1101,7 @@
         }
       }
     },
-    {
+    /*{
       "comments": "Join domain - JsonADDomainExtension",
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -1408,7 +1408,7 @@
         "Project": "BluePrint"
       },
       "dependsOn": [
-        //"[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]"
+        "[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]"
       ],
       "properties": {
         "publisher": "Microsoft.Powershell",

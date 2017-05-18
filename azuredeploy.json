@@ -73,23 +73,15 @@
     },
     "exclusionPath": {
       "type": "array",
-      "defaultValue": [
-        "c:\\Users" 
-      ]
+      "defaultValue": ["c:\\Users"]
     },
     "exclusionExtension": {
       "type": "array",
-      "defaultValue": [
-        ".txt",
-        ".ps1"
-      ]
+      "defaultValue": [".txt",".ps1"]
     },
     "exclusionProcess": {
       "type": "array",
-      "defaultValue": [
-        "w3wp.exe",
-        "explorer.exe"
-      ]
+      "defaultValue": ["w3wp.exe","explorer.exe"]
     },
     "realTimeScanDirection": {
       "type": "string",
