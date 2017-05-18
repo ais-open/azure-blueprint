@@ -259,7 +259,7 @@
     }
   },
   "resources": [
-    {
+    /*{
       "type": "Microsoft.Compute/availabilitySets",
       "name": "[parameters('adAvailabilitySetName')]",
       "apiVersion": "2015-06-15",
@@ -1307,7 +1307,7 @@
           }
         }
       }
-    },
+    },*/
     /*{
       "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
       "type": "Microsoft.Resources/deployments",

@@ -789,7 +789,7 @@
     }
 	},
 	"resources": [
-    {
+    /*{
       "name": "VirtualNetworkNSG",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1005,13 +1005,13 @@
           }
         }
       }
-    },
+    },*/
     {
       "name": "ProvisioningVMsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/BackupPolicyCustom"
+        //"Microsoft.Resources/deployments/BackupPolicyCustom"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1222,8 +1222,8 @@
           }
         }
       }
-    },
-    {
+    }//,
+    /*{
       "name": "WebTier",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1382,5 +1382,6 @@
         }
       }
     }
+    */
 	]
 }
