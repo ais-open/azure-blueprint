@@ -593,7 +593,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('adBDCNicName'))]"
+              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces', parameters('adBDCNicName'))]"
             }
           ]
         },

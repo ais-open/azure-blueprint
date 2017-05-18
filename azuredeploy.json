@@ -990,7 +990,8 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/BackupPolicyCustom"
+        "Microsoft.Resources/deployments/BackupPolicyCustom",
+				"Microsoft.Resources/deployments/ProvisioningNICsSQLADMGT"
       ],
       "properties": {
         "mode": "Incremental",
