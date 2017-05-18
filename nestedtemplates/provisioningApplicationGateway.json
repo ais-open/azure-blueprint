@@ -21,16 +21,7 @@
       }
     },
     "skuName": {
-      "type": "string",
-      "allowedValues": [
-        "Standard_Small",
-        "Standard_Medium",
-        "Standard_Large"
-      ],
-      "defaultValue": "Standard_Medium",
-      "metadata": {
-        "description": "Sku Name"
-      }
+      "type": "string"
     },
     "capacity": {
       "type": "int",
@@ -55,6 +46,30 @@
     },
     "subnetName": {
       "type": "string"
+    },
+    "wafEnabled": {
+      "type": "bool",
+      "metadata": {
+        "description": "WAF Enabled"
+      }
+    },
+    "wafMode": {
+      "type": "string",
+      "metadata": {
+        "description": "WAF Mode"
+      }
+    },
+    "wafRuleSetType": {
+      "type": "string",
+      "metadata": {
+        "description": "WAF Rule Set Type"
+      }
+    },
+    "wafRuleSetVersion": {
+      "type": "string",
+      "metadata": {
+        "description": "WAF Rule Set Version"
+      }
     }
   },
   "variables": {
@@ -66,11 +81,11 @@
     "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]",
     "publicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]",
     "applicationGatewayID": "[resourceId('Microsoft.Network/applicationGateways',variables('applicationGatewayName'))]",
-    "apiVersion": "2015-06-15"
+    "apiVersion": "2017-03-01"
   },
   "resources": [
     {
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2016-03-30",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[variables('publicIPAddressName')]",
       "location": "[resourceGroup().location]",
@@ -89,7 +104,7 @@
       "properties": {
         "sku": {
           "name": "[parameters('skuName')]",
-          "tier": "Standard",
+          "tier": "WAF",
           "capacity": "[parameters('capacity')]"
         },
         "gatewayIPConfigurations": [
@@ -201,7 +216,14 @@
               }
             }
           }
-        ]
+        ],
+        "webApplicationFirewallConfiguration": {
+          "enabled": "[parameters('wafEnabled')]",
+          "firewallMode": "[parameters('wafMode')]",
+          "ruleSetType": "[parameters('wafRuleSetType')]",
+          "ruleSetVersion": "[parameters('wafRuleSetVersion')]",
+          "disabledRuleGroups": [ ]
+        }
       }
     }
   ]

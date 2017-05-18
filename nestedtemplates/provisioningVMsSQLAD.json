@@ -193,6 +193,25 @@
     },
     "vmEncryptionSettings": {
       "type": "object"
+    },
+    "sqlAutobackupRetentionPeriod": {
+      "type": "string",
+      "defaultValue": "2"
+    },
+    "sqlAutobackupEncryptionPassword": {
+      "type": "securestring"
+    },
+    "sqlCredentialName": {
+      "type": "string"
+    },
+    "sqlAkvUrl": {
+      "type": "string"
+    },
+    "servicePrincipalName": {
+      "type": "securestring"
+    },
+    "servicePrincipalSecret": {
+      "type": "securestring"
     }
   },
   "variables": {
@@ -574,7 +593,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('adBDCNicName'))]"
+              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces', parameters('adBDCNicName'))]"
             }
           ]
         },
@@ -879,7 +898,7 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
-        "sqlvirtualMachineLoop",        
+        "sqlvirtualMachineLoop",
         "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
       ],
       "properties": {
@@ -1164,7 +1183,31 @@
           },
           "workloadType": {
             "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.workloadType]"
-          }
+          },
+          "sqlAutobackupRetentionPeriod": {
+			      "value":"[parameters('sqlAutobackupRetentionPeriod')]"
+			    },
+			    "sqlAutobackupEncryptionPassword": {
+						"value": "[parameters('sqlAutobackupEncryptionPassword')]"
+			    },
+					"sqlCredentialName": {
+			      "value": "[parameters('sqlCredentialName')]"
+			    },
+			    "sqlAkvUrl": {
+			      "value": "[parameters('sqlAkvUrl')]"
+			    },
+			    "servicePrincipalName": {
+						"value": "[parameters('servicePrincipalName')]"
+			    },
+			    "servicePrincipalSecret": {
+						"value": "[parameters('servicePrincipalSecret')]"
+			    },
+					"sqlStorageAccountType": {
+						"value": "[parameters('SqlStorageAccountType')]"
+					},
+					"sqlStorageAccountName": {
+						"value": "[parameters('sqlStorageAccountName')]"
+					}
         }
       }
     },

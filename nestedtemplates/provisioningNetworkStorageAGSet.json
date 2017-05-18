@@ -1,90 +1,90 @@
-{  
+{
    "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
    "contentVersion":"1.0.0.0",
-   "parameters":{  
-      "sqlStorageAccountName":{  
+   "parameters":{
+      "sqlStorageAccountName":{
          "type":"string"
       },
-      "dcStorageAccountName":{  
+      "dcStorageAccountName":{
          "type":"string"
       },
-      "location":{  
+      "location":{
          "type":"string"
       },
-      "SqlStorageAccountType":{  
+      "SqlStorageAccountType":{
          "type":"string"
       },
-      "DcStorageAccountType":{  
+      "DcStorageAccountType":{
          "type":"string"
       },
-      "virtualNetworkName":{  
+      "virtualNetworkName":{
          "type":"string"
       },
-      "virtualNetworkAddressRange":{  
+      "virtualNetworkAddressRange":{
          "type":"string"
       },
-      "subnets":{  
+      "subnets":{
          "type":"array"
       },
-      "rdpIPAddressName":{  
+      "rdpIPAddressName":{
          "type":"string"
       },
-      "rdpLBName":{  
+      "rdpLBName":{
          "type":"string"
       },
-      "rdpLBFE":{  
+      "rdpLBFE":{
          "type":"string"
       },
-      "adLBBE":{  
+      "adLBBE":{
          "type":"string"
       },
-      "RDPNAT":{  
+      "RDPNAT":{
          "type":"string"
       },
-      "rdplbFEConfigID":{  
+      "rdplbFEConfigID":{
          "type":"string"
       }
    },
-   "resources":[  
-      {  
+   "resources":[
+      {
          "name":"[parameters('sqlStorageAccountName')]",
          "type":"Microsoft.Storage/storageAccounts",
          "apiVersion":"2015-05-01-preview",
          "location":"[parameters('location')]",
-         "properties":{  
+         "properties":{
             "accountType":"[parameters('SqlStorageAccountType')]"
          }
       },
-      {  
+      {
          "type":"Microsoft.Storage/storageAccounts",
          "name":"[parameters('dcStorageAccountName')]",
          "apiVersion":"2015-05-01-preview",
          "location":"[parameters('location')]",
-         "properties":{  
+         "properties":{
             "accountType":"[parameters('DcStorageAccountType')]"
          }
       },
-      {  
+      {
          "type":"Microsoft.Storage/storageAccounts",
          "name":"[concat(uniquestring(parameters('sqlStorageAccountName')), 'fsw')]",
          "apiVersion":"2015-05-01-preview",
          "location":"[parameters('location')]",
-         "properties":{  
+         "properties":{
             "accountType":"Standard_LRS"
          }
       },
-      {  
+      {
          "type":"Microsoft.Storage/storageAccounts",
          "name":"[concat(uniquestring(parameters('sqlStorageAccountName')), 'diag')]",
          "apiVersion":"2015-05-01-preview",
          "location":"[parameters('location')]",
-         "properties":{  
+         "properties":{
             "accountType":"Standard_LRS"
          }
       },
-      
-      
-      
+
+
+
 
     {
       "type": "microsoft.insights/alertrules",
@@ -212,45 +212,44 @@
         "[resourceId('Microsoft.Storage/storageAccounts',concat(uniquestring(parameters('sqlStorageAccountName')), 'diag'))]"
       ]
     },
-    
-      {  
+      {
          "apiVersion":"2015-06-15",
          "type":"Microsoft.Network/publicIPAddresses",
          "name":"[parameters('rdpIPAddressName')]",
          "location":"[parameters('location')]",
-         "properties":{  
+         "properties":{
             "publicIPAllocationMethod":"dynamic"
          }
       },
-      {  
+      {
          "apiVersion":"2015-06-15",
          "name":"[parameters('rdpLBName')]",
          "type":"Microsoft.Network/loadBalancers",
          "location":"[parameters('location')]",
-         "dependsOn":[  
+         "dependsOn":[
             "[resourceId('Microsoft.Network/publicIPAddresses',parameters('rdpIPAddressName'))]"
          ],
-         "properties":{  
-            "frontendIPConfigurations":[  
-               {  
+         "properties":{
+            "frontendIPConfigurations":[
+               {
                   "name":"[parameters('rdpLBFE')]",
-                  "properties":{  
-                     "publicIPAddress":{  
+                  "properties":{
+                     "publicIPAddress":{
                         "id":"[resourceId('Microsoft.Network/publicIPAddresses',parameters('rdpIPAddressName'))]"
                      }
                   }
                }
             ],
-            "backendAddressPools":[  
-               {  
+            "backendAddressPools":[
+               {
                   "name":"[parameters('adLBBE')]"
                }
             ],
-            "inboundNatRules":[  
-               {  
+            "inboundNatRules":[
+               {
                   "name":"[parameters('RDPNAT')]",
-                  "properties":{  
-                     "frontendIPConfiguration":{  
+                  "properties":{
+                     "frontendIPConfiguration":{
                         "id":"[parameters('rdplbFEConfigID')]"
                      },
                      "protocol":"tcp",
@@ -262,14 +261,14 @@
             ]
          }
       },
-      {  
+      {
          "name":"[parameters('virtualNetworkName')]",
          "type":"Microsoft.Network/virtualNetworks",
          "location":"[parameters('location')]",
          "apiVersion":"2015-06-15",
-         "properties":{  
-            "addressSpace":{  
-               "addressPrefixes":[  
+         "properties":{
+            "addressSpace":{
+               "addressPrefixes":[
                   "[parameters('virtualNetworkAddressRange')]"
                ]
             },
@@ -277,7 +276,7 @@
          }
       }
    ],
-   "outputs":{  
+   "outputs":{
 
    }
 }
