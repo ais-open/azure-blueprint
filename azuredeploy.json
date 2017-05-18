@@ -728,8 +728,8 @@
       "createClusterConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
       "iisModulesURL": "[concat(parameters('dscBaseUrl'),'/ContosoWebsite.ps1.zip')]",
       "iisConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite",
-      "configureAntimalwareDSCUrl": "[concat(parameters('dscBaseUrl'),'/ConfigureWindowsDefender.ps1.zip')]",
-      "configureAntimalwareDSCFunction": "ConfigureWindowsDefender.ps1\\ConfigureWindowsDefender"
+      "configureAntimalwareDSCUrl": "[concat(parameters('dscBaseUrl'),'/ConfigurexWindowsDefender.ps1.zip')]",
+      "configureAntimalwareDSCFunction": "ConfigurexWindowsDefender.ps1\\ConfigurexWindowsDefender"
     },
     "prepareAlwaysOnSQLInfo": {
       "artifacts": "[variables('artifacts')]",
