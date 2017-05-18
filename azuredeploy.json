@@ -73,15 +73,23 @@
     },
     "exclusionPath": {
       "type": "array",
-      "defaultValue": ["c:\Users"]
+      "defaultValue": [
+        "c:\\Users" 
+      ]
     },
     "exclusionExtension": {
       "type": "array",
-      "defaultValue": [".txt",".ps1"]
+      "defaultValue": [
+        ".txt",
+        ".ps1"
+      ]
     },
     "exclusionProcess": {
       "type": "array",
-      "defaultValue": ["w3wp.exe","explorer.exe"]
+      "defaultValue": [
+        "w3wp.exe",
+        "explorer.exe"
+      ]
     },
     "realTimeScanDirection": {
       "type": "string",
@@ -769,15 +777,15 @@
       "keyVaultResourceID": "[concat(subscription().id,'/resourceGroups/',parameters('keyVaultResourceGroupName'),'/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
     },
     "antimalwareInfo": {
-      "configAntimalwareDSCUrl": null,
-      "configAntimalwareDSCFunction": null,
-      "exclusionPath":,
-      "exclusionExtension":,
-      "exclusionProcess":,
-      "realTimeScanDirection":,
-      "remediationScheduleDay":,
-      "scanScheduleDay":,
-      "disableRealtimeMonitoring": "[]"
+      "configureAntimalwareDSCUrl": "[variables('artifacts').configureAntimalwareDSCUrl]",
+      "configureAntimalwareDSCFunction": "[variables('artifacts').configureAntimalwareDSCFunction]",
+      "exclusionPath": "[parameters('exclusionPath')]",
+      "exclusionExtension": "[parameters('exclusionExtension')]",
+      "exclusionProcess": "[parameters('exclusionProcess')]",
+      "realTimeScanDirection": "[parameters('realTimeScanDirection')]",
+      "remediationScheduleDay": "[parameters('remediationScheduleDay')]",
+      "scanScheduleDay": "[parameters('scanScheduleDay')]",
+      "disableRealtimeMonitoring": "[parameters('disableRealtimeMonitoring')]"
     }
 	},
 	"resources": [
