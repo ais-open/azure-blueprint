@@ -71,6 +71,34 @@
         "description": "Number of years you want to retain the backup"
       }
     },
+    "exclusionPath": {
+      "type": "array",
+      "defaultValue": ["c:\Users"]
+    },
+    "exclusionExtension": {
+      "type": "array",
+      "defaultValue": [".txt",".ps1"]
+    },
+    "exclusionProcess": {
+      "type": "array",
+      "defaultValue": ["w3wp.exe","explorer.exe"]
+    },
+    "realTimeScanDirection": {
+      "type": "string",
+      "defaultValue": "Both"
+    },
+    "remediationScheduleDay": {
+      "type": "string",
+      "defaultValue": "Everyday"
+    },
+    "scanScheduleDay": {
+      "type": "string",
+      "defaultValue": "Everyday"
+    },
+    "disableRealtimeMonitoring": {
+      "type": "bool",
+      "defaultValue": false
+    },
     "adminUsername": {
       "type": "string",
       "metadata": {
@@ -739,6 +767,17 @@
       "provisioningVMAzureDiskEncryptionUrl": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/BackupVault/nestedtemplates','/configuringVMAzureDiskEncryption-', parameters('useExistingKek'),'.json')]",
       "keyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]",
       "keyVaultResourceID": "[concat(subscription().id,'/resourceGroups/',parameters('keyVaultResourceGroupName'),'/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+    },
+    "antimalwareInfo": {
+      "configAntimalwareDSCUrl": null,
+      "configAntimalwareDSCFunction": null,
+      "exclusionPath":,
+      "exclusionExtension":,
+      "exclusionProcess":,
+      "realTimeScanDirection":,
+      "remediationScheduleDay":,
+      "scanScheduleDay":,
+      "disableRealtimeMonitoring": "[]"
     }
 	},
 	"resources": [
@@ -1170,11 +1209,8 @@
           "vmEncryptionSettings": {
             "value": "[variables('vmEncryptionSettings')]"
           },
-          "configAntimalwareDSCUrl": {
-            "value": "[variables('artifacts').configureAntimalwareDSCUrl]"
-          },
-          "configAntimalwareDSCFunction": {
-            "value": "[variables('artifacts').configureAntimalwareDSCFunction]"
+          "antimalwareInfo": {
+            "value": "[variables('antimalwareInfo')]"
           }
         }
       }
@@ -1294,11 +1330,8 @@
           "vmEncryptionSettings": {
             "value": "[variables('vmEncryptionSettings')]"
           },
-          "configAntimalwareDSCUrl": {
-            "value": "[variables('artifacts').configureAntimalwareDSCUrl]"
-          },
-          "configAntimalwareDSCFunction": {
-            "value": "[variables('artifacts').configureAntimalwareDSCFunction]"
+          "antimalwareInfo": {
+            "value": "[variables('antimalwareInfo')]"
           }
         }
       }

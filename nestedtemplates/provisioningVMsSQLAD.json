@@ -194,11 +194,8 @@
     "vmEncryptionSettings": {
       "type": "object"
     },
-    "configAntimalwareDSCUrl": {
-      "type": "string"
-    },
-    "configAntimalwareDSCFunction": {
-      "type": "string"
+    "antimalwareInfo": {
+      "type": "object"
     }
   },
   "variables": {
@@ -1419,16 +1416,16 @@
         "typeHandlerVersion": "2.19",
         "autoUpgradeMinorVersion": false,
         "settings": {
-          "modulesUrl": "[parameters('configAntimalwareDSCUrl')]",
-          "configurationFunction": "[parameters('configAntimalwareDSCFunction')]",
+          "modulesUrl": "[parameters('antimalwareInfo').configAntimalwareDSCUrl]",
+          "configurationFunction": "[parameters('antimalwareInfo').configAntimalwareDSCFunction]",
           "properties": {
-            "ExclusionPath": "c:\\Users",
-            "ExclusionExtension": ".txt",
-            "ExclusionProcess": "w3wp.exe",
-            "RealTimeScanDirection": "Both",
-            "RemediationScheduleDay": "Everyday",
-            "ScanScheduleDay": "Everyday",
-            "DisableRealtimeMonitoring": false
+            "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath]",
+            "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension]",
+            "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess]",
+            "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
+            "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
+            "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
+            "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
           }
         },
         "protectedSettings": {
