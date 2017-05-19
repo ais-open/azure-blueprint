@@ -101,6 +101,21 @@
       "minLength": 1,
       "defaultValue": [ "w3wp.exe", "explorer.exe" ]
     },
+    "exclusionPathAD": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "c:\\Users" ]
+    },
+    "exclusionExtensionAD": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ ".txt", ".ps1" ]
+    },
+    "exclusionProcessAD": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "w3wp.exe", "explorer.exe" ]
+    },
     "exclusionPathMgt": {
       "type": "array",
       "minLength": 1,
@@ -114,7 +129,7 @@
     "exclusionProcessMgt": {
       "type": "array",
       "minLength": 1,
-      "defaultValue": ["explorer.exe" ]
+      "defaultValue": [ "explorer.exe" ]
     },
     "exclusionPathGen": {
       "type": "array",
@@ -819,16 +834,19 @@
       "exclusionPath": {
         "web": "[concat(parameters('exclusionPathWeb'),parameters('exclusionPathGen'))]",
         "sql": "[concat(parameters('exclusionPathSQL'),parameters('exclusionPathGen'))]",
+        "ad": "[concat(parameters('exclusionPathAD'),parameters('exclusionPathGen'))]",
         "mgt": "[concat(parameters('exclusionPathMgt'),parameters('exclusionPathGen'))]"
       },
       "exclusionExtension": {
         "web": "[concat(parameters('exclusionExtensionWeb'),parameters('exclusionExtensionGen'))]",
         "sql": "[concat(parameters('exclusionExtensionSQL'),parameters('exclusionExtensionGen'))]",
+        "ad": "[concat(parameters('exclusionExtensionAD'),parameters('exclusionExtensionGen'))]",
         "mgt": "[concat(parameters('exclusionExtensionMgt'),parameters('exclusionExtensionGen'))]"
       },
       "exclusionProcess": {
         "web": "[concat(parameters('exclusionProcessWeb'),parameters('exclusionProcessGen'))]",
         "sql": "[concat(parameters('exclusionProcessSQL'),parameters('exclusionProcessGen'))]",
+        "ad": "[concat(parameters('exclusionProcessAD'),parameters('exclusionProcessGen'))]",
         "mgt": "[concat(parameters('exclusionProcessMgt'),parameters('exclusionProcessGen'))]"
       },
       "realTimeScanDirection": "[parameters('realTimeScanDirection')]",
@@ -838,7 +856,7 @@
     }
 	},
 	"resources": [
-    /*{
+    {
       "name": "VirtualNetworkNSG",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1054,13 +1072,13 @@
           }
         }
       }
-    },*/
+    },
     {
       "name": "ProvisioningVMsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        //"Microsoft.Resources/deployments/BackupPolicyCustom"
+        "Microsoft.Resources/deployments/BackupPolicyCustom"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1271,8 +1289,8 @@
           }
         }
       }
-    }//,
-    /*{
+    },
+    {
       "name": "WebTier",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1431,6 +1449,5 @@
         }
       }
     }
-    */
 	]
 }

@@ -259,7 +259,7 @@
     }
   },
   "resources": [
-    /*{
+    {
       "type": "Microsoft.Compute/availabilitySets",
       "name": "[parameters('adAvailabilitySetName')]",
       "apiVersion": "2015-06-15",
@@ -349,7 +349,7 @@
           "keySource": "Microsoft.Storage"
         }
       }
-    },*/
+    },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[parameters('mgtStorageAccountName')]",
@@ -373,7 +373,7 @@
         }
       }
     },
-    /*{
+    {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('diagstorageNameSQL')]",
       "apiVersion": "2016-01-01",
@@ -548,6 +548,40 @@
               "storageAccountKey": ""
             }
           }
+        },
+        {
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('adPDCVMName'),'/ConfigureAntimalware')]",
+          "apiVersion": "2015-06-15",
+          "location": "[parameters('location')]",
+          "tags": {
+            "Project": "BluePrint"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.19",
+            "autoUpgradeMinorVersion": false,
+            "settings": {
+              "modulesUrl": "[parameters('antimalwareInfo').configureAntimalwareDSCUrl]",
+              "configurationFunction": "[parameters('antimalwareInfo').configureAntimalwareDSCFunction]",
+              "properties": {
+                "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.ad]",
+                "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.ad]",
+                "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.ad]",
+                "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
+                "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
+                "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
+                "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+              }
+            },
+            "protectedSettings": {
+              "items": {}
+            }
+          }
         }
       ]
     },
@@ -649,6 +683,40 @@
               "storageAccountKey": ""
             }
           }
+        },
+        {
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('adBDCVMName'),'/ConfigureAntimalware')]",
+          "apiVersion": "2015-06-15",
+          "location": "[parameters('location')]",
+          "tags": {
+            "Project": "BluePrint"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.19",
+            "autoUpgradeMinorVersion": false,
+            "settings": {
+              "modulesUrl": "[parameters('antimalwareInfo').configureAntimalwareDSCUrl]",
+              "configurationFunction": "[parameters('antimalwareInfo').configureAntimalwareDSCFunction]",
+              "properties": {
+                "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.ad]",
+                "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.ad]",
+                "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.ad]",
+                "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
+                "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
+                "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
+                "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+              }
+            },
+            "protectedSettings": {
+              "items": {}
+            }
+          }
         }
       ]
     },
@@ -733,7 +801,43 @@
             "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
           }
         }
-      }
+      },
+      "resources": [
+        {
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('sqlVMName'),copyIndex(),'/ConfigureAntimalware')]",
+          "apiVersion": "2015-06-15",
+          "location": "[parameters('location')]",
+          "tags": {
+            "Project": "BluePrint"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', concat(parameters('sqlVMName'),copyIndex()))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.19",
+            "autoUpgradeMinorVersion": false,
+            "settings": {
+              "modulesUrl": "[parameters('antimalwareInfo').configureAntimalwareDSCUrl]",
+              "configurationFunction": "[parameters('antimalwareInfo').configureAntimalwareDSCFunction]",
+              "properties": {
+                "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.sql]",
+                "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.sql]",
+                "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.sql]",
+                "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
+                "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
+                "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
+                "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+              }
+            },
+            "protectedSettings": {
+              "items": {}
+            }
+          }
+        }
+      ]
     },
     {
       "apiVersion": "2016-03-30",
@@ -802,7 +906,43 @@
             "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
           }
         }
-      }
+      },
+      "resources": [
+        {
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('sqlwVMName'),'/ConfigureAntimalware')]",
+          "apiVersion": "2015-06-15",
+          "location": "[parameters('location')]",
+          "tags": {
+            "Project": "BluePrint"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('sqlwVMName'))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.19",
+            "autoUpgradeMinorVersion": false,
+            "settings": {
+              "modulesUrl": "[parameters('antimalwareInfo').configureAntimalwareDSCUrl]",
+              "configurationFunction": "[parameters('antimalwareInfo').configureAntimalwareDSCFunction]",
+              "properties": {
+                "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.sql]",
+                "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.sql]",
+                "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.sql]",
+                "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
+                "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
+                "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
+                "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+              }
+            },
+            "protectedSettings": {
+              "items": {}
+            }
+          }
+        }
+      ]
     },
     {
       "name": "UpdatingDNStoPrimaryADVM",
@@ -1054,7 +1194,7 @@
           }
         }
       }
-    },*/
+    },
     {
       "apiVersion": "2016-03-30",
       "type": "Microsoft.Compute/virtualMachines",
@@ -1065,7 +1205,7 @@
       },
       "dependsOn": [
         "[concat('Microsoft.Storage/storageAccounts/', parameters('mgtStorageAccountName'))]",
-        //"Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
+        "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
       ],
       "properties": {
         "hardwareProfile": {
@@ -1136,8 +1276,8 @@
           }
         }
       ]
-    }//,
-    /*{
+    },
+    {
       "comments": "Join domain - JsonADDomainExtension",
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -1343,8 +1483,8 @@
           }
         }
       }
-    },*/
-    /*{
+    },
+    {
       "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1434,7 +1574,7 @@
           }
         }
       }
-    },*/
+    }
   ],
   "outputs": {
 
