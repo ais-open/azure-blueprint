@@ -294,7 +294,7 @@
         },
         "protectedSettings": null
       }
-    }//,
+    }, //,
     /*{
       "name": "[concat('ConfigurationVMEncryption-WEB-',copyIndex())]",
       "type": "Microsoft.Resources/deployments",
@@ -376,6 +376,44 @@
         }
       }
     }*/
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('WebVMName'),copyIndex(),'/ConfigureAntimalware')]",
+      "apiVersion": "2015-06-15",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "copy": {
+        "name": "antimalwareLoop",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', concat(parameters('WebVMName'),copyIndex()))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.19",
+        "autoUpgradeMinorVersion": false,
+        "settings": {
+          "modulesUrl": "[parameters('antimalwareInfo').configureAntimalwareDSCUrl]",
+          "configurationFunction": "[parameters('antimalwareInfo').configureAntimalwareDSCFunction]",
+          "properties": {
+            "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.web]",
+            "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.web]",
+            "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.web]",
+            "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
+            "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
+            "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
+            "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+          }
+        },
+        "protectedSettings": {
+          "items": {}
+        }
+      }
+    }
   ],
   "outputs": {
 

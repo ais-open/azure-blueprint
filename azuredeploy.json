@@ -104,29 +104,29 @@
     "exclusionPathMgt": {
       "type": "array",
       "minLength": 1,
-      "defaultValue": [ "c:\\Users" ]
+      "defaultValue": [ "c:\\Users\\adminuser" ]
     },
     "exclusionExtensionMgt": {
       "type": "array",
       "minLength": 1,
-      "defaultValue": [ ".txt", ".ps1" ]
+      "defaultValue": [ ".txt" ]
     },
     "exclusionProcessMgt": {
       "type": "array",
       "minLength": 1,
-      "defaultValue": [ "w3wp.exe", "explorer.exe" ]
+      "defaultValue": ["explorer.exe" ]
     },
     "exclusionPathGen": {
       "type": "array",
-      "defaultValue": null
+      "defaultValue": []
     },
     "exclusionExtensionGen": {
       "type": "array",
-      "defaultValue": null
+      "defaultValue": []
     },
     "exclusionProcessGen": {
       "type": "array",
-      "defaultValue": null
+      "defaultValue": []
     },
     "realTimeScanDirection": {
       "type": "string",
