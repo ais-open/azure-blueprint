@@ -536,7 +536,7 @@
       "metadata": {
         "description": "DSC Scripts base url"
       },
-      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/postdeploy"
+      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/Malware/postdeploy"
     },
     "sqlServerVersion": {
       "type": "string",
@@ -728,8 +728,8 @@
       "createClusterConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
       "iisModulesURL": "[concat(parameters('dscBaseUrl'),'/ContosoWebsite.ps1.zip')]",
       "iisConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite",
-      "configureAntimalwareDSCUrl": "[concat(parameters('dscBaseUrl'),'/ConfigurexWindowsDefender.ps1.zip')]",
-      "configureAntimalwareDSCFunction": "ConfigurexWindowsDefender.ps1\\ConfigurexWindowsDefender"
+      "configureAntimalwareDSCUrl": "[concat(parameters('dscBaseUrl'),'/ConfigureWindowsDefender.ps1.zip')]",
+      "configureAntimalwareDSCFunction": "ConfigureWindowsDefender.ps1\\ConfigureWindowsDefender"
     },
     "prepareAlwaysOnSQLInfo": {
       "artifacts": "[variables('artifacts')]",
@@ -764,7 +764,7 @@
       "encryptionOperation": "EnableEncryption",
       "keyEncryptionAlgorithm": "RSA-OAEP",
       "keyVaultURL": "[concat('https://', parameters('keyVaultName'), '.vault.usgovcloudapi.net/')]",
-      "provisioningVMAzureDiskEncryptionUrl": "[concat('https://raw.githubusercontent.com/AppliedIS/azure-blueprint/BackupVault/nestedtemplates','/configuringVMAzureDiskEncryption-', parameters('useExistingKek'),'.json')]",
+      "provisioningVMAzureDiskEncryptionUrl": "[concat(parameters('templatesBaseUrl'),'/configuringVMAzureDiskEncryption-', parameters('useExistingKek'),'.json')]",
       "keyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]",
       "keyVaultResourceID": "[concat(subscription().id,'/resourceGroups/',parameters('keyVaultResourceGroupName'),'/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
     },
