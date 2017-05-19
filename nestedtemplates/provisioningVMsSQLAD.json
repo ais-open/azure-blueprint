@@ -1419,9 +1419,9 @@
           "modulesUrl": "[parameters('antimalwareInfo').configureAntimalwareDSCUrl]",
           "configurationFunction": "[parameters('antimalwareInfo').configureAntimalwareDSCFunction]",
           "properties": {
-            "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath]",
-            "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension]",
-            "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess]",
+            "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.mgt]",
+            "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.mgt]",
+            "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.mgt]",
             "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
             "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
             "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",

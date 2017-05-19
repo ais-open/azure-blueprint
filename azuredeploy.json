@@ -71,17 +71,62 @@
         "description": "Number of years you want to retain the backup"
       }
     },
-    "exclusionPath": {
+    "exclusionPathWeb": {
       "type": "array",
-      "defaultValue": ["c:\\Users"]
+      "minLength": 1,
+      "defaultValue": [ "c:\\Users" ]
     },
-    "exclusionExtension": {
+    "exclusionExtensionWeb": {
       "type": "array",
-      "defaultValue": [".txt",".ps1"]
+      "minLength": 1,
+      "defaultValue": [ ".txt", ".ps1" ]
     },
-    "exclusionProcess": {
+    "exclusionProcessWeb": {
       "type": "array",
-      "defaultValue": ["w3wp.exe","explorer.exe"]
+      "minLength": 1,
+      "defaultValue": [ "w3wp.exe", "explorer.exe" ]
+    },
+    "exclusionPathSQL": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "c:\\Users" ]
+    },
+    "exclusionExtensionSQL": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ ".txt", ".ps1" ]
+    },
+    "exclusionProcessSQL": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "w3wp.exe", "explorer.exe" ]
+    },
+    "exclusionPathMgt": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "c:\\Users" ]
+    },
+    "exclusionExtensionMgt": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ ".txt", ".ps1" ]
+    },
+    "exclusionProcessMgt": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "w3wp.exe", "explorer.exe" ]
+    },
+    "exclusionPathGen": {
+      "type": "array",
+      "defaultValue": null
+    },
+    "exclusionExtensionGen": {
+      "type": "array",
+      "defaultValue": null
+    },
+    "exclusionProcessGen": {
+      "type": "array",
+      "defaultValue": null
     },
     "realTimeScanDirection": {
       "type": "string",
@@ -771,9 +816,21 @@
     "antimalwareInfo": {
       "configureAntimalwareDSCUrl": "[variables('artifacts').configureAntimalwareDSCUrl]",
       "configureAntimalwareDSCFunction": "[variables('artifacts').configureAntimalwareDSCFunction]",
-      "exclusionPath": "[parameters('exclusionPath')]",
-      "exclusionExtension": "[parameters('exclusionExtension')]",
-      "exclusionProcess": "[parameters('exclusionProcess')]",
+      "exclusionPath": {
+        "web": "[concat(parameters('exclusionPathWeb'),parameters('exclusionPathGen'))]",
+        "sql": "[concat(parameters('exclusionPathSQL'),parameters('exclusionPathGen'))]",
+        "mgt": "[concat(parameters('exclusionPathMgt'),parameters('exclusionPathGen'))]"
+      },
+      "exclusionExtension": {
+        "web": "[concat(parameters('exclusionExtensionWeb'),parameters('exclusionExtensionGen'))]",
+        "sql": "[concat(parameters('exclusionExtensionSQL'),parameters('exclusionExtensionGen'))]",
+        "mgt": "[concat(parameters('exclusionExtensionMgt'),parameters('exclusionExtensionGen'))]"
+      },
+      "exclusionProcess": {
+        "web": "[concat(parameters('exclusionProcessWeb'),parameters('exclusionProcessGen'))]",
+        "sql": "[concat(parameters('exclusionProcessSQL'),parameters('exclusionProcessGen'))]",
+        "mgt": "[concat(parameters('exclusionProcessMgt'),parameters('exclusionProcessGen'))]"
+      },
       "realTimeScanDirection": "[parameters('realTimeScanDirection')]",
       "remediationScheduleDay": "[parameters('remediationScheduleDay')]",
       "scanScheduleDay": "[parameters('scanScheduleDay')]",
