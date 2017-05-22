@@ -1321,6 +1321,9 @@
                             },
                             "secretName": "[variables('appSecret')]"
                         }
+                    },
+                    "workspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
                     }
                 }
             }
@@ -1439,6 +1442,9 @@
                     },
                     "vmEncryptionSettings": {
                         "value": "[variables('vmEncryptionSettings')]"
+                    },
+                    "workspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
                     }
                 }
             }
@@ -1453,7 +1459,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('provisioningOMSAutomationScheduleUrl')]",
+                    "uri": "[variables('artifacts').provisioningOMSAutomationScheduleUrl]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {

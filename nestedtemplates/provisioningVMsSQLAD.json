@@ -212,6 +212,9 @@
         },
         "servicePrincipalSecret": {
             "type": "securestring"
+        },
+        "workspaceName": {
+            "type": "string"
         }
     },
     "variables": {
@@ -526,6 +529,27 @@
                             "storageAccountKey": ""
                         }
                     }
+                },
+                {
+                    "type": "extensions",
+                    "name": "EnterpriseCloudMonitoring",
+                    "apiVersion": "2016-03-30",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                        "type": "MicrosoftMonitoringAgent",
+                        "typeHandlerVersion": "1.0",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
+                        },
+                        "protectedSettings": {
+                            "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
+                        }
+                    }
                 }
             ]
         },
@@ -594,31 +618,53 @@
                 }
             },
             "resources": [{
-                "apiVersion": "2015-06-15",
-                "type": "Microsoft.Compute/virtualMachines/extensions",
-                "name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
-                "dependsOn": [
-                    "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]"
-                ],
-                "location": "[resourceGroup().location]",
-                "tags": {
-                    "displayName": "adcse-pwd"
-                },
-                "properties": {
-                    "publisher": "Microsoft.Compute",
-                    "type": "CustomScriptExtension",
-                    "typeHandlerVersion": "1.8",
-                    "autoUpgradeMinorVersion": true,
-                    "settings": {
-                        "fileUris": "[parameters('postDeployScriptUris')]",
-                        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1"
+                    "apiVersion": "2015-06-15",
+                    "type": "Microsoft.Compute/virtualMachines/extensions",
+                    "name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]"
+                    ],
+                    "location": "[resourceGroup().location]",
+                    "tags": {
+                        "displayName": "adcse-pwd"
                     },
-                    "protectedSettings": {
-                        "storageAccountName": "",
-                        "storageAccountKey": ""
+                    "properties": {
+                        "publisher": "Microsoft.Compute",
+                        "type": "CustomScriptExtension",
+                        "typeHandlerVersion": "1.8",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "fileUris": "[parameters('postDeployScriptUris')]",
+                            "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1"
+                        },
+                        "protectedSettings": {
+                            "storageAccountName": "",
+                            "storageAccountKey": ""
+                        }
+                    }
+                },
+                {
+                    "type": "extensions",
+                    "name": "EnterpriseCloudMonitoring",
+                    "apiVersion": "2016-03-30",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                        "type": "MicrosoftMonitoringAgent",
+                        "typeHandlerVersion": "1.0",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
+                        },
+                        "protectedSettings": {
+                            "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
+                        }
                     }
                 }
-            }]
+            ]
         },
         {
             "apiVersion": "2016-03-30",
@@ -695,7 +741,28 @@
                         "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
                     }
                 }
-            }
+            },
+            "resources": [{
+                "type": "extensions",
+                "name": "EnterpriseCloudMonitoring",
+                "apiVersion": "2016-03-30",
+                "location": "[resourceGroup().location]",
+                "dependsOn": [
+                    "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'))]"
+                ],
+                "properties": {
+                    "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                    "type": "MicrosoftMonitoringAgent",
+                    "typeHandlerVersion": "1.0",
+                    "autoUpgradeMinorVersion": true,
+                    "settings": {
+                        "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
+                    },
+                    "protectedSettings": {
+                        "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
+                    }
+                }
+            }]
         },
         {
             "apiVersion": "2016-03-30",
@@ -757,7 +824,28 @@
                         "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
                     }
                 }
-            }
+            },
+            "resources": [{
+                "type": "extensions",
+                "name": "EnterpriseCloudMonitoring",
+                "apiVersion": "2016-03-30",
+                "location": "[resourceGroup().location]",
+                "dependsOn": [
+                    "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]"
+                ],
+                "properties": {
+                    "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                    "type": "MicrosoftMonitoringAgent",
+                    "typeHandlerVersion": "1.0",
+                    "autoUpgradeMinorVersion": true,
+                    "settings": {
+                        "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
+                    },
+                    "protectedSettings": {
+                        "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
+                    }
+                }
+            }]
         },
         {
             "name": "UpdatingDNStoPrimaryADVM",
@@ -1039,7 +1127,28 @@
                         "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('mgtNICName'))]"
                     }]
                 }
-            }
+            },
+            "resources": [{
+                "type": "extensions",
+                "name": "EnterpriseCloudMonitoring",
+                "apiVersion": "2016-03-30",
+                "location": "[resourceGroup().location]",
+                "dependsOn": [
+                    "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]"
+                ],
+                "properties": {
+                    "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                    "type": "MicrosoftMonitoringAgent",
+                    "typeHandlerVersion": "1.0",
+                    "autoUpgradeMinorVersion": true,
+                    "settings": {
+                        "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
+                    },
+                    "protectedSettings": {
+                        "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
+                    }
+                }
+            }]
         },
         {
             "comments": "Join domain - JsonADDomainExtension",
