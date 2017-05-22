@@ -1437,7 +1437,7 @@
                     }
                 }
             }
-        },
+        }
         /*{
             "name": "[concat('BackupVM-',variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
