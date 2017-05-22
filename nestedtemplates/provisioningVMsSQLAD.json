@@ -214,52 +214,22 @@
     "vmNames": {
       "VMs": [
         {
-          "Name": "[parameters('adPDCVMName')]",
-          "Exclusions": {
-            "Paths": "",
-            "Extensions": "",
-            "Processes": ""
-          }
+          "Name": "[parameters('adPDCVMName')]"
         },
         {
-          "Name": "[parameters('adBDCVMName')]",
-          "Exclusions": {
-            "Paths": "",
-            "Extensions": "",
-            "Processes": ""
-          }
+          "Name": "[parameters('adBDCVMName')]"
         },
         {
-          "Name": "[parameters('sqlwVMName')]",
-          "Exclusions": {
-            "Paths": "",
-            "Extensions": "",
-            "Processes": ""
-          }
+          "Name": "[parameters('sqlwVMName')]"
         },
         {
-          "Name": "[parameters('mgtVMName')]",
-          "Exclusions": {
-            "Paths": "",
-            "Extensions": "",
-            "Processes": ""
-          }
+          "Name": "[parameters('mgtVMName')]"
         },
         {
-          "Name": "[concat(parameters('sqlVMName'),'0')]",
-          "Exclusions": {
-            "Paths": "",
-            "Extensions": "",
-            "Processes": ""
-          }
+          "Name": "[concat(parameters('sqlVMName'),'0')]"
         },
         {
-          "Name": "[concat(parameters('sqlVMName'),'1')]",
-          "Exclusions": {
-            "Paths": "",
-            "Extensions": "",
-            "Processes": ""
-          }
+          "Name": "[concat(parameters('sqlVMName'),'1')]"
         }
       ]
     }
