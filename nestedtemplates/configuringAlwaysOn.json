@@ -117,7 +117,8 @@
               "password": "privateSettingsRef:sqlAuthPassword"
             },
             "NumberOfDisks": "[parameters('numberOfDisks')]",
-            "WorkloadType": "[parameters('workloadType')]",
+            "WorkloadType": "[parameters('workloadType')]"
+            /*,
             "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.sql]",
             "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.sql]",
             "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.sql]",
@@ -125,6 +126,7 @@
             "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
             "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
             "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+            */
           }
         },
         "protectedSettings": {
