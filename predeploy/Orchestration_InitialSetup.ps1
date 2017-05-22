@@ -34,6 +34,10 @@ Param(
     [string]$BaseSourceControl,
 	[Parameter(Mandatory=$true)]
 	[string]$subscriptionId,
+    [Parameter(Mandatory=$true)]
+    [string]$azureUserName,
+    [Parameter(Mandatory=$true)]
+    [SecureString]$azurePassword,
 	[Parameter(Mandatory=$true)]
 	[string]$resourceGroupName,
 	[Parameter(Mandatory=$true)]
@@ -177,20 +181,34 @@ if (-not (Get-AzureRMKeyVault -VaultName $keyVaultName -ResourceGroupName $resou
         $keyEncryptionKeyUrl = $kek.Key.Kid;
     }
 
+    Write-Host "Set Azure Key Vault Access Policy. Set AzureUserName in Key Vault: $keyVaultName";
+    $key = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name 'azureUserName' -Destination 'Software'
+    $azureUserNameSecureString = ConvertTo-SecureString $azureUserName -AsPlainText -Force
+	$secret = Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'azureUserName' -SecretValue $azureUserNameSecureString
+
+    Write-Host "Set Azure Key Vault Access Policy. Set AzurePassword in Key Vault: $keyVaultName";
+    $key = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name 'azurePassword' -Destination 'Software'
+	$secret = Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'azurePassword' -SecretValue $azurePassword
+
+    Write-Host "Set Azure Key Vault Access Policy. Set AdminPassword in Key Vault: $keyVaultName";
 	$key = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name 'adminPassword' -Destination 'Software'
 	$secret = Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'adminPassword' -SecretValue $adminPassword
 
+    Write-Host "Set Azure Key Vault Access Policy. Set SqlServerServiceAccountPassword in Key Vault: $keyVaultName";
 	$key = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name 'sqlServerServiceAccountPassword' -Destination 'Software'
 	$secret = Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'sqlServerServiceAccountPassword' -SecretValue $sqlServerServiceAccountPassword
 
+    Write-Host "Set Azure Key Vault Access Policy. Set Application Client ID in Key Vault: $keyVaultName";
 	$key = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name 'aadClientID' -Destination 'Software'
     $aadClientIDSecureString = ConvertTo-SecureString $aadClientID -AsPlainText -Force
 	$secret = Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'aadClientID' -SecretValue $aadClientIDSecureString
 
+    Write-Host "Set Azure Key Vault Access Policy. Set Application Client Secret in Key Vault: $keyVaultName";
     $key = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name 'aadClientSecret' -Destination 'Software'
     $aadClientSecretSecureString = ConvertTo-SecureString $aadClientSecret -AsPlainText -Force
 	$secret = Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'aadClientSecret' -SecretValue $aadClientSecretSecureString
 
+    Write-Host "Set Azure Key Vault Access Policy. Set Key Encryption URL in Key Vault: $keyVaultName";
     $key = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name 'keyEncryptionKeyURL' -Destination 'Software'
     $keyEncryptionKeyUrlSecureString = ConvertTo-SecureString $keyEncryptionKeyUrl -AsPlainText -Force
 	$secret = Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'keyEncryptionKeyURL' -SecretValue $keyEncryptionKeyUrlSecureString
