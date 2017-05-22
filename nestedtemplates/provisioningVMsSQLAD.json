@@ -540,7 +540,7 @@
           "name": "[concat(parameters('adPDCVMName'), '/adcse-pwd')]",
           "dependsOn": [
             "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]",
-            "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]"
+            "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]"
           ],
           "location": "[resourceGroup().location]",
           "tags": {
@@ -577,8 +577,8 @@
         "[concat('Microsoft.Storage/storageAccounts/', parameters('dcStorageAccountName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameDC'))]",
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'), '/extensions/InstallDomainController')]",
+        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]",
+        //"[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'), '/extensions/PDCBaselineDSC')]",
         "UpdatingDNStoPrimaryADVM"
       ],
       "properties": {
@@ -825,8 +825,8 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'InstallDomainController')]",
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'), '/extensions/InstallDomainController')]"
+        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]"//,
+        //"[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'), '/extensions/PDCBaselineDSC')]"
       ],
       "properties": {
         "mode": "Incremental",
