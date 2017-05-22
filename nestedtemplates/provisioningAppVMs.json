@@ -246,7 +246,7 @@
           "location": "[parameters('location')]",
           "dependsOn": [
             "[concat(parameters('WebVMName'), copyindex())]",
-            "[concat(parameters('WebVMName'), copyindex(), '/joindomain')]"
+            "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat(parameters('WebVMName'),copyIndex()), 'joindomain')]"
           ],
           "properties": {
             "publisher": "Microsoft.Powershell",
