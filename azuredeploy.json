@@ -73,6 +73,7 @@
         },
         "omsWorkspaceName": {
             "type": "string",
+            "defaultValue": "dc-bp-omsworkspace",
             "metadata": {
                 "description": "Assign a name for the Log Analytic Workspace Name"
             }
@@ -108,6 +109,7 @@
         },
         "omsAutomationAccountName": {
             "type": "string",
+            "defaultValue": "dc-bp-autoacc",
             "metadata": {
                 "description": "Assign a name for the Log Analytic Workspace Name"
             }
@@ -742,7 +744,7 @@
                 "[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]"
             ],
             "provisioningOMSWorkspaceUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutoAccOMSWorkspace.json')]",
-            "provisioningOMSAutomationScheduleUrl": "[concat(parameters('templatesBaseUrl'),'/createAutomationSchedule.json')]",
+            "provisioningOMSAutomationScheduleUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutomationSchedule.json')]",
             "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
             "nicTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateNic.json')]",
             "sqlLoadBalancerURL": "[concat(parameters('templatesBaseUrl'),'/sqlLoadBalancer.json')]",
