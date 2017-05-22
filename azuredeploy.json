@@ -776,20 +776,20 @@
       "configuringBackupADVMURL": "[concat(parameters('templatesBaseUrl'),'/configuringBackupADVM.json')]",
       "preparingAlwaysOnSqlServerURL": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServer.json')]",
       "configuringAlwaysOnURL": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOn.json')]",
-      "adPDCModulesURL": "[concat(parameters('dscBaseUrl'),'/CreateADPDC.ps1.zip')]",
-      "adPDCConfigurationFunction": "CreateADPDC.ps1\\CreateADPDC",
-      "adBDCModulesURL": "[concat(parameters('dscBaseUrl'),'/PrepareADBDC.ps1.zip')]",
-      "adBDCConfigurationFunction": "PrepareADBDC.ps1\\PrepareADBDC",
-      "fswModulesURL": "[concat(parameters('dscBaseUrl'),'/CreateFileShareWitness.ps1.zip')]",
-      "fswConfigurationFunction": "CreateFileShareWitness.ps1\\CreateFileShareWitness",
-      "sqlAOPrepareModulesURL": "[concat(parameters('dscBaseUrl'),'/PrepareAlwaysOnSqlServer.ps1.zip')]",
-      "sqlAOPrepareConfigurationFunction": "PrepareAlwaysOnSqlServer.ps1\\PrepareAlwaysOnSqlServer",
-      "createClusterModulesURL": "[concat(parameters('dscBaseUrl'),'/CreateFailoverCluster.ps1.zip')]",
-      "createClusterConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
-      "iisModulesURL": "[concat(parameters('dscBaseUrl'),'/ContosoWebsite.ps1.zip')]",
-      "iisConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite",
-      "configureAntimalwareDSCUrl": "[concat(parameters('dscBaseUrl'),'/ConfigureWindowsDefender.ps1.zip')]",
-      "configureAntimalwareDSCFunction": "ConfigureWindowsDefender.ps1\\ConfigureWindowsDefender"
+      "pdcModulesURL": "[concat(parameters('dscBaseUrl'),'/PDCBaselineDSC.ps1.zip')]",
+      "pdcConfigurationFunction": "CreateADPDC.ps1\\PDCBaselineDSC",
+      "bdcModulesURL": "[concat(parameters('dscBaseUrl'),'/BDCBaselineDSC.ps1.zip')]",
+      "bdcConfigurationFunction": "BDCBaselineDSC.ps1\\BDCBaselineDSC",
+      "sqlwModulesURL": "[concat(parameters('dscBaseUrl'),'/SQLWBaselineDSC.ps1.zip')]",
+      "sqlwConfigurationFunction": "SQLWBaselineDSC.ps1\\SQLWBaselineDSC",
+      "sql0ModulesURL": "[concat(parameters('dscBaseUrl'),'/SQL0BaselineDSC.ps1.zip')]",
+      "sql0ConfigurationFunction": "SQL0BaselineDSC.ps1\\SQL0BaselineDSC",
+      "sql1ModulesURL": "[concat(parameters('dscBaseUrl'),'/SQL1BaselineDSC.ps1.zip')]",
+      "sql1ConfigurationFunction": "SQL1BaselineDSC.ps1\\SQL1BaselineDSC",
+      "webModulesURL": "[concat(parameters('dscBaseUrl'),'/WEBBaselineDSC.ps1.zip')]",
+      "webConfigurationFunction": "WEBBaselineDSC.ps1\\WEBBaselineDSC",
+      "mgtModulesURL": "[concat(parameters('dscBaseUrl'),'/MGTBaselineDSC.ps1.zip')]",
+      "mgtConfigurationFunction": "MGTBaselineDSC.ps1\\MGTBaselineDSC"
     },
     "prepareAlwaysOnSQLInfo": {
       "artifacts": "[variables('artifacts')]",
@@ -829,8 +829,6 @@
       "keyVaultResourceID": "[concat(subscription().id,'/resourceGroups/',parameters('keyVaultResourceGroupName'),'/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
     },
     "antimalwareInfo": {
-      "configureAntimalwareDSCUrl": "[variables('artifacts').configureAntimalwareDSCUrl]",
-      "configureAntimalwareDSCFunction": "[variables('artifacts').configureAntimalwareDSCFunction]",
       "exclusionPath": {
         "web": "[concat(parameters('exclusionPathWeb'),parameters('exclusionPathGen'))]",
         "sql": "[concat(parameters('exclusionPathSQL'),parameters('exclusionPathGen'))]",
@@ -1143,11 +1141,11 @@
           "domainName": {
             "value": "[parameters('domainName')]"
           },
-          "adPDCConfigurationFunction": {
-            "value": "[variables('artifacts').adPDCConfigurationFunction]"
+          "pdcConfigurationFunction": {
+            "value": "[variables('artifacts').pdcConfigurationFunction]"
           },
-          "adPDCModulesURL": {
-            "value": "[variables('artifacts').adPDCModulesURL]"
+          "pdcModulesURL": {
+            "value": "[variables('artifacts').pdcModulesURL]"
           },
           "adBDCVMName": {
             "value": "[variables('resourceNames').vms.adbdc]"
@@ -1230,6 +1228,12 @@
           "mgtNSGid": {
             "value": "[variables('derivedIds').mgtNSG]"
           },
+          "mgtModulesURL": {
+            "value": "[variables('artifacts').mgtModulesURL]"
+          },
+          "mgtConfigurationFunction": {
+            "value": "[variables('artifacts').mgtConfigurationFunction]"
+          },
           "updateVnetWithDNSTemplateURL": {
             "value": "[variables('artifacts').vnetwithDNSTemplateURL]"
           },
@@ -1248,11 +1252,11 @@
           "adBDCNICIPAddress": {
             "value": "[parameters('adBDCNICIPAddress')]"
           },
-          "adBDCConfigurationFunction": {
-            "value": "[variables('artifacts').adBDCConfigurationFunction]"
+          "bdcConfigurationFunction": {
+            "value": "[variables('artifacts').bdcConfigurationFunction]"
           },
-          "adBDCModulesURL": {
-            "value": "[variables('artifacts').adBDCModulesURL]"
+          "bdcModulesURL": {
+            "value": "[variables('artifacts').bdcModulesURL]"
           },
           "configuringBackupADVMURL": {
             "value": "[variables('artifacts').configuringBackupADVMURL]"
@@ -1287,7 +1291,7 @@
           "antimalwareInfo": {
             "value": "[variables('antimalwareInfo')]"
           }
-        }
+          }
       }
     },
     {
@@ -1310,32 +1314,20 @@
           "WebVMName": {
             "value": "[variables('resourceNames').vms.web]"
           },
-          "MGTVMName": {
-            "value": "[variables('resourceNames').vms.mgt]"
-          },
           "WebAvailabilitySetName": {
             "value": "[variables('resourceNames').availabilitySets.web]"
           },
           "WebStorageAccountName": {
             "value": "[variables('resourceNames').storageAccounts.web]"
           },
-          "MGTStorageAccountName": {
-            "value": "[variables('resourceNames').storageAccounts.mgt]"
-          },
           "webStorageAccountType": {
             "value": "[parameters('webStorageAccountType')]"
-          },
-          "mgtStorageAccountType": {
-            "value": "[parameters('mgtStorageAccountType')]"
           },
           "location": {
             "value": "[resourceGroup().location]"
           },
           "WebVMSize": {
             "value": "[parameters('webVMSize')]"
-          },
-          "MGTVMSize": {
-            "value": "[parameters('mgtVMSize')]"
           },
           "adminUsername": {
             "value": "[parameters('adminUsername')]"
@@ -1363,20 +1355,8 @@
           "WEBNICName": {
             "value": "[variables('resourceNames').nics.web]"
           },
-          "MGTNICName": {
-            "value": "[variables('resourceNames').nics.mgt]"
-          },
-          "mgtIPAddress": {
-            "value": "[parameters('mgtIPAddress')]"
-          },
           "subnetRef": {
             "value": "[variables('derivedIds').webSubnet]"
-          },
-          "mgtSubnetRef": {
-            "value": "[variables('derivedIds').mgtSubnet]"
-          },
-          "mgtNSGid": {
-            "value": "[variables('derivedIds').mgtNSG]"
           },
           "webNSGid": {
             "value": "[variables('derivedIds').webNSG]"
@@ -1384,11 +1364,11 @@
           "domainName": {
             "value": "[parameters('domainName')]"
           },
-          "iisModulesURL": {
-            "value": "[variables('artifacts').iisModulesURL]"
+          "webModulesURL": {
+            "value": "[variables('artifacts').webModulesURL]"
           },
-          "iisConfigurationFunction": {
-            "value": "[variables('artifacts').iisConfigurationFunction]"
+          "webConfigurationFunction": {
+            "value": "[variables('artifacts').webConfigurationFunction]"
           },
           "staticIPWEBStart": {
             "value": "[variables('staticIPWEBStart')]"

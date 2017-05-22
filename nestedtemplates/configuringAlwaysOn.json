@@ -1,75 +1,78 @@
 {  
-   "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-   "contentVersion":"1.0.0.0",
-   "parameters":{  
-      "sqlVMName":{  
-         "type":"string"
-      },
-      "location":{  
-         "type":"string"
-      },
-      "adminUsername":{  
-         "type":"string"
-      },
-      "adminPassword":{  
-         "type":"securestring"
-      },
-      "domainName":{  
-         "type":"string"
-      },
-      "sqlAOEPName":{  
-         "type":"string"
-      },
-      "sqlServerServiceAccountUserName":{  
-         "type":"string"
-      },
-      "sqlServerServiceAccountPassword":{  
-         "type":"securestring"
-      },
-      "createClusterModulesURL":{  
-         "type":"string"
-      },
-      "createClusterConfigurationFunction":{  
-         "type":"string"
-      },
-      "clusterName":{  
-         "type":"string"
-      },
-      "sharePath":{  
-         "type":"string"
-      },
-      "sqlAOAGName":{  
-         "type":"string"
-      },
-      "sqlAOListenerName":{  
-         "type":"string"
-      },
-      "sqlAOListenerPort":{  
-         "type":"string"
-      },
-      "sqlLBName":{  
-         "type":"string"
-      },
-      "sqlLBIPAddress":{  
-         "type":"string"
-      },
-      "adPDCVMName":{  
-         "type":"string"
-      },
-      "sqlwVMName":{  
-         "type":"string"
-      },
-      "numberOfDisks":{  
-         "type":"string"
-      },
-      "workloadType":{  
-         "type":"string"
-      }
+  "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion":"1.0.0.0",
+  "parameters":{  
+    "sqlVMName":{  
+        "type":"string"
+    },
+    "location":{  
+        "type":"string"
+    },
+    "adminUsername":{  
+        "type":"string"
+    },
+    "adminPassword":{  
+        "type":"securestring"
+    },
+    "domainName":{  
+        "type":"string"
+    },
+    "sqlAOEPName":{  
+        "type":"string"
+    },
+    "sqlServerServiceAccountUserName":{  
+        "type":"string"
+    },
+    "sqlServerServiceAccountPassword":{  
+        "type":"securestring"
+    },
+    "sql1ModulesURL":{  
+        "type":"string"
+    },
+    "sql1ConfigurationFunction":{  
+        "type":"string"
+    },
+    "clusterName":{  
+        "type":"string"
+    },
+    "sharePath":{  
+        "type":"string"
+    },
+    "sqlAOAGName":{  
+        "type":"string"
+    },
+    "sqlAOListenerName":{  
+        "type":"string"
+    },
+    "sqlAOListenerPort":{  
+        "type":"string"
+    },
+    "sqlLBName":{  
+        "type":"string"
+    },
+    "sqlLBIPAddress":{  
+        "type":"string"
+    },
+    "adPDCVMName":{  
+        "type":"string"
+    },
+    "sqlwVMName":{  
+        "type":"string"
+    },
+    "numberOfDisks":{  
+        "type":"string"
+    },
+    "workloadType": {
+      "type": "string"
+    },
+    "antimalwareInfo": {
+      "type": "object"
+    }
    },
    "resources":[
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('sqlVMName'),'1/configuringAlwaysOn')]",
+      "name": "[concat(parameters('sqlVMName'),'1/SQL1BaselineDSC')]",
       "apiVersion": "2015-06-15",
       "tags": {
         "Project": "BluePrint"
@@ -81,8 +84,8 @@
         "typeHandlerVersion": "2.19",
         "autoUpgradeMinorVersion": false,
         "settings": {
-          "modulesURL": "[parameters('createClusterModulesURL')]",
-          "configurationFunction": "[parameters('createClusterConfigurationFunction')]",
+          "modulesURL": "[parameters('sql1ModulesURL')]",
+          "configurationFunction": "[parameters('sql1ConfigurationFunction')]",
           "properties": {
             "domainName": "[parameters('domainName')]",
             "clusterName": "[parameters('clusterName')]",
@@ -114,7 +117,14 @@
               "password": "privateSettingsRef:sqlAuthPassword"
             },
             "NumberOfDisks": "[parameters('numberOfDisks')]",
-            "WorkloadType": "[parameters('workloadType')]"
+            "WorkloadType": "[parameters('workloadType')]",
+            "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.sql]",
+            "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.sql]",
+            "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.sql]",
+            "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
+            "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
+            "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
+            "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
           }
         },
         "protectedSettings": {

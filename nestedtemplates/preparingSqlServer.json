@@ -1,67 +1,70 @@
 {  
-   "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-   "contentVersion":"1.0.0.0",
-   "parameters":{  
-      "sqlVMName":{  
-         "type":"string"
-      },
-      "location":{  
-         "type":"string"
-      },
-      "adminUsername":{  
-         "type":"string"
-      },
-      "adminPassword":{  
-         "type":"securestring"
-      },
-      "domainName":{  
-         "type":"string"
-      },
-      "sqlAOPrepareModulesURL":{  
-         "type":"string"
-      },
-      "sqlAOPrepareConfigurationFunction":{  
-         "type":"string"
-      },
-      "sqlAOEPName":{  
-         "type":"string"
-      },
-      "sqlServerServiceAccountUserName":{  
-         "type":"string"
-      },
-      "sqlServerServiceAccountPassword":{  
-         "type":"securestring"
-      },
-      "sharePath":{  
-         "type":"string"
-      },
-      "adPDCVMName":{  
-         "type":"string"
-      },
-      "sqlwVMName":{  
-         "type":"string"
-      },
-      "fswModulesURL":{  
-         "type":"string"
-      },
-      "fswConfigurationFunction":{  
-         "type":"string"
-      },
-      "autoPatchingEnable":{  
-         "type":"bool"
-      },
-      "autoPatchingDay":{  
-         "type":"string"
-      },
-      "autoPatchingStartHour":{  
-         "type":"string"
-      },
-      "numberOfDisks":{  
-         "type":"string"
-      },
-      "workloadType":{  
-         "type":"string"
-      }
+  "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion":"1.0.0.0",
+  "parameters":{  
+    "sqlVMName":{  
+        "type":"string"
+    },
+    "location":{  
+        "type":"string"
+    },
+    "adminUsername":{  
+        "type":"string"
+    },
+    "adminPassword":{  
+        "type":"securestring"
+    },
+    "domainName":{  
+        "type":"string"
+    },
+    "sql0ModulesURL":{  
+        "type":"string"
+    },
+    "sql0ConfigurationFunction":{  
+        "type":"string"
+    },
+    "sqlAOEPName":{  
+        "type":"string"
+    },
+    "sqlServerServiceAccountUserName":{  
+        "type":"string"
+    },
+    "sqlServerServiceAccountPassword":{  
+        "type":"securestring"
+    },
+    "sharePath":{  
+        "type":"string"
+    },
+    "adPDCVMName":{  
+        "type":"string"
+    },
+    "sqlwVMName":{  
+        "type":"string"
+    },
+    "sqlwModulesURL":{  
+        "type":"string"
+    },
+    "sqlwConfigurationFunction":{  
+        "type":"string"
+    },
+    "autoPatchingEnable":{  
+        "type":"bool"
+    },
+    "autoPatchingDay":{  
+        "type":"string"
+    },
+    "autoPatchingStartHour":{  
+        "type":"string"
+    },
+    "numberOfDisks":{  
+        "type":"string"
+    },
+    "workloadType": {
+      "type": "string"
+    },
+    "antimalwareInfo": {
+      "type": "object"
+    }
    },
    "variables":{  
       "Monday":"[mod(div(add(add(24,int(parameters('autoPatchingStartHour'))),2),24),7)]",
@@ -86,7 +89,7 @@
    "resources":[
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('sqlwVMName'),'/CreateFileShareWitness')]",
+      "name": "[concat(parameters('sqlwVMName'),'/SQLWBaselineDSC')]",
       "apiVersion": "2015-06-15",
       "tags": {
         "Project": "BluePrint"
@@ -98,15 +101,22 @@
         "typeHandlerVersion": "2.19",
         "autoUpgradeMinorVersion": false,
         "settings": {
-          "modulesURL": "[parameters('fswModulesURL')]",
-          "configurationFunction": "[parameters('fswConfigurationFunction')]",
+          "modulesURL": "[parameters('sqlwModulesURL')]",
+          "configurationFunction": "[parameters('sqlwConfigurationFunction')]",
           "properties": {
             "domainName": "[parameters('domainName')]",
             "SharePath": "[parameters('sharePath')]",
             "adminCreds": {
               "userName": "[parameters('adminUserName')]",
               "password": "privateSettingsRef:adminPassword"
-            }
+            },
+            "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.sql]",
+            "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.sql]",
+            "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.sql]",
+            "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
+            "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
+            "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
+            "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
           }
         },
         "protectedSettings": {
@@ -182,14 +192,14 @@
     },
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('sqlVMName'),'0/sqlAOPrepare')]",
+      "name": "[concat(parameters('sqlVMName'),'0/SQL0BaselineDSC')]",
       "apiVersion": "2015-06-15",
       "tags": {
         "Project": "BluePrint"
       },
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlwVMName'),'/extensions/CreateFileShareWitness')]",
+        "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlwVMName'),'/extensions/SQLWBaselineDSC')]",
         "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlVMName'),'0/extensions/SqlVmIaasExtension')]"
       ],
       "properties": {
@@ -198,8 +208,8 @@
         "typeHandlerVersion": "2.19",
         "autoUpgradeMinorVersion": false,
         "settings": {
-          "modulesURL": "[parameters('sqlAOPrepareModulesURL')]",
-          "configurationFunction": "[parameters('sqlAOPrepareConfigurationFunction')]",
+          "modulesURL": "[parameters('sql0ModulesURL')]",
+          "configurationFunction": "[parameters('sql0ConfigurationFunction')]",
           "properties": {
             "domainName": "[parameters('domainName')]",
             "sqlAlwaysOnEndpointName": "[parameters('sqlAOEPName')]",
@@ -212,7 +222,14 @@
               "password": "privateSettingsRef:SqlServerServiceAccountPassword"
             },
             "NumberOfDisks": "[parameters('numberOfDisks')]",
-            "WorkloadType": "[parameters('workloadType')]"
+            "WorkloadType": "[parameters('workloadType')]",
+            "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.sql]",
+            "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.sql]",
+            "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.sql]",
+            "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
+            "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
+            "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
+            "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
           }
         },
         "protectedSettings": {
@@ -224,7 +241,5 @@
       }
     }
    ],
-   "outputs":{  
-
-   }
+   "outputs":{}
 }
