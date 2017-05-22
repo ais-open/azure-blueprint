@@ -777,7 +777,7 @@
       "preparingAlwaysOnSqlServerURL": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServer.json')]",
       "configuringAlwaysOnURL": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOn.json')]",
       "pdcModulesURL": "[concat(parameters('dscBaseUrl'),'/PDCBaselineDSC.ps1.zip')]",
-      "pdcConfigurationFunction": "CreateADPDC.ps1\\PDCBaselineDSC",
+      "pdcConfigurationFunction": "PDCBaselineDSC.ps1\\PDCBaselineDSC",
       "bdcModulesURL": "[concat(parameters('dscBaseUrl'),'/BDCBaselineDSC.ps1.zip')]",
       "bdcConfigurationFunction": "BDCBaselineDSC.ps1\\BDCBaselineDSC",
       "sqlwModulesURL": "[concat(parameters('dscBaseUrl'),'/SQLWBaselineDSC.ps1.zip')]",
