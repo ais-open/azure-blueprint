@@ -116,7 +116,7 @@
         },
         "scheduleName": {
             "type": "string",
-            "defaultValue": "BPVMPatchSchedule"
+            "defaultValue": "VM-Patching-Schedule"
         },
         "scheduleJobGuid": {
             "type": "string",
