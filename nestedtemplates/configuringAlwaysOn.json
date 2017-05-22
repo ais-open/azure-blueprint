@@ -69,7 +69,7 @@
       "type": "object"
     }
    },
-   "resources":[
+  "resources": [
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('sqlVMName'),'1/SQL1BaselineDSC')]",
@@ -137,8 +137,39 @@
           }
         }
       }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('sqlVMName'),'1/Antimalware')]",
+      "apiVersion": "2016-04-30-preview",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "dependsOn": "[resourceId('Microsoft.Compute/virtualMachines/extensions',concat(parameters('sqlVMName'),'1'),'SQL1BaselineDSC')]",
+      "properties": {
+        "publisher": "Microsoft.Azure.Security",
+        "type": "IaaSAntimalware",
+        "typeHandlerVersion": "1.3",
+        "settings": {
+          "AntimalwareEnabled": "true",
+          "Exclusions": {
+            "Paths": "[parameters('antimalwareInfo').exclusionPath.sql]",
+            "Extensions": "[parameters('antimalwareInfo').exclusionExtension.sql]",
+            "Processes": "[parameters('antimalwareInfo').exclusionProcess.sql]"
+          },
+          "RealtimeProtectionEnabled": "true",
+          "ScheduledScanSettings": {
+            "isEnabled": "true",
+            "scanType": "Full",
+            "day": "0",
+            "time": "60"
+          }
+        },
+        "protectedSettings": null
+      }
     }
-   ],
+  ],
    "outputs":{  
 
    }
