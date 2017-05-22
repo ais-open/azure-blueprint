@@ -17,12 +17,6 @@
         "omsAutomationAccountName": {
             "type": "string"
         },
-        "scheduleName": {
-            "type": "string"
-        },
-        "scheduleJobGuid": {
-            "type": "string"
-        },
         "artifactsLocation": {
             "type": "string"
         }

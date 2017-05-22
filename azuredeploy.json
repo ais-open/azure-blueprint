@@ -2,59 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "omsWorkspaceName": {
-            "type": "string",
-            "defaultValue": "bp-omsworkspace",
-            "metadata": {
-                "description": "Assign a name for the Log Analytic Workspace Name"
-            }
-        },
-        "omsWorkspaceRegion": {
-            "type": "string",
-            "defaultValue": "USGov Virginia",
-            "allowedValues": ["USGov Virginia", "East US", "West Europe", "Southeast Asia", "Australia Southeast"],
-            "metadata": {
-                "description": "Specify the region for your Workspace"
-            }
-        },
-        "serviceTier": {
-            "type": "string",
-            "allowedValues": [
-                "Free",
-                "Standalone",
-                "PerNode"
-            ],
-            "defaultValue": "Free",
-            "metadata": {
-                "description": "Service Tier: Free, Standalone, or PerNode"
-            }
-        },
-        "dataRetention": {
-            "type": "int",
-            "defaultValue": 365,
-            "minValue": 7,
-            "maxValue": 730,
-            "metadata": {
-                "description": "Number of days of retention. Free plans can only have 7 days, Standalone and OMS plans include 30 days for free"
-            }
-        },
-        "omsAutomationAccountName": {
-            "type": "string",
-            "defaultValue": "bp-autoacccount",
-            "metadata": {
-                "description": "Assign a name for the Log Analytic Workspace Name"
-            }
-        },
-        "scheduleName": {
-            "type": "string",
-            "defaultValue": "VMPatchSchedule"
-        },
-        "scheduleJobGuid": {
-            "type": "string",
-            "metadata": {
-                "description": "The GUID for the runbook job to be started."
-            }
-        },
         "keyVaultName": {
             "type": "string"
         },
@@ -122,6 +69,57 @@
             "defaultValue": 5,
             "metadata": {
                 "description": "Number of years you want to retain the backup"
+            }
+        },
+        "omsWorkspaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "Assign a name for the Log Analytic Workspace Name"
+            }
+        },
+        "omsWorkspaceRegion": {
+            "type": "string",
+            "defaultValue": "USGov Virginia",
+            "allowedValues": ["USGov Virginia", "East US", "West Europe", "Southeast Asia", "Australia Southeast"],
+            "metadata": {
+                "description": "Specify the region for your Workspace"
+            }
+        },
+        "serviceTier": {
+            "type": "string",
+            "allowedValues": [
+                "Free",
+                "Standalone",
+                "PerNode"
+            ],
+            "defaultValue": "Free",
+            "metadata": {
+                "description": "Service Tier: Free, Standalone, or PerNode"
+            }
+        },
+        "dataRetention": {
+            "type": "int",
+            "defaultValue": 365,
+            "minValue": 7,
+            "maxValue": 730,
+            "metadata": {
+                "description": "Number of days of retention. Free plans can only have 7 days, Standalone and OMS plans include 30 days for free"
+            }
+        },
+        "omsAutomationAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Assign a name for the Log Analytic Workspace Name"
+            }
+        },
+        "scheduleName": {
+            "type": "string",
+            "defaultValue": "BPVMPatchSchedule"
+        },
+        "scheduleJobGuid": {
+            "type": "string",
+            "metadata": {
+                "description": "The GUID for the runbook job to be started."
             }
         },
         "adminUsername": {
@@ -821,17 +819,23 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
+                    "omsWorkspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "omsWorkspaceRegion": {
+                        "value": "[parameters('omsWorkspaceRegion')]"
+                    },
+                    "serviceTier": {
+                        "value": "[parameters('serviceTier')]"
+                    },
+                    "dataRetention": {
+                        "value": "[parameters('dataRetention')]"
+                    },
                     "omsAutomationAccountName": {
                         "value": "[parameters('omsAutomationAccountName')]"
                     },
-                    "scheduleName": {
-                        "value": "[parameters('scheduleName')]"
-                    },
-                    "scheduleJobGuid": {
-                        "value": "[parameters('scheduleJobGuid')]"
-                    },
                     "artifactsLocation": {
-                        "value": "[parameters('dscBaseUrl')]"
+                        "value": "[parameters('scriptsBaseUrl')]"
                     }
                 }
             }
@@ -1451,18 +1455,6 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "omsWorkspaceName": {
-                        "value": "[parameters('omsWorkspaceName')]"
-                    },
-                    "omsWorkspaceRegion": {
-                        "value": "[parameters('omsWorkspaceRegion')]"
-                    },
-                    "serviceTier": {
-                        "value": "[parameters('serviceTier')]"
-                    },
-                    "dataRetention": {
-                        "value": "[parameters('dataRetention')]"
-                    },
                     "omsAutomationAccountName": {
                         "value": "[parameters('omsAutomationAccountName')]"
                     },
