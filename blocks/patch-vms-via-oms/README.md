@@ -15,7 +15,7 @@ Run Predeploy script first
 
 Quick Test 
 
-Login-AzureRmAccount –Environment (Get-AzureRmEnvironment –Name AzureUSGovernment) -SubscriptionId 58520ef9-dd73-4e37-9313-1cab4a9ade36
+Login-AzureRmAccount –Environment (Get-AzureRmEnvironment –Name AzureUSGovernment) -SubscriptionId 
 Get-AzureRmSubscription 
 Set-AzureRmContext -SubscriptionId <subscription ID>
 .\Deploy-AzureResourceGroup.ps1 -ResourceGroupLocation 'USGov Virginia' -ArtifactStagingDirectory 'patch-vms-via-oms' -ResourceGroupName 'dcais-omstest'

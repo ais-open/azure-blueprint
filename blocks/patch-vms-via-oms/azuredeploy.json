@@ -81,7 +81,7 @@
               "defaultValue": "VMPatchSchedule"
           },
           "scheduleJobGuid": {
-              "type": "string",
+              "type": "string"
           },
           "windowsOSVersion": {
               "type": "string",
@@ -98,11 +98,11 @@
           },
           "templatesBaseUrl": {
               "type": "string",
-              "defaultValue": "https://dctemplates.blob.core.usgovcloudapi.net/nestedtemplates"
+              "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/blocks/patch-vms-via-oms/nestedtemplates"
           },
           "scriptsBaseUrl": {
               "type": "string",
-              "defaultValue": "https://dctemplates.blob.core.usgovcloudapi.net/dsc"
+              "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/blocks/patch-vms-via-oms/dsc"
           }
       },
       "variables": {
@@ -263,86 +263,12 @@
                   }
               }
           },
-
-          /*{
-              "type": "Microsoft.Compute/virtualMachines/extensions",
-              "name": "[concat(variables('vmNames').VMs[copyIndex()].Name,'/setApplockerRulesPrepare')]",
-              "apiVersion": "2015-06-15",
-              "location": "[resourceGroup().location]",
-              "dependsOn": [
-                  "Microsoft.Resources/deployments/CreateOMSWorkspace",
-                  "createVMsLoop"
-              ],
-              "copy": {
-                  "name": "VMLoopUpdateApplocker",
-                  "count": "[length(variables('vmNames').VMs)]"
-              },
-              "properties": {
-                  "publisher": "Microsoft.Powershell",
-                  "type": "DSC",
-                  "typeHandlerVersion": "2.19",
-                  "autoUpgradeMinorVersion": false,
-                  "settings": {
-                      "modulesURL": "[variables('setApplockerRulesModulesURL')]",
-                      "configurationFunction": "[variables('setApplockerRulesConfigurationFunction')]",
-                      "properties": {
-                          "MachineName": "[variables('vmNames').VMs[copyIndex()].Name]"
-                      },
-                      "protectedSettings": null
-                  }
-              }
-          },*/
-          /*{
-              "type": "Microsoft.Compute/virtualMachines/extensions",
-              "name": "[concat(variables('vmSettings').vmName,'/GetHybridWorkersId')]",
-              "apiVersion": "2015-06-15",
-              "location": "[resourceGroup().location]",
-              "dependsOn": [
-                  // "Microsoft.Resources/deployments/CreateOMSWorkspace",
-                  // "createVMsLoop"
-              ],
-              "properties": {
-                  "publisher": "Microsoft.Powershell",
-                  "type": "DSC",
-                  "typeHandlerVersion": "2.19",
-                  "autoUpgradeMinorVersion": false,
-                  "settings": {
-                      "modulesURL": "[variables('getHybridWorkersIdURL')]",
-                      "configurationFunction": "[variables('getHybridWorkersIdConfigurationFunction')]",
-                      "properties": {
-                          "MachineName": "[variables('vmSettings').vmName]",
-                          "ResourceGroupName": "[resourceGroup().name]",
-                          "AutomationAccountName": "[parameters('omsAutomationAccountName')]",
-                          "AzureUserName": {
-                              "reference": {
-                                  "keyVault": {
-                                      "id": "[variables('keyVaultId')]"
-                                  },
-                                  "secretName": "azureUserName"
-                              }
-                          },
-                          "AzurePassword": {
-                              "reference": {
-                                  "keyVault": {
-                                      "id": "[variables('keyVaultId')]"
-                                  },
-                                  "secretName": "azurePassword"
-                              }
-                          },
-                          "SubscriptionId": "[subscription().subscriptionId]",
-                          "EnvironmentName": "AzureCloud"
-                      },
-                      "protectedSettings": null
-                  }
-              }
-          },*/
           {
               "name": "ConfigurationAutomationSchedules",
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2015-01-01",
               "dependsOn": [
                   "Microsoft.Resources/deployments/CreateOMSWorkspace",
-                  //"[resourceId('Microsoft.Compute/virtualMachines/extensions',variables('vmSettings').vmName,'GetHybridWorkersId')]"
                   "createVMsLoop"
               ],
               "properties": {
