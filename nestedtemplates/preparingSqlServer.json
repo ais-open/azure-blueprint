@@ -250,7 +250,9 @@
       "tags": {
         "Project": "BluePrint"
       },
-      "dependsOn": "[resourceId('Microsoft.Compute/virtualMachines/extensions',concat(parameters('sqlVMName'),'0'),'SQL0BaselineDSC')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines/extensions',concat(parameters('sqlVMName'),'0'),'SQL0BaselineDSC')]"
+      ],
       "properties": {
         "publisher": "Microsoft.Azure.Security",
         "type": "IaaSAntimalware",
