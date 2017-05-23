@@ -1071,207 +1071,207 @@
                 }
             }
         },
-        /*{
-      "name": "PreparingAlwaysOnSqlServer",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-        "Microsoft.Resources/deployments/UpdatingSQL1Nic"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURL]",
-          "contentVersion": "1.0.0.0"
+        {
+            "name": "PreparingAlwaysOnSqlServer",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/UpdatingSQL1Nic"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURL]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "sqlVMName": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.sql]"
+                    },
+                    "location": {
+                        "value": "[resourceGroup().location]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[parameters('prepareAlwaysOnSQLInfo').derivedIds.keyVaultId]"
+                            },
+                            "secretName": "adminPassword"
+                        }
+                    },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "sqlAOPrepareModulesURL": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sqlAOPrepareModulesURL]"
+                    },
+                    "sqlAOPrepareConfigurationFunction": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sqlAOPrepareConfigurationFunction]"
+                    },
+                    "sqlAOEPName": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sqlAOEPName]"
+                    },
+                    "sqlServerServiceAccountUserName": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').sqlServerServiceAccountUserName]"
+                    },
+                    "sqlServerServiceAccountPassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[parameters('prepareAlwaysOnSQLInfo').derivedIds.keyVaultId]"
+                            },
+                            "secretName": "sqlServerServiceAccountPassword"
+                        }
+                    },
+                    "sharePath": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sharePath]"
+                    },
+                    "adPDCVMName": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.adpdc]"
+                    },
+                    "sqlwVMName": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.sqlw]"
+                    },
+                    "fswModulesURL": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.fswModulesURL]"
+                    },
+                    "fswConfigurationFunction": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.fswConfigurationFunction]"
+                    },
+                    "autoPatchingDay": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.autoPatchingDay]"
+                    },
+                    "autoPatchingStartHour": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.autoPatchingStartHour]"
+                    },
+                    "autoPatchingEnable": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.autoPatchingEnable]"
+                    },
+                    "numberOfDisks": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').numberOfSqlVMDisks]"
+                    },
+                    "workloadType": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.workloadType]"
+                    },
+                    "sqlAutobackupRetentionPeriod": {
+                        "value": "[parameters('sqlAutobackupRetentionPeriod')]"
+                    },
+                    "sqlAutobackupEncryptionPassword": {
+                        "value": "[parameters('sqlAutobackupEncryptionPassword')]"
+                    },
+                    "sqlCredentialName": {
+                        "value": "[parameters('sqlCredentialName')]"
+                    },
+                    "sqlAkvUrl": {
+                        "value": "[parameters('sqlAkvUrl')]"
+                    },
+                    "servicePrincipalName": {
+                        "value": "[parameters('servicePrincipalName')]"
+                    },
+                    "servicePrincipalSecret": {
+                        "value": "[parameters('servicePrincipalSecret')]"
+                    },
+                    "sqlStorageAccountType": {
+                        "value": "[parameters('SqlStorageAccountType')]"
+                    },
+                    "sqlStorageAccountName": {
+                        "value": "[parameters('sqlStorageAccountName')]"
+                    }
+                }
+            }
         },
-        "parameters": {
-          "sqlVMName": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.sql]"
-          },
-          "location": {
-            "value": "[resourceGroup().location]"
-          },
-          "adminUsername": {
-            "value": "[parameters('adminUsername')]"
-          },
-          "adminPassword": {
-            "reference": {
-              "keyVault": {
-                "id": "[parameters('prepareAlwaysOnSQLInfo').derivedIds.keyVaultId]"
-              },
-              "secretName": "adminPassword"
+        {
+            "name": "ConfiguringAlwaysOn",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/PreparingAlwaysOnSqlServer"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configuringAlwaysOnURL]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "sqlVMName": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.sql]"
+                    },
+                    "location": {
+                        "value": "[resourceGroup().location]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[parameters('prepareAlwaysOnSQLInfo').derivedIds.keyVaultId]"
+                            },
+                            "secretName": "adminPassword"
+                        }
+                    },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "sqlAOEPName": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sqlAOEPName]"
+                    },
+                    "sqlServerServiceAccountUserName": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').sqlServerServiceAccountUserName]"
+                    },
+                    "sqlServerServiceAccountPassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[parameters('prepareAlwaysOnSQLInfo').derivedIds.keyVaultId]"
+                            },
+                            "secretName": "sqlServerServiceAccountPassword"
+                        }
+                    },
+                    "createClusterModulesURL": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.createClusterModulesURL]"
+                    },
+                    "createClusterConfigurationFunction": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.createClusterConfigurationFunction]"
+                    },
+                    "clusterName": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.clusterName]"
+                    },
+                    "sharePath": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sharePath]"
+                    },
+                    "sqlAOAGName": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sqlAOAGName]"
+                    },
+                    "sqlAOListenerName": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sqlAOListenerName]"
+                    },
+                    "sqlAOListenerPort": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sqlAOListenerPort]"
+                    },
+                    "sqlLBName": {
+                        "value": "[parameters('configuringAlwaysOnInfo').lbSettings.sqlLBName]"
+                    },
+                    "sqlLBIPAddress": {
+                        "value": "[parameters('configuringAlwaysOnInfo').sqlLBIPAddress]"
+                    },
+                    "adPDCVMName": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.adpdc]"
+                    },
+                    "sqlwVMName": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.sqlw]"
+                    },
+                    "numberOfDisks": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').numberOfSqlVMDisks]"
+                    },
+                    "workloadType": {
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.workloadType]"
+                    }
+                }
             }
-          },
-          "domainName": {
-            "value": "[parameters('domainName')]"
-          },
-          "sqlAOPrepareModulesURL": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sqlAOPrepareModulesURL]"
-          },
-          "sqlAOPrepareConfigurationFunction": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sqlAOPrepareConfigurationFunction]"
-          },
-          "sqlAOEPName": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sqlAOEPName]"
-          },
-          "sqlServerServiceAccountUserName": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').sqlServerServiceAccountUserName]"
-          },
-          "sqlServerServiceAccountPassword": {
-            "reference": {
-              "keyVault": {
-                "id": "[parameters('prepareAlwaysOnSQLInfo').derivedIds.keyVaultId]"
-              },
-              "secretName": "sqlServerServiceAccountPassword"
-            }
-          },
-          "sharePath": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sharePath]"
-          },
-          "adPDCVMName": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.adpdc]"
-          },
-          "sqlwVMName": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.sqlw]"
-          },
-          "fswModulesURL": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.fswModulesURL]"
-          },
-          "fswConfigurationFunction": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.fswConfigurationFunction]"
-          },
-          "autoPatchingDay": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.autoPatchingDay]"
-          },
-          "autoPatchingStartHour": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.autoPatchingStartHour]"
-          },
-          "autoPatchingEnable": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.autoPatchingEnable]"
-          },
-          "numberOfDisks": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').numberOfSqlVMDisks]"
-          },
-          "workloadType": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.workloadType]"
-          },
-          "sqlAutobackupRetentionPeriod": {
-			      "value":"[parameters('sqlAutobackupRetentionPeriod')]"
-			    },
-			    "sqlAutobackupEncryptionPassword": {
-						"value": "[parameters('sqlAutobackupEncryptionPassword')]"
-			    },
-					"sqlCredentialName": {
-			      "value": "[parameters('sqlCredentialName')]"
-			    },
-			    "sqlAkvUrl": {
-			      "value": "[parameters('sqlAkvUrl')]"
-			    },
-			    "servicePrincipalName": {
-						"value": "[parameters('servicePrincipalName')]"
-			    },
-			    "servicePrincipalSecret": {
-						"value": "[parameters('servicePrincipalSecret')]"
-			    },
-					"sqlStorageAccountType": {
-						"value": "[parameters('SqlStorageAccountType')]"
-					},
-					"sqlStorageAccountName": {
-						"value": "[parameters('sqlStorageAccountName')]"
-					}
-        }
-      }
-    },
-    {
-      "name": "ConfiguringAlwaysOn",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-        "Microsoft.Resources/deployments/PreparingAlwaysOnSqlServer"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configuringAlwaysOnURL]",
-          "contentVersion": "1.0.0.0"
         },
-        "parameters": {
-          "sqlVMName": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.sql]"
-          },
-          "location": {
-            "value": "[resourceGroup().location]"
-          },
-          "adminUsername": {
-            "value": "[parameters('adminUsername')]"
-          },
-          "adminPassword": {
-            "reference": {
-              "keyVault": {
-                "id": "[parameters('prepareAlwaysOnSQLInfo').derivedIds.keyVaultId]"
-              },
-              "secretName": "adminPassword"
-            }
-          },
-          "domainName": {
-            "value": "[parameters('domainName')]"
-          },
-          "sqlAOEPName": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sqlAOEPName]"
-          },
-          "sqlServerServiceAccountUserName": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').sqlServerServiceAccountUserName]"
-          },
-          "sqlServerServiceAccountPassword": {
-            "reference": {
-              "keyVault": {
-                "id": "[parameters('prepareAlwaysOnSQLInfo').derivedIds.keyVaultId]"
-              },
-              "secretName": "sqlServerServiceAccountPassword"
-            }
-          },
-          "createClusterModulesURL": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.createClusterModulesURL]"
-          },
-          "createClusterConfigurationFunction": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.createClusterConfigurationFunction]"
-          },
-          "clusterName": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.clusterName]"
-          },
-          "sharePath": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sharePath]"
-          },
-          "sqlAOAGName": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sqlAOAGName]"
-          },
-          "sqlAOListenerName": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sqlAOListenerName]"
-          },
-          "sqlAOListenerPort": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sqlAOListenerPort]"
-          },
-          "sqlLBName": {
-            "value": "[parameters('configuringAlwaysOnInfo').lbSettings.sqlLBName]"
-          },
-          "sqlLBIPAddress": {
-            "value": "[parameters('configuringAlwaysOnInfo').sqlLBIPAddress]"
-          },
-          "adPDCVMName": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.adpdc]"
-          },
-          "sqlwVMName": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.sqlw]"
-          },
-          "numberOfDisks": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').numberOfSqlVMDisks]"
-          },
-          "workloadType": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.workloadType]"
-          }
-        }
-      }
-    },*/
         {
             "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
@@ -1282,8 +1282,8 @@
                 "sqlvirtualMachineLoop",
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]",
-                //"ConfiguringAlwaysOn"
-                "Microsoft.Resources/deployments/UpdatingSQL1Nic"
+                "ConfiguringAlwaysOn"
+                //"Microsoft.Resources/deployments/UpdatingSQL1Nic"
             ],
             "copy": {
                 "name": "encryptSQLMGMTADLoop",
@@ -1334,8 +1334,8 @@
                     }
                 }
             }
-        }
-        /*{
+        },
+        {
             "name": "[concat('BackupVM-',variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1366,7 +1366,7 @@
                     }
                 }
             }
-        }*/
+        }
     ],
     "outputs": {
 

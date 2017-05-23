@@ -162,13 +162,21 @@
             "properties": {
                 "type": "SqlIaaSAgent",
                 "publisher": "Microsoft.SqlServer.Management",
-                "typeHandlerVersion": "1.2",
+                "typeHandlerVersion": "1.2.17.0",
                 "autoUpgradeMinorVersion": "true",
                 "settings": {
+                    "AutoTelemetrySettings": {
+                        "MaintenanceWindowDuration": "60"
+                    },
                     "AutoBackupSettings": {
                         "Enable": true,
-                        "RetentionPeriod": "2",
-                        "EnableEncryption": true
+                        "RetentionPeriod": "30",
+                        "EnableEncryption": false,
+                        "BackupScheduleType": "Manual",
+                        "FullBackupFrequency": "Weekly",
+                        "FullBackupStartTime": "2",
+                        "FullBackupWindowHours": "2",
+                        "LogBackupFrequency": "60"
                     },
                     "AutoPatchingSettings": {
                         "PatchCategory": "WindowsMandatoryUpdates",
@@ -193,48 +201,47 @@
                     "Password": "[parameters('sqlAutobackupEncryptionPassword')]"
                 }
             }
+        } {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('sqlVMName'),'0/sqlAOPrepare')]",
+            "apiVersion": "2015-06-15",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlwVMName'),'/extensions/CreateFileShareWitness')]",
+                "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlVMName'),'0/extensions/SqlVmIaasExtension')]",
+                "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlVMName'),'1/extensions/SqlVmIaasExtension')]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.19",
+                "autoUpgradeMinorVersion": false,
+                "settings": {
+                    "modulesURL": "[parameters('sqlAOPrepareModulesURL')]",
+                    "configurationFunction": "[parameters('sqlAOPrepareConfigurationFunction')]",
+                    "properties": {
+                        "domainName": "[parameters('domainName')]",
+                        "sqlAlwaysOnEndpointName": "[parameters('sqlAOEPName')]",
+                        "adminCreds": {
+                            "userName": "[parameters('adminUserName')]",
+                            "password": "privateSettingsRef:AdminPassword"
+                        },
+                        "sqlServiceCreds": {
+                            "userName": "[parameters('sqlServerServiceAccountUserName')]",
+                            "password": "privateSettingsRef:SqlServerServiceAccountPassword"
+                        },
+                        "NumberOfDisks": "[parameters('numberOfDisks')]",
+                        "WorkloadType": "[parameters('workloadType')]"
+                    }
+                },
+                "protectedSettings": {
+                    "items": {
+                        "adminPassword": "[parameters('adminPassword')]",
+                        "sqlServerServiceAccountPassword": "[parameters('sqlServerServiceAccountPassword')]"
+                    }
+                }
+            }
         }
-        /*{
-           "type":"Microsoft.Compute/virtualMachines/extensions",
-           "name":"[concat(parameters('sqlVMName'),'0/sqlAOPrepare')]",
-           "apiVersion":"2015-06-15",
-           "location":"[parameters('location')]",
-           "dependsOn":[
-              "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlwVMName'),'/extensions/CreateFileShareWitness')]",
-              "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlVMName'),'0/extensions/SqlVmIaasExtension')]",
-              "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlVMName'),'1/extensions/SqlVmIaasExtension')]"
-           ],
-           "properties":{
-              "publisher":"Microsoft.Powershell",
-              "type":"DSC",
-              "typeHandlerVersion":"2.19",
-              "autoUpgradeMinorVersion":false,
-              "settings":{
-                 "modulesURL":"[parameters('sqlAOPrepareModulesURL')]",
-                 "configurationFunction":"[parameters('sqlAOPrepareConfigurationFunction')]",
-                 "properties":{
-                    "domainName":"[parameters('domainName')]",
-                    "sqlAlwaysOnEndpointName":"[parameters('sqlAOEPName')]",
-                    "adminCreds":{
-                       "userName":"[parameters('adminUserName')]",
-                       "password":"privateSettingsRef:AdminPassword"
-                    },
-                    "sqlServiceCreds":{
-                       "userName":"[parameters('sqlServerServiceAccountUserName')]",
-                       "password":"privateSettingsRef:SqlServerServiceAccountPassword"
-                    },
-                    "NumberOfDisks":"[parameters('numberOfDisks')]",
-                    "WorkloadType":"[parameters('workloadType')]"
-                 }
-              },
-              "protectedSettings":{
-                 "items":{
-                    "adminPassword":"[parameters('adminPassword')]",
-                    "sqlServerServiceAccountPassword":"[parameters('sqlServerServiceAccountPassword')]"
-                 }
-              }
-           }
-        }*/
     ],
     "outputs": {
 
