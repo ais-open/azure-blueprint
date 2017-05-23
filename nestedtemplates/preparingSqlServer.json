@@ -137,7 +137,7 @@
       "properties": {
         "type": "SqlIaaSAgent",
         "publisher": "Microsoft.SqlServer.Management",
-        "typeHandlerVersion": "1.2",
+        "typeHandlerVersion": "1.2.17.0",
         "autoUpgradeMinorVersion": "true",
         "settings": {
           "AutoTelemetrySettings": {
@@ -151,9 +151,14 @@
             "MaintenanceWindowDuration": "60"
           },
           "AutoBackupSettings": {
-            "Enable": false,
+            "Enable": true,
             "RetentionPeriod": "30",
-            "EnableEncryption": false
+            "EnableEncryption": false,
+            "BackupScheduleType": "Manual",
+            "FullBackupFrequency": "Weekly",
+            "FullBackupStartTime": "2",
+            "FullBackupWindowHours": "2",
+            "LogBackupFrequency": "60"
           }
         }
       }
@@ -169,7 +174,7 @@
       "properties": {
         "type": "SqlIaaSAgent",
         "publisher": "Microsoft.SqlServer.Management",
-        "typeHandlerVersion": "1.2",
+        "typeHandlerVersion": "1.2.17.0",
         "autoUpgradeMinorVersion": "true",
         "settings": {
           "AutoTelemetrySettings": {
@@ -183,9 +188,14 @@
             "MaintenanceWindowDuration": "60"
           },
           "AutoBackupSettings": {
-            "Enable": false,
+            "Enable": true,
             "RetentionPeriod": "30",
-            "EnableEncryption": false
+            "EnableEncryption": false,
+            "BackupScheduleType": "Manual",
+            "FullBackupFrequency": "Weekly",
+            "FullBackupStartTime": "2",
+            "FullBackupWindowHours": "2",
+            "LogBackupFrequency": "60"
           }
         }
       }
