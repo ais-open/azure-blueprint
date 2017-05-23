@@ -118,15 +118,6 @@
             },
             "NumberOfDisks": "[parameters('numberOfDisks')]",
             "WorkloadType": "[parameters('workloadType')]"
-            /*,
-            "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.sql]",
-            "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.sql]",
-            "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.sql]",
-            "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
-            "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
-            "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
-            "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
-            */
           }
         },
         "protectedSettings": {
@@ -147,7 +138,6 @@
         "Project": "BluePrint"
       },
       "dependsOn": [
-        //"[resourceId('Microsoft.Compute/virtualMachines/extensions',concat(parameters('sqlVMName'),'1'),'SQL1BaselineDSC')]",
         "[concat('Microsoft.Compute/virtualMachines/',concat(parameters('sqlVMName'),'1'),'/extensions/SQL1BaselineDSC')]"
       ],
       "properties": {
@@ -157,9 +147,9 @@
         "settings": {
           "AntimalwareEnabled": "true",
           "Exclusions": {
-            "Paths": "[parameters('antimalwareInfo').exclusionPath.sql]",
-            "Extensions": "[parameters('antimalwareInfo').exclusionExtension.sql]",
-            "Processes": "[parameters('antimalwareInfo').exclusionProcess.sql]"
+            "Paths": "[parameters('antimalwareInfo').exclusionPath.sqlWS2012]",
+            "Extensions": "[parameters('antimalwareInfo').exclusionExtension.sqlWS2012]",
+            "Processes": "[parameters('antimalwareInfo').exclusionProcess.sqlWS2012]"
           },
           "RealtimeProtectionEnabled": "true",
           "ScheduledScanSettings": {

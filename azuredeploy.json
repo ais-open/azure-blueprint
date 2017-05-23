@@ -101,6 +101,21 @@
       "minLength": 1,
       "defaultValue": [ "w3wp.exe", "explorer.exe" ]
     },
+    "exclusionPathSQLWS2012": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "c:\\Users"
+    },
+    "exclusionExtensionSQLWS2012": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": ".txt;.ps1"
+    },
+    "exclusionProcessSQLWS2012": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "w3wp.exe;explorer.exe" 
+    },
     "exclusionPathAD": {
       "type": "array",
       "minLength": 1,
@@ -833,18 +848,21 @@
       "exclusionPath": {
         "web": "[concat(parameters('exclusionPathWeb'),parameters('exclusionPathGen'))]",
         "sql": "[concat(parameters('exclusionPathSQL'),parameters('exclusionPathGen'))]",
+        "sqlWS2012": "[parameters('exclusionPathSQLWS2012')]",
         "ad": "[concat(parameters('exclusionPathAD'),parameters('exclusionPathGen'))]",
         "mgt": "[concat(parameters('exclusionPathMgt'),parameters('exclusionPathGen'))]"
       },
       "exclusionExtension": {
         "web": "[concat(parameters('exclusionExtensionWeb'),parameters('exclusionExtensionGen'))]",
         "sql": "[concat(parameters('exclusionExtensionSQL'),parameters('exclusionExtensionGen'))]",
+        "sqlWS2012": "[parameters('exclusionExtensionSQLWS2012')]",
         "ad": "[concat(parameters('exclusionExtensionAD'),parameters('exclusionExtensionGen'))]",
         "mgt": "[concat(parameters('exclusionExtensionMgt'),parameters('exclusionExtensionGen'))]"
       },
       "exclusionProcess": {
         "web": "[concat(parameters('exclusionProcessWeb'),parameters('exclusionProcessGen'))]",
         "sql": "[concat(parameters('exclusionProcessSQL'),parameters('exclusionProcessGen'))]",
+        "sqlWS2012": "[parameters('exclusionProcessSQLWS2012')]",
         "ad": "[concat(parameters('exclusionProcessAD'),parameters('exclusionProcessGen'))]",
         "mgt": "[concat(parameters('exclusionProcessMgt'),parameters('exclusionProcessGen'))]"
       },

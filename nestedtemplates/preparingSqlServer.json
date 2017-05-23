@@ -260,8 +260,7 @@
       "tags": {
         "Project": "BluePrint"
       },
-      "dependsOn": [
-        //"[resourceId('Microsoft.Compute/virtualMachines/extensions',parameters('sqlVMName'),'SQL0BaselineDSC')]",
+      "dependsOn": [        
         "[concat('Microsoft.Compute/virtualMachines/',concat(parameters('sqlVMName'),'0'),'/extensions/SQL0BaselineDSC')]"
       ],
       "properties": {
@@ -271,9 +270,9 @@
         "settings": {
           "AntimalwareEnabled": "true",
           "Exclusions": {
-            "Paths": "[parameters('antimalwareInfo').exclusionPath.sql]",
-            "Extensions": "[parameters('antimalwareInfo').exclusionExtension.sql]",
-            "Processes": "[parameters('antimalwareInfo').exclusionProcess.sql]"
+            "Paths": "[parameters('antimalwareInfo').exclusionPath.sqlWS2012]",
+            "Extensions": "[parameters('antimalwareInfo').exclusionExtension.sqlWS2012]",
+            "Processes": "[parameters('antimalwareInfo').exclusionProcess.sqlWS2012]"
           },
           "RealtimeProtectionEnabled": "true",
           "ScheduledScanSettings": {
