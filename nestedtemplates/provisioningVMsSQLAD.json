@@ -1434,6 +1434,9 @@
                             },
                             "secretName": "keyEncryptionKeyURL"
                         }
+                    },
+                    "workspaceName": {
+                        "value": "[parameters('workspaceName')]"
                     }
                 }
             }
