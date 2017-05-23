@@ -597,21 +597,21 @@
       "metadata": {
         "description": "Linked Templates base url"
       },
-      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/Malware/nestedtemplates"
+      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/nestedtemplates"
     },
     "dscBaseUrl": {
       "type": "string",
       "metadata": {
         "description": "DSC Scripts base url"
       },
-      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/Malware/DSC"
+      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/DSC"
     },
     "scriptsBaseUrl": {
       "type": "string",
       "metadata": {
         "description": "DSC Scripts base url"
       },
-      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/Malware/postdeploy"
+      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/postdeploy"
     },
     "sqlServerVersion": {
       "type": "string",
