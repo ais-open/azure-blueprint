@@ -1332,7 +1332,7 @@
           "workloadType": {
             "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.workloadType]"
           },
-          "antimalware": {
+          "antimalwareInfo": {
             "value": "[parameters('antimalwareInfo')]"
           }
         }
