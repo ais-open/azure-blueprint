@@ -38,11 +38,67 @@ The PowerShell pre-deployment task includes installation of Azure PowerShell mod
 
 ### Pre-deployment script
 
-The pre-deployment PowerShell script will verify that a supported version of PowerShell is installed, that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters (suggested values are provided):
+The pre-deployment PowerShell script will verify that a supported version of PowerShell is installed, that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters:
 
 [table; note: for parameters that the customer needs to look up (e.g., subscription ID), provide instructions to find]
 
+Parameter | Description | Value
+--- | --- | ---
+subscriptionID | Unique ID for your Azure Government subscription | (see note 1 below)
+resourceGroupName | Resource group name for this deployment | blueprint-rg
+keyVaultName | Key Vault name | (see note 2 below)
+adminPassword | Administrator password for local VM accounts | (see note 3 below)
+sqlServerServiceAccountPassword | SQL service account password | (see note 3 below)
 
+Note 1: To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu, and begin typing "subscription" in the filter box. Click on **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
+
+Note 2: Key Vault name must be a string 3-24 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government. 
+
+Note 3: You must enter credentials that meet the following complexity requirements: [...].
+
+Resource group name must be a string of 1-90 alphanumeric characters (0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis and cannot end in a period (e.g., `blueprint-rg`).
+
+1. 
+2. 
+3. 
+
+### DEPLOYMENT
+
+During this phase, an Azure Resource Manger (ARM) template will deploy Azure resources to your subscription and perform configuration activities. 
+
+## Azure Resource Manager (ARM) template deployment
+
+[Description of how the deployment works, ARM, PowerShell scripts used...]
+
+After clicking the Deploy to Azure Gov button below, the Azure portal will open and prompt for the following parameters (suggested values are provided):
+
+[table; note: for parameters that the customer needs to look up (e.g., subscription ID), provide instructions to find]
+
+Setting | Description | Value
+--- | --- | ---
+Key Vault Name | Name of the Key Vault created during pre-deployment | blueprint-keyvault
+
+1. 
+2. 
+3. 
+4. 
+5. Review the terms and conditions, then click **I agree to the terms and conditions stated above**.
+6. Click **Purchase**.
+
+## Monitoring deployment status
+
+This solution uses multiple nested templates to deploy and configure the resources shown in the architecture diagram. The full deployment will take approximately [xx] minutes. You can monitor the deployment from the Azure portal. 
+
+[instructions / screen captures]
+
+The full timeline for the deployment is shown below.
+
+[deployment timeline]
+
+
+
+
+### POST-DEPLOYMENT
 
 
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
