@@ -306,27 +306,6 @@
                     }
                 }
             }
-            /*"resources": [{
-                "type": "extensions",
-                "name": "EnterpriseCloudMonitoring",
-                "apiVersion": "2016-03-30",
-                "location": "[resourceGroup().location]",
-                "dependsOn": [
-                    "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlVMName'), copyindex())]"
-                ],
-                "properties": {
-                    "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                    "type": "MicrosoftMonitoringAgent",
-                    "typeHandlerVersion": "1.0",
-                    "autoUpgradeMinorVersion": true,
-                    "settings": {
-                        "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
-                    },
-                    "protectedSettings": {
-                        "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
-                    }
-                }
-            }]*/
         },
         {
             "apiVersion": "2015-06-15",
@@ -388,27 +367,6 @@
                     }
                 }
             }
-            /*"resources": [{
-                "type": "extensions",
-                "name": "EnterpriseCloudMonitoring",
-                "apiVersion": "2016-03-30",
-                "location": "[resourceGroup().location]",
-                "dependsOn": [
-                    "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]"
-                ],
-                "properties": {
-                    "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                    "type": "MicrosoftMonitoringAgent",
-                    "typeHandlerVersion": "1.0",
-                    "autoUpgradeMinorVersion": true,
-                    "settings": {
-                        "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
-                    },
-                    "protectedSettings": {
-                        "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
-                    }
-                }
-            }]*/
         },
         {
             "name": "UpdatingSQLWNic",
