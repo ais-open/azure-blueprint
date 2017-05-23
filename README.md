@@ -61,11 +61,11 @@ The pre-deployment PowerShell script will verify that a supported version of Pow
 3. Run Orchestration_InitialSetup.ps1
 4. Enter the parameters above when prompted
 
-### DEPLOYMENT
+## DEPLOYMENT
 
 During this phase, an Azure Resource Manger (ARM) template will deploy Azure resources to your subscription and perform configuration activities. 
 
-## Azure Resource Manager (ARM) template deployment
+### Azure Resource Manager (ARM) template deployment
 
 [Description of how the deployment works, ARM, PowerShell scripts used...]
 
@@ -79,7 +79,7 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 
 * **Admin Username**: User account name for local VM administrator accounts
 
-## Deployment instructions
+### Deployment instructions
 
 1. Click [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
 2. 
@@ -88,7 +88,7 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 5. Review the terms and conditions, then click **I agree to the terms and conditions stated above**.
 6. Click **Purchase**.
 
-## Monitoring deployment status
+### Monitoring deployment status
 
 This solution uses multiple nested templates to deploy and configure the resources shown in the architecture diagram. The full deployment will take approximately [xx] minutes. You can monitor the deployment from the Azure portal. 
 
@@ -98,34 +98,34 @@ The full timeline for the deployment is shown below.
 
 [deployment timeline]
 
-### POST-DEPLOYMENT
+## POST-DEPLOYMENT
 
 Post-deployment tasks include...
 
-## Post-deployment instructions
+### Post-deployment instructions
 
 1. 
 2. 
 3. 
 
-## Accessing deployed resources
+### Accessing deployed resources
 
 [Instructions to access VMs]
 
 [Instructions to view OMS dashboard(s)]
 
-## Cost
+### Cost
 
 [Estimated monthly cost of deployed resources]
 
-## Extending and modifying the solution
+### Extending and modifying the solution
 
 [TBD]
 
-## How to delete deployed resources
+### How to delete deployed resources
 
 [Instructions to delete all deployed resources]
 
-### Troubleshooting
+## Troubleshooting
 
 [Common problems; where to obtain support, etc.]
