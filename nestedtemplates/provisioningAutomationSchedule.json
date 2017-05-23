@@ -8,7 +8,7 @@
         "scheduleName": {
             "type": "string"
         },
-        "scheduleJobGuid": {
+        "schedulerGuid": {
             "type": "string"
         },
         "computerIdList": {
@@ -36,15 +36,15 @@
         {
             "comments": "",
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
-            "name": "[concat(parameters('omsAutomationAccountName'),'/', parameters('scheduleJobGuid'))]",
+            "name": "[concat(parameters('omsAutomationAccountName'),'/', parameters('schedulerGuid'))]",
             "apiVersion": "2015-10-31",
-            "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Automation/automationAccounts/',parameters('omsAutomationAccountName'), '/jobSchedules/', parameters('scheduleJobGuid'))]",
+            "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Automation/automationAccounts/',parameters('omsAutomationAccountName'), '/jobSchedules/', parameters('schedulerGuid'))]",
             "dependsOn": [
 
                 "[concat('Microsoft.Automation/automationAccounts/', parameters('omsAutomationAccountName'), '/schedules/', parameters('scheduleName'))]"
             ],
             "properties": {
-                "jobScheduleId": "[parameters('scheduleJobGuid')]",
+                "jobScheduleId": "[parameters('schedulerGuid')]",
                 "runbook": {
                     "name": "Patch-MicrosoftOMSComputers"
                 },

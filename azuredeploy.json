@@ -116,7 +116,7 @@
             "type": "string",
             "defaultValue": "VM-Patching-Schedule"
         },
-        "scheduleJobGuid": {
+        "schedulerGuid": {
             "type": "string",
             "metadata": {
                 "description": "The GUID for the runbook job to be started."
@@ -1467,8 +1467,8 @@
                     "scheduleName": {
                         "value": "[parameters('scheduleName')]"
                     },
-                    "scheduleJobGuid": {
-                        "value": "[parameters('scheduleJobGuid')]"
+                    "schedulerGuid": {
+                        "value": "[parameters('schedulerGuid')]"
                     },
                     "computerIdList": {
                         "value": ""

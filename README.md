@@ -15,4 +15,5 @@
 $BaseSourceControl = 'C:\Users\USERNAME\Desktop\azure-blueprint'
 . "$BaseSourceControl\predeploy\Orchestration_InitialSetup.ps1"
 ```
-6. After the script has completed, click the Deploy to Azure button above, login into Azure Gov, and complete the form to begin the deployment process.
+6. You should also change the values for the Scheduler Guid. You can generate your own using PowerShell with the following cmdlet: New-Guid
+7. After the script has completed, click the Deploy to Azure button above, login into Azure Gov, and complete the form to begin the deployment process.

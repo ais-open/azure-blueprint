@@ -5,7 +5,7 @@
         "adminUsername": {
             "value": "adminuser"
         },
-        "scheduleJobGuid": {
+        "schedulerGuid": {
             "value": "f9f2e80a-3834-4b08-b34a-c5a92a426102"
         }
     }
