@@ -5,6 +5,8 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 
 ![alt text](docs/n-tier-diagram.png?raw=true "Azure Blueprint FedRAMP three-tier web-based application compliance architecture")
 
+[Solution description]
+
 The architecture includes the following Azure products:
 * Azure Storage
 * Azure Virtual Network
@@ -40,17 +42,19 @@ The PowerShell pre-deployment task includes installation of Azure PowerShell mod
 
 The pre-deployment PowerShell script will verify that a supported version of PowerShell is installed, that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters:
 
-**subscriptionID**: Unique ID for your Azure Government subscription. To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu, and begin typing "subscription" in the filter box. Click on **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
+[Note: for parameters that the customer needs to look up (e.g., subscription ID), provide instructions to find]
 
-**resourceGroupName**: Resource group name for this deployment. Resource group name must be a string of 1-90 alphanumeric characters (0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis and cannot end in a period (e.g., `blueprint-rg`).
+* **subscriptionID**: To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu, and begin typing "subscription" in the filter box. Click on **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
 
-**keyVaultName**: Key Vault name. Key Vault name must be a string 3-24 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government. 
+* **resourceGroupName**: The resource group name must be a string of 1-90 alphanumeric characters (0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis and cannot end in a period (e.g., `blueprint-rg`).
 
-**adminPassword**: Administrator password for local VM accounts (see note 3 below)
+* **keyVaultName**: The Key Vault name must be a string 3-24 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government. 
 
-**sqlServerServiceAccountPassword**: SQL service account password (see note 3 below)
+* **adminPassword**: Administrator password for local VM accounts (must complexity requirements)
 
-Note: You must enter credentials that meet the following complexity requirements: [...].
+* **sqlServerServiceAccountPassword**: SQL service account password (must complexity requirements)
+
+### Pre-deployment instructions
 
 1. Clone this GitHub repository to your local workstation
 2. Start PowerShell as an administrator
@@ -65,15 +69,19 @@ During this phase, an Azure Resource Manger (ARM) template will deploy Azure res
 
 [Description of how the deployment works, ARM, PowerShell scripts used...]
 
-After clicking the Deploy to Azure Gov button below, the Azure portal will open and prompt for the following parameters (suggested values are provided):
+After clicking the Deploy to Azure Gov button, the Azure portal will open and prompt for the following settings:
 
-[table; note: for parameters that the customer needs to look up (e.g., subscription ID), provide instructions to find]
+[Note: for settings that the customer needs to look up (e.g., subscription ID), provide instructions to find]
 
-Setting | Description | Value
---- | --- | ---
-Key Vault Name | Name of the Key Vault created during pre-deployment | blueprint-keyvault
+* **Key Vault Name**: Name of the Key Vault created during pre-deployment
 
-1. [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
+* **Key Vault Resource Gorup Name**: Name of the resource group created during pre-deployment (e.g., blueprint-rg)
+
+* **Admin Username**: User account name for local VM administrator accounts
+
+## Deployment instructions
+
+1. Click [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
 2. 
 3. 
 4. 
@@ -90,7 +98,34 @@ The full timeline for the deployment is shown below.
 
 [deployment timeline]
 
-
-
-
 ### POST-DEPLOYMENT
+
+Post-deployment tasks include...
+
+## Post-deployment instructions
+
+1. 
+2. 
+3. 
+
+## Accessing deployed resources
+
+[Instructions to access VMs]
+
+[Instructions to view OMS dashboard(s)]
+
+## Cost
+
+[Estimated monthly cost of deployed resources]
+
+## Extending and modifying the solution
+
+[TBD]
+
+## How to delete deployed resources
+
+[Instructions to delete all deployed resources]
+
+### Troubleshooting
+
+[Common problems; where to obtain support, etc.]
