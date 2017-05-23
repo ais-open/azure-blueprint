@@ -305,8 +305,8 @@
                         "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
                     }
                 }
-            },
-            "resources": [{
+            }
+            /*"resources": [{
                 "type": "extensions",
                 "name": "EnterpriseCloudMonitoring",
                 "apiVersion": "2016-03-30",
@@ -326,7 +326,7 @@
                         "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                     }
                 }
-            }]
+            }]*/
         },
         {
             "apiVersion": "2015-06-15",
@@ -387,8 +387,8 @@
                         "storageUri": "[concat('http://',variables('diagstorageNameSQL'),'.blob.core.usgovcloudapi.net')]"
                     }
                 }
-            },
-            "resources": [{
+            }
+            /*"resources": [{
                 "type": "extensions",
                 "name": "EnterpriseCloudMonitoring",
                 "apiVersion": "2016-03-30",
@@ -408,7 +408,7 @@
                         "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                     }
                 }
-            }]
+            }]*/
         },
         {
             "name": "UpdatingSQLWNic",

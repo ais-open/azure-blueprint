@@ -212,8 +212,8 @@
                         "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces', concat(parameters('WEBNICName'), copyindex()))]"
                     }]
                 }
-            },
-            "resources": [{
+            }
+            /*"resources": [{
                 "type": "extensions",
                 "name": "EnterpriseCloudMonitoring",
                 "apiVersion": "2016-03-30",
@@ -233,7 +233,7 @@
                         "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                     }
                 }
-            }]
+            }]*/
         },
         {
             "comments": "Join domain - JsonADDomainExtension",
