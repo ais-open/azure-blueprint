@@ -73,7 +73,6 @@
         },
         "omsWorkspaceName": {
             "type": "string",
-            "defaultValue": "dc-bp-omsworkspace",
             "metadata": {
                 "description": "Assign a name for the Log Analytic Workspace Name"
             }
@@ -109,7 +108,6 @@
         },
         "omsAutomationAccountName": {
             "type": "string",
-            "defaultValue": "dc-bp-autoacc",
             "metadata": {
                 "description": "Assign a name for the Log Analytic Workspace Name"
             }
