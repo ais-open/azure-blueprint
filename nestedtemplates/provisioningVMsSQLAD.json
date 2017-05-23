@@ -1294,10 +1294,10 @@
             }
           },
           "sql1ModulesURL": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.createClusterModulesURL]"
+            "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql1ModulesURL]"
           },
           "sql1ConfigurationFunction": {
-            "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.createClusterConfigurationFunction]"
+            "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql1ConfigurationFunction]"
           },
           "clusterName": {
             "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.clusterName]"
