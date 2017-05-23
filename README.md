@@ -40,27 +40,22 @@ The PowerShell pre-deployment task includes installation of Azure PowerShell mod
 
 The pre-deployment PowerShell script will verify that a supported version of PowerShell is installed, that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters:
 
-[table; note: for parameters that the customer needs to look up (e.g., subscription ID), provide instructions to find]
+**subscriptionID**: Unique ID for your Azure Government subscription. To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu, and begin typing "subscription" in the filter box. Click on **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
 
-Parameter | Description | Value
---- | --- | ---
-subscriptionID | Unique ID for your Azure Government subscription | (see note 1 below)
-resourceGroupName | Resource group name for this deployment | blueprint-rg
-keyVaultName | Key Vault name | (see note 2 below)
-adminPassword | Administrator password for local VM accounts | (see note 3 below)
-sqlServerServiceAccountPassword | SQL service account password | (see note 3 below)
+**resourceGroupName**: Resource group name for this deployment. Resource group name must be a string of 1-90 alphanumeric characters (0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis and cannot end in a period (e.g., `blueprint-rg`).
 
-Note 1: To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu, and begin typing "subscription" in the filter box. Click on **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
+**keyVaultName**: Key Vault name. Key Vault name must be a string 3-24 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government. 
 
-Note 2: Key Vault name must be a string 3-24 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government. 
+**adminPassword**: Administrator password for local VM accounts (see note 3 below)
 
-Note 3: You must enter credentials that meet the following complexity requirements: [...].
+**sqlServerServiceAccountPassword**: SQL service account password (see note 3 below)
 
-Resource group name must be a string of 1-90 alphanumeric characters (0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis and cannot end in a period (e.g., `blueprint-rg`).
+Note: You must enter credentials that meet the following complexity requirements: [...].
 
-1. 
-2. 
-3. 
+1. Clone this GitHub repository to your local workstation
+2. Start PowerShell as an administrator
+3. Run Orchestration_InitialSetup.ps1
+4. Enter the parameters above when prompted
 
 ### DEPLOYMENT
 
@@ -78,7 +73,7 @@ Setting | Description | Value
 --- | --- | ---
 Key Vault Name | Name of the Key Vault created during pre-deployment | blueprint-keyvault
 
-1. 
+1. [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
 2. 
 3. 
 4. 
@@ -99,20 +94,3 @@ The full timeline for the deployment is shown below.
 
 
 ### POST-DEPLOYMENT
-
-
-[![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
-
-
-## instructions
-1. Clone repo to local environment
-2. Start PowerShell session as Administrator
-3. Run ```Import-Module AzureRM ````
-4. Set $BaseSourceControl equal to the path of the location of the repo you just cloned (do not include the actual repo folder).
-5. Run /predeploy/Orchestration_InitialSetup.ps1 to create a new Resource Group with a new Key Vault that will contain the administrator passwords that you enter.
-```
-# Example
-$BaseSourceControl = 'C:\Users\USERNAME\Desktop\azure-blueprint'
-. "$BaseSourceControl\predeploy\Orchestration_InitialSetup.ps1"
-```
-6. After the script has completed, click the Deploy to Azure button above, login into Azure Gov, and complete the form to begin the deployment process.
