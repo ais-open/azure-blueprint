@@ -83,7 +83,7 @@
             "resources": [{
                 "type": "extensions",
                 "name": "EnterpriseCloudMonitoring",
-                "apiVersion": "2016-03-30",
+                "apiVersion": "2015-06-15",
                 "location": "[resourceGroup().location]",
                 "dependsOn": [
                     "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
