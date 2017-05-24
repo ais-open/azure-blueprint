@@ -1435,6 +1435,34 @@
                     },
                     "workspaceName": {
                         "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "AutomationAccountName": {
+                        "value": "[parameters('omsAutomationAccountName')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
+                    },
+                    "AzureUserName": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('keyVaultId')]"
+                            },
+                            "secretName": "azureUserName"
+                        }
+                    },
+                    "AzurePassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('keyVaultId')]"
+                            },
+                            "secretName": "azurePassword"
+                        }
+                    },
+                    "SubscriptionId": {
+                        "value": "[subscription().subscriptionId]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[resourceGroup().name]"
                     }
                 }
             }
@@ -1535,6 +1563,34 @@
                     },
                     "workspaceName": {
                         "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "AutomationAccountName": {
+                        "value": "[parameters('omsAutomationAccountName')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
+                    },
+                    "AzureUserName": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('keyVaultId')]"
+                            },
+                            "secretName": "azureUserName"
+                        }
+                    },
+                    "AzurePassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('keyVaultId')]"
+                            },
+                            "secretName": "azurePassword"
+                        }
+                    },
+                    "SubscriptionId": {
+                        "value": "[subscription().subscriptionId]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[resourceGroup().name]"
                     }
                 }
             }

@@ -206,6 +206,24 @@
         },
         "workspaceName": {
             "type": "string"
+        },
+        "AutomationAccountName": {
+            "type": "string"
+        },
+        "EnvironmentName": {
+            "type": "string"
+        },
+        "ResourceGroupName": {
+            "type": "string"
+        },
+        "AzureUserName": {
+            "type": "string"
+        },
+        "AzurePassword": {
+            "type": "securestring"
+        },
+        "SubscriptionId": {
+            "type": "string"
         }
     },
     "variables": {
@@ -491,7 +509,16 @@
                                 "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
                                 "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
                                 "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
-                                "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+                                "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]",
+                                "MachineName": "[parameters('adPDCVMName')]",
+                                "ResourceGroupName": "[parameters('ResourceGroupName')]",
+                                "AutomationAccountName": "[parameters('AutomationAccountName')]",
+                                "AzureAuthCreds": {
+                                    "UserName": "[parameters('AzureUserName')]",
+                                    "Password": "PrivateSettingsRef:AzurePassword"
+                                },
+                                "SubscriptionId": "[parameters('SubscriptionId')]",
+                                "EnvironmentName": "[parameters('EnvironmentName')]"
                             }
                         },
                         "protectedSettings": {
@@ -1114,7 +1141,16 @@
                                 "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
                                 "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
                                 "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
-                                "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+                                "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]",
+                                "MachineName": "[parameters('mgtVMName')]",
+                                "ResourceGroupName": "[parameters('ResourceGroupName')]",
+                                "AutomationAccountName": "[parameters('AutomationAccountName')]",
+                                "AzureAuthCreds": {
+                                    "UserName": "[parameters('AzureUserName')]",
+                                    "Password": "PrivateSettingsRef:AzurePassword"
+                                },
+                                "SubscriptionId": "[parameters('SubscriptionId')]",
+                                "EnvironmentName": "[parameters('EnvironmentName')]"
                             }
                         },
                         "protectedSettings": {
@@ -1211,6 +1247,25 @@
 
                     "antimalwareInfo": {
                         "value": "[parameters('antimalwareInfo')]"
+                    },
+
+                    "AutomationAccountName": {
+                        "value": "[parameters('AutomationAccountName')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[parameters('ResourceGroupName')]"
+                    },
+                    "AzureUserName": {
+                        "value": "[parameters('AzureUserName')]"
+                    },
+                    "AzurePassword": {
+                        "value": "[parameters('AzurePassword')]"
+                    },
+                    "SubscriptionId": {
+                        "value": "[parameters('SubscriptionId')]"
                     }
 
                 }
@@ -1305,6 +1360,24 @@
                     },
                     "antimalwareInfo": {
                         "value": "[parameters('antimalwareInfo')]"
+                    },
+                    "AutomationAccountName": {
+                        "value": "[parameters('AutomationAccountName')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[parameters('ResourceGroupName')]"
+                    },
+                    "AzureUserName": {
+                        "value": "[parameters('AzureUserName')]"
+                    },
+                    "AzurePassword": {
+                        "value": "[parameters('AzurePassword')]"
+                    },
+                    "SubscriptionId": {
+                        "value": "[parameters('SubscriptionId')]"
                     }
                 }
             }
