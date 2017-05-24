@@ -1017,7 +1017,19 @@
           },
           "subnetName": {
             "value": "[parameters('appGatewaySubnet').name]"
-          }
+          },
+	 "wafEnabled": {
+	 	"value": "[variables('wafSettings').wafEnabled]"
+	 },
+	 "wafMode": {
+	 	"value": "[variables('wafSettings').wafMode]"
+	 },
+	 "wafRuleSetType": {
+	 	"value": "[variables('wafSettings').wafRuleSetType]"
+	 },
+	 "wafRuleSetVersion": {
+	 	"value": "[variables('wafSettings').wafRuleSetVersion]"
+	 }	
         }
       }
     },
