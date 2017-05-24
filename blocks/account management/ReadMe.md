@@ -1,7 +1,7 @@
 For Harun: This script should be applied as a custom script extension on domain controller.
 In the last line of this script: reboot is required for group policies to be applied- 
 Please apply that only at the end of script to avoid any issues. (it is commented out right now)
-
+ 
 
 
 ##What script accomplishes:
