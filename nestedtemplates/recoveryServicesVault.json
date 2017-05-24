@@ -22,6 +22,9 @@
       "apiVersion": "2016-06-01",
       "name": "[parameters('backupInfo').rcVaultName]",
       "location": "[resourceGroup().location]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "sku": {
         "name": "RS0",
         "tier": "[parameters('skuTier')]"

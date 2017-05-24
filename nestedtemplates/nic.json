@@ -27,6 +27,9 @@
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
       "apiVersion": "2016-10-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "properties": {
         "ipConfigurations": "[parameters('ipConfigurations')]",
         "dnsSettings": {

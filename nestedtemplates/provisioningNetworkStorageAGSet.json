@@ -46,52 +46,64 @@
       }
    },
    "resources":[
-      {
-         "name":"[parameters('sqlStorageAccountName')]",
-         "type":"Microsoft.Storage/storageAccounts",
-         "apiVersion":"2015-05-01-preview",
-         "location":"[parameters('location')]",
-         "properties":{
-            "accountType":"[parameters('SqlStorageAccountType')]"
-         }
-      },
-      {
-         "type":"Microsoft.Storage/storageAccounts",
-         "name":"[parameters('dcStorageAccountName')]",
-         "apiVersion":"2015-05-01-preview",
-         "location":"[parameters('location')]",
-         "properties":{
-            "accountType":"[parameters('DcStorageAccountType')]"
-         }
-      },
-      {
-         "type":"Microsoft.Storage/storageAccounts",
-         "name":"[concat(uniquestring(parameters('sqlStorageAccountName')), 'fsw')]",
-         "apiVersion":"2015-05-01-preview",
-         "location":"[parameters('location')]",
-         "properties":{
-            "accountType":"Standard_LRS"
-         }
-      },
-      {
-         "type":"Microsoft.Storage/storageAccounts",
-         "name":"[concat(uniquestring(parameters('sqlStorageAccountName')), 'diag')]",
-         "apiVersion":"2015-05-01-preview",
-         "location":"[parameters('location')]",
-         "properties":{
-            "accountType":"Standard_LRS"
-         }
-      },
 
-
-
+    {
+      "name": "[parameters('sqlStorageAccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2015-05-01-preview",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[parameters('location')]",
+      "properties": {
+        "accountType": "[parameters('SqlStorageAccountType')]"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[parameters('dcStorageAccountName')]",
+      "apiVersion": "2015-05-01-preview",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[parameters('location')]",
+      "properties": {
+        "accountType": "[parameters('DcStorageAccountType')]"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[concat(uniquestring(parameters('sqlStorageAccountName')), 'fsw')]",
+      "apiVersion": "2015-05-01-preview",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[parameters('location')]",
+      "properties": {
+        "accountType": "Standard_LRS"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[concat(uniquestring(parameters('sqlStorageAccountName')), 'diag')]",
+      "apiVersion": "2015-05-01-preview",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[parameters('location')]",
+      "properties": {
+        "accountType": "Standard_LRS"
+      }
+    },
 
     {
       "type": "microsoft.insights/alertrules",
       "name": "capacity alert1",
       "apiVersion": "2014-04-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]",
-
       "properties": {
         "name": "capacity alert",
         "description": "usage more than 450 TB",
@@ -116,14 +128,14 @@
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('sqlStorageAccountName'))]"
       ]
     },
-
-
     {
       "type": "microsoft.insights/alertrules",
       "name": "capacity alert2",
       "apiVersion": "2014-04-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]",
-
       "properties": {
         "name": "capacity alert",
         "description": "usage more than 450 TB",
@@ -148,14 +160,14 @@
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('dcStorageAccountName'))]"
       ]
     },
-
-
     {
       "type": "microsoft.insights/alertrules",
       "name": "capacity alert3",
       "apiVersion": "2014-04-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]",
-
       "properties": {
         "name": "capacity alert4",
         "description": "usage more than 450 TB",
@@ -180,14 +192,14 @@
         "[resourceId('Microsoft.Storage/storageAccounts', concat(uniquestring(parameters('sqlStorageAccountName')), 'fsw'))]"
       ]
     },
-
-
     {
       "type": "microsoft.insights/alertrules",
       "name": "capacity alert4",
       "apiVersion": "2014-04-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "location": "[parameters('location')]",
-
       "properties": {
         "name": "capacity alert",
         "description": "usage more than 450 TB",
@@ -212,69 +224,80 @@
         "[resourceId('Microsoft.Storage/storageAccounts',concat(uniquestring(parameters('sqlStorageAccountName')), 'diag'))]"
       ]
     },
-      {
-         "apiVersion":"2015-06-15",
-         "type":"Microsoft.Network/publicIPAddresses",
-         "name":"[parameters('rdpIPAddressName')]",
-         "location":"[parameters('location')]",
-         "properties":{
-            "publicIPAllocationMethod":"dynamic"
-         }
+
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[parameters('rdpIPAddressName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Project": "BluePrint"
       },
-      {
-         "apiVersion":"2015-06-15",
-         "name":"[parameters('rdpLBName')]",
-         "type":"Microsoft.Network/loadBalancers",
-         "location":"[parameters('location')]",
-         "dependsOn":[
-            "[resourceId('Microsoft.Network/publicIPAddresses',parameters('rdpIPAddressName'))]"
-         ],
-         "properties":{
-            "frontendIPConfigurations":[
-               {
-                  "name":"[parameters('rdpLBFE')]",
-                  "properties":{
-                     "publicIPAddress":{
-                        "id":"[resourceId('Microsoft.Network/publicIPAddresses',parameters('rdpIPAddressName'))]"
-                     }
-                  }
-               }
-            ],
-            "backendAddressPools":[
-               {
-                  "name":"[parameters('adLBBE')]"
-               }
-            ],
-            "inboundNatRules":[
-               {
-                  "name":"[parameters('RDPNAT')]",
-                  "properties":{
-                     "frontendIPConfiguration":{
-                        "id":"[parameters('rdplbFEConfigID')]"
-                     },
-                     "protocol":"tcp",
-                     "frontendPort":3389,
-                     "backendPort":3389,
-                     "enableFloatingIP":false
-                  }
-               }
-            ]
-         }
-      },
-      {
-         "name":"[parameters('virtualNetworkName')]",
-         "type":"Microsoft.Network/virtualNetworks",
-         "location":"[parameters('location')]",
-         "apiVersion":"2015-06-15",
-         "properties":{
-            "addressSpace":{
-               "addressPrefixes":[
-                  "[parameters('virtualNetworkAddressRange')]"
-               ]
-            },
-            "subnets":"[parameters('subnets')]"
-         }
+      "properties": {
+        "publicIPAllocationMethod": "dynamic"
       }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "name": "[parameters('rdpLBName')]",
+      "type": "Microsoft.Network/loadBalancers",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses',parameters('rdpIPAddressName'))]"
+      ],
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "name": "[parameters('rdpLBFE')]",
+            "properties": {
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('rdpIPAddressName'))]"
+              }
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "[parameters('adLBBE')]"
+          }
+        ],
+        "inboundNatRules": [
+          {
+            "name": "[parameters('RDPNAT')]",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[parameters('rdplbFEConfigID')]"
+              },
+              "protocol": "tcp",
+              "frontendPort": 3389,
+              "backendPort": 3389,
+              "enableFloatingIP": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[parameters('virtualNetworkName')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[parameters('location')]",
+      "apiVersion": "2015-06-15",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('virtualNetworkAddressRange')]"
+          ]
+        },
+        "subnets": "[parameters('subnets')]"
+
+      }
+    }
    ],
    "outputs":{
 

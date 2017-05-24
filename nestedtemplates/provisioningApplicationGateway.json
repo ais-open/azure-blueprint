@@ -89,6 +89,9 @@
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[variables('publicIPAddressName')]",
       "location": "[resourceGroup().location]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "properties": {
         "publicIPAllocationMethod": "Dynamic"
       }
@@ -98,6 +101,9 @@
       "name": "[variables('applicationGatewayName')]",
       "type": "Microsoft.Network/applicationGateways",
       "location": "[resourceGroup().location]",
+      "tags": {
+        "Project": "BluePrint"
+      },
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]"
       ],
@@ -137,16 +143,16 @@
         ],
         "backendAddressPools": [
           {
-              "name": "appGatewayBackendPoolDefault",
-              "properties": {
-                "BackendAddresses": "[parameters('backendIpsForPathRuleWEB')]"
-              }
+            "name": "appGatewayBackendPoolDefault",
+            "properties": {
+              "BackendAddresses": "[parameters('backendIpsForPathRuleWEB')]"
+            }
           },
           {
-              "name": "appGatewayBackendPool1",
-              "properties": {
-                "BackendAddresses": "[parameters('backendIpsForPathRuleWEB')]"
-              }
+            "name": "appGatewayBackendPool1",
+            "properties": {
+              "BackendAddresses": "[parameters('backendIpsForPathRuleWEB')]"
+            }
           }
         ],
         "backendHttpSettingsCollection": [

@@ -83,32 +83,35 @@
         "gatewaySubnetRef2": "[concat(variables('vnetID2'),'/subnets/','GatewaySubnet')]"
     },
     "resources": [
-        {
-            "apiVersion": "[variables('apiVersion')]",
-            "type": "Microsoft.Network/virtualNetworkGateways",
-            "name": "[parameters('gatewayName1')]",
-            "location": "[parameters('location1')]",
-            "dependsOn": [
-            ],
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": {
-                                "id": "[variables('gatewaySubnetRef1')]"
-                            },
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('gatewayPublicIPName1'))]"
-                            }
-                        },
-                        "name": "vnetGatewayConfig1"
-                    }
-                ],
-                "gatewayType": "Vpn",
-                "vpnType": "RouteBased",
-                "enableBgp": "false"
+      {
+        "apiVersion": "[variables('apiVersion')]",
+        "type": "Microsoft.Network/virtualNetworkGateways",
+        "name": "[parameters('gatewayName1')]",
+        "location": "[parameters('location1')]",
+        "tags": {
+          "Project": "BluePrint"
+        },
+        "dependsOn": [
+        ],
+        "properties": {
+          "ipConfigurations": [
+            {
+              "properties": {
+                "privateIPAllocationMethod": "Dynamic",
+                "subnet": {
+                  "id": "[variables('gatewaySubnetRef1')]"
+                },
+                "publicIPAddress": {
+                  "id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('gatewayPublicIPName1'))]"
+                }
+              },
+              "name": "vnetGatewayConfig1"
             }
+          ],
+          "gatewayType": "Vpn",
+          "vpnType": "RouteBased",
+          "enableBgp": "false"
         }
+      }
     ]
 }
