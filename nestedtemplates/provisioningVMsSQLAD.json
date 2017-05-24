@@ -200,6 +200,7 @@
     "vmEncryptionSettings": {
       "type": "object"
     },
+
     "antimalwareInfo": {
       "type": "object"
     }
@@ -593,7 +594,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('adBDCNicName'))]"
+              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces', parameters('adBDCNicName'))]"
             }
           ]
         },
@@ -1237,9 +1238,11 @@
           "workloadType": {
             "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.workloadType]"
           },
+
           "antimalwareInfo": {
             "value": "[parameters('antimalwareInfo')]"
           }
+
         }
       }
     },

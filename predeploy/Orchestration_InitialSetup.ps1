@@ -112,7 +112,7 @@ Select-AzureRmSubscription -SubscriptionId $SubscriptionId | Out-String | Write-
         $SvcPrincipals = (Get-AzureRmADServicePrincipal -SearchString $aadAppName);
         if(-not $SvcPrincipals)
         {
-            # AAD app wasn't created 
+            # AAD app wasn't created
             Write-Error "Failed to create AAD app $aadAppName. Please log-in to Azure using Login-AzureRmAccount  and try again";
             return;
         }
@@ -165,7 +165,7 @@ if (-not (Get-AzureRMKeyVault -VaultName $keyVaultName -ResourceGroupName $resou
         {
             Write-Host "Couldn't find key encryption key named : $keyEncryptionKeyName in Key Vault: $keyVaultName";
             $kek = $null;
-        } 
+        }
 
         if(-not $kek)
         {
@@ -175,7 +175,7 @@ if (-not (Get-AzureRMKeyVault -VaultName $keyVaultName -ResourceGroupName $resou
         }
 
         $keyEncryptionKeyUrl = $kek.Key.Kid;
-    } 
+    }
 
 	$key = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name 'adminPassword' -Destination 'Software'
 	$secret = Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'adminPassword' -SecretValue $adminPassword

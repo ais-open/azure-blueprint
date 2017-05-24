@@ -1,51 +1,52 @@
-{  
+{
    "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
    "contentVersion":"1.0.0.0",
-   "parameters":{  
-      "sqlStorageAccountName":{  
+   "parameters":{
+      "sqlStorageAccountName":{
          "type":"string"
       },
-      "dcStorageAccountName":{  
+      "dcStorageAccountName":{
          "type":"string"
       },
-      "location":{  
+      "location":{
          "type":"string"
       },
-      "SqlStorageAccountType":{  
+      "SqlStorageAccountType":{
          "type":"string"
       },
-      "DcStorageAccountType":{  
+      "DcStorageAccountType":{
          "type":"string"
       },
-      "virtualNetworkName":{  
+      "virtualNetworkName":{
          "type":"string"
       },
-      "virtualNetworkAddressRange":{  
+      "virtualNetworkAddressRange":{
          "type":"string"
       },
-      "subnets":{  
+      "subnets":{
          "type":"array"
       },
-      "rdpIPAddressName":{  
+      "rdpIPAddressName":{
          "type":"string"
       },
-      "rdpLBName":{  
+      "rdpLBName":{
          "type":"string"
       },
-      "rdpLBFE":{  
+      "rdpLBFE":{
          "type":"string"
       },
-      "adLBBE":{  
+      "adLBBE":{
          "type":"string"
       },
-      "RDPNAT":{  
+      "RDPNAT":{
          "type":"string"
       },
-      "rdplbFEConfigID":{  
+      "rdplbFEConfigID":{
          "type":"string"
       }
    },
    "resources":[
+
     {
       "name": "[parameters('sqlStorageAccountName')]",
       "type": "Microsoft.Storage/storageAccounts",
@@ -94,6 +95,7 @@
         "accountType": "Standard_LRS"
       }
     },
+
     {
       "type": "microsoft.insights/alertrules",
       "name": "capacity alert1",
@@ -222,6 +224,7 @@
         "[resourceId('Microsoft.Storage/storageAccounts',concat(uniquestring(parameters('sqlStorageAccountName')), 'diag'))]"
       ]
     },
+
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/publicIPAddresses",
@@ -292,10 +295,11 @@
           ]
         },
         "subnets": "[parameters('subnets')]"
+
       }
     }
    ],
-   "outputs":{  
+   "outputs":{
 
    }
 }

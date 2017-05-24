@@ -616,6 +616,7 @@
     "sqlServerVersion": {
       "type": "string",
       "allowedValues": [
+
         "SQL2012SP3-WS2012R2",
         "SQL2014SP1-WS2012R2",
         "SQL2014SP2-WS2012R2",
@@ -644,7 +645,10 @@
       "defaultValue": "Standard_Small"
     }
   },
+
 	"variables": {
+		"appID": "aadClientID",
+		"appSecret": "aadClientSecret",
 		"lbSettings": {
 			"rdpLBFEName": "rdpLBFE",
 			"sqlLBFEName": "sqlLBFE",
@@ -652,6 +656,12 @@
 			"sqlLBBEName": "sqlLBBE",
 			"rdpLBName": "rdpLoadBalancer",
 			"sqlLBName": "sqlLoadBalancer"
+		},
+		"wafSettings": {
+			"wafMode": "Prevention",
+	    "wafRuleSetType": "OWASP",
+	    "wafRuleSetVersion": "3.0",
+			"wafEnabled": true
 		},
 		"numberOfWebInstances": "[length(parameters('webIPAddresses'))]",
 		"staticIPWEBStart": 5,
@@ -669,14 +679,15 @@
         "imageSKU": "Enterprise",
         "autoPatchingEnable": true,
         "autoPatchingDay": "Sunday",
-        "autoPatchingStartHour": "2",
+        "autoPatchingStartHour": 2,
         "sqlAOListenerPort": "1433",
         "sqlAOAGName": "alwayson-ag",
         "workloadType": "GENERAL",
         "sqlAOListenerName": "alwayson-ag-listener",
         "sqlAOEPName": "[concat(parameters('deploymentPrefix'),'-hadr')]",
     		"sharePath": "[concat(parameters('deploymentPrefix'),'-fsw')]",
-    		"clusterName": "[concat(parameters('deploymentPrefix'),'-fc')]"
+    		"clusterName": "[concat(parameters('deploymentPrefix'),'-fc')]",
+				"sqlAutobackupRetentionPeriod":"2"
       },
       "sqlw": {
         "imagePublisher": "MicrosoftWindowsServer",
@@ -699,6 +710,7 @@
 		},
 		"VnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkNameWithSuffix'))]",
 		"derivedIds": {
+			"keyVaultUrl": "[concat('https://', parameters('keyVaultName') ,'.vault.usgovcloudapi.net/')]",
 			"keyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]",
 			"dcSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('dcSubnet').name)]",
 			"sqlSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('sqlSubnet').name)]",
@@ -873,6 +885,7 @@
     }
 	},
 	"resources": [
+
     {
       "name": "VirtualNetworkNSG",
       "type": "Microsoft.Resources/deployments",
@@ -1033,6 +1046,7 @@
           "dcSubnetRef": {
             "value": "[variables('derivedIds').dcSubnet]"
           },
+
           "mgtSubnetRef": {
             "value": "[variables('derivedIds').mgtSubnet]"
           },
@@ -1095,7 +1109,8 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/BackupPolicyCustom"
+        "Microsoft.Resources/deployments/BackupPolicyCustom",
+				"Microsoft.Resources/deployments/ProvisioningNICsSQLADMGT"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1289,6 +1304,7 @@
           "sqlSubnetRef": {
             "value": "[variables('derivedIds').sqlSubnet]"
           },
+
           "postDeployScriptUris": {
             "value": "[variables('artifacts').postDeployScriptUris]"
           },

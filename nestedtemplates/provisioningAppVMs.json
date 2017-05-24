@@ -206,6 +206,7 @@
           ]
         }
       },
+
       "resources": [
         {
           "comments": "Join domain - JsonADDomainExtension",
@@ -234,6 +235,7 @@
             "protectedSettings": {
               "Password": "[parameters('adminPassword')]"
             }
+
           }
         },
         {
@@ -281,7 +283,9 @@
         "count": "[parameters('numberOfWebInstances')]"
       },
       "dependsOn": [
+
         "[resourceId('Microsoft.Compute/virtualMachines/extensions',concat(parameters('WebVMName'),copyindex()),'WebBaselineDSC')]"
+
       ],
       "properties": {
         "mode": "Incremental",

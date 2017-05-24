@@ -1,3 +1,4 @@
+
 {  
   "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion":"1.0.0.0",
@@ -65,8 +66,9 @@
     "antimalwareInfo": {
       "type": "object"
     }
+
    },
-   "variables":{  
+   "variables":{
       "Monday":"[mod(div(add(add(24,int(parameters('autoPatchingStartHour'))),2),24),7)]",
       "Tuesday":"[mod(div(add(add(48,int(parameters('autoPatchingStartHour'))),2),24),7)]",
       "Wednesday":"[mod(div(add(add(72,int(parameters('autoPatchingStartHour'))),2),24),7)]",
@@ -84,9 +86,11 @@
       "6":"Saturday",
       "7":"Sunday",
       "8":"Monday",
-      "0":"Everyday"
+      "0":"Everyday",
+      "sqlBackupStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'sqlbackup')]"
    },
    "resources":[
+
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('sqlwVMName'),'/SQLWBaselineDSC')]",
@@ -279,3 +283,4 @@
   ],
    "outputs":{}
 }
+
