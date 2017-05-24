@@ -17,6 +17,8 @@ Please apply that only at the end of script to avoid any issues. (it is commente
 
 3. Disbales inactive active directory user account after 35 days of inactivity.
 
-4. Shows a logon message when you login to the VM using RDP. You have to click on "OK" displayed under the message to login to the session.
+4. Shows a logon message when you login to the VM using RDP.
+You have to click on "OK" displayed under the message to login to the session.
 
-5. When you signout by going on 'start->user->signout', it will display message "signing out" to authenticate your successful logout and terminate the user session.
+5. When you signout by going on 'start->user->signout', it will display message "signing out"
+to authenticate your successful logout and terminate the user session.
