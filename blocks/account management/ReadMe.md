@@ -7,14 +7,14 @@ Please apply that only at the end of script to avoid any issues. (it is commente
 ##What script accomplishes: 
 ##What to test: 
 
-1. Sets account lockout policies: 
--On entering wrong password account locks out after 3 attempts. 
--After each unsuccessful attempt to login- lockout period is 15 minutes.  
--After 3 unsusccessful attempts to login, lokcout period id 3 hours.  
+1. Sets account lockout policies:  
+-On entering wrong password account locks out after 3 attempts.  
+-After each unsuccessful attempt to login- lockout period is 15 minutes.   
+-After 3 unsusccessful attempts to login, lokcout period id 3 hours.   
   
-2. Inactive session policies: 
--RDP session gets locked after 15 minutes of inactivity.  
--User needs to enter password (authenticate again) to log back in.    
+2. Inactive session policies:  
+-RDP session gets locked after 15 minutes of inactivity.   
+-User needs to enter password (authenticate again) to log back in.     
   
 3. Disbales inactive active directory user account after 35 days of inactivity. 
 The script adds a powershell scirpt at location "c:\scripts\Windows-PowerShell\disableinactiveaccounts.ps1",  
