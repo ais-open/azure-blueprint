@@ -292,7 +292,11 @@
                                 "EnvironmentName": "[parameters('EnvironmentName')]"
                             }
                         },
-                        "protectedSettings": null
+                        "protectedSettings": {
+                            "items": {
+                                "AzurePassword": "[parameters('AzurePassword')]"
+                            }
+                        }
                     }
                 }
             ]

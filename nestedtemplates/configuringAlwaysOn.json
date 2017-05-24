@@ -150,7 +150,8 @@
                     "items": {
                         "adminPassword": "[parameters('adminPassword')]",
                         "sqlServerServiceAccountPassword": "[parameters('sqlServerServiceAccountPassword')]",
-                        "sqlAuthPassword": "[parameters('sqlServerServiceAccountPassword')]"
+                        "sqlAuthPassword": "[parameters('sqlServerServiceAccountPassword')]",
+                        "AzurePassword": "[parameters('AzurePassword')]"
                     }
                 }
             }

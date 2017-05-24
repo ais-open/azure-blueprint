@@ -151,7 +151,8 @@
                 },
                 "protectedSettings": {
                     "items": {
-                        "adminPassword": "[parameters('adminPassword')]"
+                        "adminPassword": "[parameters('adminPassword')]",
+                        "AzurePassword": "[parameters('AzurePassword')]"
                     }
                 }
             }
@@ -278,7 +279,8 @@
                 "protectedSettings": {
                     "items": {
                         "adminPassword": "[parameters('adminPassword')]",
-                        "sqlServerServiceAccountPassword": "[parameters('sqlServerServiceAccountPassword')]"
+                        "sqlServerServiceAccountPassword": "[parameters('sqlServerServiceAccountPassword')]",
+                        "AzurePassword": "[parameters('AzurePassword')]"
                     }
                 }
             }

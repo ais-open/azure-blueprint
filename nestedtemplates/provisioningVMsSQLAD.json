@@ -523,7 +523,8 @@
                         },
                         "protectedSettings": {
                             "items": {
-                                "adminPassword": "[parameters('adminPassword')]"
+                                "adminPassword": "[parameters('adminPassword')]",
+                                "AzurePassword": "[parameters('AzurePassword')]"
                             }
                         }
                     }
@@ -875,6 +876,27 @@
                     },
                     "antimalwareInfo": {
                         "value": "[parameters('antimalwareInfo')]"
+                    },
+                    "MachineName": {
+                        "value": "[parameters('MachineName')]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[parameters('ResourceGroupName')]"
+                    },
+                    "AutomationAccountName": {
+                        "value": "[parameters('AutomationAccountName')]"
+                    },
+                    "AzureUserName": {
+                        "value": "[parameters('AzureUserName')]"
+                    },
+                    "AzurePassword": {
+                        "value": "[parameters('AzurePassword')]"
+                    },
+                    "SubscriptionId": {
+                        "value": "[parameters('SubscriptionId')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
                     }
                 }
             }
@@ -1154,7 +1176,9 @@
                             }
                         },
                         "protectedSettings": {
-                            "items": {}
+                            "items": {
+                                "AzurePassword": "[parameters('AzurePassword')]"
+                            }
                         }
                     }
                 }

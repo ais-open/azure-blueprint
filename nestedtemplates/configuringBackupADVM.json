@@ -82,6 +82,11 @@
                     },
                     "SubscriptionId": "[parameters('SubscriptionId')]",
                     "EnvironmentName": "[parameters('EnvironmentName')]"
+                },
+                "protectedSettings": {
+                    "items": {
+                        "AzurePassword": "[parameters('AzurePassword')]"
+                    }
                 }
             }
         }

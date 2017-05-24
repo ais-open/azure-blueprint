@@ -1445,7 +1445,7 @@
                     "AzureUserName": {
                         "reference": {
                             "keyVault": {
-                                "id": "[variables('keyVaultId')]"
+                                "id": "[variables('derivedIds').keyVaultId]"
                             },
                             "secretName": "azureUserName"
                         }
@@ -1453,7 +1453,7 @@
                     "AzurePassword": {
                         "reference": {
                             "keyVault": {
-                                "id": "[variables('keyVaultId')]"
+                                "id": "[variables('derivedIds').keyVaultId]"
                             },
                             "secretName": "azurePassword"
                         }
@@ -1573,7 +1573,7 @@
                     "AzureUserName": {
                         "reference": {
                             "keyVault": {
-                                "id": "[variables('keyVaultId')]"
+                                "id": "[variables('derivedIds').keyVaultId]"
                             },
                             "secretName": "azureUserName"
                         }
@@ -1581,7 +1581,7 @@
                     "AzurePassword": {
                         "reference": {
                             "keyVault": {
-                                "id": "[variables('keyVaultId')]"
+                                "id": "[variables('derivedIds').keyVaultId]"
                             },
                             "secretName": "azurePassword"
                         }
