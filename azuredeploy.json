@@ -642,7 +642,11 @@
     },
     "gatewaySkuName": {
       "type": "string",
-      "defaultValue": "Standard_Small"
+	"allowedValues": [
+		"WAF_Medium",
+		"WAF_Large"
+	],
+      "defaultValue": "WAF_Medium"
     }
   },
 
