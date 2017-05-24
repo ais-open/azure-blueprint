@@ -693,7 +693,12 @@
         },
         "gatewaySkuName": {
             "type": "string",
-            "defaultValue": "Standard_Small"
+            "defaultValue": "WAF_Medium",
+            "allowedValues": [
+                "Standard_Small",
+                "WAF_Medium",
+                "WAF_Large"
+            ]
         }
     },
 
@@ -730,7 +735,7 @@
                 "imageSKU": "Enterprise",
                 "autoPatchingEnable": true,
                 "autoPatchingDay": "Sunday",
-                "autoPatchingStartHour": 2,
+                "autoPatchingStartHour": "2",
                 "sqlAOListenerPort": "1433",
                 "sqlAOAGName": "alwayson-ag",
                 "workloadType": "GENERAL",
