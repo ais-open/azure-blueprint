@@ -90,7 +90,7 @@
                 "properties": {
                     "publisher": "Microsoft.EnterpriseCloud.Monitoring",
                     "type": "MicrosoftMonitoringAgent",
-                    "typeHandlerVersion": "1.0.11030.2",
+                    "typeHandlerVersion": "1.0",
                     "autoUpgradeMinorVersion": true,
                     "settings": {
                         "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
