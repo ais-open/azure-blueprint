@@ -868,8 +868,7 @@
             "apiVersion": "2015-01-01",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]",
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('sqlwVMName'), 'EnterpriseCloudMonitoring')]"
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]"
             ],
             "properties": {
                 "mode": "Incremental",
