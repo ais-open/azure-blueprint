@@ -927,6 +927,7 @@
             "apiVersion": "2015-01-01",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adBDCVMName'), 'EnterpriseCloudMonitoring')]",
                 "UpdatingDNStoPrimaryADVM"
             ],
             "properties": {
@@ -1521,6 +1522,7 @@
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adBDCVMName'), 'EnterpriseCloudMonitoring')]",
                 "sqlvirtualMachineLoop",
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]",
@@ -1589,6 +1591,7 @@
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
                 "sqlvirtualMachineLoop",
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adBDCVMName'), 'EnterpriseCloudMonitoring')]",
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
                 "encryptSQLMGMTADLoop"
             ],
