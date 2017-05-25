@@ -648,32 +648,54 @@
                 }
             },
             "resources": [{
-                "apiVersion": "2015-06-15",
-                "type": "Microsoft.Compute/virtualMachines/extensions",
-                "name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
-                "dependsOn": [
-                    "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]"
-                ],
-                "location": "[resourceGroup().location]",
-                "tags": {
-                    "displayName": "adcse-pwd",
-                    "Project": "BluePrint"
+                    "type": "Microsoft.Compute/virtualMachines/extensions",
+                    "name": "[concat(parameters('adBDCVMName'),'/EnterpriseCloudMonitoring')]",
+                    "apiVersion": "2016-03-30",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                        "type": "MicrosoftMonitoringAgent",
+                        "typeHandlerVersion": "1.0",
+                        "autoUpgradeMinorVersion": false,
+                        "settings": {
+                            "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
+                        },
+                        "protectedSettings": {
+                            "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
+                        }
+                    }
                 },
-                "properties": {
-                    "publisher": "Microsoft.Compute",
-                    "type": "CustomScriptExtension",
-                    "typeHandlerVersion": "1.8",
-                    "autoUpgradeMinorVersion": true,
-                    "settings": {
-                        "fileUris": "[parameters('postDeployScriptUris')]",
-                        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1"
+                {
+                    "apiVersion": "2015-06-15",
+                    "type": "Microsoft.Compute/virtualMachines/extensions",
+                    "name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]"
+                    ],
+                    "location": "[resourceGroup().location]",
+                    "tags": {
+                        "displayName": "adcse-pwd",
+                        "Project": "BluePrint"
                     },
-                    "protectedSettings": {
-                        "storageAccountName": "",
-                        "storageAccountKey": ""
+                    "properties": {
+                        "publisher": "Microsoft.Compute",
+                        "type": "CustomScriptExtension",
+                        "typeHandlerVersion": "1.8",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "fileUris": "[parameters('postDeployScriptUris')]",
+                            "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1"
+                        },
+                        "protectedSettings": {
+                            "storageAccountName": "",
+                            "storageAccountKey": ""
+                        }
                     }
                 }
-            }]
+            ]
         },
         {
             "apiVersion": "2016-03-30",

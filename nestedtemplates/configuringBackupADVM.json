@@ -51,7 +51,8 @@
             "type": "string"
         }
     },
-    "resources": [{
+    "resources": [
+        /*{
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('adBDCVMName'),'/EnterpriseCloudMonitoring')]",
             "apiVersion": "2016-03-30",
@@ -71,7 +72,7 @@
                     "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                 }
             }
-        },
+        },*/
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('adBDCVMName'),'/BDCBaselineDSC')]",
