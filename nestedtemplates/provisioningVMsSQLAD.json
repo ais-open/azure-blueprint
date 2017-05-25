@@ -480,7 +480,7 @@
             },
             "resources": [{
                     "type": "Microsoft.Compute/virtualMachines/extensions",
-                    "name": "[concat('EnterpriseCloudMonitoring-',parameters('adPDCVMName'))]",
+                    "name": "[concat(parameters('adPDCVMName'),'/EnterpriseCloudMonitoring')]",
                     "apiVersion": "2016-03-30",
                     "location": "[resourceGroup().location]",
                     "dependsOn": [
@@ -509,7 +509,7 @@
                     "location": "[parameters('location')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]",
-                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat('EnterpriseCloudMonitoring-',parameters('adPDCVMName')))]"
+                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'EnterpriseCloudMonitoring')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",

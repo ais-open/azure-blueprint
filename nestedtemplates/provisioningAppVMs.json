@@ -255,7 +255,7 @@
                 },
                 {
                     "type": "Microsoft.Compute/virtualMachines/extensions",
-                    "name": "[concat('EnterpriseCloudMonitoring-WEB-',copyIndex())]",
+                    "name": "[concat(parameters('WebVMName'), copyindex(), '/EnterpriseCloudMonitoring')]",
                     "apiVersion": "2016-03-30",
                     "location": "[resourceGroup().location]",
                     "dependsOn": [
@@ -286,7 +286,7 @@
                     "dependsOn": [
                         "[concat(parameters('WebVMName'), copyindex())]",
                         "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat(parameters('WebVMName'),copyIndex()), 'joindomain')]",
-                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat('EnterpriseCloudMonitoring-WEB-',copyIndex())]"
+                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat(parameters('WebVMName'),copyIndex()), 'EnterpriseCloudMonitoring')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
