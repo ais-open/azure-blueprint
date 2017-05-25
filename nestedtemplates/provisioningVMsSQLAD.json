@@ -674,7 +674,7 @@
                     "name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]",
-                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adBDCVMName'), 'EnterpriseCloudMonitoring')]"
+                        //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adBDCVMName'), 'EnterpriseCloudMonitoring')]"
                     ],
                     "location": "[resourceGroup().location]",
                     "tags": {
@@ -927,7 +927,7 @@
             "apiVersion": "2015-01-01",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adBDCVMName'), 'EnterpriseCloudMonitoring')]",
+                //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adBDCVMName'), 'EnterpriseCloudMonitoring')]",
                 "UpdatingDNStoPrimaryADVM"
             ],
             "properties": {
