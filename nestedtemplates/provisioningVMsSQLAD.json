@@ -649,7 +649,7 @@
             },
             "resources": [{
                     "type": "Microsoft.Compute/virtualMachines/extensions",
-                    "name": "[concat('EnterpriseCloudMonitoring-',parameters('adBDCVMName'))]",
+                    "name": "[concat(parameters('adBDCVMName'), '/EnterpriseCloudMonitoring')]",
                     "apiVersion": "2016-03-30",
                     "location": "[resourceGroup().location]",
                     "dependsOn": [
@@ -674,7 +674,7 @@
                     "name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]",
-                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat('EnterpriseCloudMonitoring-',parameters('adBDCVMName')))]"
+                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adBDCVMName'), 'EnterpriseCloudMonitoring')]"
                     ],
                     "location": "[resourceGroup().location]",
                     "tags": {
@@ -779,7 +779,7 @@
             },
             "resources": [{
                 "type": "Microsoft.Compute/virtualMachines/extensions",
-                "name": "[concat('EnterpriseCloudMonitoring-',concat(parameters('sqlVMName'), copyindex()))]",
+                "name": "[concat(parameters('sqlVMName'), copyindex(), '/EnterpriseCloudMonitoring')]",
                 "apiVersion": "2016-03-30",
                 "location": "[resourceGroup().location]",
                 "dependsOn": [
@@ -865,7 +865,7 @@
             },
             "resources": [{
                 "type": "Microsoft.Compute/virtualMachines/extensions",
-                "name": "[concat('EnterpriseCloudMonitoring-',parameters('sqlwVMName'))]",
+                "name": "[concat(parameters('sqlwVMName'), '/EnterpriseCloudMonitoring')]",
                 "apiVersion": "2016-03-30",
                 "location": "[resourceGroup().location]",
                 "dependsOn": [
@@ -892,7 +892,7 @@
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
                 "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]",
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat('EnterpriseCloudMonitoring-',parameters('sqlwVMName'))]"
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('sqlwVMName'), 'EnterpriseCloudMonitoring')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -1225,7 +1225,7 @@
                 },
                 {
                     "type": "Microsoft.Compute/virtualMachines/extensions",
-                    "name": "[concat('EnterpriseCloudMonitoring-',parameters('mgtVMName'))]",
+                    "name": "[concat(parameters('mgtVMName'), '/EnterpriseCloudMonitoring')]",
                     "apiVersion": "2016-03-30",
                     "location": "[resourceGroup().location]",
                     "dependsOn": [
@@ -1254,7 +1254,7 @@
                     },
                     "dependsOn": [
                         "[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]",
-                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat('EnterpriseCloudMonitoring-',parameters('mgtVMName'))]"
+                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'EnterpriseCloudMonitoring')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
