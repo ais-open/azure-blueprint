@@ -654,7 +654,7 @@
                     "location": "[resourceGroup().location]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]",
-                        "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
