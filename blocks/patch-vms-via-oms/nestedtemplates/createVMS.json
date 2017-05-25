@@ -208,8 +208,8 @@
             "apiVersion": "2015-06-15",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
-                //"[resourceId('Microsoft.Compute/virtualMachines/extensions/', parameters('vmName'),'EnterpriseCloudMonitoring')]"
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions/', parameters('vmName'),'EnterpriseCloudMonitoring')]"
                 // "Microsoft.Resources/deployments/CreateOMSWorkspace",
                 // "createVMsLoop"
             ],

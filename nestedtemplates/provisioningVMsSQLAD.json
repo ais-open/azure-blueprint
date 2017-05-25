@@ -478,8 +478,7 @@
                     }
                 }
             },
-            "resources": [
-                /*{
+            "resources": [{
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('adPDCVMName'),'/EnterpriseCloudMonitoring')]",
                     "apiVersion": "2016-03-30",
@@ -499,7 +498,7 @@
                             "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                         }
                     }
-                },*/
+                },
                 {
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('adPDCVMName'),'/PDCBaselineDSC')]",
@@ -510,7 +509,7 @@
                     "location": "[parameters('location')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]",
-                        //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'EnterpriseCloudMonitoring')]"
+                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'EnterpriseCloudMonitoring')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
