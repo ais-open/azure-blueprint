@@ -107,7 +107,7 @@
     },
     "resources": [
 
-        {
+        /*{
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('sqlwVMName'),'/SQLWBaselineDSC')]",
             "apiVersion": "2015-06-15",
@@ -156,7 +156,7 @@
                     }
                 }
             }
-        },
+        },*/
         {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -231,7 +231,7 @@
                 }
             }
         },
-        {
+        /*{
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('sqlVMName'),'0/SQL0BaselineDSC')]",
             "apiVersion": "2015-06-15",
@@ -284,7 +284,7 @@
                     }
                 }
             }
-        },
+        },*/
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('sqlVMName'),'0/Antimalware')]",

@@ -87,7 +87,8 @@
             "type": "string"
         }
     },
-    "resources": [{
+    "resources": [
+        /*{
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('sqlVMName'),'1/SQL1BaselineDSC')]",
             "apiVersion": "2015-06-15",
@@ -155,7 +156,7 @@
                     }
                 }
             }
-        },
+        },*/
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('sqlVMName'),'1/Antimalware')]",

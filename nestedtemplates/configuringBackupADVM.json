@@ -51,7 +51,8 @@
             "type": "string"
         }
     },
-    "resources": [{
+    "resources": [
+        /*{
         "type": "Microsoft.Compute/virtualMachines/extensions",
         "name": "[concat(parameters('adBDCVMName'),'/BDCBaselineDSC')]",
         "apiVersion": "2016-03-30",
@@ -93,6 +94,7 @@
                 }
             }
         }
-    }],
+    }*/
+    ],
     "outputs": {}
 }
