@@ -863,29 +863,27 @@
                     }
                 }
             },
-            "resources": [
-                /*{
-                                "type": "Microsoft.Compute/virtualMachines/extensions",
-                                "name": "[concat(parameters('sqlwVMName'), '/EnterpriseCloudMonitoring')]",
-                                "apiVersion": "2016-03-30",
-                                "location": "[resourceGroup().location]",
-                                "dependsOn": [
-                                    "[resourceId('Microsoft.Compute/virtualMachines', parameters('sqlwVMName'))]"
-                                ],
-                                "properties": {
-                                    "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                                    "type": "MicrosoftMonitoringAgent",
-                                    "typeHandlerVersion": "1.0",
-                                    "autoUpgradeMinorVersion": false,
-                                    "settings": {
-                                        "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
-                                    },
-                                    "protectedSettings": {
-                                        "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
-                                    }
-                                }
-                            }*/
-            ]
+            "resources": [{
+                "type": "Microsoft.Compute/virtualMachines/extensions",
+                "name": "[concat(parameters('sqlwVMName'), '/EnterpriseCloudMonitoring')]",
+                "apiVersion": "2016-03-30",
+                "location": "[resourceGroup().location]",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Compute/virtualMachines', parameters('sqlwVMName'))]"
+                ],
+                "properties": {
+                    "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                    "type": "MicrosoftMonitoringAgent",
+                    "typeHandlerVersion": "1.0",
+                    "autoUpgradeMinorVersion": false,
+                    "settings": {
+                        "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
+                    },
+                    "protectedSettings": {
+                        "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
+                    }
+                }
+            }]
         },
         {
             "name": "UpdatingDNStoPrimaryADVM",
@@ -894,7 +892,7 @@
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
                 "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]",
-                //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('sqlwVMName'), 'EnterpriseCloudMonitoring')]"
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('sqlwVMName'), 'EnterpriseCloudMonitoring')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -1226,7 +1224,7 @@
                         }
                     }
                 },
-                /*{
+                {
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('mgtVMName'), '/EnterpriseCloudMonitoring')]",
                     "apiVersion": "2016-03-30",
@@ -1246,7 +1244,7 @@
                             "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                         }
                     }
-                },*/
+                },
                 {
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('mgtVMName'),'/MGTBaselineDSC')]",
@@ -1257,7 +1255,7 @@
                     },
                     "dependsOn": [
                         "[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]",
-                        //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'EnterpriseCloudMonitoring')]"
+                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'EnterpriseCloudMonitoring')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
