@@ -178,7 +178,8 @@
                     }
                 }
             },
-            "resources": [{
+            "resources": [
+                /*{
                 "type": "extensions",
                 "name": "EnterpriseCloudMonitoring",
                 "apiVersion": "[variables('vmSettings').apiVersion]",
@@ -198,7 +199,8 @@
                         "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                     }
                 }
-            }]
+            }*/
+            ]
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -206,8 +208,8 @@
             "apiVersion": "2015-06-15",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]",
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions/', parameters('vmName'),'EnterpriseCloudMonitoring')]"
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+                //"[resourceId('Microsoft.Compute/virtualMachines/extensions/', parameters('vmName'),'EnterpriseCloudMonitoring')]"
                 // "Microsoft.Resources/deployments/CreateOMSWorkspace",
                 // "createVMsLoop"
             ],
