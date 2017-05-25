@@ -798,8 +798,7 @@
                     }
                 }
             },
-            "resources": [
-                /*{
+            "resources": [{
                 "type": "Microsoft.Compute/virtualMachines/extensions",
                 "name": "[concat(parameters('sqlVMName'), copyindex(), '/EnterpriseCloudMonitoring')]",
                 "apiVersion": "2016-03-30",
@@ -819,8 +818,7 @@
                         "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                     }
                 }
-            }*/
-            ]
+            }]
         },
         {
             "apiVersion": "2016-03-30",
@@ -886,8 +884,7 @@
                     }
                 }
             },
-            "resources": [
-                /*{
+            "resources": [{
                 "type": "Microsoft.Compute/virtualMachines/extensions",
                 "name": "[concat(parameters('sqlwVMName'), '/EnterpriseCloudMonitoring')]",
                 "apiVersion": "2016-03-30",
@@ -907,8 +904,7 @@
                         "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                     }
                 }
-            }*/
-            ]
+            }]
         },
         {
             "name": "UpdatingDNStoPrimaryADVM",
@@ -917,7 +913,7 @@
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
                 "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]",
-                //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('sqlwVMName'), 'EnterpriseCloudMonitoring')]"
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('sqlwVMName'), 'EnterpriseCloudMonitoring')]"
             ],
             "properties": {
                 "mode": "Incremental",
