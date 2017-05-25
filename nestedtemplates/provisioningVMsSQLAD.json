@@ -594,8 +594,8 @@
                 "[concat('Microsoft.Storage/storageAccounts/', parameters('dcStorageAccountName'))]",
                 "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameDC'))]",
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]"
-                //"UpdatingDNStoPrimaryADVM"
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]",
+                "UpdatingDNStoPrimaryADVM"
             ],
             "properties": {
                 "hardwareProfile": {
