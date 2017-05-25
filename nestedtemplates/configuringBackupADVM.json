@@ -82,7 +82,7 @@
             },
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adBDCVMName'), 'EnterpriseCloudMonitoring')]"
+                //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adBDCVMName'), 'EnterpriseCloudMonitoring')]"
             ],
             "properties": {
                 "publisher": "Microsoft.Powershell",
