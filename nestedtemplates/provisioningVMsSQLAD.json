@@ -674,7 +674,7 @@
                     "name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]",
-                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName', 'EnterpriseCloudMonitoring'))]"
+                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'), 'EnterpriseCloudMonitoring')]"
                     ],
                     "location": "[resourceGroup().location]",
                     "tags": {
