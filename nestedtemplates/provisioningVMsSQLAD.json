@@ -653,7 +653,8 @@
                     "apiVersion": "2016-03-30",
                     "location": "[resourceGroup().location]",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]"
+                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]",
+                        "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
