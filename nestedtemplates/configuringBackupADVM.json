@@ -29,6 +29,9 @@
         "antimalwareInfo": {
             "type": "object"
         },
+        "workspaceName": {
+            "type": "string"
+        },
         "ResourceGroupName": {
             "type": "string"
         },
@@ -49,47 +52,72 @@
         }
     },
     "resources": [{
-        "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(parameters('adBDCVMName'),'/BDCBaselineDSC')]",
-        "apiVersion": "2016-03-30",
-        "tags": {
-            "Project": "BluePrint"
-        },
-        "location": "[resourceGroup().location]",
-        "properties": {
-            "publisher": "Microsoft.Powershell",
-            "type": "DSC",
-            "typeHandlerVersion": "2.19",
-            "autoUpgradeMinorVersion": true,
-            "settings": {
-                "modulesURL": "[parameters('bdcModulesURL')]",
-                "configurationFunction": "[parameters('bdcConfigurationFunction')]",
-                "Properties": {
-                    "DNSServer": "[parameters('adPDCNICIPAddress')]",
-                    "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.ad]",
-                    "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.ad]",
-                    "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.ad]",
-                    "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
-                    "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
-                    "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
-                    "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]",
-                    "MachineName": "[parameters('adBDCVMName')]",
-                    "ResourceGroupName": "[parameters('ResourceGroupName')]",
-                    "AutomationAccountName": "[parameters('AutomationAccountName')]",
-                    "AzureAuthCreds": {
-                        "UserName": "[parameters('AzureUserName')]",
-                        "Password": "PrivateSettingsRef:AzurePassword"
-                    },
-                    "SubscriptionId": "[parameters('SubscriptionId')]",
-                    "EnvironmentName": "[parameters('EnvironmentName')]"
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('adBDCVMName'),'/EnterpriseCloudMonitoring')]",
+            "apiVersion": "2016-03-30",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                "type": "MicrosoftMonitoringAgent",
+                "typeHandlerVersion": "1.0",
+                "autoUpgradeMinorVersion": false,
+                "settings": {
+                    "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
                 },
                 "protectedSettings": {
-                    "items": {
-                        "AzurePassword": "[parameters('AzurePassword')]"
+                    "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('adBDCVMName'),'/BDCBaselineDSC')]",
+            "apiVersion": "2016-03-30",
+            "tags": {
+                "Project": "BluePrint"
+            },
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adBDCVMName'), 'EnterpriseCloudMonitoring')]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.19",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "modulesURL": "[parameters('bdcModulesURL')]",
+                    "configurationFunction": "[parameters('bdcConfigurationFunction')]",
+                    "Properties": {
+                        "DNSServer": "[parameters('adPDCNICIPAddress')]",
+                        "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.ad]",
+                        "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.ad]",
+                        "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.ad]",
+                        "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
+                        "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
+                        "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
+                        "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]",
+                        "MachineName": "[parameters('adBDCVMName')]",
+                        "ResourceGroupName": "[parameters('ResourceGroupName')]",
+                        "AutomationAccountName": "[parameters('AutomationAccountName')]",
+                        "AzureAuthCreds": {
+                            "UserName": "[parameters('AzureUserName')]",
+                            "Password": "PrivateSettingsRef:AzurePassword"
+                        },
+                        "SubscriptionId": "[parameters('SubscriptionId')]",
+                        "EnvironmentName": "[parameters('EnvironmentName')]"
+                    },
+                    "protectedSettings": {
+                        "items": {
+                            "AzurePassword": "[parameters('AzurePassword')]"
+                        }
                     }
                 }
             }
         }
-    }],
+    ],
     "outputs": {}
 }
