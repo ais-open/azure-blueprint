@@ -1245,7 +1245,7 @@
                         }
                     }
                 },
-                /*{
+                {
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('mgtVMName'), '/EnterpriseCloudMonitoring')]",
                     "apiVersion": "2016-03-30",
@@ -1265,7 +1265,7 @@
                             "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                         }
                     }
-                },*/
+                },
                 {
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('mgtVMName'),'/MGTBaselineDSC')]",
@@ -1276,7 +1276,7 @@
                     },
                     "dependsOn": [
                         "[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]",
-                        //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'EnterpriseCloudMonitoring')]"
+                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'EnterpriseCloudMonitoring')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
