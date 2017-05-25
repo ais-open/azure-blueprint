@@ -334,7 +334,7 @@
             },
             "dependsOn": [
 
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions',concat(parameters('WebVMName'),copyindex()),'WebBaselineDSC')]"
+                //"[resourceId('Microsoft.Compute/virtualMachines/extensions',concat(parameters('WebVMName'),copyindex()),'WebBaselineDSC')]"
 
             ],
             "properties": {

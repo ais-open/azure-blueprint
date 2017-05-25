@@ -166,7 +166,7 @@
                 "Project": "BluePrint"
             },
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/',concat(parameters('sqlVMName'),'1'),'/extensions/SQL1BaselineDSC')]"
+                //"[concat('Microsoft.Compute/virtualMachines/',concat(parameters('sqlVMName'),'1'),'/extensions/SQL1BaselineDSC')]"
             ],
             "properties": {
                 "publisher": "Microsoft.Azure.Security",
