@@ -847,7 +847,8 @@
         },
         "artifacts": {
             "postDeployScriptUris": [
-                "[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]"
+                "[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]",
+                "[concat(parameters('scriptsBaseUrl'),'/accountmanagementprincipals.ps1')]"
             ],
             "provisioningOMSWorkspaceUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutoAccOMSWorkspace.json')]",
             "provisioningOMSAutomationScheduleUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutomationSchedule.json')]",
