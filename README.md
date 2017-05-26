@@ -27,16 +27,16 @@ The architecture includes the following Azure products:
 	- (1) SQL Loadbalancer
 * Application Gateway
 	- (1) WAF Application Gateway
-	-- Enabled
-	-- Firewall Mode: Prevention
-	-- Rule set: OWASP 3.0
-	-- Listener: Port 80
+	- Enabled
+	- Firewall Mode: Prevention
+	- Rule set: OWASP 3.0
+	- Listener: Port 80
 * Storage
 * Backup
 * Key Vault
 	- (1) keyVault
-	-- (3) Access Policies (user, AADServicePrincipal, BackupFairFax)
-	-- (7) Secrets (aadClientID, aadClientSecret, adminPassword, azurePassword, azureUserName, keyEncryptionKeyURL, sqlServerServiceAccountPassword)
+	- (3) Access Policies (user, AADServicePrincipal, BackupFairFax)
+	- (7) Secrets (aadClientID, aadClientSecret, adminPassword, azurePassword, azureUserName, keyEncryptionKeyURL, sqlServerServiceAccountPassword)
 * Azure Active Directory
 * Azure Resource Manager
 * Application Insights
