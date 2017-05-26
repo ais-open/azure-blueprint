@@ -705,7 +705,6 @@
             ]
         }
     },
-
     "variables": {
         "appID": "aadClientID",
         "appSecret": "aadClientSecret",
