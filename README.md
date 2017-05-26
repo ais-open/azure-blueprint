@@ -27,4 +27,5 @@ sqlServerServiceAccountPassword: ***************
 aadAppName: <enter a name for a new azure AD application>
 keyEncryptionKeyName: <enter a name for a new encryption key>
 ```
-6. After the script has completed, click the Deploy to Azure button above, login into Azure Gov, and complete the form to begin the deployment process.
+6. The scheduler Job needs a unique GUID as the jobId. Please update scheduleJobGuid parameter with a new GUID. Use the following PowerShell to create a new GUID:  New-Guid
+7. After the script has completed, click the Deploy to Azure button above, login into Azure Gov, and complete the form to begin the deployment process.

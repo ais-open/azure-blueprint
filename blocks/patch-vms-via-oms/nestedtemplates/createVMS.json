@@ -178,7 +178,8 @@
                     }
                 }
             },
-            "resources": [{
+            "resources": [
+                /*{
                 "type": "extensions",
                 "name": "EnterpriseCloudMonitoring",
                 "apiVersion": "[variables('vmSettings').apiVersion]",
@@ -198,7 +199,8 @@
                         "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                     }
                 }
-            }]
+            }*/
+            ]
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
