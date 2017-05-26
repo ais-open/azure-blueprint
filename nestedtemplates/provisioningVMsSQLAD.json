@@ -500,7 +500,7 @@
                                         }
                                     }
                                 },*/
-                {
+                /*{
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('adPDCVMName'),'/PDCBaselineDSC')]",
                     "apiVersion": "2015-06-15",
@@ -532,7 +532,7 @@
                                 "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
                                 "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
                                 "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
-                                "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+                                "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"*/
                                     /*"MachineName": "[parameters('adPDCVMName')]",
                                     "ResourceGroupName": "[parameters('ResourceGroupName')]",
                                     "AutomationAccountName": "[parameters('AutomationAccountName')]",
@@ -542,7 +542,7 @@
                                     },
                                     "SubscriptionId": "[parameters('SubscriptionId')]",
                                     "EnvironmentName": "[parameters('EnvironmentName')]"*/
-                            }
+                            /*}
                         },
                         "protectedSettings": {
                             "items": {
@@ -551,7 +551,7 @@
                             }
                         }
                     }
-                },
+                },*/
                 {
                     "apiVersion": "2015-06-15",
                     "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -670,7 +670,7 @@
                                         }
                                     }
                                 },*/
-                {
+                /*{
                     "apiVersion": "2015-06-15",
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
@@ -696,7 +696,7 @@
                             "storageAccountKey": ""
                         }
                     }
-                }
+                }*/
             ]
         },
         {
