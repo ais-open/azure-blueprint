@@ -895,8 +895,8 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]"
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]"//,
+                //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]"
             ],
             "properties": {
                 "mode": "Incremental",
