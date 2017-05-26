@@ -849,6 +849,7 @@
             "postDeployScriptUris": [
                 "[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]"
             ],
+            "provisioningHybridworkerUrl": "[concat(parameters('scriptsBaseUrl'),'/provisioningHybridworkers.ps1')]",
             "provisioningOMSWorkspaceUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutoAccOMSWorkspace.json')]",
             "provisioningOMSAutomationScheduleUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutomationSchedule.json')]",
             "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
@@ -1462,6 +1463,9 @@
                     },
                     "ResourceGroupName": {
                         "value": "[resourceGroup().name]"
+                    },
+                    "provisioningHybridworkersUrl": {
+                        "value": "[variables('artifacts').provisioningHybridworkerUrl]"
                     }
                 }
             }
@@ -1590,6 +1594,9 @@
                     },
                     "ResourceGroupName": {
                         "value": "[resourceGroup().name]"
+                    },
+                    "provisioningHybridworkersUrl": {
+                        "value": "[variables('artifacts').provisioningHybridworkerUrl]"
                     }
                 }
             }
