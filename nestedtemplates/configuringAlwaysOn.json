@@ -87,55 +87,57 @@
             "type": "string"
         }
     },
-    "resources": [{
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('sqlVMName'),'1/SQL1BaselineDSC')]",
-            "apiVersion": "2015-06-15",
-            "tags": {
-                "Project": "BluePrint"
+  "resources": [
+    
+    /*{
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('sqlVMName'),'1/SQL1BaselineDSC')]",
+      "apiVersion": "2015-06-15",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[parameters('location')]",
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.19",
+        "autoUpgradeMinorVersion": false,
+        "settings": {
+          "modulesURL": "[parameters('sql1ModulesURL')]",
+          "configurationFunction": "[parameters('sql1ConfigurationFunction')]",
+          "properties": {
+            "domainName": "[parameters('domainName')]",
+            "clusterName": "[parameters('clusterName')]",
+            "sharePath": "[concat('\\\\',parameters('sqlwVMName'),'\\',parameters('sharePath'))]",
+            "nodes": [
+              "[concat(parameters('sqlVMName'),'0')]",
+              "[concat(parameters('sqlVMName'),'1')]"
+            ],
+            "sqlAlwaysOnEndpointName": "[parameters('sqlAOEPName')]",
+            "sqlAlwaysOnAvailabilityGroupName": "[parameters('sqlAOAGName')]",
+            "sqlAlwaysOnAvailabilityGroupListenerName": "[parameters('sqlAOListenerName')]",
+            "SqlAlwaysOnAvailabilityGroupListenerPort": "[parameters('sqlAOListenerPort')]",
+            "databaseNames": "AutoHa-sample",
+            "lbName": "[parameters('sqlLBName')]",
+            "lbAddress": "[parameters('sqlLBIPAddress')]",
+            "primaryReplica": "[concat(parameters('sqlVMName'),'1')]",
+            "secondaryReplica": "[concat(parameters('sqlVMName'),'0')]",
+            "dnsServerName": "[parameters('adPDCVMName')]",
+            "adminCreds": {
+              "userName": "[parameters('adminUserName')]",
+              "password": "privateSettingsRef:adminPassword"
             },
-            "location": "[parameters('location')]",
-            "properties": {
-                "publisher": "Microsoft.Powershell",
-                "type": "DSC",
-                "typeHandlerVersion": "2.19",
-                "autoUpgradeMinorVersion": false,
-                "settings": {
-                    "modulesURL": "[parameters('sql1ModulesURL')]",
-                    "configurationFunction": "[parameters('sql1ConfigurationFunction')]",
-                    "properties": {
-                        "domainName": "[parameters('domainName')]",
-                        "clusterName": "[parameters('clusterName')]",
-                        "sharePath": "[concat('\\\\',parameters('sqlwVMName'),'\\',parameters('sharePath'))]",
-                        "nodes": [
-                            "[concat(parameters('sqlVMName'),'0')]",
-                            "[concat(parameters('sqlVMName'),'1')]"
-                        ],
-                        "sqlAlwaysOnEndpointName": "[parameters('sqlAOEPName')]",
-                        "sqlAlwaysOnAvailabilityGroupName": "[parameters('sqlAOAGName')]",
-                        "sqlAlwaysOnAvailabilityGroupListenerName": "[parameters('sqlAOListenerName')]",
-                        "SqlAlwaysOnAvailabilityGroupListenerPort": "[parameters('sqlAOListenerPort')]",
-                        "databaseNames": "AutoHa-sample",
-                        "lbName": "[parameters('sqlLBName')]",
-                        "lbAddress": "[parameters('sqlLBIPAddress')]",
-                        "primaryReplica": "[concat(parameters('sqlVMName'),'1')]",
-                        "secondaryReplica": "[concat(parameters('sqlVMName'),'0')]",
-                        "dnsServerName": "[parameters('adPDCVMName')]",
-                        "adminCreds": {
-                            "userName": "[parameters('adminUserName')]",
-                            "password": "privateSettingsRef:adminPassword"
-                        },
-                        "sqlServiceCreds": {
-                            "userName": "[parameters('sqlServerServiceAccountUserName')]",
-                            "password": "privateSettingsRef:sqlServerServiceAccountPassword"
-                        },
-                        "SQLAuthCreds": {
-                            "userName": "sqlsa",
-                            "password": "privateSettingsRef:sqlAuthPassword"
-                        },
-                        "NumberOfDisks": "[parameters('numberOfDisks')]",
-                        "WorkloadType": "[parameters('workloadType')]"
-                            /*"MachineName": "[concat(parameters('sqlVMName'),'1')]",
+            "sqlServiceCreds": {
+              "userName": "[parameters('sqlServerServiceAccountUserName')]",
+              "password": "privateSettingsRef:sqlServerServiceAccountPassword"
+            },
+            "SQLAuthCreds": {
+              "userName": "sqlsa",
+              "password": "privateSettingsRef:sqlAuthPassword"
+            },
+            "NumberOfDisks": "[parameters('numberOfDisks')]",
+            "WorkloadType": "[parameters('workloadType')]"*/
+            /*"MachineName": "[concat(parameters('sqlVMName'),'1')]",
                             "ResourceGroupName": "[parameters('ResourceGroupName')]",
                             "AutomationAccountName": "[parameters('AutomationAccountName')]",
                             "AzureAuthCreds": {
@@ -144,52 +146,52 @@
                             },
                             "SubscriptionId": "[parameters('SubscriptionId')]",
                             "EnvironmentName": "[parameters('EnvironmentName')]"*/
-                    }
-                },
-                "protectedSettings": {
-                    "items": {
-                        "adminPassword": "[parameters('adminPassword')]",
-                        "sqlServerServiceAccountPassword": "[parameters('sqlServerServiceAccountPassword')]",
-                        "sqlAuthPassword": "[parameters('sqlServerServiceAccountPassword')]",
-                        "AzurePassword": "[parameters('AzurePassword')]"
-                    }
-                }
-            }
+          /*}
         },
-        {
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('sqlVMName'),'1/Antimalware')]",
-            "apiVersion": "2016-04-30-preview",
-            "location": "[parameters('location')]",
-            "tags": {
-                "Project": "BluePrint"
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/',concat(parameters('sqlVMName'),'1'),'/extensions/SQL1BaselineDSC')]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Azure.Security",
-                "type": "IaaSAntimalware",
-                "typeHandlerVersion": "1.3",
-                "settings": {
-                    "AntimalwareEnabled": "true",
-                    "Exclusions": {
-                        "Paths": "[parameters('antimalwareInfo').exclusionPath.sqlWS2012]",
-                        "Extensions": "[parameters('antimalwareInfo').exclusionExtension.sqlWS2012]",
-                        "Processes": "[parameters('antimalwareInfo').exclusionProcess.sqlWS2012]"
-                    },
-                    "RealtimeProtectionEnabled": "true",
-                    "ScheduledScanSettings": {
-                        "isEnabled": "true",
-                        "scanType": "Full",
-                        "day": "0",
-                        "time": "60"
-                    }
-                },
-                "protectedSettings": null
-            }
+        "protectedSettings": {
+          "items": {
+            "adminPassword": "[parameters('adminPassword')]",
+            "sqlServerServiceAccountPassword": "[parameters('sqlServerServiceAccountPassword')]",
+            "sqlAuthPassword": "[parameters('sqlServerServiceAccountPassword')]",
+            "AzurePassword": "[parameters('AzurePassword')]"
+          }
         }
-    ],
+      }
+    },*/
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('sqlVMName'),'1/Antimalware')]",
+      "apiVersion": "2016-04-30-preview",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "dependsOn": [
+        //"[concat('Microsoft.Compute/virtualMachines/',concat(parameters('sqlVMName'),'1'),'/extensions/SQL1BaselineDSC')]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Azure.Security",
+        "type": "IaaSAntimalware",
+        "typeHandlerVersion": "1.3",
+        "settings": {
+          "AntimalwareEnabled": "true",
+          "Exclusions": {
+            "Paths": "[parameters('antimalwareInfo').exclusionPath.sqlWS2012]",
+            "Extensions": "[parameters('antimalwareInfo').exclusionExtension.sqlWS2012]",
+            "Processes": "[parameters('antimalwareInfo').exclusionProcess.sqlWS2012]"
+          },
+          "RealtimeProtectionEnabled": "true",
+          "ScheduledScanSettings": {
+            "isEnabled": "true",
+            "scanType": "Full",
+            "day": "0",
+            "time": "60"
+          }
+        },
+        "protectedSettings": null
+      }
+    }
+  ],
     "outputs": {
 
     }
