@@ -32,7 +32,10 @@ The architecture includes the following Azure products:
 	- Rule set: OWASP 3.0
 	- Listener: Port 80
 * Storage
+	- (6) Azure Storage Accounts (dc, dcdiag, mgt, sql, sqldiag, sqlfsw)
 * Backup
+	- (1) Recovery Services Vault
+	- All VMs are protected
 * Key Vault
 	- (1) keyVault
 	- (3) Access Policies (user, AADServicePrincipal, BackupFairFax)
