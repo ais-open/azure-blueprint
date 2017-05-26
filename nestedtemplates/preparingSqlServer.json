@@ -136,16 +136,16 @@
                         "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
                         "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
                         "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
-                        "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]",
-                        /*"MachineName": "[parameters('sqlwVMName')]",
-                        "ResourceGroupName": "[parameters('ResourceGroupName')]",
-                        "AutomationAccountName": "[parameters('AutomationAccountName')]",
-                        "AzureAuthCreds": {
-                            "UserName": "[parameters('AzureUserName')]",
-                            "Password": "PrivateSettingsRef:AzurePassword"
-                        },
-                        "SubscriptionId": "[parameters('SubscriptionId')]",
-                        "EnvironmentName": "[parameters('EnvironmentName')]"*/
+                        "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+                            /*"MachineName": "[parameters('sqlwVMName')]",
+                            "ResourceGroupName": "[parameters('ResourceGroupName')]",
+                            "AutomationAccountName": "[parameters('AutomationAccountName')]",
+                            "AzureAuthCreds": {
+                                "UserName": "[parameters('AzureUserName')]",
+                                "Password": "PrivateSettingsRef:AzurePassword"
+                            },
+                            "SubscriptionId": "[parameters('SubscriptionId')]",
+                            "EnvironmentName": "[parameters('EnvironmentName')]"*/
 
                     }
                 },
