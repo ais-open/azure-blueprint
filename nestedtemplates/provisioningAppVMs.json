@@ -253,7 +253,7 @@
 
                     }
                 },
-                {
+                /*{
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('WebVMName'), copyindex(), '/EnterpriseCloudMonitoring')]",
                     "apiVersion": "2016-03-30",
@@ -274,8 +274,8 @@
                             "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                         }
                     }
-                },
-                /*{
+                },*/
+                {
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('WebVMName'), copyindex(), '/WebBaselineDSC')]",
                     "apiVersion": "2015-05-01-preview",
@@ -285,8 +285,8 @@
                     "location": "[parameters('location')]",
                     "dependsOn": [
                         "[concat(parameters('WebVMName'), copyindex())]",
-                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat(parameters('WebVMName'),copyIndex()), 'joindomain')]",
-                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat(parameters('WebVMName'),copyIndex()), 'EnterpriseCloudMonitoring')]"
+                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat(parameters('WebVMName'),copyIndex()), 'joindomain')]"
+                        //"[resourceId('Microsoft.Compute/virtualMachines/extensions', concat(parameters('WebVMName'),copyIndex()), 'EnterpriseCloudMonitoring')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
@@ -304,15 +304,15 @@
                                 "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
                                 "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
                                 "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
-                                "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]",
-                                "ResourceGroupName": "[parameters('ResourceGroupName')]",
-                                "AutomationAccountName": "[parameters('AutomationAccountName')]",
-                                "AzureAuthCreds": {
-                                    "UserName": "[parameters('AzureUserName')]",
-                                    "Password": "PrivateSettingsRef:AzurePassword"
-                                },
-                                "SubscriptionId": "[parameters('SubscriptionId')]",
-                                "EnvironmentName": "[parameters('EnvironmentName')]"
+                                "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+                                    /*"ResourceGroupName": "[parameters('ResourceGroupName')]",
+                                    "AutomationAccountName": "[parameters('AutomationAccountName')]",
+                                    "AzureAuthCreds": {
+                                        "UserName": "[parameters('AzureUserName')]",
+                                        "Password": "PrivateSettingsRef:AzurePassword"
+                                    },
+                                    "SubscriptionId": "[parameters('SubscriptionId')]",
+                                    "EnvironmentName": "[parameters('EnvironmentName')]"*/
                             }
                         },
                         "protectedSettings": {
@@ -321,7 +321,7 @@
                             }
                         }
                     }
-                }*/
+                }
             ]
         },
         {
@@ -334,7 +334,7 @@
             },
             "dependsOn": [
 
-                //"[resourceId('Microsoft.Compute/virtualMachines/extensions',concat(parameters('WebVMName'),copyindex()),'WebBaselineDSC')]"
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions',concat(parameters('WebVMName'),copyindex()),'WebBaselineDSC')]"
 
             ],
             "properties": {
