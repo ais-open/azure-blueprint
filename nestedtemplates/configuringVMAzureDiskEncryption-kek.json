@@ -81,7 +81,7 @@
                 }
             }
         },
-        {
+        /*{
             "apiVersion": "2016-04-30-preview",
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[parameters('vmName')]",
@@ -112,9 +112,10 @@
                     }
                 }
             },
-            "resources": [{
+            "resources": [
+                {
                 "type": "extensions",
-                "name": "EnterpriseCloudMonitoring",
+                "name": "[concat(parameters('vmName'), '/EnterpriseCloudMonitoring')]",
                 "apiVersion": "2016-03-30",
                 "location": "[resourceGroup().location]",
                 "dependsOn": [
@@ -132,7 +133,29 @@
                         "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                     }
                 }
-            }]
+            }
+            ]
+        },*/
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('vmName'), '/EnterpriseCloudMonitoring')]",
+            "apiVersion": "2016-03-30",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                "type": "MicrosoftMonitoringAgent",
+                "typeHandlerVersion": "1.0",
+                "autoUpgradeMinorVersion": false,
+                "settings": {
+                    "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
+                },
+                "protectedSettings": {
+                    "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
+                }
+            }
         },
         {
             "apiVersion": "2015-06-15",
