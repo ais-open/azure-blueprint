@@ -88,7 +88,7 @@
       },
       "resources": [*/
         {
-          "type": "extensions",
+          "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "EnterpriseCloudMonitoring",
           "apiVersion": "2016-03-30",
           "location": "[resourceGroup().location]",
