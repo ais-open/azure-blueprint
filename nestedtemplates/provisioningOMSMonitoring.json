@@ -63,7 +63,7 @@
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'), '/provisioningHybridworkers')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('vmName'),'EnterpriseCloudMonitoring')]"
+                //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('vmName'),'EnterpriseCloudMonitoring')]"
             ],
             "location": "[resourceGroup().location]",
             "tags": {
