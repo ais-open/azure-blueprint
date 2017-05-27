@@ -372,10 +372,11 @@
                     },
                     "provisioningHybridworkersUrl": {
                         "value": "[parameters('provisioningHybridworkersUrl')]"
-                    },
-                    "AdMachineNames": {
-                        "value": "[concat('', '')]"
                     }
+                    /*,
+                                        "AdMachineNames": {
+                                            "value": "[concat('', '')]"
+                                        }*/
 
                 }
             }

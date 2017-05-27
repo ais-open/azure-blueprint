@@ -1545,10 +1545,11 @@
                     },
                     "provisioningHybridworkersUrl": {
                         "value": "[parameters('provisioningHybridworkersUrl')]"
-                    },
-                    "AdMachineNames": {
-                        "value": "" // "[concat(parameters('adPDCVMName'),';', parameters('adBDCVMName'))]"
                     }
+                    /*,
+                                        "AdMachineNames": {
+                                            "value": "" // "[concat(parameters('adPDCVMName'),';', parameters('adBDCVMName'))]"
+                                        }*/
                 }
             }
         },
