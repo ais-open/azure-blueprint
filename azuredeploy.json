@@ -666,6 +666,7 @@
             "metadata": {
                 "description": "DSC Scripts base url"
             },
+
             "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/postdeploy"
         },
         "sqlServerVersion": {
@@ -1019,6 +1020,9 @@
                     },
                     "lbNSGName": {
                         "value": "[variables('resourceNames').nsgs.lb]"
+                    },
+                    "appGatewayAddressRange": {
+                        "value": "[parameters('appGatewaySubnet').properties.addressPrefix]"
                     }
                 }
             }
