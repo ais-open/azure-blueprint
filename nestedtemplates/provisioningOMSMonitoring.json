@@ -38,7 +38,8 @@
         "scriptFileName": "provisioningHybridworkers.ps1",
         "scriptParameters": "[concat('-MachineName \"' ,parameters('vmName'), '\" -ResourceGroupName \"', parameters('ResourceGroupName'), '\" -AutomationAccountName \"', parameters('AutomationAccountName'), '\" -AzureUserName \"', parameters('AzureUserName'), '\" -AzurePassword \"', parameters('AzurePassword'),'\" -SubscriptionId \"', parameters('SubscriptionId'), '\" -EnvironmentName \"', parameters('EnvironmentName'), '\" -MachinesToSetPasswordPolicy \"', parameters('MachinesToSetPasswordPolicy'), '\"' )]"
     },
-    "resources": [{
+    "resources": [
+        /*{
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'), '/EnterpriseCloudMonitoring')]",
             "apiVersion": "2016-03-30",
@@ -56,8 +57,8 @@
                     "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                 }
             }
-        },
-        /*{
+        },*/
+        {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'), '/provisioningHybridworkers')]",
@@ -79,7 +80,7 @@
                     "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters') )]"
                 }
             }
-        }*/
+        }
     ],
     "outputs": {}
 }
