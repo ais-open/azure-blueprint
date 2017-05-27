@@ -56,7 +56,8 @@
         "scriptFileName": "provisioningHybridworkers.ps1",
         "scriptParameters": "[concat('-MachineName \"' ,parameters('vmName'), '\" -ResourceGroupName \"', parameters('ResourceGroupName'), '\" -AutomationAccountName \"', parameters('AutomationAccountName'), '\" -AzureUserName \"', parameters('AzureUserName'), '\" -AzurePassword \"', parameters('AzurePassword'),'\" -SubscriptionId \"', parameters('SubscriptionId'), '\" -EnvironmentName \"', parameters('EnvironmentName'), '\" -AdMachineNames \"', parameters('AdMachineNames'), '\"' )]"
     },
-    "resources": [{
+    "resources": [
+        /*{
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'),'/', parameters('vmEncryptionSettings').diskEncryptionExtensionName)]",
             "apiVersion": "2016-04-30-preview",
@@ -128,7 +129,7 @@
                     "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters') )]"
                 }
             }
-        }
+        }*/
     ],
     "outputs": {
         "BitLockerKey": {
