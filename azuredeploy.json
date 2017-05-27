@@ -843,33 +843,6 @@
             },
             "publicIPs": {
                 "mgt": "mgtpublicip"
-            },
-            "vmNames": {
-                "VMs": [{
-                        "Name": "[variables('resourceNames').vms.adpdc]"
-                    },
-                    {
-                        "Name": "[variables('resourceNames').vms.adbdc]"
-                    },
-                    {
-                        "Name": "[variables('resourceNames').vms.mgt]"
-                    },
-                    {
-                        "Name": "[variables('resourceNames').vms.sqlw]"
-                    },
-                    {
-                        "Name": "[concat(variables('resourceNames').vms.sql,'0')]"
-                    },
-                    {
-                        "Name": "[concat(variables('resourceNames').vms.sql,'1')]"
-                    },
-                    {
-                        "Name": "[concat(variables('resourceNames').vms.web,'0')]"
-                    },
-                    {
-                        "Name": "[concat(variables('resourceNames').vms.web,'1')]"
-                    }
-                ]
             }
         },
         "artifacts": {
@@ -972,6 +945,33 @@
             "remediationScheduleDay": "[parameters('remediationScheduleDay')]",
             "scanScheduleDay": "[parameters('scanScheduleDay')]",
             "disableRealtimeMonitoring": "[parameters('disableRealtimeMonitoring')]"
+        },
+        "vmNames": {
+            "VMs": [{
+                    "Name": "[variables('resourceNames').vms.adpdc]"
+                },
+                {
+                    "Name": "[variables('resourceNames').vms.adbdc]"
+                },
+                {
+                    "Name": "[variables('resourceNames').vms.mgt]"
+                },
+                {
+                    "Name": "[variables('resourceNames').vms.sqlw]"
+                },
+                {
+                    "Name": "[concat(variables('resourceNames').vms.sql,'0')]"
+                },
+                {
+                    "Name": "[concat(variables('resourceNames').vms.sql,'1')]"
+                },
+                {
+                    "Name": "[concat(variables('resourceNames').vms.web,'0')]"
+                },
+                {
+                    "Name": "[concat(variables('resourceNames').vms.web,'1')]"
+                }
+            ]
         }
     },
     "resources": [{
@@ -1630,7 +1630,7 @@
             }
         },
         {
-            "name": "ConfigurationOMSMonitoring",
+            "name": "[concat('ConfigurationOMSMonitoring-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [

@@ -388,7 +388,7 @@
                 "count": "[parameters('numberOfWebInstances')]"
             },
             "dependsOn": [
-                //"encryptWebLoop"
+                "encryptWebLoop"
             ],
             "properties": {
                 "mode": "Incremental",
