@@ -48,7 +48,8 @@
             "type": "string"
         },
         "AdMachineNames": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": ""
         }
 
     },
