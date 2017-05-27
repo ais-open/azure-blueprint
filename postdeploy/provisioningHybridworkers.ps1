@@ -352,7 +352,7 @@ SetHybridWorderList -MachineName $MachineName -ResourceGroupName $ResourceGroupN
 Start-DscConfiguration -Wait -Force -Path .\SetHybridWorderList -Verbose
 
 
-<## Set Password Policy
+# Set Password Policy
 if($AdMachineNames -ne ""){
     $adMachineArray = $AdMachineNames.Split(";")
     $index = $adMachineArray.IndexOf($MachineName)
@@ -371,6 +371,6 @@ if($AdMachineNames -ne ""){
 
 
     }
-}#>
+}
 
 
