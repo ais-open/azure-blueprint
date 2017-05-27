@@ -35,7 +35,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('sqlLBIPAddress')]",
               "subnet": {
-                "id": "[parameters('derivedIds').sqlSubnetRef]"
+                "id": "[parameters('derivedIds').sqlSubnet]"
               }
             }
           }
