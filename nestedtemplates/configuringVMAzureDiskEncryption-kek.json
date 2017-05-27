@@ -56,8 +56,7 @@
         "scriptFileName": "provisioningHybridworkers.ps1",
         "scriptParameters": "[concat('-MachineName \"' ,parameters('vmName'), '\" -ResourceGroupName \"', parameters('ResourceGroupName'), '\" -AutomationAccountName \"', parameters('AutomationAccountName'), '\" -AzureUserName \"', parameters('AzureUserName'), '\" -AzurePassword \"', parameters('AzurePassword'),'\" -SubscriptionId \"', parameters('SubscriptionId'), '\" -EnvironmentName \"', parameters('EnvironmentName'), '\" -AdMachineNames \"', parameters('AdMachineNames'), '\"' )]"
     },
-    "resources": [
-        /*{
+    "resources": [{
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'),'/', parameters('vmEncryptionSettings').diskEncryptionExtensionName)]",
             "apiVersion": "2016-04-30-preview",
@@ -84,7 +83,7 @@
                 }
             }
         },
-        {
+        /*{
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'), '/EnterpriseCloudMonitoring')]",
             "apiVersion": "2016-03-30",
@@ -132,9 +131,9 @@
         }*/
     ],
     "outputs": {
-        /*"BitLockerKey": {
+        "BitLockerKey": {
             "type": "string",
             "value": "[reference(resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('vmName'), parameters('vmEncryptionSettings').diskEncryptionExtensionName)).instanceView.statuses[0].message]"
-        }*/
+        }
     }
 }
