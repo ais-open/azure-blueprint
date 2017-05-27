@@ -46,12 +46,15 @@
         },
         "provisioningHybridworkersUrl": {
             "type": "string"
+        },
+        "AdMachineNames": {
+            "type": "string"
         }
     },
     "variables": {
         "scriptFolder": ".",
         "scriptFileName": "provisioningHybridworkers.ps1",
-        "scriptParameters": "[concat('-MachineName \"' ,parameters('vmName'), '\" -ResourceGroupName \"', parameters('ResourceGroupName'), '\" -AutomationAccountName \"', parameters('AutomationAccountName'), '\" -AzureUserName \"', parameters('AzureUserName'), '\" -AzurePassword \"', parameters('AzurePassword'),'\" -SubscriptionId \"', parameters('SubscriptionId'), '\" -EnvironmentName \"', parameters('EnvironmentName'), '\" -AdMachineNames \"', parameters('EnvironmentName'), '\"' )]"
+        "scriptParameters": "[concat('-MachineName \"' ,parameters('vmName'), '\" -ResourceGroupName \"', parameters('ResourceGroupName'), '\" -AutomationAccountName \"', parameters('AutomationAccountName'), '\" -AzureUserName \"', parameters('AzureUserName'), '\" -AzurePassword \"', parameters('AzurePassword'),'\" -SubscriptionId \"', parameters('SubscriptionId'), '\" -EnvironmentName \"', parameters('EnvironmentName'), '\" -AdMachineNames \"', parameters('AdMachineNames'), '\"' )]"
     },
     "resources": [{
             "type": "Microsoft.Compute/virtualMachines/extensions",

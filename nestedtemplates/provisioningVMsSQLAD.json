@@ -531,7 +531,7 @@
                             }
                         }
                     }
-                },
+                }
                 /*{
                     "apiVersion": "2015-06-15",
                     "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -1547,7 +1547,7 @@
                         "value": "[parameters('provisioningHybridworkersUrl')]"
                     },
                     "AdMachineNames": {
-                        "value": "" // "[concat(parameters('adPDCVMName'),';', parameters('adBDCVMName'))]"
+                        "value": "[concat(parameters('adPDCVMName'),';', parameters('adBDCVMName'))]"
                     }
                 }
             }

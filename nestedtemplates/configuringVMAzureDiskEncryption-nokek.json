@@ -25,6 +25,30 @@
         },
         "workspaceName": {
             "type": "string"
+        },
+        "ResourceGroupName": {
+            "type": "string"
+        },
+        "AutomationAccountName": {
+            "type": "string"
+        },
+        "AzureUserName": {
+            "type": "string"
+        },
+        "AzurePassword": {
+            "type": "securestring"
+        },
+        "SubscriptionId": {
+            "type": "string"
+        },
+        "EnvironmentName": {
+            "type": "string"
+        },
+        "provisioningHybridworkersUrl": {
+            "type": "string"
+        },
+        "AdMachineNames": {
+            "type": "string"
         }
     },
     "resources": [{
