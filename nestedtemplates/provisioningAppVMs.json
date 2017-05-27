@@ -296,7 +296,7 @@
                 }
             ]
         },
-        /*{
+        {
             "name": "[concat('ConfigurationVMEncryption-WEB-',copyIndex())]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -374,12 +374,12 @@
                         "value": "[parameters('provisioningHybridworkersUrl')]"
                     },
                     "AdMachineNames": {
-                        "value": "[concat(parameters('adPDCVMName'),';', parameters('adBDCVMName'))]"
+                        "value": "[concat('', '')]"
                     }
 
                 }
             }
-        },*/
+        },
         {
             "name": "[concat('Backup-WEB-',copyIndex())]",
             "type": "Microsoft.Resources/deployments",
