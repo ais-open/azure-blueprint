@@ -5,24 +5,6 @@
         "vmName": {
             "type": "string"
         },
-        "keyVaultName": {
-            "type": "string"
-        },
-        "vmEncryptionSettings": {
-            "type": "object"
-        },
-        "aadClientID": {
-            "type": "securestring"
-        },
-        "aadClientSecret": {
-            "type": "securestring"
-        },
-        "keyEncryptionKeyURL": {
-            "type": "securestring",
-            "metadata": {
-                "description": "KeyVault key encryption key Url. Ex: https://diskencryptiontestaus.vault.azure.net/keys/DiskEncryptionKek/562a4bb76b524a1493a6afe8e536ee78"
-            }
-        },
         "workspaceName": {
             "type": "string"
         },
@@ -58,39 +40,10 @@
     },
     "resources": [{
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmName'),'/', parameters('vmEncryptionSettings').diskEncryptionExtensionName)]",
-            "apiVersion": "2016-04-30-preview",
-            "tags": {
-                "Project": "BluePrint"
-            },
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "publisher": "Microsoft.Azure.Security",
-                "type": "AzureDiskEncryption",
-                "typeHandlerVersion": "[parameters('vmEncryptionSettings').diskEncryptionExtensionVersion]",
-                "autoUpgradeMinorVersion": true,
-                "forceUpdateTag": "[parameters('vmEncryptionSettings').sequenceVersion]",
-                "settings": {
-                    "AADClientID": "[parameters('aadClientID')]",
-                    "KeyVaultURL": "[parameters('vmEncryptionSettings').keyVaultURL]",
-                    "KeyEncryptionKeyURL": "[parameters('keyEncryptionKeyURL')]",
-                    "KeyEncryptionAlgorithm": "[parameters('vmEncryptionSettings').keyEncryptionAlgorithm]",
-                    "VolumeType": "[parameters('vmEncryptionSettings').volumeType]",
-                    "EncryptionOperation": "[parameters('vmEncryptionSettings').encryptionOperation]"
-                },
-                "protectedSettings": {
-                    "AADClientSecret": "[parameters('aadClientSecret')]"
-                }
-            }
-        },
-        /*{
-            "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'), '/EnterpriseCloudMonitoring')]",
             "apiVersion": "2016-03-30",
             "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('vmName'),parameters('vmEncryptionSettings').diskEncryptionExtensionName)]"
-            ],
+            "dependsOn": [],
             "properties": {
                 "publisher": "Microsoft.EnterpriseCloud.Monitoring",
                 "type": "MicrosoftMonitoringAgent",
@@ -126,12 +79,7 @@
                     "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters') )]"
                 }
             }
-        }*/
-    ],
-    "outputs": {
-        "BitLockerKey": {
-            "type": "string",
-            "value": "[reference(resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('vmName'), parameters('vmEncryptionSettings').diskEncryptionExtensionName)).instanceView.statuses[0].message]"
         }
-    }
+    ],
+    "outputs": {}
 }

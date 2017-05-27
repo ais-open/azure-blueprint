@@ -843,6 +843,33 @@
             },
             "publicIPs": {
                 "mgt": "mgtpublicip"
+            },
+            "vmNames": {
+                "VMs": [{
+                        "Name": "[variables('resourceNames').vms.adpdc]"
+                    },
+                    {
+                        "Name": "[variables('resourceNames').vms.adbdc]"
+                    },
+                    {
+                        "Name": "[variables('resourceNames').vms.mgt]"
+                    },
+                    {
+                        "Name": "[variables('resourceNames').vms.sqlw]"
+                    },
+                    {
+                        "Name": "[concat(variables('resourceNames').vms.sql,'0')]"
+                    },
+                    {
+                        "Name": "[concat(variables('resourceNames').vms.sql,'1')]"
+                    },
+                    {
+                        "Name": "[concat(variables('resourceNames').vms.web'0')]"
+                    },
+                    {
+                        "Name": "[concat(variables('resourceNames').vms.web,'1')]"
+                    }
+                ]
             }
         },
         "artifacts": {
@@ -866,6 +893,7 @@
             "configuringBackupADVMURL": "[concat(parameters('templatesBaseUrl'),'/configuringBackupADVM.json')]",
             "preparingAlwaysOnSqlServerURL": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServer.json')]",
             "configuringAlwaysOnURL": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOn.json')]",
+            "provisioningOMSMonitoringUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningOMSMonitoring.json') ]",
             "pdcModulesURL": "[concat(parameters('dscBaseUrl'),'/PDCBaselineDSC.ps1.zip')]",
             "pdcConfigurationFunction": "PDCBaselineDSC.ps1\\PDCBaselineDSC",
             "bdcModulesURL": "[concat(parameters('dscBaseUrl'),'/BDCBaselineDSC.ps1.zip')]",
@@ -1602,11 +1630,73 @@
             }
         },
         {
-            "name": "ConfigurationAutomationSchedules",
+            "name": "ConfigurationOMSMonitoring",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
                 "Microsoft.Resources/deployments/WebTier"
+            ],
+            "copy": {
+                "name": "monitorVMLoop",
+                "count": "[length(variables('vmNames').VMs)]"
+            },
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningOMSMonitoringUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[variables('vmNames').VMs[copyIndex()].Name]"
+                    },
+                    "workspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "AutomationAccountName": {
+                        "value": "[parameters('omsAutomationAccountName')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
+                    },
+                    "AzureUserName": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azureUserName"
+                        }
+                    },
+                    "AzurePassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azurePassword"
+                        }
+                    },
+                    "SubscriptionId": {
+                        "value": "[subscription().subscriptionId]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[resourceGroup().name]"
+                    },
+                    "provisioningHybridworkersUrl": {
+                        "value": "[variables('artifacts').provisioningHybridworkerUrl]"
+                    },
+                    "AdMachineNames": {
+                        "value": "[concat(variables('resourceNames').vms.adpdc,';', variables('resourceNames').vms.adbdc)]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "ConfigurationAutomationSchedules",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                //"Microsoft.Resources/deployments/WebTier"
+                "monitorVMLoop"
             ],
             "properties": {
                 "mode": "Incremental",
