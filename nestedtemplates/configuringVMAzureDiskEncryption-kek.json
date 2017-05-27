@@ -46,16 +46,13 @@
         },
         "provisioningHybridworkersUrl": {
             "type": "string"
-        },
-        "AdMachineNames": {
-            "type": "string"
         }
 
     },
     "variables": {
         "scriptFolder": ".",
         "scriptFileName": "provisioningHybridworkers.ps1",
-        "scriptParameters": "[concat('-MachineName \"' ,parameters('vmName'), '\" -ResourceGroupName \"', parameters('ResourceGroupName'), '\" -AutomationAccountName \"', parameters('AutomationAccountName'), '\" -AzureUserName \"', parameters('AzureUserName'), '\" -AzurePassword \"', parameters('AzurePassword'),'\" -SubscriptionId \"', parameters('SubscriptionId'), '\" -EnvironmentName \"', parameters('EnvironmentName'), '\" -AdMachineNames \"', parameters('AdMachineNames'), '\"')]"
+        "scriptParameters": "[concat('-MachineName \"' ,parameters('vmName'), '\" -ResourceGroupName \"', parameters('ResourceGroupName'), '\" -AutomationAccountName \"', parameters('AutomationAccountName'), '\" -AzureUserName \"', parameters('AzureUserName'), '\" -AzurePassword \"', parameters('AzurePassword'),'\" -SubscriptionId \"', parameters('SubscriptionId'), '\" -EnvironmentName ', parameters('EnvironmentName'))]"
     },
     "resources": [{
             "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -145,8 +142,7 @@
             "apiVersion": "2016-03-30",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]",
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('vmName'),parameters('vmEncryptionSettings').diskEncryptionExtensionName)]"
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
             ],
             "properties": {
                 "publisher": "Microsoft.EnterpriseCloud.Monitoring",
