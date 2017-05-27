@@ -296,7 +296,7 @@
                 }
             ]
         },
-        {
+        /*{
             "name": "[concat('ConfigurationVMEncryption-WEB-',copyIndex())]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -372,10 +372,14 @@
                     },
                     "provisioningHybridworkersUrl": {
                         "value": "[parameters('provisioningHybridworkersUrl')]"
+                    },
+                    "AdMachineNames": {
+                        "value": ""
                     }
+
                 }
             }
-        },
+        },*/
         {
             "name": "[concat('Backup-WEB-',copyIndex())]",
             "type": "Microsoft.Resources/deployments",
@@ -385,7 +389,7 @@
                 "count": "[parameters('numberOfWebInstances')]"
             },
             "dependsOn": [
-                "encryptWebLoop"
+                //"encryptWebLoop"
             ],
             "properties": {
                 "mode": "Incremental",
