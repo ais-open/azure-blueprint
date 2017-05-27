@@ -522,8 +522,8 @@
                             }
                         }
                     }
-                }
-                /*{
+                },
+                {
                     "apiVersion": "2015-06-15",
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('adPDCVMName'), '/adcse-pwd')]",
@@ -549,7 +549,7 @@
                             "storageAccountKey": ""
                         }
                     }
-                }*/
+                }
             ]
         },
         {
@@ -617,8 +617,7 @@
                     }
                 }
             },
-            "resources": [
-                /*{
+            "resources": [{
                 "apiVersion": "2015-06-15",
                 "type": "Microsoft.Compute/virtualMachines/extensions",
                 "name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
@@ -644,8 +643,7 @@
                         "storageAccountKey": ""
                     }
                 }
-            }*/
-            ]
+            }]
         },
         {
             "apiVersion": "2016-03-30",
@@ -1472,7 +1470,7 @@
                         "value": "[parameters('provisioningHybridworkersUrl')]"
                     },
                     "AdMachineNames": {
-                        "value": "[concat(parameters('adPDCVMName'),';',parameters('adBDCVMName'))]"
+                        "value": "[concat(parameters('adPDCVMName'), ';', parameters('adBDCVMName'))]"
                     }
                 }
             }
