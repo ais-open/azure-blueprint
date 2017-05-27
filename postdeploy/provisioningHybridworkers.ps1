@@ -9,7 +9,8 @@
         [String]$AzureUserName,
         [String]$AzurePassword,
         [String]$SubscriptionId,
-        [String]$EnvironmentName
+        [String]$EnvironmentName,
+        [String]$AdMachineNames
     )
     Enable-PSRemoting -Force
 
@@ -349,5 +350,27 @@
 # calling the configuration
 SetHybridWorderList -MachineName $MachineName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -AzureAuthCreds $AzureAuthCreds -SubscriptionId $SubscriptionId -EnvironmentName $EnvironmentName -ConfigurationData $ConfigData -Verbose
 Start-DscConfiguration -Wait -Force -Path .\SetHybridWorderList -Verbose
+
+
+# Set Password Policy
+if($AdMachineNames -ne ""){
+    $adMachineArray = $AdMachineNames.Split(";")
+    $index = $adMachineArray.IndexOf($MachineName)
+    if($index -gt -1){
+
+        $Domain = (gwmi WIN32_ComputerSystem).Domain
+
+        Import-Module ActiveDirectory
+        Import-Module grouppolicy
+        $dcs = $Domain.split(".")
+        $target = "DC=" + $dcs[0]+ "," + "DC=" + $dcs[1]
+
+        #this does not error out
+        Set-ADDefaultDomainPasswordPolicy -Identity $Domain -AuthType Negotiate -MaxPasswordAge 60.00:00:00 -MinPasswordAge 1.00:00:00 -PasswordHistoryCount 24 -ComplexityEnabled $true -ReversibleEncryptionEnabled $true -MinPasswordLength 14
+        Set-GPLink -Guid (Get-GPO -Name "Default Domain Policy").id -Target $target -LinkEnabled Yes -Enforced Yes
+
+
+    }
+}
 
 
