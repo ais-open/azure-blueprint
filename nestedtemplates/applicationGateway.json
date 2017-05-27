@@ -1,0 +1,195 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "addressPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Address prefix for the Virtual Network"
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Address prefix for the Virtual Network"
+      }
+    },
+    "publicIPAddressName": {
+      "type": "string"
+    },
+    "appGatewaySubnet": {
+      "type": "object"
+    },
+    "skuName": {
+      "type": "string"
+    },
+    "capacity": {
+      "type": "int",
+      "minValue": 1,
+      "maxValue": 10,
+      "defaultValue": 2,
+      "metadata": {
+        "description": "Number of instances"
+      }
+    },
+    "backendIpsForPathRuleWEB": {
+      "type": "array",
+      "metadata": {
+        "description": "IP Address of Backend Server for Path Rule 1 match"
+      }
+    },
+    "pathMatch1": {
+      "type": "string",
+      "metadata": {
+        "description": "Path match string for Path Rule 1"
+      }
+    },
+    "wafSettings": {
+      "type": "object"
+    }
+  },
+  "variables": {
+    "applicationGatewayName": "applicationGateway1",
+    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('appGatewaySubnet').name)]",
+    "publicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('publicIPAddressName'))]",
+    "applicationGatewayID": "[resourceId('Microsoft.Network/applicationGateways',variables('applicationGatewayName'))]",
+    "apiVersion": "2017-03-01"
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "name": "[variables('applicationGatewayName')]",
+      "type": "Microsoft.Network/applicationGateways",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "dependsOn": [],
+      "properties": {
+        "sku": {
+          "name": "[parameters('skuName')]",
+          "tier": "WAF",
+          "capacity": "[parameters('capacity')]"
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "appGatewayIpConfig",
+            "properties": {
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "appGatewayFrontendPublicIP",
+            "properties": {
+              "PublicIPAddress": {
+                "id": "[variables('publicIPRef')]"
+              }
+            }
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "appGatewayFrontendPort80",
+            "properties": {
+              "Port": 80
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "appGatewayBackendPoolDefault",
+            "properties": {
+              "BackendAddresses": "[parameters('backendIpsForPathRuleWEB')]"
+            }
+          },
+          {
+            "name": "appGatewayBackendPool1",
+            "properties": {
+              "BackendAddresses": "[parameters('backendIpsForPathRuleWEB')]"
+            }
+          }
+        ],
+        "backendHttpSettingsCollection": [
+          {
+            "name": "appGatewayBackendHttpSettings",
+            "properties": {
+              "Port": 80,
+              "Protocol": "Http",
+              "CookieBasedAffinity": "Disabled"
+            }
+          }
+        ],
+        "httpListeners": [
+          {
+            "name": "appGatewayHttpListener",
+            "properties": {
+              "FrontendIPConfiguration": {
+                "Id": "[concat(variables('applicationGatewayID'), '/frontendIPConfigurations/appGatewayFrontendPublicIP')]"
+              },
+              "FrontendPort": {
+                "Id": "[concat(variables('applicationGatewayID'), '/frontendPorts/appGatewayFrontendPort80')]"
+              },
+              "Protocol": "Http",
+              "SslCertificate": null
+            }
+          }
+        ],
+        "urlPathMaps": [
+          {
+            "name": "urlPathMap1",
+            "properties": {
+              "defaultBackendAddressPool": {
+                "id": "[concat(variables('applicationGatewayID'), '/backendAddressPools/appGatewayBackendPoolDefault')]"
+              },
+              "defaultBackendHttpSettings": {
+                "id": "[concat(variables('applicationGatewayID'), '/backendHttpSettingsCollection/appGatewayBackendHttpSettings')]"
+              },
+              "pathRules": [
+                {
+                  "name": "pathRule1",
+                  "properties": {
+                    "paths": [
+                      "[parameters('pathMatch1')]"
+                    ],
+                    "backendAddressPool": {
+                      "id": "[concat(variables('applicationGatewayID'), '/backendAddressPools/appGatewayBackendPool1')]"
+                    },
+                    "backendHttpSettings": {
+                      "id": "[concat(variables('applicationGatewayID'), '/backendHttpSettingsCollection/appGatewayBackendHttpSettings')]"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "requestRoutingRules": [
+          {
+            "Name": "rule1",
+            "properties": {
+              "RuleType": "PathBasedRouting",
+              "httpListener": {
+                "id": "[concat(variables('applicationGatewayID'), '/httpListeners/appGatewayHttpListener')]"
+              },
+              "urlPathMap": {
+                "id": "[concat(variables('applicationGatewayID'), '/urlPathMaps/urlPathMap1')]"
+              }
+            }
+          }
+        ],
+        "webApplicationFirewallConfiguration": {
+          "enabled": "[parameters('wafSettings').wafEnabled]",
+          "firewallMode": "[parameters('wafSettings').wafMode]",
+          "ruleSetType": "[parameters('wafSettings').wafRuleSetType]",
+          "ruleSetVersion": "[parameters('wafSettings').wafRuleSetVersion]",
+          "disabledRuleGroups": []
+        }
+      }
+    }
+  ]
+}

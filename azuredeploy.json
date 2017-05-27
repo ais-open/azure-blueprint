@@ -2,708 +2,712 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-      "environmentName": {
-          "type": "string",
-          "defaultValue": "AzureUSGovernment"
-      },
-      "keyVaultName": {
-          "type": "string"
-      },
-      "keyVaultResourceGroupName": {
-          "type": "string"
-      },
-      "recoveryServicesVaultName": {
-          "type": "string",
-          "metadata": {
-              "desscription": "Name of the RecoveryServices Vault to store VM backups"
-          },
-          "defaultValue": "AZ-RCV-01"
-      },
-      "backupPolicy": {
-          "type": "string",
-          "defaultValue": "CustomPolicy",
-          "metadata": {
-              "description": "Azure Backup policy to apply to VMs"
-          }
-      },
-      "backupScheduleRunTimes": {
-          "type": "array",
-          "defaultValue": ["2017-05-09T23:00:00"],
-          "metadata": {
-              "description": "Times in day when backup should be triggered. e.g. 01:00, 13:00. This will be used in LTR too for daily, weekly, monthly and yearly backup."
-          }
-      },
-      "backupDailyRetentionDurationCount": {
-          "type": "int",
-          "defaultValue": 30,
-          "metadata": {
-              "description": "Number of days you want to retain the backup"
-          }
-      },
-      "backupDaysOfTheWeek": {
-          "type": "array",
-          "defaultValue": ["Sunday"],
-          "metadata": {
-              "description": "Backup will run on array of Days like, Monday, Tuesday etc. Applies in Weekly retention only."
-          }
-      },
-      "backupWeeklyRetentionDurationCount": {
-          "type": "int",
-          "defaultValue": 104,
-          "metadata": {
-              "description": "Number of weeks you want to retain the backup"
-          }
-      },
-      "backupMonthlyRetentionDurationCount": {
-          "type": "int",
-          "defaultValue": 36,
-          "metadata": {
-              "description": "Number of months you want to retain the backup"
-          }
-      },
-      "backupMonthsOfYear": {
-          "type": "array",
-          "defaultValue": ["January"],
-          "metadata": {
-              "description": "Array of Months for Yearly Retention"
-          }
-      },
-      "backupYearlyRetentionDurationCount": {
-          "type": "int",
-          "defaultValue": 5,
-          "metadata": {
-              "description": "Number of years you want to retain the backup"
-          }
-      },
-      "omsWorkspaceName": {
-          "type": "string",
-          "metadata": {
-              "description": "Assign a name for the Log Analytic Workspace Name"
-          }
-      },
-      "omsWorkspaceRegion": {
-          "type": "string",
-          "defaultValue": "USGov Virginia",
-          "allowedValues": ["USGov Virginia", "East US", "West Europe", "Southeast Asia", "Australia Southeast"],
-          "metadata": {
-              "description": "Specify the region for your Workspace"
-          }
-      },
-      "serviceTier": {
-          "type": "string",
-          "allowedValues": [
-              "Free",
-              "Standalone",
-              "PerNode"
-          ],
-          "defaultValue": "Free",
-          "metadata": {
-              "description": "Service Tier: Free, Standalone, or PerNode"
-          }
-      },
-      "dataRetention": {
-          "type": "int",
-          "defaultValue": 365,
-          "minValue": 7,
-          "maxValue": 730,
-          "metadata": {
-              "description": "Number of days of retention. Free plans can only have 7 days, Standalone and OMS plans include 30 days for free"
-          }
-      },
-      "omsAutomationAccountName": {
-          "type": "string",
-          "metadata": {
-              "description": "Assign a name for the Log Analytic Workspace Name"
-          }
-      },
-      "scheduleName": {
-          "type": "string",
-          "defaultValue": "VM-Patching-Schedule"
-      },
-      "scheduleJobGuid": {
-          "type": "string",
-          "metadata": {
-              "description": "The GUID for the runbook job to be started."
-          }
-      },
-      "exclusionPathWeb": {
-          "type": "array",
-          "minLength": 1,
-          "defaultValue": ["c:\\Users"]
-      },
-      "exclusionExtensionWeb": {
-          "type": "array",
-          "minLength": 1,
-          "defaultValue": [".txt", ".ps1"]
-      },
-      "exclusionProcessWeb": {
-          "type": "array",
-          "minLength": 1,
-          "defaultValue": ["w3wp.exe", "explorer.exe"]
-      },
-      "exclusionPathSQL": {
-          "type": "array",
-          "minLength": 1,
-          "defaultValue": ["c:\\Users"]
-      },
-      "exclusionExtensionSQL": {
-          "type": "array",
-          "minLength": 1,
-          "defaultValue": [".txt", ".ps1"]
-      },
-      "exclusionProcessSQL": {
-          "type": "array",
-          "minLength": 1,
-          "defaultValue": ["w3wp.exe", "explorer.exe"]
-      },
-      "exclusionPathSQLWS2012": {
-          "type": "string",
-          "minLength": 1,
-          "defaultValue": "c:\\Users"
-      },
-      "exclusionExtensionSQLWS2012": {
-          "type": "string",
-          "minLength": 1,
-          "defaultValue": ".txt;.ps1"
-      },
-      "exclusionProcessSQLWS2012": {
-          "type": "string",
-          "minLength": 1,
-          "defaultValue": "w3wp.exe;explorer.exe"
-      },
-      "exclusionPathAD": {
-          "type": "array",
-          "minLength": 1,
-          "defaultValue": ["c:\\Users"]
-      },
-      "exclusionExtensionAD": {
-          "type": "array",
-          "minLength": 1,
-          "defaultValue": [".txt", ".ps1"]
-      },
-      "exclusionProcessAD": {
-          "type": "array",
-          "minLength": 1,
-          "defaultValue": ["w3wp.exe", "explorer.exe"]
-      },
-      "exclusionPathMgt": {
-          "type": "array",
-          "minLength": 1,
-          "defaultValue": ["c:\\Users\\adminuser"]
-      },
-      "exclusionExtensionMgt": {
-          "type": "array",
-          "minLength": 1,
-          "defaultValue": [".txt"]
-      },
-      "exclusionProcessMgt": {
-          "type": "array",
-          "minLength": 1,
-          "defaultValue": ["explorer.exe"]
-      },
-      "exclusionPathGen": {
-          "type": "array",
-          "defaultValue": []
-      },
-      "exclusionExtensionGen": {
-          "type": "array",
-          "defaultValue": []
-      },
-      "exclusionProcessGen": {
-          "type": "array",
-          "defaultValue": []
-      },
-      "realTimeScanDirection": {
-          "type": "string",
-          "defaultValue": "Both"
-      },
-      "remediationScheduleDay": {
-          "type": "string",
-          "defaultValue": "Everyday"
-      },
-      "scanScheduleDay": {
-          "type": "string",
-          "defaultValue": "Everyday"
-      },
-      "disableRealtimeMonitoring": {
-          "type": "bool",
-          "defaultValue": false
-      },
-      "adminUsername": {
-          "type": "string",
-          "metadata": {
-              "description": "The name of the Administrator of the new VMs and Domain"
-          }
-      },
-      "environmentPrefix": {
-          "type": "string",
-          "metadata": {
-              "description": "Prefix for environement (production or staging). You can change the allowed values based on your preference."
-          },
-          "maxLength": 4,
-          "defaultValue": ""
-      },
-      "numberOfWebInstances": {
-          "type": "int",
-          "defaultValue": 2,
-          "minValue": 2,
-          "maxValue": 5
-      },
-      "useExistingKek": {
-          "type": "string",
-          "defaultValue": "kek",
-          "allowedValues": [
-              "nokek",
-              "kek"
-          ],
-          "metadata": {
-              "description": "Select kek if the secret should be encrypted with a key encryption key and pass explicit keyEncryptionKeyURL. For nokek, you can keep keyEncryptionKeyURL empty."
-          }
-      },
-      "encryptionEnabled": {
-          "type": "bool",
-          "defaultValue": true
-      },
-      "adVMSize": {
-          "type": "string",
-          "allowedValues": [
-              "Standard_D1_v2",
-              "Standard_D2_v2",
-              "Standard_D3_v2",
-              "Standard_D4_v2",
-              "Standard_D5_v2",
-              "Standard_D11_v2",
-              "Standard_D12_v2",
-              "Standard_D13_v2",
-              "Standard_D14_v2",
-              "Standard_D15_v2",
-              "Standard_D1",
-              "Standard_D2",
-              "Standard_D3",
-              "Standard_D4",
-              "Standard_D11",
-              "Standard_D12",
-              "Standard_D13",
-              "Standard_D14",
-              "Standard_DS1",
-              "Standard_DS2",
-              "Standard_DS3",
-              "Standard_DS4",
-              "Standard_DS11",
-              "Standard_DS12",
-              "Standard_DS13",
-              "Standard_DS14",
-              "Standard_DS1_v2",
-              "Standard_DS2_v2",
-              "Standard_DS3_v2",
-              "Standard_DS4_v2",
-              "Standard_DS5_v2",
-              "Standard_DS11_v2",
-              "Standard_DS12_v2",
-              "Standard_DS13_v2",
-              "Standard_DS14_v2",
-              "Standard_DS15_v2",
-              "Standard_GS1",
-              "Standard_GS2",
-              "Standard_GS3",
-              "Standard_GS4",
-              "Standard_GS4",
-              "Standard_GS5"
-          ],
-          "metadata": {
-              "description": "The size of the AD VMs Created"
-          },
-          "defaultValue": "Standard_D1_v2"
-      },
-      "sqlVMSize": {
-          "type": "string",
-          "allowedValues": [
-              "Standard_DS1",
-              "Standard_DS2",
-              "Standard_D2_v2",
-              "Standard_DS3",
-              "Standard_DS4",
-              "Standard_DS11",
-              "Standard_DS12",
-              "Standard_DS13",
-              "Standard_DS14",
-              "Standard_DS1_v2",
-              "Standard_DS2_v2",
-              "Standard_DS3_v2",
-              "Standard_DS4_v2",
-              "Standard_DS5_v2",
-              "Standard_DS11_v2",
-              "Standard_DS12_v2",
-              "Standard_DS13_v2",
-              "Standard_DS14_v2",
-              "Standard_DS15_v2",
-              "Standard_GS1",
-              "Standard_GS2",
-              "Standard_GS3",
-              "Standard_GS4",
-              "Standard_GS4",
-              "Standard_GS5"
-          ],
-          "metadata": {
-              "description": "The size of the SQL VMs Created"
-          },
-          "defaultValue": "Standard_D2_v2"
-      },
-      "webVMSize": {
-          "type": "string",
-          "allowedValues": [
-              "Standard_DS1",
-              "Standard_DS2",
-              "Standard_DS3",
-              "Standard_DS4",
-              "Standard_D2_v2",
-              "Standard_DS11",
-              "Standard_DS12",
-              "Standard_DS13",
-              "Standard_DS14",
-              "Standard_DS1_v2",
-              "Standard_DS2_v2",
-              "Standard_DS3_v2",
-              "Standard_DS4_v2",
-              "Standard_DS5_v2",
-              "Standard_DS11_v2",
-              "Standard_DS12_v2",
-              "Standard_DS13_v2",
-              "Standard_DS14_v2",
-              "Standard_DS15_v2",
-              "Standard_GS1",
-              "Standard_GS2",
-              "Standard_GS3",
-              "Standard_GS4",
-              "Standard_GS4",
-              "Standard_GS5"
-          ],
-          "metadata": {
-              "description": "The size of the SQL VMs Created"
-          },
-          "defaultValue": "Standard_D2_v2"
-      },
-      "mgtVMSize": {
-          "type": "string",
-          "allowedValues": [
-              "Standard_DS1",
-              "Standard_D1_v2",
-              "Standard_DS2",
-              "Standard_DS3",
-              "Standard_DS4",
-              "Standard_DS11",
-              "Standard_DS12",
-              "Standard_DS13",
-              "Standard_DS14",
-              "Standard_DS1_v2",
-              "Standard_DS2_v2",
-              "Standard_DS3_v2",
-              "Standard_DS4_v2",
-              "Standard_DS5_v2",
-              "Standard_DS11_v2",
-              "Standard_DS12_v2",
-              "Standard_DS13_v2",
-              "Standard_DS14_v2",
-              "Standard_DS15_v2",
-              "Standard_GS1",
-              "Standard_GS2",
-              "Standard_GS3",
-              "Standard_GS4",
-              "Standard_GS4",
-              "Standard_GS5"
-          ],
-          "metadata": {
-              "description": "The size of the SQL VMs Created"
-          },
-          "defaultValue": "Standard_D1_v2"
-      },
-      "witnessVMSize": {
-          "type": "string",
-          "allowedValues": [
-              "Standard_DS1",
-              "Standard_DS2",
-              "Standard_D1_v2",
-              "Standard_DS3",
-              "Standard_DS4",
-              "Standard_DS11",
-              "Standard_DS12",
-              "Standard_DS13",
-              "Standard_DS14",
-              "Standard_DS1_v2",
-              "Standard_DS2_v2",
-              "Standard_DS3_v2",
-              "Standard_DS4_v2",
-              "Standard_DS5_v2",
-              "Standard_DS11_v2",
-              "Standard_DS12_v2",
-              "Standard_DS13_v2",
-              "Standard_DS14_v2",
-              "Standard_DS15_v2",
-              "Standard_GS1",
-              "Standard_GS2",
-              "Standard_GS3",
-              "Standard_GS4",
-              "Standard_GS4",
-              "Standard_GS5"
-          ],
-          "metadata": {
-              "description": "The size of the Witness VM Created"
-          },
-          "defaultValue": "Standard_D1_v2"
-      },
-      "domainName": {
-          "type": "string",
-          "metadata": {
-              "description": "The FQDN of the AD Domain created "
-          },
-          "defaultValue": "contoso.local"
-      },
-      "sqlServerServiceAccountUserName": {
-          "type": "string",
-          "metadata": {
-              "description": "The SQL Server Service Account name"
-          },
-          "defaultValue": "sqlservice"
-      },
-      "sqlStorageAccountType": {
-          "type": "string",
-          "allowedValues": [
-              "Premium_LRS",
-              "Standard_LRS",
-              "Standard_GRS"
-          ],
-          "metadata": {
-              "description": "The type of the Sql Server Storage Account created"
-          },
-          "defaultValue": "Standard_GRS"
-      },
-      "dcStorageAccountType": {
-          "type": "string",
-          "allowedValues": [
-              "Standard_LRS",
-              "Standard_GRS",
-              "Standard_RAGRS",
-              "Premium_LRS"
-          ],
-          "metadata": {
-              "description": "The type of the DC Storage Account created"
-          },
-          "defaultValue": "Standard_GRS"
-      },
-      "webStorageAccountType": {
-          "type": "string",
-          "allowedValues": [
-              "Standard_LRS",
-              "Standard_GRS",
-              "Standard_RAGRS",
-              "Premium_LRS"
-          ],
-          "metadata": {
-              "description": "The type of the DC Storage Account created"
-          },
-          "defaultValue": "Standard_GRS"
-      },
-      "mgtStorageAccountType": {
-          "type": "string",
-          "allowedValues": [
-              "Standard_LRS",
-              "Standard_GRS",
-              "Standard_RAGRS",
-              "Premium_LRS"
-          ],
-          "metadata": {
-              "description": "The type of the DC Storage Account created"
-          },
-          "defaultValue": "Standard_GRS"
-      },
-      "virtualNetworkAddressRange": {
-          "type": "string",
-          "metadata": {
-              "description": "The address range of the new VNET in CIDR format"
-          },
-          "defaultValue": "10.200.0.0/16"
-      },
-      "sqlSubnet": {
-          "type": "object",
-          "metadata": {
-              "description": "The address range of the subnet static IPs are allocated from in the new VNET"
-          },
-          "defaultValue": {
-              "name": "sql",
-              "properties": {
-                  "addressPrefix": "10.200.1.0/24"
-              }
-          }
-      },
-      "appGatewaySubnet": {
-          "type": "object",
-          "metadata": {
-              "description": "The address range of the subnet static IPs are allocated from in the new VNET"
-          },
-          "defaultValue": {
-              "name": "appgateway",
-              "properties": {
-                  "addressPrefix": "10.200.4.0/24"
-              }
-          }
-      },
-      "webSubnet": {
-          "type": "object",
-          "metadata": {
-              "description": "The address range of the SQL subnet created in the new VNET"
-          },
-          "defaultValue": {
-              "name": "web",
-              "properties": {
-                  "addressPrefix": "10.200.2.0/24"
-              }
-          }
-      },
-      "dcSubnet": {
-          "type": "object",
-          "metadata": {
-              "description": "The address range of the SQL subnet created in the new VNET"
-          },
-          "defaultValue": {
-              "name": "dc",
-              "properties": {
-                  "addressPrefix": "10.200.0.0/24"
-              }
-          }
-      },
-      "mgtSubnet": {
-          "type": "object",
-          "metadata": {
-              "description": "The address range of the SQL subnet created in the new VNET"
-          },
-          "defaultValue": {
-              "name": "mgt",
-              "properties": {
-                  "addressPrefix": "10.200.3.0/24"
-              }
-          }
-      },
-      "sqlLBIPAddress": {
-          "type": "string",
-          "metadata": {
-              "description": "The IP address of the new SQL Server Internal Load Balancer"
-          },
-          "defaultValue": "10.200.1.5"
-      },
-      "sql0IPAddress": {
-          "type": "string",
-          "defaultValue": "10.200.1.6"
-      },
-      "sql1IPAddress": {
-          "type": "string",
-          "defaultValue": "10.200.1.7"
-      },
-      "sqlwIPAddress": {
-          "type": "string",
-          "defaultValue": "10.200.1.8"
-      },
-      "adPDCNICIPAddress": {
-          "type": "string",
-          "metadata": {
-              "description": "The IP address of the new AD VM"
-          },
-          "defaultValue": "10.200.0.5"
-      },
-      "adBDCNICIPAddress": {
-          "type": "string",
-          "metadata": {
-              "description": "The IP address of the new backup AD VM"
-          },
-          "defaultValue": "10.200.0.6"
-      },
-      "webIPAddresses": {
-          "type": "array",
-          "metadata": {
-              "description": "The IP address of the new backup AD VM"
-          },
-          "defaultValue": [
-              { "IpAddress": "10.200.2.5" },
-              { "IpAddress": "10.200.2.6" }
-          ]
-      },
-      "mgtIPAddress": {
-          "type": "string",
-          "metadata": {
-              "description": "The IP address of the new backup AD VM"
-          },
-          "defaultValue": "10.200.3.5"
-      },
-      "deploymentPrefix": {
-          "type": "string",
-          "metadata": {
-              "description": "The DNS Prefix for the Public IP Address for the Always On Cluster"
-          },
-          "defaultValue": "aodns"
-      },
-      "virtualNetworkName": {
-          "type": "string",
-          "metadata": {
-              "description": "Name of virtual network to be created"
-          },
-          "defaultValue": "autohav2VNET"
-      },
-      "templatesBaseUrl": {
-          "type": "string",
-          "metadata": {
-              "description": "Linked Templates base url"
-          },
-          "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testingCopy/nestedtemplates"
-      },
-      "dscBaseUrl": {
-          "type": "string",
-          "metadata": {
-              "description": "DSC Scripts base url"
-          },
-          "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testingCopy/DSC"
-      },
-      "scriptsBaseUrl": {
-          "type": "string",
-          "metadata": {
-              "description": "DSC Scripts base url"
-          },
-          "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testingCopy/postdeploy"
-      },
-      "sqlServerVersion": {
-          "type": "string",
-          "allowedValues": [
-
-              "SQL2012SP3-WS2012R2",
-              "SQL2014SP1-WS2012R2",
-              "SQL2014SP2-WS2012R2",
-              "SQL2016-WS2012R2"
-          ],
-          "metadata": {
-              "description": "The Sql Server Version"
-          },
-          "defaultValue": "SQL2016-WS2012R2"
-      },
-      "numberOfSqlVMDisks": {
-          "type": "string",
-          "allowedValues": [
-              "1",
-              "2",
-              "3",
-              "4"
-          ],
-          "metadata": {
-              "description": "The Sql VM Disk Size"
-          },
-          "defaultValue": "2"
-      },
-      "gatewaySkuName": {
-          "type": "string",
-          "defaultValue": "WAF_Medium",
-          "allowedValues": [
-              "Standard_Small",
-              "WAF_Medium",
-              "WAF_Large"
-          ]
+    "environmentName": {
+      "type": "string",
+      "defaultValue": "AzureUSGovernment"
+    },
+    "keyVaultName": {
+      "type": "string"
+    },
+    "keyVaultResourceGroupName": {
+      "type": "string"
+    },
+    "recoveryServicesVaultName": {
+      "type": "string",
+      "metadata": {
+        "desscription": "Name of the RecoveryServices Vault to store VM backups"
+      },
+      "defaultValue": "AZ-RCV-01"
+    },
+    "backupPolicy": {
+      "type": "string",
+      "defaultValue": "CustomPolicy",
+      "metadata": {
+        "description": "Azure Backup policy to apply to VMs"
       }
+    },
+    "backupScheduleRunTimes": {
+      "type": "array",
+      "defaultValue": [ "2017-05-09T23:00:00" ],
+      "metadata": {
+        "description": "Times in day when backup should be triggered. e.g. 01:00, 13:00. This will be used in LTR too for daily, weekly, monthly and yearly backup."
+      }
+    },
+    "backupDailyRetentionDurationCount": {
+      "type": "int",
+      "defaultValue": 30,
+      "metadata": {
+        "description": "Number of days you want to retain the backup"
+      }
+    },
+    "backupDaysOfTheWeek": {
+      "type": "array",
+      "defaultValue": [ "Sunday" ],
+      "metadata": {
+        "description": "Backup will run on array of Days like, Monday, Tuesday etc. Applies in Weekly retention only."
+      }
+    },
+    "backupWeeklyRetentionDurationCount": {
+      "type": "int",
+      "defaultValue": 104,
+      "metadata": {
+        "description": "Number of weeks you want to retain the backup"
+      }
+    },
+    "backupMonthlyRetentionDurationCount": {
+      "type": "int",
+      "defaultValue": 36,
+      "metadata": {
+        "description": "Number of months you want to retain the backup"
+      }
+    },
+    "backupMonthsOfYear": {
+      "type": "array",
+      "defaultValue": [ "January" ],
+      "metadata": {
+        "description": "Array of Months for Yearly Retention"
+      }
+    },
+    "backupYearlyRetentionDurationCount": {
+      "type": "int",
+      "defaultValue": 5,
+      "metadata": {
+        "description": "Number of years you want to retain the backup"
+      }
+    },
+    "omsWorkspaceName": {
+      "type": "string",
+      "metadata": {
+        "description": "Assign a name for the Log Analytic Workspace Name"
+      }
+    },
+    "omsWorkspaceRegion": {
+      "type": "string",
+      "defaultValue": "USGov Virginia",
+      "allowedValues": [ "USGov Virginia", "East US", "West Europe", "Southeast Asia", "Australia Southeast" ],
+      "metadata": {
+        "description": "Specify the region for your Workspace"
+      }
+    },
+    "serviceTier": {
+      "type": "string",
+      "allowedValues": [
+        "Free",
+        "Standalone",
+        "PerNode"
+      ],
+      "defaultValue": "Free",
+      "metadata": {
+        "description": "Service Tier: Free, Standalone, or PerNode"
+      }
+    },
+    "dataRetention": {
+      "type": "int",
+      "defaultValue": 365,
+      "minValue": 7,
+      "maxValue": 730,
+      "metadata": {
+        "description": "Number of days of retention. Free plans can only have 7 days, Standalone and OMS plans include 30 days for free"
+      }
+    },
+    "omsAutomationAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Assign a name for the Log Analytic Workspace Name"
+      }
+    },
+    "scheduleName": {
+      "type": "string",
+      "defaultValue": "VM-Patching-Schedule"
+    },
+    "scheduleJobGuid": {
+      "type": "string",
+      "metadata": {
+        "description": "The GUID for the runbook job to be started."
+      }
+    },
+    "exclusionPathWeb": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "c:\\Users" ]
+    },
+    "exclusionExtensionWeb": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ ".txt", ".ps1" ]
+    },
+    "exclusionProcessWeb": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "w3wp.exe", "explorer.exe" ]
+    },
+    "exclusionPathSQL": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "c:\\Users" ]
+    },
+    "exclusionExtensionSQL": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ ".txt", ".ps1" ]
+    },
+    "exclusionProcessSQL": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "w3wp.exe", "explorer.exe" ]
+    },
+    "exclusionPathSQLWS2012": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "c:\\Users"
+    },
+    "exclusionExtensionSQLWS2012": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": ".txt;.ps1"
+    },
+    "exclusionProcessSQLWS2012": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "w3wp.exe;explorer.exe"
+    },
+    "exclusionPathAD": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "c:\\Users" ]
+    },
+    "exclusionExtensionAD": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ ".txt", ".ps1" ]
+    },
+    "exclusionProcessAD": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "w3wp.exe", "explorer.exe" ]
+    },
+    "exclusionPathMgt": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "c:\\Users\\adminuser" ]
+    },
+    "exclusionExtensionMgt": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ ".txt" ]
+    },
+    "exclusionProcessMgt": {
+      "type": "array",
+      "minLength": 1,
+      "defaultValue": [ "explorer.exe" ]
+    },
+    "exclusionPathGen": {
+      "type": "array",
+      "defaultValue": []
+    },
+    "exclusionExtensionGen": {
+      "type": "array",
+      "defaultValue": []
+    },
+    "exclusionProcessGen": {
+      "type": "array",
+      "defaultValue": []
+    },
+    "realTimeScanDirection": {
+      "type": "string",
+      "defaultValue": "Both"
+    },
+    "remediationScheduleDay": {
+      "type": "string",
+      "defaultValue": "Everyday"
+    },
+    "scanScheduleDay": {
+      "type": "string",
+      "defaultValue": "Everyday"
+    },
+    "disableRealtimeMonitoring": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "adminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Administrator of the new VMs and Domain"
+      }
+    },
+    "environmentPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Prefix for environement (production or staging). You can change the allowed values based on your preference."
+      },
+      "maxLength": 4,
+      "defaultValue": ""
+    },
+    "numberOfWebInstances": {
+      "type": "int",
+      "defaultValue": 2,
+      "minValue": 2,
+      "maxValue": 5
+    },
+    "useExistingKek": {
+      "type": "string",
+      "defaultValue": "kek",
+      "allowedValues": [
+        "nokek",
+        "kek"
+      ],
+      "metadata": {
+        "description": "Select kek if the secret should be encrypted with a key encryption key and pass explicit keyEncryptionKeyURL. For nokek, you can keep keyEncryptionKeyURL empty."
+      }
+    },
+    "encryptionEnabled": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adVMSize": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_D1_v2",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2",
+        "Standard_D5_v2",
+        "Standard_D11_v2",
+        "Standard_D12_v2",
+        "Standard_D13_v2",
+        "Standard_D14_v2",
+        "Standard_D15_v2",
+        "Standard_D1",
+        "Standard_D2",
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D11",
+        "Standard_D12",
+        "Standard_D13",
+        "Standard_D14",
+        "Standard_DS1",
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_DS1_v2",
+        "Standard_DS2_v2",
+        "Standard_DS3_v2",
+        "Standard_DS4_v2",
+        "Standard_DS5_v2",
+        "Standard_DS11_v2",
+        "Standard_DS12_v2",
+        "Standard_DS13_v2",
+        "Standard_DS14_v2",
+        "Standard_DS15_v2",
+        "Standard_GS1",
+        "Standard_GS2",
+        "Standard_GS3",
+        "Standard_GS4",
+        "Standard_GS4",
+        "Standard_GS5"
+      ],
+      "metadata": {
+        "description": "The size of the AD VMs Created"
+      },
+      "defaultValue": "Standard_D1_v2"
+    },
+    "sqlVMSize": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_DS1",
+        "Standard_DS2",
+        "Standard_D2_v2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_DS1_v2",
+        "Standard_DS2_v2",
+        "Standard_DS3_v2",
+        "Standard_DS4_v2",
+        "Standard_DS5_v2",
+        "Standard_DS11_v2",
+        "Standard_DS12_v2",
+        "Standard_DS13_v2",
+        "Standard_DS14_v2",
+        "Standard_DS15_v2",
+        "Standard_GS1",
+        "Standard_GS2",
+        "Standard_GS3",
+        "Standard_GS4",
+        "Standard_GS4",
+        "Standard_GS5"
+      ],
+      "metadata": {
+        "description": "The size of the SQL VMs Created"
+      },
+      "defaultValue": "Standard_D2_v2"
+    },
+    "webVMSize": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_DS1",
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_D2_v2",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_DS1_v2",
+        "Standard_DS2_v2",
+        "Standard_DS3_v2",
+        "Standard_DS4_v2",
+        "Standard_DS5_v2",
+        "Standard_DS11_v2",
+        "Standard_DS12_v2",
+        "Standard_DS13_v2",
+        "Standard_DS14_v2",
+        "Standard_DS15_v2",
+        "Standard_GS1",
+        "Standard_GS2",
+        "Standard_GS3",
+        "Standard_GS4",
+        "Standard_GS4",
+        "Standard_GS5"
+      ],
+      "metadata": {
+        "description": "The size of the SQL VMs Created"
+      },
+      "defaultValue": "Standard_D2_v2"
+    },
+    "mgtVMSize": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_DS1",
+        "Standard_D1_v2",
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_DS1_v2",
+        "Standard_DS2_v2",
+        "Standard_DS3_v2",
+        "Standard_DS4_v2",
+        "Standard_DS5_v2",
+        "Standard_DS11_v2",
+        "Standard_DS12_v2",
+        "Standard_DS13_v2",
+        "Standard_DS14_v2",
+        "Standard_DS15_v2",
+        "Standard_GS1",
+        "Standard_GS2",
+        "Standard_GS3",
+        "Standard_GS4",
+        "Standard_GS4",
+        "Standard_GS5"
+      ],
+      "metadata": {
+        "description": "The size of the SQL VMs Created"
+      },
+      "defaultValue": "Standard_D1_v2"
+    },
+    "witnessVMSize": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_DS1",
+        "Standard_DS2",
+        "Standard_D1_v2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_DS1_v2",
+        "Standard_DS2_v2",
+        "Standard_DS3_v2",
+        "Standard_DS4_v2",
+        "Standard_DS5_v2",
+        "Standard_DS11_v2",
+        "Standard_DS12_v2",
+        "Standard_DS13_v2",
+        "Standard_DS14_v2",
+        "Standard_DS15_v2",
+        "Standard_GS1",
+        "Standard_GS2",
+        "Standard_GS3",
+        "Standard_GS4",
+        "Standard_GS4",
+        "Standard_GS5"
+      ],
+      "metadata": {
+        "description": "The size of the Witness VM Created"
+      },
+      "defaultValue": "Standard_D1_v2"
+    },
+    "domainName": {
+      "type": "string",
+      "metadata": {
+        "description": "The FQDN of the AD Domain created "
+      },
+      "defaultValue": "contoso.local"
+    },
+    "sqlServerServiceAccountUserName": {
+      "type": "string",
+      "metadata": {
+        "description": "The SQL Server Service Account name"
+      },
+      "defaultValue": "sqlservice"
+    },
+    "sqlStorageAccountType": {
+      "type": "string",
+      "allowedValues": [
+        "Premium_LRS",
+        "Standard_LRS",
+        "Standard_GRS"
+      ],
+      "metadata": {
+        "description": "The type of the Sql Server Storage Account created"
+      },
+      "defaultValue": "Standard_GRS"
+    },
+    "dcStorageAccountType": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "The type of the DC Storage Account created"
+      },
+      "defaultValue": "Standard_GRS"
+    },
+    "webStorageAccountType": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "The type of the DC Storage Account created"
+      },
+      "defaultValue": "Standard_GRS"
+    },
+    "mgtStorageAccountType": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "The type of the DC Storage Account created"
+      },
+      "defaultValue": "Standard_GRS"
+    },
+    "virtualNetworkAddressRange": {
+      "type": "string",
+      "metadata": {
+        "description": "The address range of the new VNET in CIDR format"
+      },
+      "defaultValue": "10.200.0.0/16"
+    },
+    "sqlSubnet": {
+      "type": "object",
+      "metadata": {
+        "description": "The address range of the subnet static IPs are allocated from in the new VNET"
+      },
+      "defaultValue": {
+        "name": "sql",
+        "properties": {
+          "addressPrefix": "10.200.1.0/24"
+        }
+      }
+    },
+    "appGWPublicIPName": {
+      "type": "string",
+      "defaultValue": "publicIpag"
+    },
+    "appGatewaySubnet": {
+      "type": "object",
+      "metadata": {
+        "description": "The address range of the subnet static IPs are allocated from in the new VNET"
+      },
+      "defaultValue": {
+        "name": "appgateway",
+        "properties": {
+          "addressPrefix": "10.200.4.0/24"
+        }
+      }
+    },
+    "webSubnet": {
+      "type": "object",
+      "metadata": {
+        "description": "The address range of the SQL subnet created in the new VNET"
+      },
+      "defaultValue": {
+        "name": "web",
+        "properties": {
+          "addressPrefix": "10.200.2.0/24"
+        }
+      }
+    },
+    "dcSubnet": {
+      "type": "object",
+      "metadata": {
+        "description": "The address range of the SQL subnet created in the new VNET"
+      },
+      "defaultValue": {
+        "name": "dc",
+        "properties": {
+          "addressPrefix": "10.200.0.0/24"
+        }
+      }
+    },
+    "mgtSubnet": {
+      "type": "object",
+      "metadata": {
+        "description": "The address range of the SQL subnet created in the new VNET"
+      },
+      "defaultValue": {
+        "name": "mgt",
+        "properties": {
+          "addressPrefix": "10.200.3.0/24"
+        }
+      }
+    },
+    "sqlLBIPAddress": {
+      "type": "string",
+      "metadata": {
+        "description": "The IP address of the new SQL Server Internal Load Balancer"
+      },
+      "defaultValue": "10.200.1.5"
+    },
+    "sql0IPAddress": {
+      "type": "string",
+      "defaultValue": "10.200.1.6"
+    },
+    "sql1IPAddress": {
+      "type": "string",
+      "defaultValue": "10.200.1.7"
+    },
+    "sqlwIPAddress": {
+      "type": "string",
+      "defaultValue": "10.200.1.8"
+    },
+    "adPDCNICIPAddress": {
+      "type": "string",
+      "metadata": {
+        "description": "The IP address of the new AD VM"
+      },
+      "defaultValue": "10.200.0.5"
+    },
+    "adBDCNICIPAddress": {
+      "type": "string",
+      "metadata": {
+        "description": "The IP address of the new backup AD VM"
+      },
+      "defaultValue": "10.200.0.6"
+    },
+    "webIPAddresses": {
+      "type": "array",
+      "metadata": {
+        "description": "The IP address of the new backup AD VM"
+      },
+      "defaultValue": [
+        { "IpAddress": "10.200.2.5" },
+        { "IpAddress": "10.200.2.6" }
+      ]
+    },
+    "mgtIPAddress": {
+      "type": "string",
+      "metadata": {
+        "description": "The IP address of the new backup AD VM"
+      },
+      "defaultValue": "10.200.3.5"
+    },
+    "deploymentPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "The DNS Prefix for the Public IP Address for the Always On Cluster"
+      },
+      "defaultValue": "aodns"
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of virtual network to be created"
+      },
+      "defaultValue": "autohav2VNET"
+    },
+    "templatesBaseUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "Linked Templates base url"
+      },
+      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testingCopy/nestedtemplates"
+    },
+    "dscBaseUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "DSC Scripts base url"
+      },
+      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testingCopy/DSC"
+    },
+    "scriptsBaseUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "DSC Scripts base url"
+      },
+      "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testingCopy/postdeploy"
+    },
+    "sqlServerVersion": {
+      "type": "string",
+      "allowedValues": [
+
+        "SQL2012SP3-WS2012R2",
+        "SQL2014SP1-WS2012R2",
+        "SQL2014SP2-WS2012R2",
+        "SQL2016-WS2012R2"
+      ],
+      "metadata": {
+        "description": "The Sql Server Version"
+      },
+      "defaultValue": "SQL2016-WS2012R2"
+    },
+    "numberOfSqlVMDisks": {
+      "type": "string",
+      "allowedValues": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "metadata": {
+        "description": "The Sql VM Disk Size"
+      },
+      "defaultValue": "2"
+    },
+    "gatewaySkuName": {
+      "type": "string",
+      "defaultValue": "WAF_Medium",
+      "allowedValues": [
+        "Standard_Small",
+        "WAF_Medium",
+        "WAF_Large"
+      ]
+    }
   },
   "variables": {
       "appID": "aadClientID",
@@ -845,19 +849,20 @@
               "mgt": "mgtpublicip"
           }
       },
-      "artifacts": {
-        "postDeployScriptUris": [
-          "[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]"
-        ],
+    "artifacts": {
+      "postDeployScriptUris": [
+        "[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]"
+      ],
       "provisioningOMSWorkspaceUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutoAccOMSWorkspace.json')]",
       "provisioningOMSAutomationScheduleUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutomationSchedule.json')]",
       "nsgURL": "[concat(parameters('templatesBaseUrl'),'/nsg.json')]",
       "virtualNetworkURL": "[concat(parameters('templatesBaseUrl'),'/virtualNetwork.json')]",
       "subnetURL": "[concat(parameters('templatesBaseUrl'),'/subnet.json')]",
+      "publicIPURL": "[concat(parameters('templatesBaseUrl'),'/publicIP.json')]",
       "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
       "nicTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateNic.json')]",
       "sqlLoadBalancerURL": "[concat(parameters('templatesBaseUrl'),'/sqlLoadBalancer.json')]",
-      "applicationGatewayURL": "[concat(parameters('templatesBaseUrl'),'/provisioningApplicationGateway.json')]",
+      "applicationGatewayURL": "[concat(parameters('templatesBaseUrl'),'/applicationGateway.json')]",
       "provisioningNICsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningNICsSQLAD.json')]",
       "virtualNetworkNSGURL": "[concat(parameters('templatesBaseUrl'),'/virtualNetworkNSG.json')]",
       "provisioningVMsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningVMsSQLAD.json')]",
@@ -984,7 +989,7 @@
     {
       "name": "NSG-Deployment",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",      
+      "apiVersion": "2015-01-01",
       "dependsOn": [],
       "properties": {
         "mode": "Incremental",
@@ -1003,7 +1008,7 @@
       }
     },
     {
-      "name": "VNET-Deployment",
+      "name": "VirtualNetwork-Deployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [],
@@ -1018,7 +1023,7 @@
             "value": "[resourceGroup().location]"
           },
           "virtualNetworkName": {
-            "value": "[parameters('virtualNetworkName')]"
+            "value": "[variables('virtualNetworkNameWithSuffix')]"
           },
           "virtualNetworkAddressRange": {
             "value": "[parameters('virtualNetworkAddressRange')]"
@@ -1036,10 +1041,28 @@
       }
     },
     {
-      "name": "SQLLoadBalancer-Deployment",
+      "name": "PublicIP-Deployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').publicIPURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appGWPubliIPName": {
+            "value": "[parameters('appGWPublicIPName')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "SQLLoadBalancer-Deployment",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [ "VirtualNetwork-Deployment" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -1064,13 +1087,14 @@
           }
         }
       }
-    }//,
-    /*{
-      "name": "ProvisioningApplicationGateway",
+    },
+    {
+      "name": "ApplicationGateway-Deployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/VirtualNetworkNSG"
+        "PublicIP-Deployment",
+        "VirtualNetwork-Deployment"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1083,10 +1107,13 @@
             "value": "[parameters('virtualNetworkAddressRange')]"
           },
           "virtualNetworkName": {
-            "value": "[variables('resourceNames').virtualNetworkNameWithSuffix]"
+            "value": "[variables('virtualNetworkNameWithSuffix')]"
           },
-          "subnetPrefix": {
-            "value": "[parameters('appGatewaySubnet').properties.addressPrefix]"
+          "publicIPAddressName": {
+            "value": "[parameters('appGWPublicIPName')]"
+          },
+          "appGatewaySubnet": {
+            "value": "[parameters('appGatewaySubnet')]"
           },
           "skuName": {
             "value": "[parameters('gatewaySkuName')]"
@@ -1100,25 +1127,13 @@
           "pathMatch1": {
             "value": "/WEB"
           },
-          "subnetName": {
-            "value": "[parameters('appGatewaySubnet').name]"
-          },
-          "wafEnabled": {
-            "value": "[variables('wafSettings').wafEnabled]"
-          },
-          "wafMode": {
-            "value": "[variables('wafSettings').wafMode]"
-          },
-          "wafRuleSetType": {
-            "value": "[variables('wafSettings').wafRuleSetType]"
-          },
-          "wafRuleSetVersion": {
-            "value": "[variables('wafSettings').wafRuleSetVersion]"
+          "wafSettings": {
+            "value": "[variables('wafSettings')]"
           }
         }
       }
-    },
-    {
+    } //,
+    /*{
       "name": "ProvisioningNICsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
