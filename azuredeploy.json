@@ -1475,7 +1475,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                //"Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT"
+                "Microsoft.Resources/deployments/ProvisioningVMsSQLADMGT"
             ],
             "properties": {
                 "mode": "Incremental",
