@@ -1600,6 +1600,9 @@
                     },
                     "provisioningHybridworkersUrl": {
                         "value": "[parameters('provisioningHybridworkersUrl')]"
+                    },
+                    "AdMachineNames": {
+                        "value": ""
                     }
                 }
             }
