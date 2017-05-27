@@ -864,7 +864,7 @@
                         "Name": "[concat(variables('resourceNames').vms.sql,'1')]"
                     },
                     {
-                        "Name": "[concat(variables('resourceNames').vms.web'0')]"
+                        "Name": "[concat(variables('resourceNames').vms.web,'0')]"
                     },
                     {
                         "Name": "[concat(variables('resourceNames').vms.web,'1')]"
