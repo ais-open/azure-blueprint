@@ -845,10 +845,10 @@
               "mgt": "mgtpublicip"
           }
       },
-    "artifacts": {
-      "postDeployScriptUris": [
-        "[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]"
-      ],
+      "artifacts": {
+        "postDeployScriptUris": [
+          "[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]"
+        ],
       "provisioningOMSWorkspaceUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutoAccOMSWorkspace.json')]",
       "provisioningOMSAutomationScheduleUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutomationSchedule.json')]",
       "nsgURL": "[concat(parameters('templatesBaseUrl'),'/nsg.json')]",
@@ -984,8 +984,7 @@
     {
       "name": "NSG-Deployment",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "comments": "This resource will create storage accounts for Active Directory, SQL Server, File Share Witness and Diagnostics. It will also create the Virtual Network and public IP addresses",
+      "apiVersion": "2015-01-01",      
       "dependsOn": [],
       "properties": {
         "mode": "Incremental",
@@ -1035,12 +1034,11 @@
           }
         }
       }
-    }//,
-   /* {
-      "name": "SQLLoadBalancer",
+    },
+    {
+      "name": "SQLLoadBalancer-Deployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "comments": "Create Load Balancers for SQL and DC",
       "dependsOn": [],
       "properties": {
         "mode": "Incremental",
@@ -1052,37 +1050,22 @@
           "location": {
             "value": "[resourceGroup().location]"
           },
-          "sqlLBName": {
-            "value": "[variables('lbSettings').sqlLBName]"
-          },
-          "sqlLBFEName": {
-            "value": "[variables('lbSettings').sqlLBFEName]"
+          "lbSettings": {
+            "value": "[variables('lbSettings')]"
           },
           "sqlLBIPAddress": {
             "value": "[parameters('sqlLBIPAddress')]"
           },
-          "sqlSubnetRef": {
-            "value": "[variables('derivedIds').sqlSubnet]"
-          },
-          "sqlLBBEName": {
-            "value": "[variables('lbSettings').sqlLBBEName]"
-          },
-          "sqlLBBEID": {
-            "value": "[variables('derivedIds').sqlBEAddressPoolID]"
-          },
-          "sqllbFEConfigID": {
-            "value": "[variables('derivedIds').sqllbFEConfigID]"
-          },
-          "sqllbProbeID": {
-            "value": "[variables('derivedIds').sqllbProbeID]"
+          "derivedIds": {
+            "value": "[variables('derivedIds')]"
           },
           "SQLAOProbe": {
             "value": "[variables('SQLAOProbe')]"
           }
         }
       }
-    },
-    {
+    }//,
+    /*{
       "name": "ProvisioningApplicationGateway",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
