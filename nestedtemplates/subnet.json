@@ -1,0 +1,46 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {},
+  "variables": {
+    "subnets": [
+      {
+        "name": "sql",
+        "properties": {
+          "addressPrefix": "10.200.1.0/24"
+        }
+      },
+      {
+        "name": "appgateway",
+        "properties": {
+          "addressPrefix": "10.200.4.0/24"
+        }
+      },
+      {
+        "name": "web",
+        "properties": {
+          "addressPrefix": "10.200.2.0/24"
+        }
+      },
+      {
+        "name": "dc",
+        "properties": {
+          "addressPrefix": "10.200.0.0/24"
+        }
+      },
+      {
+        "name": "mgt",
+        "properties": {
+          "addressPrefix": "10.200.3.0/24"
+        }
+      }
+    ]
+  },
+  "resources": [],
+  "outputs": {
+    "subnets": {
+      "type": "array",
+      "value": "[variables('subnets')]"
+    }
+  }
+}
