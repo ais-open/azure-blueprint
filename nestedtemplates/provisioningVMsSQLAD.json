@@ -490,7 +490,7 @@
                     },
                     "location": "[parameters('location')]",
                     "dependsOn": [
-                        //"[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
+                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
@@ -532,7 +532,7 @@
                         }
                     }
                 },
-                {
+                /*{
                     "apiVersion": "2015-06-15",
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('adPDCVMName'), '/adcse-pwd')]",
@@ -558,7 +558,7 @@
                             "storageAccountKey": ""
                         }
                     }
-                }
+                }*/
             ]
         },
         {
@@ -1206,27 +1206,6 @@
                         }
                     }
                 },
-                /*{
-                    "type": "Microsoft.Compute/virtualMachines/extensions",
-                    "name": "[concat(parameters('mgtVMName'), '/EnterpriseCloudMonitoring')]",
-                    "apiVersion": "2016-03-30",
-                    "location": "[resourceGroup().location]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]"
-                    ],
-                    "properties": {
-                        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                        "type": "MicrosoftMonitoringAgent",
-                        "typeHandlerVersion": "1.0",
-                        "autoUpgradeMinorVersion": false,
-                        "settings": {
-                            "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
-                        },
-                        "protectedSettings": {
-                            "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
-                        }
-                    }
-                },*/
                 {
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('mgtVMName'),'/MGTBaselineDSC')]",
@@ -1237,7 +1216,6 @@
                     },
                     "dependsOn": [
                         "[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]"
-                        //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'EnterpriseCloudMonitoring')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
@@ -1255,15 +1233,6 @@
                                 "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
                                 "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
                                 "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
-                                    /*"MachineName": "[parameters('mgtVMName')]",
-                                    "ResourceGroupName": "[parameters('ResourceGroupName')]",
-                                    "AutomationAccountName": "[parameters('AutomationAccountName')]",
-                                    "AzureAuthCreds": {
-                                        "UserName": "[parameters('AzureUserName')]",
-                                        "Password": "PrivateSettingsRef:AzurePassword"
-                                    },
-                                    "SubscriptionId": "[parameters('SubscriptionId')]",
-                                    "EnvironmentName": "[parameters('EnvironmentName')]"*/
                             }
                         },
                         "protectedSettings": {
@@ -1497,7 +1466,7 @@
                 }
             }
         },
-        {
+        /*{
             "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1582,7 +1551,7 @@
                     }
                 }
             }
-        },
+        },*/
         {
             "name": "[concat('BackupVM-',variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
