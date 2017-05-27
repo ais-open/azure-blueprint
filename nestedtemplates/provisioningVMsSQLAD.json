@@ -1566,7 +1566,7 @@
                 "sqlvirtualMachineLoop",
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
-                "encryptSQLMGMTADLoop"
+                //"encryptSQLMGMTADLoop"
             ],
             "properties": {
                 "mode": "Incremental",
