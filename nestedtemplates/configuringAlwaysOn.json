@@ -135,15 +135,6 @@
                         },
                         "NumberOfDisks": "[parameters('numberOfDisks')]",
                         "WorkloadType": "[parameters('workloadType')]"
-                            /*"MachineName": "[concat(parameters('sqlVMName'),'1')]",
-                            "ResourceGroupName": "[parameters('ResourceGroupName')]",
-                            "AutomationAccountName": "[parameters('AutomationAccountName')]",
-                            "AzureAuthCreds": {
-                                "UserName": "[parameters('AzureUserName')]",
-                                "Password": "PrivateSettingsRef:AzurePassword"
-                            },
-                            "SubscriptionId": "[parameters('SubscriptionId')]",
-                            "EnvironmentName": "[parameters('EnvironmentName')]"*/
                     }
                 },
                 "protectedSettings": {

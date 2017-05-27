@@ -84,61 +84,6 @@
                 }
             }
         },
-        /*{
-            "apiVersion": "2016-04-30-preview",
-            "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('vmName')]",
-            "location": "[resourceGroup().location]",
-            "tags": {
-                "Project": "BluePrint"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('vmName'), parameters('vmEncryptionSettings').diskEncryptionExtensionName)]"
-            ],
-            "properties": {
-                "storageProfile": {
-                    "osDisk": {
-                        "encryptionSettings": {
-                            "diskEncryptionKey": {
-                                "sourceVault": {
-                                    "id": "[parameters('vmEncryptionSettings').keyVaultResourceID]"
-                                },
-                                "secretUrl": "[reference(resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('vmName'), parameters('vmEncryptionSettings').diskEncryptionExtensionName)).instanceView.statuses[0].message]"
-                            },
-                            "keyEncryptionKey": {
-                                "sourceVault": {
-                                    "id": "[parameters('vmEncryptionSettings').keyVaultResourceID]"
-                                },
-                                "keyUrl": "[parameters('keyEncryptionKeyURL')]"
-                            }
-                        }
-                    }
-                }
-            },
-            "resources": [
-                {
-                "type": "extensions",
-                "name": "[concat(parameters('vmName'), '/EnterpriseCloudMonitoring')]",
-                "apiVersion": "2016-03-30",
-                "location": "[resourceGroup().location]",
-                "dependsOn": [
-                    "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
-                ],
-                "properties": {
-                    "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                    "type": "MicrosoftMonitoringAgent",
-                    "typeHandlerVersion": "1.0",
-                    "autoUpgradeMinorVersion": false,
-                    "settings": {
-                        "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
-                    },
-                    "protectedSettings": {
-                        "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
-                    }
-                }
-            }
-            ]
-        },*/
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'), '/EnterpriseCloudMonitoring')]",

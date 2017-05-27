@@ -481,29 +481,7 @@
                     }
                 }
             },
-            "resources": [
-                /*{
-                                    "type": "Microsoft.Compute/virtualMachines/extensions",
-                                    "name": "[concat(parameters('adPDCVMName'),'/EnterpriseCloudMonitoring')]",
-                                    "apiVersion": "2016-03-30",
-                                    "location": "[resourceGroup().location]",
-                                    "dependsOn": [
-                                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
-                                    ],
-                                    "properties": {
-                                        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                                        "type": "MicrosoftMonitoringAgent",
-                                        "typeHandlerVersion": "1.0",
-                                        "autoUpgradeMinorVersion": false,
-                                        "settings": {
-                                            "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
-                                        },
-                                        "protectedSettings": {
-                                            "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
-                                        }
-                                    }
-                                },*/
-                {
+            "resources": [{
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('adPDCVMName'),'/PDCBaselineDSC')]",
                     "apiVersion": "2015-06-15",
@@ -512,8 +490,7 @@
                     },
                     "location": "[parameters('location')]",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
-                        //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'EnterpriseCloudMonitoring')]"
+                        //"[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
@@ -561,7 +538,6 @@
                     "name": "[concat(parameters('adPDCVMName'), '/adcse-pwd')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
-                        //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]"
                     ],
                     "location": "[resourceGroup().location]",
                     "tags": {
