@@ -50,7 +50,7 @@
             "name": "SQLAlwaysOnEndPointListener",
             "properties": {
               "backendAddressPool": {
-                "id": "[parameters('derivedIds').sqlLBBEID]"
+                "id": "[parameters('derivedIds').sqlBEAddressPoolID]"
               },
               "frontendIPConfiguration": {
                 "id": "[parameters('derivedIds').sqllbFEConfigID]"
