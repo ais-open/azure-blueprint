@@ -853,7 +853,7 @@
       "postDeployScriptUris": [
         "[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]"
       ],
-      "provisioningOMSWorkspaceUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutoAccOMSWorkspace.json')]",
+      "omsWorkspaceURL": "[concat(parameters('templatesBaseUrl'),'/omsWorkspace.json')]",
       "provisioningOMSAutomationScheduleUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutomationSchedule.json')]",
       "nsgURL": "[concat(parameters('templatesBaseUrl'),'/nsg.json')]",
       "virtualNetworkURL": "[concat(parameters('templatesBaseUrl'),'/virtualNetwork.json')]",
@@ -954,14 +954,15 @@
       }
   },
   "resources": [
-    /*{
-      "name": "CreateAutomationAccountAndOMSWorkspace",
+    {
+      "name": "OMSWorkspaceAutomationAccount-Deployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "dependsOn": [],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('artifacts').provisioningOMSWorkspaceUrl]",
+          "uri": "[variables('artifacts').omsWorkspaceURL]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -985,7 +986,7 @@
           }
         }
       }
-    },*/
+    },
     {
       "name": "NSG-Deployment",
       "type": "Microsoft.Resources/deployments",
@@ -1132,7 +1133,7 @@
           }
         }
       }
-    } //,
+    }//,
     /*{
       "name": "ProvisioningNICsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
