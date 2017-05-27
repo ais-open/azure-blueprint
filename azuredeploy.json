@@ -1052,7 +1052,7 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "appGWPubliIPName": {
+          "appGWPublicIPName": {
             "value": "[parameters('appGWPublicIPName')]"
           }
         }
