@@ -13,6 +13,12 @@
     },
     "subnetURL": {
       "type": "string"
+    },
+    "pdcIP": {
+      "type": "string"
+    },
+    "bdcIP": {
+      "type": "string"
     }
   },
   "resources": [
@@ -29,6 +35,12 @@
         "addressSpace": {
           "addressPrefixes": [
             "[parameters('virtualNetworkAddressRange')]"
+          ]
+        },
+        "dhcpOptions": {
+          "dnsServers": [
+            "[parameters('pdcIP')]",
+            "[parameters('bdcIP')]"
           ]
         },
         "subnets": "[reference('Subnets').outputs.subnets.value]"

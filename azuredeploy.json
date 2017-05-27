@@ -1026,6 +1026,12 @@
           },
           "subnetURL": {
             "value": "[variables('artifacts').subnetURL]"
+          },
+          "pdcIP": {
+            "value": "[parameters('adPDCNICIPAddress')]"
+          },
+          "bdcIP": {
+            "value": "[parameters('adBDCNICIPAddress')]"
           }
         }
       }
