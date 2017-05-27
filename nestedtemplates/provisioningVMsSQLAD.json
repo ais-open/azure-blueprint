@@ -1444,7 +1444,7 @@
                     "provisioningHybridworkersUrl": {
                         "value": "[parameters('provisioningHybridworkersUrl')]"
                     },
-                    "AdMachineNames": {
+                    "MachinesToSetPasswordPolicy": {
                         "value": "[concat(parameters('adPDCVMName'),';', parameters('adBDCVMName'))]"
                     }
                 }

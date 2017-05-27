@@ -10,7 +10,7 @@
         [String]$AzurePassword,
         [String]$SubscriptionId,
         [String]$EnvironmentName,
-        [String]$AdMachineNames
+        [String]$MachinesToSetPasswordPolicy
     )
     Enable-PSRemoting -Force
 
@@ -353,8 +353,8 @@ Start-DscConfiguration -Wait -Force -Path .\SetHybridWorderList -Verbose
 
 
 # Set Password Policy
-if($AdMachineNames -ne ""){
-    $adMachineArray = $AdMachineNames.Split(";")
+if($MachinesToSetPasswordPolicy -ne ""){
+    $adMachineArray = $MachinesToSetPasswordPolicy.Split(";")
     $index = $adMachineArray.IndexOf($MachineName)
     if($index -gt -1){
 

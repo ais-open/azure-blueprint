@@ -1684,7 +1684,7 @@
                     "provisioningHybridworkersUrl": {
                         "value": "[variables('artifacts').provisioningHybridworkerUrl]"
                     },
-                    "AdMachineNames": {
+                    "MachinesToSetPasswordPolicy": {
                         "value": "[concat(variables('resourceNames').vms.adpdc,';', variables('resourceNames').vms.adbdc)]"
                     }
                 }

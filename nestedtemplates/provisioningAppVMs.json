@@ -373,7 +373,7 @@
                     "provisioningHybridworkersUrl": {
                         "value": "[parameters('provisioningHybridworkersUrl')]"
                     },
-                    "AdMachineNames": {
+                    "MachinesToSetPasswordPolicy": {
                         "value": ""
                     }
                 }

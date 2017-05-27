@@ -47,7 +47,7 @@
         "provisioningHybridworkersUrl": {
             "type": "string"
         },
-        "AdMachineNames": {
+        "MachinesToSetPasswordPolicy": {
             "type": "string"
         }
     },
