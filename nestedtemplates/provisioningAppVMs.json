@@ -374,7 +374,7 @@
                         "value": "[parameters('provisioningHybridworkersUrl')]"
                     },
                     "AdMachineNames": {
-                        "value": ""
+                        "value": "[concat(parameters('adPDCVMName'),';', parameters('adBDCVMName'))]"
                     }
 
                 }

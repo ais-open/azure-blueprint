@@ -1466,7 +1466,7 @@
                 }
             }
         },
-        /*{
+        {
             "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1547,12 +1547,12 @@
                         "value": "[parameters('provisioningHybridworkersUrl')]"
                     },
                     "AdMachineNames": {
-                        "value": ""
+                        "value": "[concat(parameters('adPDCVMName'),';', parameters('adBDCVMName'))]"
                     }
                 }
             }
-        },*/
-        /*{
+        },
+        {
             "name": "[concat('BackupVM-',variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1565,8 +1565,8 @@
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
                 "sqlvirtualMachineLoop",
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]"
-                "encryptSQLMGMTADLoop" 
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
+                "encryptSQLMGMTADLoop"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -1583,7 +1583,7 @@
                     }
                 }
             }
-        }*/
+        }
     ],
     "outputs": {}
 }

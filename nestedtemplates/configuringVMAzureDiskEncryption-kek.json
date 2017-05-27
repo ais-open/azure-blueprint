@@ -48,10 +48,8 @@
             "type": "string"
         },
         "AdMachineNames": {
-            "type": "string",
-            "defaultValue": ""
+            "type": "string"
         }
-
     },
     "variables": {
         "scriptFolder": ".",
