@@ -1552,7 +1552,7 @@
                 }
             }
         },
-        /*{
+        {
             "name": "[concat('BackupVM-',variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1561,11 +1561,6 @@
                 "count": "[length(variables('vmNames').VMs)]"
             },
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]",
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
-                "sqlvirtualMachineLoop",
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
                 "encryptSQLMGMTADLoop"
             ],
             "properties": {
@@ -1583,7 +1578,7 @@
                     }
                 }
             }
-        }*/
+        }
     ],
     "outputs": {}
 }
