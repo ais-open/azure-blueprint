@@ -342,4 +342,31 @@ if($MachinesToSetPasswordPolicy -ne ""){
     }
 }
 
+# Temp Fix OMS Cloud Monitoring Connection Issue
+try{
+    $cloudMonitoring =Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Status
+    $status = $cloudMonitoring.ProvisioningState
+    if($status -eq "Failed"){
+        Remove-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Force
+        $Workspace = Get-AzureRmOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName  -ErrorAction Stop
+        $OmsLocation = $Workspace.Location
+        # Get the workspace ID
+        $WorkspaceId = $Workspace.CustomerId
+
+        # Get the primary key for the OMS workspace
+        $WorkspaceSharedKeys = Get-AzureRmOperationalInsightsWorkspaceSharedKeys -ResourceGroupName $ResourceGroupName -Name $WorkspaceName
+        $WorkspaceKey = $WorkspaceSharedKeys.PrimarySharedKey
+
+        $PublicSettings = @{"workspaceId" = $WorkspaceId }
+        $ProtectedSettings = @{"workspaceKey" = $WorkspaceKey}
+
+        Set-AzureRmVMExtension -ExtensionName "Microsoft.EnterpriseCloud.Monitoring" -ResourceGroupName $ResourceGroupName -VMName $MachineName -Publisher "Microsoft.EnterpriseCloud.Monitoring" -ExtensionType "MicrosoftMonitoringAgent" -TypeHandlerVersion 1.0 -Settings $PublicSettings -ProtectedSettings $ProtectedSettings -Location $OmsLocation
+
+    }
+}
+catch{
+
+}
+
+
 
