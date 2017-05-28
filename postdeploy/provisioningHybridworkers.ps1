@@ -6,6 +6,7 @@
         [String]$MachineName,
         [String]$ResourceGroupName,
         [String]$AutomationAccountName,
+        [String]$WorkspaceName,
         [String]$AzureUserName,
         [String]$AzurePassword,
         [String]$SubscriptionId,
@@ -178,38 +179,6 @@
         [String]$EnvironmentName
 
         )
-
-        Write-Host "Check Module exists"
-        Install-Packageprovider -Name Nuget -MinimumVersion 2.8.5.201 -Force
-    
-        
-        # Add and update modules on the Automation account
-        Write-Output "Importing necessary modules..."
-
-        # Create a list of the modules necessary to register a hybrid worker
-        $AzureRmModule = @{"Name" = "AzureRM"; "Version" = ""}
-        $Modules = @($AzureRmModule)
-
-        # Import modules
-        foreach ($Module in $Modules) {
-            $ModuleName = $Module.Name
-            # Find the module version
-            if ([string]::IsNullOrEmpty($Module.Version)){            
-                # Find the latest module version if a version wasn't provided
-                $ModuleVersion = (Find-Module -Name $ModuleName).Version
-            } else {
-                $ModuleVersion = $Module.Version
-            }
-            # Check if the required module is already installed
-            $CurrentModule = Get-Module -Name $ModuleName -ListAvailable | where "Version" -eq $ModuleVersion
-            if (!$CurrentModule) {
-
-                $null = Install-Module -Name $ModuleName -RequiredVersion $ModuleVersion -Force
-                Write-Output " Successfully installed version $ModuleVersion of $ModuleName..."
-            } else {
-                Write-Output " Required version $ModuleVersion of $ModuleName is installed..."
-            }
-        }
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
         Import-Module -Name AzureRM    
