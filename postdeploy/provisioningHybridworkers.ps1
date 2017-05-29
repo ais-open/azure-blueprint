@@ -341,6 +341,11 @@ try{
 catch{
 }
 
+
+# calling the configuration
+SetHybridWorderList -MachineName $MachineName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -AzureAuthCreds $AzureAuthCreds -SubscriptionId $SubscriptionId -EnvironmentName $EnvironmentName -ConfigurationData $ConfigData -Verbose
+Start-DscConfiguration -Wait -Force -Path .\SetHybridWorderList -Verbose
+
 # Temp Fix OMS Cloud Monitoring Connection Issue
 try{
     $cloudMonitoring =Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Status
@@ -367,12 +372,4 @@ try{
 catch{
 
 }
-
-
-
-# calling the configuration
-SetHybridWorderList -MachineName $MachineName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -AzureAuthCreds $AzureAuthCreds -SubscriptionId $SubscriptionId -EnvironmentName $EnvironmentName -ConfigurationData $ConfigData -Verbose
-Start-DscConfiguration -Wait -Force -Path .\SetHybridWorderList -Verbose
-
-
 
