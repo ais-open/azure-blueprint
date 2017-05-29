@@ -194,7 +194,7 @@
             #Apply AppLocker
         Service AppIDsvc {
             Name = 'AppIDSvc'
-            StartupType = 'Automatic'
+            #StartupType = 'Automatic'
             State = 'Running'
             BuiltinAccount = 'LocalService'
             DependsOn = "[File]XMLPol","[Script]ApplyLocalApplockerPol"
@@ -316,38 +316,39 @@
         )
     } # End of Config Data
 
-# calling the configuration
-SetHybridWorderList -MachineName $MachineName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -AzureAuthCreds $AzureAuthCreds -SubscriptionId $SubscriptionId -EnvironmentName $EnvironmentName -ConfigurationData $ConfigData -Verbose
-Start-DscConfiguration -Wait -Force -Path .\SetHybridWorderList -Verbose
+try{
+    # Set Password Policy
+    if($MachinesToSetPasswordPolicy -ne ""){
+        $adMachineArray = $MachinesToSetPasswordPolicy.Split(";")
+        $index = $adMachineArray.IndexOf($MachineName)
+        if($index -gt -1){
+
+            $Domain = (gwmi WIN32_ComputerSystem).Domain
+
+            Import-Module ActiveDirectory
+            Import-Module grouppolicy
+            $dcs = $Domain.split(".")
+            $target = "DC=" + $dcs[0]+ "," + "DC=" + $dcs[1]
+
+            #this does not error out
+            Set-ADDefaultDomainPasswordPolicy -Identity $Domain -AuthType Negotiate -MaxPasswordAge 60.00:00:00 -MinPasswordAge 1.00:00:00 -PasswordHistoryCount 24 -ComplexityEnabled $true -ReversibleEncryptionEnabled $true -MinPasswordLength 14
+            Set-GPLink -Guid (Get-GPO -Name "Default Domain Policy").id -Target $target -LinkEnabled Yes -Enforced Yes
 
 
-# Set Password Policy
-if($MachinesToSetPasswordPolicy -ne ""){
-    $adMachineArray = $MachinesToSetPasswordPolicy.Split(";")
-    $index = $adMachineArray.IndexOf($MachineName)
-    if($index -gt -1){
-
-        $Domain = (gwmi WIN32_ComputerSystem).Domain
-
-        Import-Module ActiveDirectory
-        Import-Module grouppolicy
-        $dcs = $Domain.split(".")
-        $target = "DC=" + $dcs[0]+ "," + "DC=" + $dcs[1]
-
-        #this does not error out
-        Set-ADDefaultDomainPasswordPolicy -Identity $Domain -AuthType Negotiate -MaxPasswordAge 60.00:00:00 -MinPasswordAge 1.00:00:00 -PasswordHistoryCount 24 -ComplexityEnabled $true -ReversibleEncryptionEnabled $true -MinPasswordLength 14
-        Set-GPLink -Guid (Get-GPO -Name "Default Domain Policy").id -Target $target -LinkEnabled Yes -Enforced Yes
-
-
+        }
     }
+}
+catch{
 }
 
 # Temp Fix OMS Cloud Monitoring Connection Issue
 try{
     $cloudMonitoring =Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Status
-    $status = $cloudMonitoring.ProvisioningState
+    $status = $cloudMonitoring.ProvisioningState    
+
     if($status -eq "Failed"){
-        Remove-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Force
+        Remove-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Force        
+
         $Workspace = Get-AzureRmOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName  -ErrorAction Stop
         $OmsLocation = $Workspace.Location
         # Get the workspace ID
@@ -360,13 +361,18 @@ try{
         $PublicSettings = @{"workspaceId" = $WorkspaceId }
         $ProtectedSettings = @{"workspaceKey" = $WorkspaceKey}
 
-        Set-AzureRmVMExtension -ExtensionName "Microsoft.EnterpriseCloud.Monitoring" -ResourceGroupName $ResourceGroupName -VMName $MachineName -Publisher "Microsoft.EnterpriseCloud.Monitoring" -ExtensionType "MicrosoftMonitoringAgent" -TypeHandlerVersion 1.0 -Settings $PublicSettings -ProtectedSettings $ProtectedSettings -Location $OmsLocation
-
+        Set-AzureRmVMExtension -ExtensionName "EnterpriseCloudMonitoring" -ResourceGroupName $ResourceGroupName -VMName $MachineName -Publisher "Microsoft.EnterpriseCloud.Monitoring" -ExtensionType "MicrosoftMonitoringAgent" -TypeHandlerVersion 1.0 -Settings $PublicSettings -ProtectedSettings $ProtectedSettings -Location $OmsLocation
     }
 }
 catch{
 
 }
+
+
+
+# calling the configuration
+SetHybridWorderList -MachineName $MachineName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -AzureAuthCreds $AzureAuthCreds -SubscriptionId $SubscriptionId -EnvironmentName $EnvironmentName -ConfigurationData $ConfigData -Verbose
+Start-DscConfiguration -Wait -Force -Path .\SetHybridWorderList -Verbose
 
 
 
