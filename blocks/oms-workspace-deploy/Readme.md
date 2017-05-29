@@ -33,5 +33,5 @@ Testing instructions:
       frequency:15 min    
       timewindow: 60 min	    
       Saved search: logical disk: free disk size    
-      Status: ON    
-7)On The settings pane-> go to connnected sources-> make sure the VMs in the resource groups are mentioned in the connected resources.    
+      Status: ON              
+7) On The settings pane-> go to connnected sources-> Windows servers->make sure the VMs in the resource groups are mentioned in the connected resources.    
