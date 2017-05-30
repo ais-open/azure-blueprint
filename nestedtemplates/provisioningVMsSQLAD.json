@@ -256,7 +256,26 @@
                     "Name": "[concat(parameters('sqlVMName'),'1')]"
                 }
             ]
-        }
+        },
+        "storageAccountNames": [{
+                "Name": "[parameters('sqlStorageAccountName')]"
+            },
+            {
+                "Name": "[parameters('dcStorageAccountName')]"
+            },
+            {
+                "Name": "[concat(parameters('sqlStorageAccountName'), 'fsw')]"
+            },
+            {
+                "Name": "[concat(parameters('sqlStorageAccountName'), 'diag')]"
+            },
+            {
+                "Name": "[concat(parameters('sqlStorageAccountName'), 'diag')]"
+            },
+            {
+                "Name": "[concat(parameters('dcStorageAccountName'), 'diag')]"
+            }
+        ]
     },
     "resources": [{
             "type": "Microsoft.Compute/availabilitySets",
@@ -417,6 +436,42 @@
                     "keySource": "Microsoft.Storage"
                 }
             }
+        },
+        {
+          "type": "microsoft.insights/alertrules",
+          "name": "[concat('capacity_alert_', variables('storageAccountNames')[copyIndex()].Name)]",
+          "apiVersion": "2014-04-01",
+          "copy": {
+              "name": "alertRulesLoop",
+              "count": "[length(variables('storageAccountNames'))]"
+          },
+          "tags": {
+            "Project": "BluePrint"
+          },
+          "location": "[parameters('location')]",
+          "properties": {
+            "name": "capacity alert",
+            "description": "usage more than 450 TB",
+            "isEnabled": true,
+            "condition": {
+              "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
+              "dataSource": {
+                "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+                "resourceUri": "[concat(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountNames')[copyIndex()].Name), '/services/blob')]",
+                "metricName": "Capacity"
+              },
+              "threshold": 4500000000000,
+              "windowSize": "P1D"
+            },
+            "action": {
+              "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+              "sendToServiceOwners": true,
+              "customEmails": []
+            }
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountNames')[copyIndex()].Name)]"
+          ]
         },
         {
             "apiVersion": "2016-03-30",

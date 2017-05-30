@@ -5,25 +5,25 @@ This outline provides an overview of the deployment timeline for cloud resources
 
 ### Outline
 
-1. **CreateAutomationAccountAndOMSWorkspace** - 5 mins
+1. **CreateAutomationAccountAndOMSWorkspace** - 5 mins | 5 mins
         a. OMS Automation Account
         b. OMS Automation Account Module - Azure Profile (1a)  
         c. OMS Automation Account Module - ASR Scripts (1a)
         d. Operational Insights Workspaces (1a)
         e. Operational Insights Workspaces Linked Services (1d, 1a)
-2. **RecoverServicesVault** - 10s
+2. **RecoverServicesVault** - 10 sec
         a. Recovery Services Vault
-3. **BackupPolicyCustom** (2) - 5s
+3. **BackupPolicyCustom** (2) - 5 sec | 15 sec
         a.  Recovery Services Vault BackUp Policies
-4. **VirtualNetworkNSG** (1) - 1min
+4. **VirtualNetworkNSG** (1) - 1 min | 6 min
         a. Network Security Groups - Application Gateway, Domain Controllers, SQL, Web Tier, MGT
         b. Virtual Network (4a)
-5. **SQLLoadBalancer** (4)
+5. **SQLLoadBalancer** (4) - 10 sec | 6 min
         a. SQL Load Balancer
-6. **ProvisioningApplicationGateway** (4)
+6. **ProvisioningApplicationGateway** (4) - 10 mins | 16 min
         a. Public IP for Application Gateway
         b. Application Gateway (6b)
-7. **ProvisioningNICsSQLADMGT** (5)
+7. **ProvisioningNICsSQLADMGT** (5) - 30 sec | 7 min
         a. Public IP for MGT/Bastion
         b. Primary DC Network Interface
         c. Backup DC Network Interface
@@ -31,7 +31,7 @@ This outline provides an overview of the deployment timeline for cloud resources
         e. SQL 1 Network Interface
         f. SQL Witness Network Interface
         g. MGT/Bastion Network Interface (7a)
-8. **ProvisioningVMsSQLADMGT** (5, 3)
+8. **ProvisioningVMsSQLADMGT** (7, 3) - 1 hr 30 mins | 1 hr 40 min
         a. Domain Controller Availability Set
         b. SQL Controller Availability Set
         c. SQL Storage Account for sql0 and sql1 VMs
@@ -68,7 +68,7 @@ This outline provides an overview of the deployment timeline for cloud resources
           I. Azure Disk Encryption Extension
         w. BackUp Configuration (8v) \*
           I. Recovery Services Vault Protected Items
-9. **WebTier** (9)
+9. **WebTier** (9) - 20 mins
         a. Web Storage Account
         b. Web Availability Set
         c. Web Network Interfaces \*

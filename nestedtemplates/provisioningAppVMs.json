@@ -133,6 +133,38 @@
             }
         },
         {
+          "type": "microsoft.insights/alertrules",
+          "name": "[concat('capacity_alert_', parameters('WebStorageAccountName'))]",
+          "apiVersion": "2014-04-01",
+          "tags": {
+            "Project": "BluePrint"
+          },
+          "location": "[parameters('location')]",
+          "properties": {
+            "name": "capacity alert",
+            "description": "usage more than 450 TB",
+            "isEnabled": true,
+            "condition": {
+              "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
+              "dataSource": {
+                "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+                "resourceUri": "[concat(resourceId('Microsoft.Storage/storageAccounts', parameters('WebStorageAccountName')), '/services/blob')]",
+                "metricName": "Capacity"
+              },
+              "threshold": 4500000000000,
+              "windowSize": "P1D"
+            },
+            "action": {
+              "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+              "sendToServiceOwners": true,
+              "customEmails": []
+            }
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts', parameters('WebStorageAccountName'))]"
+          ]
+        },
+        {
             "type": "Microsoft.Compute/availabilitySets",
             "name": "[parameters('WebAvailabilitySetName')]",
             "apiVersion": "2015-06-15",

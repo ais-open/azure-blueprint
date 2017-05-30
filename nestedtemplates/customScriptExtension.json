@@ -34,6 +34,8 @@
         }
     },
     "variables": {
+        "scriptFolder": ".",
+        "scriptFileName": "provisioningHybridworkers.ps1",
         "scriptParametersHybridWorkers": "[concat('-MachineName \"' , parameters('vmName'), '\" -ResourceGroupName \"', parameters('ResourceGroupName'), '\" -AutomationAccountName \"', parameters('AutomationAccountName'), '\" -WorkspaceName \"', parameters('workspaceName'), '\" -AzureUserName \"', parameters('AzureUserName'), '\" -AzurePassword \"', parameters('AzurePassword'),'\" -SubscriptionId \"', parameters('SubscriptionId'), '\" -EnvironmentName \"', parameters('EnvironmentName'), '\" -MachinesToSetPasswordPolicy \"', parameters('MachinesToSetPasswordPolicy'), '\"' )]"
     },
     "resources": [
@@ -58,7 +60,7 @@
                     "fileUris": [
                         "[parameters('postDeployScriptUris')]"
                     ],
-                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters') )]"
+                    "commandToExecute": "[concat('start powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters'), 'start powershell -ExecutionPolicy Unrestricted -File settimezonelogsize.ps1' )]"
                 }
             }
         }
