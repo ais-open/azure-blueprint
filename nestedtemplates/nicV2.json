@@ -240,7 +240,7 @@
             "properties": {
               "privateIPAllocationMethod": "Static",
               "publicIPAddress": {
-                "id": "[variables('varMgtPublicIP')]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('resourceNames').publicIPs.mgt)]"
               },
               "privateIPAddress": "[parameters('mgtIPAddress')]",
               "subnet": {
