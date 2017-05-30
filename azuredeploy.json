@@ -1144,7 +1144,8 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "VirtualNetwork-Deployment",
-        "PublicIP-Deployment"
+        "PublicIP-Deployment",
+        "SQLLoadBalancer-Deployment"
       ],
       "properties": {
         "mode": "Incremental",
