@@ -14,9 +14,6 @@
     "adPDCNICIPAddress": {
       "type": "string"
     },
-    "adBDCNicName": {
-      "type": "string"
-    },
     "adBDCNICIPAddress": {
       "type": "string"
     },
