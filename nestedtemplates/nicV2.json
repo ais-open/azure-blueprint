@@ -244,7 +244,7 @@
               },
               "privateIPAddress": "[parameters('mgtIPAddress')]",
               "subnet": {
-                "id": "[parameters('derivedIds').mgtSubne]"
+                "id": "[parameters('derivedIds').mgtSubnet]"
               }
             }
           }
