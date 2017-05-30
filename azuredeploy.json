@@ -852,7 +852,7 @@
                 "[concat(parameters('scriptsBaseUrl'),'/settimezonelogsize.ps1')]"
             ],
             "provisioningHybridworkerUrl": "[concat(parameters('scriptsBaseUrl'),'/provisioningHybridworkers.ps1')]",
-            "provisioningCustomScriptExtensionUrl": "[concat(parameters('scriptsBaseUrl'),'/customScriptExtension.json')]",
+            "provisioningCustomScriptExtensionUrl": "[concat(parameters('templatesBaseUrl'),'/customScriptExtension.json')]",
             "provisioningOMSWorkspaceUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutoAccOMSWorkspace.json')]",
             "provisioningOMSAutomationScheduleUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutomationSchedule.json')]",
             "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
@@ -1866,7 +1866,7 @@
                 },
                 "parameters": {
                     "vmName": {
-                        "value": "[variables('vmNames').VMs[copyIndex()].Name]"
+                        "value": "[concat(variables('resourceNames').vms.web, copyindex())]"
                     },
                     "workspaceName": {
                         "value": "[parameters('omsWorkspaceName')]"
@@ -1916,8 +1916,8 @@
                 //"Microsoft.Resources/deployments/WebTier"
                 "monitorVMLoopSQLAD",
                 "monitorVMLoopWEB",
-                "CustomScriptExtenstionLoopWEB",
-                "CustomScriptExtenstionLoopSQLAD"
+                "CustomScriptExtensionLoopWEB",
+                "CustomScriptExtensionLoopSQLAD"
             ],
             "properties": {
                 "mode": "Incremental",
