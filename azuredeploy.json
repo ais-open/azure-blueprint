@@ -1007,6 +1007,44 @@
             }
         },
         {
+            "name": "RecoverServicesVault",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningRCV]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "backupInfo": {
+                        "value": "[variables('backupInfo')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "BackupPolicyCustom",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/RecoverServicesVault"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').backupPolicy]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "backupInfo": {
+                        "value": "[variables('backupInfo')]"
+                    }
+                }
+            }
+        },
+        {
             "name": "VirtualNetworkNSG",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1716,44 +1754,6 @@
                     },
                     "computerIdList": {
                         "value": ""
-                    }
-                }
-            }
-        },
-        {
-            "name": "RecoverServicesVault",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
-            "dependsOn": [],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('artifacts').provisioningRCV]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "backupInfo": {
-                        "value": "[variables('backupInfo')]"
-                    }
-                }
-            }
-        },
-        {
-            "name": "BackupPolicyCustom",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
-            "dependsOn": [
-                "Microsoft.Resources/deployments/RecoverServicesVault"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('artifacts').backupPolicy]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "backupInfo": {
-                        "value": "[variables('backupInfo')]"
                     }
                 }
             }
