@@ -223,9 +223,7 @@
       "name": "[parameters('resourceNames').nics.mgt]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIPAddresses/', parameters('resourceNames').publicIPs.mgt)]"
-      ],
+      "dependsOn": [],
       "apiVersion": "2015-06-15",
       "tags": {
         "Project": "BluePrint"
