@@ -4,15 +4,27 @@
   "parameters": {
     "appGWPublicIPName": {
       "type": "string"
+    },
+    "mgtPublicIPName": {
+      "type": "string"
     }
   },
-  "variables": {},
+  "variables": {
+    "publicIPNames": [
+      "[parameters('appGWPublicIPName')]",
+      "[parameters('mgtPublicIPName')]"
+    ]
+  },
   "resources": [
     {
       "apiVersion": "2016-03-30",
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[parameters('appGWPublicIPName')]",
+      "name": "[variables('publicIPNames')[copyIndex()]]",
       "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "publicIPLoop",
+        "count": "[length(variables('publicIPNames'))]"
+      },
       "tags": {
         "Project": "BluePrint"
       },
