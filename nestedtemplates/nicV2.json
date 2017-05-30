@@ -11,19 +11,7 @@
     "derivedIds": {
       "type": "object"
     },
-    "adPDCNicName": {
-      "type": "string"
-    },
     "adPDCNICIPAddress": {
-      "type": "string"
-    },
-    "dcSubnetRef": {
-      "type": "string"
-    },
-    "adBEAddressPoolID": {
-      "type": "string"
-    },
-    "adRDPNATRuleID": {
       "type": "string"
     },
     "adBDCNicName": {
@@ -32,19 +20,7 @@
     "adBDCNICIPAddress": {
       "type": "string"
     },
-    "sql0NicName": {
-      "type": "string"
-    },
-    "sql1NicName": {
-      "type": "string"
-    },
-    "sqlSubnetRef": {
-      "type": "string"
-    },
     "sqlBEAddressPoolID": {
-      "type": "string"
-    },
-    "sqlwNicName": {
       "type": "string"
     },
     "sql0IPAddress": {
@@ -56,25 +32,7 @@
     "sqlwIPAddress": {
       "type": "string"
     },
-    "sqlNSGid": {
-      "type": "string"
-    },
-    "dcNSGid": {
-      "type": "string"
-    },
-    "mgtNicName": {
-      "type": "string"
-    },
     "mgtIPAddress": {
-      "type": "string"
-    },
-    "mgtNSGid": {
-      "type": "string"
-    },
-    "mgtSubnetRef": {
-      "type": "string"
-    },
-    "mgtPublicIPName": {
       "type": "string"
     },
     "webSubnet": {
@@ -255,7 +213,7 @@
           }
         ],
         "networkSecurityGroup": {
-          "id": "[parameters('mgtNSGid')]"
+          "id": "[parameters('derivedIds').mgtNSG]"
         }
       }
     },
