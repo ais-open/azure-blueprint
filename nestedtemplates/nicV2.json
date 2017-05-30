@@ -6,7 +6,7 @@
       "type": "string"
     },
     "resourceNames": {
-      "type": "object" 
+      "type": "object"
     },
     "derivedIds": {
       "type": "object"
@@ -48,13 +48,13 @@
       "type": "string"
     },
     "sql0IPAddress": {
-      "type":"string"
+      "type": "string"
     },
     "sql1IPAddress": {
-      "type":"string"
+      "type": "string"
     },
     "sqlwIPAddress": {
-      "type":"string"
+      "type": "string"
     },
     "sqlNSGid": {
       "type": "string"
@@ -76,6 +76,11 @@
     },
     "mgtPublicIPName": {
       "type": "string"
+    }
+  },
+  "variables": {
+    "varMgtPublicIP": {
+      "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('resourceNames').publicIPs.mgt)]"
     }
   },
   "resources": [
@@ -235,7 +240,7 @@
             "properties": {
               "privateIPAllocationMethod": "Static",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('resourceNames').publicIPs.mgt)]"
+                "id": "[variables('varMgtPublicIP')]"
               },
               "privateIPAddress": "[parameters('mgtIPAddress')]",
               "subnet": {
