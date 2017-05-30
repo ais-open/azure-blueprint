@@ -1181,53 +1181,14 @@
           "mgtIPAddress": {
             "value": "[parameters('mgtIPAddress')]"
           },
-          "adPDCNicName": {
-            "value": "[variables('resourceNames').nics.adpdc]"
+          "staticIPWEBStart": {
+            "value": "[variables('staticIPWEBStart')]"
           },
-          "adBDCNicName": {
-            "value": "[variables('resourceNames').nics.adbdc]"
+          "webSubnet": {
+            "value": "[parameters('webSubnet')]"
           },
-          "sqlwNicName": {
-            "value": "[variables('resourceNames').nics.sqlw]"
-          },
-          "sql0NicName": {
-            "value": "[variables('resourceNames').nics.sql0]"
-          },
-          "sql1NicName": {
-            "value": "[variables('resourceNames').nics.sql1]"
-          },
-          "mgtPublicIPName": {
-            "value": "[variables('resourceNames').publicIPs.mgt]"
-          },
-          "mgtNICName": {
-            "value": "[variables('resourceNames').nics.mgt]"
-          },
-          "sqlSubnetRef": {
-            "value": "[variables('derivedIds').sqlSubnet]"
-          },
-          "dcSubnetRef": {
-            "value": "[variables('derivedIds').dcSubnet]"
-          },
-          "mgtSubnetRef": {
-            "value": "[variables('derivedIds').mgtSubnet]"
-          },
-          "adBEAddressPoolID": {
-            "value": "[variables('derivedIds').adBEAddressPoolID]"
-          },
-          "adRDPNATRuleID": {
-            "value": "[variables('derivedIds').adRDPNATRuleID]"
-          },
-          "sqlBEAddressPoolID": {
-            "value": "[variables('derivedIds').sqlBEAddressPoolID]"
-          },
-          "sqlNSGid": {
-            "value": "[variables('derivedIds').sqlNSG]"
-          },
-          "dcNSGid": {
-            "value": "[variables('derivedIds').dcNSG]"
-          },
-          "mgtNSGid": {
-            "value": "[variables('derivedIds').mgtNSG]"
+          "numberOfWebInstances": {
+            "value": "[variables('numberOfWebInstances')]"
           }
         }
       }
@@ -1318,8 +1279,8 @@
           }
         }
       }
-    },
-    {
+    },*/
+    /*{
       "name": "ProvisioningVMsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1574,8 +1535,8 @@
           }
         }
       }
-    },
-    {
+    },*/
+    /*{
       "name": "WebTier",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",

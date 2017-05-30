@@ -76,13 +76,18 @@
     },
     "mgtPublicIPName": {
       "type": "string"
+    },
+    "webSubnet": {
+      "type": "object"
+    },
+    "numberOfWebInstances": {
+      "type": "int"
+    },
+    "staticIPWEBStart": {
+      "type": "int"
     }
   },
-  "variables": {
-    "varMgtPublicIP": {
-      "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('resourceNames').publicIPs.mgt)]"
-    }
-  },
+  "variables": {},
   "resources": [
     {
       "name": "[parameters('resourceNames').nics.adpdc]",
@@ -251,6 +256,37 @@
         ],
         "networkSecurityGroup": {
           "id": "[parameters('mgtNSGid')]"
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(parameters('resourceNames').nics.web, copyindex())]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "copy": {
+        "name": "webNICLoop",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
+      "dependsOn": [],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[concat(split(parameters('webSubnet').properties.addressPrefix, '0/')[0], add(copyindex(), parameters('staticIPWEBStart')))]",
+              "subnet": {
+                "id": "[parameters('derivedIds').webSubnet]"
+              }
+            }
+          }
+        ],
+        "networkSecurityGroup": {
+          "id": "[parameters('derivedIds').webNSG]"
         }
       }
     }
