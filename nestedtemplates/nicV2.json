@@ -17,9 +17,6 @@
     "adBDCNICIPAddress": {
       "type": "string"
     },
-    "sqlBEAddressPoolID": {
-      "type": "string"
-    },
     "sql0IPAddress": {
       "type": "string"
     },
