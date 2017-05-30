@@ -860,6 +860,7 @@
       "subnetURL": "[concat(parameters('templatesBaseUrl'),'/subnet.json')]",
       "publicIPURL": "[concat(parameters('templatesBaseUrl'),'/publicIP.json')]",
       "nicURL": "[concat(parameters('templatesBaseUrl'),'/nicV2.json')]",
+      "availabilitySetURL": "[concat(parameters('templatesBaseUrl'),'/availabilitySet.json')]",
       "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
       "nicTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateNic.json')]",
       "sqlLoadBalancerURL": "[concat(parameters('templatesBaseUrl'),'/sqlLoadBalancer.json')]",
@@ -1189,6 +1190,27 @@
           },
           "numberOfWebInstances": {
             "value": "[variables('numberOfWebInstances')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "AvailabilitySet-Deployment",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').availabilitySetURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[resourceGroup().location]"
+          },
+          "resourceNames": {
+            "value": "[variables('resourceNames')]"
           }
         }
       }

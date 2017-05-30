@@ -223,7 +223,6 @@
         "name": "webNICLoop",
         "count": "[parameters('numberOfWebInstances')]"
       },
-      "dependsOn": [],
       "properties": {
         "ipConfigurations": [
           {
