@@ -5,17 +5,17 @@ This outline provides an overview of the deployment timeline for cloud resources
 
 ### Outline
 
-1. **CreateAutomationAccountAndOMSWorkspace**
+1. **CreateAutomationAccountAndOMSWorkspace** - 5 mins
         a. OMS Automation Account
         b. OMS Automation Account Module - Azure Profile (1a)  
         c. OMS Automation Account Module - ASR Scripts (1a)
         d. Operational Insights Workspaces (1a)
         e. Operational Insights Workspaces Linked Services (1d, 1a)
-2. **RecoverServicesVault**
+2. **RecoverServicesVault** - 10s
         a. Recovery Services Vault
-3. **BackupPolicyCustom** (2)
+3. **BackupPolicyCustom** (2) - 5s
         a.  Recovery Services Vault BackUp Policies
-4. **VirtualNetworkNSG** (1)
+4. **VirtualNetworkNSG** (1) - 1min
         a. Network Security Groups - Application Gateway, Domain Controllers, SQL, Web Tier, MGT
         b. Virtual Network (4a)
 5. **SQLLoadBalancer** (4)

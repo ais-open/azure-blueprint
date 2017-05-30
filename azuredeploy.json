@@ -1723,6 +1723,35 @@
             }
         },
         {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(variables('vmNames').VMs[copyIndex()].Name, '/provisioningHybridworkers')]",
+            "dependsOn": [
+                "monitorVMLoopSQLAD"
+            ],
+            "copy": {
+                "name": "CustomScriptExtenstionLoopSQLAD",
+                "count": "[length(variables('vmNames').VMs)]"
+            },
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "provisioningHybridworkers",
+                "Project": "BluePrint"
+            },
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.8",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "[parameters('provisioningHybridworkersUrl')]"
+                    ],
+                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters') )]"
+                }
+            }
+        },
+        {
             "name": "[concat('ConfigurationOMSMonitoringWEB-', variables('resourceNames').vms.web, copyindex())]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1778,8 +1807,37 @@
                         "value": "[variables('artifacts').provisioningHybridworkerUrl]"
                     },
                     "MachinesToSetPasswordPolicy": {
-                        "value": "[concat(variables('resourceNames').vms.adpdc,';', variables('resourceNames').vms.adbdc)]"
+                        "value": ""
                     }
+                }
+            }
+        },
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(variables('resourceNames').vms.web, copyindex(), '/provisioningHybridworkers')]",
+            "dependsOn": [
+                "monitorVMLoopWEB"
+            ],
+            "copy": {
+                "name": "CustomScriptExtenstionLoopWEB",
+                "count": "[variables('numberOfWebInstances')]"
+            },
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "provisioningHybridworkers",
+                "Project": "BluePrint"
+            },
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.8",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "[parameters('provisioningHybridworkersUrl')]"
+                    ],
+                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters') )]"
                 }
             }
         },
