@@ -5,6 +5,12 @@
     "location": {
       "type": "string"
     },
+    "resourceNames": {
+      "type": "object" 
+    },
+    "derivedIds": {
+      "type": "object"
+    },
     "adPDCNicName": {
       "type": "string"
     },
@@ -74,7 +80,7 @@
   },
   "resources": [
     {
-      "name": "[parameters('adPDCNicName')]",
+      "name": "[parameters('resourceNames').nics.adpdc]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
@@ -89,18 +95,18 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('adPDCNICIPAddress')]",
               "subnet": {
-                "id": "[parameters('dcSubnetRef')]"
+                "id": "[parameters('derivedIds').dcSubnet]"
               }
             }
           }
         ],
         "networkSecurityGroup": {
-          "id": "[parameters('dcNSGid')]"
+          "id": "[parameters('derivedIds').dcNSG]"
         }
       }
     },
     {
-      "name": "[parameters('adBDCNicName')]",
+      "name": "[parameters('resourceNames').nics.adbdc]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
@@ -115,18 +121,18 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('adBDCNICIPAddress')]",
               "subnet": {
-                "id": "[parameters('dcSubnetRef')]"
+                "id": "[parameters('derivedIds').dcSubnet]"
               }
             }
           }
         ],
         "networkSecurityGroup": {
-          "id": "[parameters('dcNSGid')]"
+          "id": "[parameters('derivedIds').dcNSG]"
         }
       }
     },
     {
-      "name": "[parameters('sql0NicName')]",
+      "name": "[parameters('resourceNames').nics.sql0]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
@@ -140,24 +146,24 @@
             "properties": {
               "privateIPAllocationMethod": "Static",
               "subnet": {
-                "id": "[parameters('sqlSubnetRef')]"
+                "id": "[parameters('derivedIds').sqlSubnet]"
               },
               "privateIPAddress": "[parameters('sql0IPAddress')]",
               "loadBalancerBackendAddressPools": [
                 {
-                  "id": "[parameters('sqlBEAddressPoolID')]"
+                  "id": "[parameters('derivedIds').sqlBEAddressPoolID]"
                 }
               ]
             }
           }
         ],
         "networkSecurityGroup": {
-          "id": "[parameters('sqlNSGid')]"
+          "id": "[parameters('derivedIds').sqlNSG]"
         }
       }
     },
     {
-      "name": "[parameters('sql1NicName')]",
+      "name": "[parameters('resourceNames').nics.sql1]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
@@ -171,24 +177,24 @@
             "properties": {
               "privateIPAllocationMethod": "Static",
               "subnet": {
-                "id": "[parameters('sqlSubnetRef')]"
+                "id": "[parameters('derivedIds').sqlSubnet]"
               },
               "privateIPAddress": "[parameters('sql1IPAddress')]",
               "loadBalancerBackendAddressPools": [
                 {
-                  "id": "[parameters('sqlBEAddressPoolID')]"
+                  "id": "[parameters('derivedIds').sqlBEAddressPoolID]"
                 }
               ]
             }
           }
         ],
         "networkSecurityGroup": {
-          "id": "[parameters('sqlNSGid')]"
+          "id": "[parameters('derivedIds').sqlNSG]"
         }
       }
     },
     {
-      "name": "[parameters('sqlwNicName')]",
+      "name": "[parameters('resourceNames').nics.sqlw]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
@@ -203,22 +209,22 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('sqlwIPAddress')]",
               "subnet": {
-                "id": "[parameters('sqlSubnetRef')]"
+                "id": "[parameters('derivedIds').sqlSubnet]"
               }
             }
           }
         ],
         "networkSecurityGroup": {
-          "id": "[parameters('sqlNSGid')]"
+          "id": "[parameters('derivedIds').sqlNSG]"
         }
       }
     },
     {
-      "name": "[parameters('mgtNicName')]",
+      "name": "[parameters('resourceNames').nics.mgt]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIPAddresses/', parameters('mgtPublicIPName'))]"
+        "[resourceId('Microsoft.Network/publicIPAddresses/', parameters('resourceNames').publicIPs.mgt)]"
       ],
       "apiVersion": "2015-06-15",
       "tags": {
@@ -231,11 +237,11 @@
             "properties": {
               "privateIPAllocationMethod": "Static",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('mgtPublicIPName'))]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('resourceNames').publicIPs.mgt)]"
               },
               "privateIPAddress": "[parameters('mgtIPAddress')]",
               "subnet": {
-                "id": "[parameters('mgtSubnetRef')]"
+                "id": "[parameters('derivedIds').mgtSubne]"
               }
             }
           }
