@@ -652,21 +652,21 @@
             "metadata": {
                 "description": "Linked Templates base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/Patching/nestedtemplates"
+            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/PatchingRevision/nestedtemplates"
         },
         "dscBaseUrl": {
             "type": "string",
             "metadata": {
                 "description": "DSC Scripts base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/Patching/DSC"
+            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/PatchingRevision/DSC"
         },
         "scriptsBaseUrl": {
             "type": "string",
             "metadata": {
                 "description": "DSC Scripts base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/Patching/postdeploy"
+            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/PatchingRevision/postdeploy"
         },
         "sqlServerVersion": {
             "type": "string",
@@ -847,9 +847,12 @@
         },
         "artifacts": {
             "postDeployScriptUris": [
-                "[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]"
+                "[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]",
+                "[concat(parameters('scriptsBaseUrl'),'/provisioningHybridworkers.ps1')]",
+                "[concat(parameters('scriptsBaseUrl'),'/settimezonelogsize.ps1')]"
             ],
             "provisioningHybridworkerUrl": "[concat(parameters('scriptsBaseUrl'),'/provisioningHybridworkers.ps1')]",
+            "provisioningCustomScriptExtensionUrl": "[concat(parameters('scriptsBaseUrl'),'/customScriptExtension.json')]",
             "provisioningOMSWorkspaceUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutoAccOMSWorkspace.json')]",
             "provisioningOMSAutomationScheduleUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutomationSchedule.json')]",
             "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
@@ -1723,31 +1726,63 @@
             }
         },
         {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(variables('vmNames').VMs[copyIndex()].Name, '/provisioningHybridworkers')]",
+            "name": "[concat('CustomScriptExtensionSQLAD-', variables('vmNames').VMs[copyIndex()].Name)]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
             "dependsOn": [
                 "monitorVMLoopSQLAD"
             ],
             "copy": {
-                "name": "CustomScriptExtenstionLoopSQLAD",
+                "name": "CustomScriptExtensionLoopSQLAD",
                 "count": "[length(variables('vmNames').VMs)]"
             },
-            "location": "[resourceGroup().location]",
-            "tags": {
-                "displayName": "provisioningHybridworkers",
-                "Project": "BluePrint"
-            },
             "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.8",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "[parameters('provisioningHybridworkersUrl')]"
-                    ],
-                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters') )]"
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningcustomScriptExtensionUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[variables('vmNames').VMs[copyIndex()].Name]"
+                    },
+                    "workspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "AutomationAccountName": {
+                        "value": "[parameters('omsAutomationAccountName')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
+                    },
+                    "AzureUserName": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azureUserName"
+                        }
+                    },
+                    "AzurePassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azurePassword"
+                        }
+                    },
+                    "SubscriptionId": {
+                        "value": "[subscription().subscriptionId]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[resourceGroup().name]"
+                    },
+                    "postDeployScriptUris": {
+                        "value": "[variables('artifacts').postDeployScriptUris]"
+                    },
+                    "MachinesToSetPasswordPolicy": {
+                        "value": "[concat(variables('resourceNames').vms.adpdc,';', variables('resourceNames').vms.adbdc)]"
+                    }
                 }
             }
         },
@@ -1813,31 +1848,63 @@
             }
         },
         {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(variables('resourceNames').vms.web, copyindex(), '/provisioningHybridworkers')]",
+            "name": "[concat('CustomScriptExtensionWEB-', variables('resourceNames').vms.web, copyindex())]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
             "dependsOn": [
                 "monitorVMLoopWEB"
             ],
             "copy": {
-                "name": "CustomScriptExtenstionLoopWEB",
+                "name": "CustomScriptExtensionLoopWEB",
                 "count": "[variables('numberOfWebInstances')]"
             },
-            "location": "[resourceGroup().location]",
-            "tags": {
-                "displayName": "provisioningHybridworkers",
-                "Project": "BluePrint"
-            },
             "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.8",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "[parameters('provisioningHybridworkersUrl')]"
-                    ],
-                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters') )]"
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningcustomScriptExtensionUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[variables('vmNames').VMs[copyIndex()].Name]"
+                    },
+                    "workspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "AutomationAccountName": {
+                        "value": "[parameters('omsAutomationAccountName')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
+                    },
+                    "AzureUserName": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azureUserName"
+                        }
+                    },
+                    "AzurePassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azurePassword"
+                        }
+                    },
+                    "SubscriptionId": {
+                        "value": "[subscription().subscriptionId]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[resourceGroup().name]"
+                    },
+                    "postDeployScriptUris": {
+                        "value": "[variables('artifacts').postDeployScriptUris]"
+                    },
+                    "MachinesToSetPasswordPolicy": {
+                        "value": ""
+                    }
                 }
             }
         },
@@ -1848,7 +1915,9 @@
             "dependsOn": [
                 //"Microsoft.Resources/deployments/WebTier"
                 "monitorVMLoopSQLAD",
-                "monitorVMLoopWEB"
+                "monitorVMLoopWEB",
+                "CustomScriptExtenstionLoopWEB",
+                "CustomScriptExtenstionLoopSQLAD"
             ],
             "properties": {
                 "mode": "Incremental",

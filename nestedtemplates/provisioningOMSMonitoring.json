@@ -57,7 +57,7 @@
                 }
             }
         },
-        {
+        /*{
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'), '/provisioningHybridworkers')]",
@@ -81,7 +81,7 @@
                     "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters') )]"
                 }
             }
-        }
+        }*/
     ],
     "outputs": {}
 }
