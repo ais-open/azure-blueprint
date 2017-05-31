@@ -94,27 +94,27 @@ The pre-deployment PowerShell script will verify that a supported version of Pow
 4. Enter the parameters above when prompted
 5. The scheduler Job needs a unique GUID as the jobId. Update scheduleJobGuid parameter with a new GUID. Use the following PowerShell to create a new GUID: New-Guid
 
-# Example
+#### Example
 ```
-`powershell
-`PS C:\> cd c:\blueprint
-`PS C:\blueprint> Import-Module AzureRM
-`PS C:\blueprint> .\predeploy\Orchestration_InitialSetup.ps1
-`BaseSourceControl: C:\blueprint\predeploy
-`subscriptionId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx
-`resourceGroupName: <enter a new resource group name>
-`keyVaultName: <enter a new key vault name>
-`azureUserName: <enter your Azure username>
-`azurePassword: <enter your Azure password>
-`adminUsername: <enter a new username>
-`adminPassword: ***************
-`sqlServerServiceAccountPassword: ***************
-`aadAppName: <enter a name for a new azure AD application>
-`keyEncryptionKeyName: <enter a name for a new encryption key>
-`
-`#press Enter
-`
-`New-Guid
+powershell
+PS C:\> cd c:\blueprint
+PS C:\blueprint> Import-Module AzureRM
+PS C:\blueprint> .\predeploy\Orchestration_InitialSetup.ps1
+BaseSourceControl: C:\blueprint\predeploy
+subscriptionId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx
+resourceGroupName: <enter a new resource group name>
+keyVaultName: <enter a new key vault name>
+azureUserName: <enter your Azure username>
+azurePassword: <enter your Azure password>
+adminUsername: <enter a new username>
+adminPassword: ***************
+sqlServerServiceAccountPassword: ***************
+aadAppName: <enter a name for a new azure AD application>
+keyEncryptionKeyName: <enter a name for a new encryption key>
+
+#press Enter
+
+New-Guid
 ```
 
 ## DEPLOYMENT
