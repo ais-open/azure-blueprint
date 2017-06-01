@@ -1735,6 +1735,20 @@
           "location": {
             "value": "[resourceGroup().location]"
           },
+          "environmentPrefix": {
+            "value": "[parameters('environmentPrefix')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('derivedIds').keyVaultId]"
+              },
+              "secretName": "adminPassword"
+            }
+          },
           "resourceNames": {
             "value": "[variables('resourceNames')]"
           },
@@ -1747,16 +1761,17 @@
           "WebVMSize": {
             "value": "[parameters('webVMSize')]"
           },
-          "adminUsername": {
-            "value": "[parameters('adminUsername')]"
+          "adVMSize": {
+            "value": "[parameters('adVMSize')]"
           },
-          "adminPassword": {
-            "reference": {
-              "keyVault": {
-                "id": "[variables('derivedIds').keyVaultId]"
-              },
-              "secretName": "adminPassword"
-            }
+          "sqlVMSize": {
+            "value": "[parameters('sqlVMSize')]"
+          },
+          "witnessVMSize": {
+            "value": "[parameters('witnessVMSize')]"
+          },
+          "mgtVMSize": {
+            "value": "[parameters('mgtVMSize')]"
           }
         }
       }
