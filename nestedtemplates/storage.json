@@ -23,8 +23,8 @@
   },
   "variables": {
     "fswstorageName": "[concat(parameters('resourceNames').storageAccounts.sql, 'fsw')]",
-    "diagstorageNameSQL": "[concat(parameters('sqlStorageAccountName'), 'diag')]",
-    "diagstorageNameDC": "[concat(parameters('dcStorageAccountName'), 'diag')]"
+    "diagstorageNameSQL": "[concat(parameters('resourceNames').storageAccounts.sql, 'diag')]",
+    "diagstorageNameDC": "[concat(parameters('resourceNames').storageAccounts.dc, 'diag')]"
   },
   "resources": [
     {
