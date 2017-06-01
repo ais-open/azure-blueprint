@@ -862,6 +862,7 @@
       "nicURL": "[concat(parameters('templatesBaseUrl'),'/nicV2.json')]",
       "availabilitySetURL": "[concat(parameters('templatesBaseUrl'),'/availabilitySet.json')]",
       "storageURL": "[concat(parameters('templatesBaseUrl'),'/storage.json')]",
+      "virtualMachineURL": "[concat(parameters('templatesBaseUrl'),'/vm.json')]",
       "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
       "nicTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateNic.json')]",
       "sqlLoadBalancerURL": "[concat(parameters('templatesBaseUrl'),'/sqlLoadBalancer.json')]",
@@ -1716,12 +1717,13 @@
         }
       }
     },*/
-    /*{
+    {
       "name": "VirtualMachine-Deployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "NIC-Deployment"
+        "NIC-Deployment",
+        "StorageAccount-Deployment"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1730,23 +1732,17 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "numberOfWebInstances": {
-            "value": "[variables('numberOfWebInstances')]"
-          },
-          "WebVMName": {
-            "value": "[variables('resourceNames').vms.web]"
-          },
-          "WebAvailabilitySetName": {
-            "value": "[variables('resourceNames').availabilitySets.web]"
-          },
-          "WebStorageAccountName": {
-            "value": "[variables('resourceNames').storageAccounts.web]"
-          },
-          "webStorageAccountType": {
-            "value": "[parameters('webStorageAccountType')]"
-          },
           "location": {
             "value": "[resourceGroup().location]"
+          },
+          "resourceNames": {
+            "value": "[variables('resourceNames')]"
+          },
+          "vmSettings": {
+            "value": "[variables('vmSettings')]"
+          },
+          "numberOfWebInstances": {
+            "value": "[variables('numberOfWebInstances')]"
           },
           "WebVMSize": {
             "value": "[parameters('webVMSize')]"
@@ -1761,89 +1757,10 @@
               },
               "secretName": "adminPassword"
             }
-          },
-          "appImagePublisher": {
-            "value": "[variables('vmSettings').web.imagePublisher]"
-          },
-          "appImageOffer": {
-            "value": "[variables('vmSettings').web.imageOffer]"
-          },
-          "appImageSKU": {
-            "value": "[variables('vmSettings').web.imageSKU]"
-          },
-          "vmContainerName": {
-            "value": "[variables('vmSettings').vmContainerName]"
-          },
-          "WEBNICName": {
-            "value": "[variables('resourceNames').nics.web]"
-          },
-          "subnetRef": {
-            "value": "[variables('derivedIds').webSubnet]"
-          },
-          "webNSGid": {
-            "value": "[variables('derivedIds').webNSG]"
-          },
-          "domainName": {
-            "value": "[parameters('domainName')]"
-          },
-          "webModulesURL": {
-            "value": "[variables('artifacts').webModulesURL]"
-          },
-          "webConfigurationFunction": {
-            "value": "[variables('artifacts').webConfigurationFunction]"
-          },
-          "staticIPWEBStart": {
-            "value": "[variables('staticIPWEBStart')]"
-          },
-          "webSubnetAddressRange": {
-            "value": "[parameters('webSubnet').properties.addressPrefix]"
-          },
-          "backupInfo": {
-            "value": "[variables('backupInfo')]"
-          },
-          "keyVaultName": {
-            "value": "[parameters('keyVaultName')]"
-          },
-          "vmEncryptionSettings": {
-            "value": "[variables('vmEncryptionSettings')]"
-          },
-          "antimalwareInfo": {
-            "value": "[variables('antimalwareInfo')]"
-          },
-          "workspaceName": {
-            "value": "[parameters('omsWorkspaceName')]"
-          },
-          "AutomationAccountName": {
-            "value": "[parameters('omsAutomationAccountName')]"
-          },
-          "EnvironmentName": {
-            "value": "[parameters('EnvironmentName')]"
-          },
-          "AzureUserName": {
-            "reference": {
-              "keyVault": {
-                "id": "[variables('derivedIds').keyVaultId]"
-              },
-              "secretName": "azureUserName"
-            }
-          },
-          "AzurePassword": {
-            "reference": {
-              "keyVault": {
-                "id": "[variables('derivedIds').keyVaultId]"
-              },
-              "secretName": "azurePassword"
-            }
-          },
-          "SubscriptionId": {
-            "value": "[subscription().subscriptionId]"
-          },
-          "ResourceGroupName": {
-            "value": "[resourceGroup().name]"
           }
         }
       }
-    },*/
+    },
     {
       "name": "StorageAccount-Deployment",
       "type": "Microsoft.Resources/deployments",

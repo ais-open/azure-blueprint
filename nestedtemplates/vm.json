@@ -1,0 +1,85 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string"
+    },
+    "resourceNames": {
+      "type": "object"
+    },
+    "vmSettings": {
+      "type": "object"
+    },
+    "numberOfWebInstances": {
+      "type": "int",
+      "defaultValue": 2,
+      "minValue": 2,
+      "maxValue": 5
+    },
+    "WebVMSize": {
+      "type": "string"
+    },
+    "adminUsername": {
+      "type": "string"
+    },
+    "adminPassword": {
+      "type": "securestring"
+    }
+  },
+    "variables": {},
+  "resources": [
+    {
+      "apiVersion": "2016-03-30",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(parameters('resourceNames').vms.web, copyindex())]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "copy": {
+        "name": "vmLoop",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
+      "dependsOn": [],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('WebVMSize')]"
+        },
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('resourceNames').availabilitySets.web)]"
+        },
+        "osProfile": {
+          "computername": "[concat(parameters('resourceNames').vms.web, copyindex())]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('vmSettings').web.imagePublisher]",
+            "offer": "[parameters('vmSettings').web.imageOffer]",
+            "sku": "[parameters('vmSettings').web.imageSKU]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('https://',parameters('resourceNames').storageAccounts.web,'.blob.core.usgovcloudapi.net/',parameters('vmSettings').vmContainerName,'/',parameters('resourceNames').vms.web, copyindex(), '-osdisk.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces', concat(parameters('resourceNames').nics.web, copyindex()))]"
+            }
+          ]
+        }
+      },
+      "resources": []
+    }
+  ],
+  "outputs": {}
+}
