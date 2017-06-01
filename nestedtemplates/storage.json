@@ -1,0 +1,193 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string"
+    },
+    "resourceNames": {
+      "type": "object"
+    },
+    "webStorageAccountType": {
+      "type": "string"
+    },
+    "SqlStorageAccountType": {
+      "type": "string"
+    },
+    "DcStorageAccountType": {
+      "type": "string"
+    },
+    "mgtStorageAccountType": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "fswstorageName": "[concat(parameters('resourceNames').storageAccounts.sql, 'fsw')]",
+    "diagstorageNameSQL": "[concat(parameters('sqlStorageAccountName'), 'diag')]",
+    "diagstorageNameDC": "[concat(parameters('dcStorageAccountName'), 'diag')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[parameters('resourceNames').storageAccounts.web]",
+      "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('webStorageAccountType')]"
+      },
+      "kind": "Storage",
+      "properties": {
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      }
+    },
+    {
+      "name": "[parameters('resourceNames').storageAccounts.sql]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('SqlStorageAccountType')]"
+      },
+      "kind": "Storage",
+      "properties": {
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[parameters('resourceNames').storageAccounts.dc]",
+      "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('DcStorageAccountType')]"
+      },
+      "kind": "Storage",
+      "properties": {
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('fswstorageName')]",
+      "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_GRS"
+      },
+      "kind": "Storage",
+      "properties": {
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[parameters('resourceNames').storageAccounts.mgt]",
+      "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[parameters('mgtStorageAccountType')]"
+      },
+      "kind": "Storage",
+      "properties": {
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('diagstorageNameSQL')]",
+      "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_GRS"
+      },
+      "kind": "Storage",
+      "properties": {
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('diagstorageNameDC')]",
+      "apiVersion": "2016-01-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_GRS"
+      },
+      "kind": "Storage",
+      "properties": {
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}

@@ -861,6 +861,7 @@
       "publicIPURL": "[concat(parameters('templatesBaseUrl'),'/publicIP.json')]",
       "nicURL": "[concat(parameters('templatesBaseUrl'),'/nicV2.json')]",
       "availabilitySetURL": "[concat(parameters('templatesBaseUrl'),'/availabilitySet.json')]",
+      "storageURL": "[concat(parameters('templatesBaseUrl'),'/storage.json')]",
       "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
       "nicTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateNic.json')]",
       "sqlLoadBalancerURL": "[concat(parameters('templatesBaseUrl'),'/sqlLoadBalancer.json')]",
@@ -1214,7 +1215,7 @@
           }
         }
       }
-    }
+    },
     /*{
       "name": "ProvisioningNICsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
@@ -1715,6 +1716,167 @@
         }
       }
     },*/
+    /*{
+      "name": "VirtualMachine-Deployment",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "NIC-Deployment"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').virtualMachineURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "numberOfWebInstances": {
+            "value": "[variables('numberOfWebInstances')]"
+          },
+          "WebVMName": {
+            "value": "[variables('resourceNames').vms.web]"
+          },
+          "WebAvailabilitySetName": {
+            "value": "[variables('resourceNames').availabilitySets.web]"
+          },
+          "WebStorageAccountName": {
+            "value": "[variables('resourceNames').storageAccounts.web]"
+          },
+          "webStorageAccountType": {
+            "value": "[parameters('webStorageAccountType')]"
+          },
+          "location": {
+            "value": "[resourceGroup().location]"
+          },
+          "WebVMSize": {
+            "value": "[parameters('webVMSize')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('derivedIds').keyVaultId]"
+              },
+              "secretName": "adminPassword"
+            }
+          },
+          "appImagePublisher": {
+            "value": "[variables('vmSettings').web.imagePublisher]"
+          },
+          "appImageOffer": {
+            "value": "[variables('vmSettings').web.imageOffer]"
+          },
+          "appImageSKU": {
+            "value": "[variables('vmSettings').web.imageSKU]"
+          },
+          "vmContainerName": {
+            "value": "[variables('vmSettings').vmContainerName]"
+          },
+          "WEBNICName": {
+            "value": "[variables('resourceNames').nics.web]"
+          },
+          "subnetRef": {
+            "value": "[variables('derivedIds').webSubnet]"
+          },
+          "webNSGid": {
+            "value": "[variables('derivedIds').webNSG]"
+          },
+          "domainName": {
+            "value": "[parameters('domainName')]"
+          },
+          "webModulesURL": {
+            "value": "[variables('artifacts').webModulesURL]"
+          },
+          "webConfigurationFunction": {
+            "value": "[variables('artifacts').webConfigurationFunction]"
+          },
+          "staticIPWEBStart": {
+            "value": "[variables('staticIPWEBStart')]"
+          },
+          "webSubnetAddressRange": {
+            "value": "[parameters('webSubnet').properties.addressPrefix]"
+          },
+          "backupInfo": {
+            "value": "[variables('backupInfo')]"
+          },
+          "keyVaultName": {
+            "value": "[parameters('keyVaultName')]"
+          },
+          "vmEncryptionSettings": {
+            "value": "[variables('vmEncryptionSettings')]"
+          },
+          "antimalwareInfo": {
+            "value": "[variables('antimalwareInfo')]"
+          },
+          "workspaceName": {
+            "value": "[parameters('omsWorkspaceName')]"
+          },
+          "AutomationAccountName": {
+            "value": "[parameters('omsAutomationAccountName')]"
+          },
+          "EnvironmentName": {
+            "value": "[parameters('EnvironmentName')]"
+          },
+          "AzureUserName": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('derivedIds').keyVaultId]"
+              },
+              "secretName": "azureUserName"
+            }
+          },
+          "AzurePassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('derivedIds').keyVaultId]"
+              },
+              "secretName": "azurePassword"
+            }
+          },
+          "SubscriptionId": {
+            "value": "[subscription().subscriptionId]"
+          },
+          "ResourceGroupName": {
+            "value": "[resourceGroup().name]"
+          }
+        }
+      }
+    },*/
+    {
+      "name": "StorageAccount-Deployment",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').storageURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[resourceGroup().location]"
+          },
+          "resourceNames": {
+            "value": "[variables('resourceNames')]"
+          },
+          "webStorageAccountType": {
+            "value": "[parameters('webStorageAccountType')]"
+          },
+          "SqlStorageAccountType": {
+            "value": "[parameters('sqlStorageAccountType')]"
+          },
+          "DcStorageAccountType": {
+            "value": "[parameters('dcStorageAccountType')]"
+          },
+          "mgtStorageAccountType": {
+            "value": "[parameters('mgtStorageAccountType')]"
+          }
+        }
+      }
+    },
     {
       "name": "RecoverServicesVault-Deployment",
       "type": "Microsoft.Resources/deployments",
@@ -1738,7 +1900,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/RecoverServicesVault"
+        "RecoverServicesVault-Deployment"
       ],
       "properties": {
         "mode": "Incremental",
