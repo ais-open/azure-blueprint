@@ -1685,8 +1685,8 @@
           }
         }
       }
-    },
-    {
+    },*/
+    /*{
       "name": "ConfigurationAutomationSchedules",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1714,9 +1714,9 @@
           }
         }
       }
-    },
+    },*/
     {
-      "name": "RecoverServicesVault",
+      "name": "RecoverServicesVault-Deployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [],
@@ -1734,7 +1734,7 @@
       }
     },
     {
-      "name": "BackupPolicyCustom",
+      "name": "BackupPolicyCustom-Deployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
@@ -1752,6 +1752,6 @@
           }
         }
       }
-    }*/
+    }
   ]
 }
