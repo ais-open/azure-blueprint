@@ -1149,7 +1149,8 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "VirtualNetwork-Deployment",
-        "PublicIP-Deployment"
+        "PublicIP-Deployment",
+        "SQLLoadBalancer-Deployment"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1956,5 +1957,22 @@
       }
     }
   ],
-  "outputs": {}
+  "outputs": {
+    "resourceNames": {
+      "type": "object",
+      "value": "[variables('resourceNames')]"
+    },
+    "numberOfWebInstances": {
+      "type": "int",
+      "value": "[parameters('numberOfWebInstances')]"
+    },
+    "workspaceName": {
+      "type": "string",
+      "value": "[parameters('omsWorkspaceName')]"
+    },
+    "artifacts": {
+      "type": "object",
+      "value": "[variables('artifacts')]"
+    }
+  }
 }
