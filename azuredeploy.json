@@ -854,7 +854,7 @@
         "[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]"
       ],
       "omsWorkspaceURL": "[concat(parameters('templatesBaseUrl'),'/omsWorkspace.json')]",
-      "provisioningOMSAutomationScheduleUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutomationSchedule.json')]",
+      "omsAutomationScheduleURL": "[concat(parameters('templatesBaseUrl'),'/provisioningAutomationSchedule.json')]",
       "nsgURL": "[concat(parameters('templatesBaseUrl'),'/nsg.json')]",
       "virtualNetworkURL": "[concat(parameters('templatesBaseUrl'),'/virtualNetwork.json')]",
       "subnetURL": "[concat(parameters('templatesBaseUrl'),'/subnet.json')]",
@@ -865,6 +865,7 @@
       "virtualMachineURL": "[concat(parameters('templatesBaseUrl'),'/vm.json')]",
       "diskEncryptionURL": "[concat(parameters('templatesBaseUrl'),'/diskEncryption-', parameters('useExistingKek'),'.json')]",
       "backupVMProtectedItemURL": "[concat(parameters('templatesBaseUrl'),'/backupProtectedItemsV2.json')]",
+      "enterpriseCloudMonitoringURL": "[concat(parameters('templatesBaseUrl'),'/enterpriseCloudMonitoring.json')]",
       "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
       "nicTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateNic.json')]",
       "sqlLoadBalancerURL": "[concat(parameters('templatesBaseUrl'),'/sqlLoadBalancer.json')]",
@@ -1698,7 +1699,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('artifacts').provisioningOMSAutomationScheduleUrl]",
+          "uri": "[variables('artifacts').omsAutomationScheduleURL]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -1924,6 +1925,32 @@
           },
           "backupInfo": {
             "value": "[variables('backupInfo')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "EnterpriseCloudMonitoring-Deployment",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "DiskEncryption-Deployment"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').enterpriseCloudMonitoringURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "resourceNames": {
+            "value": "[variables('resourceNames')]"
+          },
+          "numberOfWebInstances": {
+            "value": "[variables('numberOfWebInstances')]"
+          },
+          "workspaceName": {
+            "value": "[parameters('omsWorkspaceName')]"
           }
         }
       }
