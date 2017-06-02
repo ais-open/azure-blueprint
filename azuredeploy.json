@@ -908,7 +908,7 @@
     "backupInfo": {
       "rcVaultName": "[parameters('recoveryServicesVaultName')]",
       "backupPolicy": "[parameters('backupPolicy')]",
-      "backupTemplateUrl": "[variables('artifacts').backupVMProtectedItem]",
+      "backupTemplateUrl": "[variables('artifacts').backupVMProtectedItemURL]",
       "backupPolicyTemplateUrl": "[variables('artifacts').backupPolicy]",
       "backupScheduleRunTimes": "[parameters('backupScheduleRunTimes')]",
       "backupDailyRetentionDurationCount": "[parameters('backupDailyRetentionDurationCount')]",
