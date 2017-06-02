@@ -37,7 +37,7 @@
       "name": "[concat(parameters('resourceNames').vms.adbdc,'/EnterpriseCloudMonitoring')]",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
-      "dependsOn": [ "[concat(parameters('resourceNames').vms.adpdc,'/EnterpriseCloudMonitoring')]" ],
+      "dependsOn": [ "[concat('Microsoft.Compute/virtualMachines/',parameters('resourceNames').vms.adpdc,'/extensions/EnterpriseCloudMonitoring')]" ],
       "properties": {
         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
         "type": "MicrosoftMonitoringAgent",
@@ -56,7 +56,7 @@
       "name": "[concat(parameters('resourceNames').vms.mgt,'/EnterpriseCloudMonitoring')]",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
-      "dependsOn": [ "[concat(parameters('resourceNames').vms.adbdc,'/EnterpriseCloudMonitoring')]" ],
+      "dependsOn": [ "[concat('Microsoft.Compute/virtualMachines/',parameters('resourceNames').vms.adbdc,'/extensions/EnterpriseCloudMonitoring')]" ],
       "properties": {
         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
         "type": "MicrosoftMonitoringAgent",
@@ -75,7 +75,7 @@
       "name": "[concat(parameters('resourceNames').vms.sqlw,'/EnterpriseCloudMonitoring')]",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
-      "dependsOn": [ "[concat(parameters('resourceNames').vms.mgt,'/EnterpriseCloudMonitoring')]" ],
+      "dependsOn": [ "[concat('Microsoft.Compute/virtualMachines/',parameters('resourceNames').vms.mgt,'/extensions/EnterpriseCloudMonitoring')]" ],
       "properties": {
         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
         "type": "MicrosoftMonitoringAgent",
@@ -94,7 +94,7 @@
       "name": "[concat(parameters('resourceNames').vms.sql,copyIndex(),'/EnterpriseCloudMonitoring')]",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
-      "dependsOn": [ "[concat(parameters('resourceNames').vms.sqlw,'/EnterpriseCloudMonitoring')]" ],
+      "dependsOn": [ "[concat('Microsoft.Compute/virtualMachines/',parameters('resourceNames').vms.sqlw,'/extensions/EnterpriseCloudMonitoring')]" ],
       "copy": {
         "name": "sqlEnterpriseCLoudMonitoringLoop",
         "count": 2
