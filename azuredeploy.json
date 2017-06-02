@@ -867,6 +867,7 @@
       "nicTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateNic.json')]",
       "sqlLoadBalancerURL": "[concat(parameters('templatesBaseUrl'),'/sqlLoadBalancer.json')]",
       "applicationGatewayURL": "[concat(parameters('templatesBaseUrl'),'/applicationGateway.json')]",
+      "diskEncryptionURL": "[concat(parameters('templatesBaseUrl'),'/diskEncryption-', parameters('useExistingKek'),'.json')]",
       "provisioningNICsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningNICsSQLAD.json')]",
       "virtualNetworkNSGURL": "[concat(parameters('templatesBaseUrl'),'/virtualNetworkNSG.json')]",
       "provisioningVMsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningVMsSQLAD.json')]",
@@ -1147,8 +1148,7 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "VirtualNetwork-Deployment",
-        "PublicIP-Deployment",
-        "SQLLoadBalancer-Deployment"
+        "PublicIP-Deployment"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1723,7 +1723,9 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "NIC-Deployment",
-        "StorageAccount-Deployment"
+        "StorageAccount-Deployment",
+        "AvailabilitySet-Deployment",
+        "BackupPolicyCustom-Deployment"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1843,6 +1845,59 @@
         "parameters": {
           "backupInfo": {
             "value": "[variables('backupInfo')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "DiskEncryption-Deployment",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "VirtualMachine-Deployment"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').diskEncryptionURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "resourceNames": {
+            "value": "[variables('resourceNames')]"
+          },
+          "numberOfWebInstances": {
+            "value": "[variables('numberOfWebInstances')]"
+          },
+          "keyVaultName": {
+            "value": "[parameters('keyVaultName')]"
+          },
+          "vmEncryptionSettings": {
+            "value": "[variables('vmEncryptionSettings')]"
+          },
+          "aadClientID": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('vmEncryptionSettings').keyVaultId]"
+              },
+              "secretName": "aadClientID"
+            }
+          },
+          "aadClientSecret": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('vmEncryptionSettings').keyVaultId]"
+              },
+              "secretName": "aadClientSecret"
+            }
+          },
+          "keyEncryptionKeyURL": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('vmEncryptionSettings').keyVaultId]"
+              },
+              "secretName": "keyEncryptionKeyURL"
+            }
           }
         }
       }
