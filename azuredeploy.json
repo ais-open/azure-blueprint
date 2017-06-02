@@ -1929,7 +1929,8 @@
           }
         }
       }
-    },
+    }
+    /*,
     {
       "name": "EnterpriseCloudMonitoring-Deployment",
       "type": "Microsoft.Resources/deployments",
@@ -1955,7 +1956,7 @@
           }
         }
       }
-    }
+    }*/
   ],
   "outputs": {
     "resourceNames": {
