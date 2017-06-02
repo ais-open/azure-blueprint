@@ -710,145 +710,145 @@
     }
   },
   "variables": {
-      "appID": "aadClientID",
-      "appSecret": "aadClientSecret",
-      "lbSettings": {
-          "rdpLBFEName": "rdpLBFE",
-          "sqlLBFEName": "sqlLBFE",
-          "adLBBEName": "adLBBE",
-          "sqlLBBEName": "sqlLBBE",
-          "rdpLBName": "rdpLoadBalancer",
-          "sqlLBName": "sqlLoadBalancer"
+    "appID": "aadClientID",
+    "appSecret": "aadClientSecret",
+    "lbSettings": {
+      "rdpLBFEName": "rdpLBFE",
+      "sqlLBFEName": "sqlLBFE",
+      "adLBBEName": "adLBBE",
+      "sqlLBBEName": "sqlLBBE",
+      "rdpLBName": "rdpLoadBalancer",
+      "sqlLBName": "sqlLoadBalancer"
+    },
+    "wafSettings": {
+      "wafMode": "Prevention",
+      "wafRuleSetType": "OWASP",
+      "wafRuleSetVersion": "3.0",
+      "wafEnabled": true
+    },
+    "numberOfWebInstances": "[length(parameters('webIPAddresses'))]",
+    "staticIPWEBStart": 5,
+    "RDPNAT": "RDP",
+    "SQLAOProbe": "SQLAlwaysOnEndPointProbe",
+    "vmSettings": {
+      "dc": {
+        "imagePublisher": "MicrosoftWindowsServer",
+        "imageOffer": "WindowsServer",
+        "imageSKU": "2016-Datacenter"
       },
-      "wafSettings": {
-          "wafMode": "Prevention",
-          "wafRuleSetType": "OWASP",
-          "wafRuleSetVersion": "3.0",
-          "wafEnabled": true
+      "sql": {
+        "imagePublisher": "MicrosoftSQLServer",
+        "imageOffer": "[parameters('sqlServerVersion')]",
+        "imageSKU": "Enterprise",
+        "autoPatchingEnable": true,
+        "autoPatchingDay": "Sunday",
+        "autoPatchingStartHour": "2",
+        "sqlAOListenerPort": "1433",
+        "sqlAOAGName": "alwayson-ag",
+        "workloadType": "GENERAL",
+        "sqlAOListenerName": "alwayson-ag-listener",
+        "sqlAOEPName": "[concat(parameters('deploymentPrefix'),'-hadr')]",
+        "sharePath": "[concat(parameters('deploymentPrefix'),'-fsw')]",
+        "clusterName": "[concat(parameters('deploymentPrefix'),'-fc')]",
+        "sqlAutobackupRetentionPeriod": "2"
       },
-      "numberOfWebInstances": "[length(parameters('webIPAddresses'))]",
-      "staticIPWEBStart": 5,
-      "RDPNAT": "RDP",
-      "SQLAOProbe": "SQLAlwaysOnEndPointProbe",
-      "vmSettings": {
-          "dc": {
-              "imagePublisher": "MicrosoftWindowsServer",
-              "imageOffer": "WindowsServer",
-              "imageSKU": "2016-Datacenter"
-          },
-          "sql": {
-              "imagePublisher": "MicrosoftSQLServer",
-              "imageOffer": "[parameters('sqlServerVersion')]",
-              "imageSKU": "Enterprise",
-              "autoPatchingEnable": true,
-              "autoPatchingDay": "Sunday",
-              "autoPatchingStartHour": "2",
-              "sqlAOListenerPort": "1433",
-              "sqlAOAGName": "alwayson-ag",
-              "workloadType": "GENERAL",
-              "sqlAOListenerName": "alwayson-ag-listener",
-              "sqlAOEPName": "[concat(parameters('deploymentPrefix'),'-hadr')]",
-              "sharePath": "[concat(parameters('deploymentPrefix'),'-fsw')]",
-              "clusterName": "[concat(parameters('deploymentPrefix'),'-fc')]",
-              "sqlAutobackupRetentionPeriod": "2"
-          },
-          "sqlw": {
-              "imagePublisher": "MicrosoftWindowsServer",
-              "imageOffer": "WindowsServer",
-              "imageSKU": "2016-Datacenter"
-          },
-          "web": {
-              "imagePublisher": "MicrosoftWindowsServer",
-              "imageOffer": "WindowsServer",
-              "imageSKU": "2016-Datacenter",
-              "numberOfWebInstances": "[length(parameters('webIPAddresses'))]",
-              "staticIPWEBStart": 5
-          },
-          "mgt": {
-              "imagePublisher": "MicrosoftWindowsServer",
-              "imageOffer": "WindowsServer",
-              "imageSKU": "2016-Datacenter"
-          },
-          "vmContainerName": "vhds"
+      "sqlw": {
+        "imagePublisher": "MicrosoftWindowsServer",
+        "imageOffer": "WindowsServer",
+        "imageSKU": "2016-Datacenter"
       },
-      "VnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkNameWithSuffix'))]",
-      "derivedIds": {
-          "keyVaultUrl": "[concat('https://', parameters('keyVaultName') ,'.vault.usgovcloudapi.net/')]",
-          "keyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]",
-          "dcSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('dcSubnet').name)]",
-          "sqlSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('sqlSubnet').name)]",
-          "webSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('webSubnet').name)]",
-          "mgtSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('mgtSubnet').name)]",
-          "dcNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('resourceNames').nsgs.dc)]",
-          "sqlNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('resourceNames').nsgs.sql)]",
-          "webNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('resourceNames').nsgs.web)]",
-          "lbNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('resourceNames').nsgs.lb)]",
-          "mgtNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('resourceNames').nsgs.mgt)]",
-          "adIPConfigID": "[concat(resourceId('Microsoft.Network/networkInterfaces',variables('resourceNames').nics.adpdc),'/ipConfigurations/ipconfig1')]",
-          "rdplbFEConfigID": "[concat(resourceId('Microsoft.Network/loadBalancers',variables('lbSettings').rdpLBName),'/frontendIPConfigurations/',variables('lbSettings').rdpLBFEName)]",
-          "adRDPNATRuleID": "[concat(resourceId('Microsoft.Network/loadBalancers',variables('lbSettings').rdpLBName),'/inboundNatRules/',variables('RDPNAT'))]",
-          "adBEAddressPoolID": "[concat(resourceId('Microsoft.Network/loadBalancers',variables('lbSettings').rdpLBName),'/backendAddressPools/',variables('lbSettings').adLBBEName)]",
-          "sqlBEAddressPoolID": "[concat(resourceId('Microsoft.Network/loadBalancers',variables('lbSettings').sqlLBName),'/backendAddressPools/',variables('lbSettings').sqlLBBEName)]",
-          "sqllbFEConfigID": "[concat(resourceId('Microsoft.Network/loadBalancers',variables('lbSettings').sqlLBName),'/frontendIPConfigurations/',variables('lbSettings').sqlLBFEName)]",
-          "sqllbProbeID": "[concat(resourceId('Microsoft.Network/loadBalancers',variables('lbSettings').sqlLBName),'/probes/',variables('SQLAOProbe'))]"
+      "web": {
+        "imagePublisher": "MicrosoftWindowsServer",
+        "imageOffer": "WindowsServer",
+        "imageSKU": "2016-Datacenter",
+        "numberOfWebInstances": "[length(parameters('webIPAddresses'))]",
+        "staticIPWEBStart": 5
       },
-      "subnets": [
-          "[parameters('sqlSubnet')]",
-          "[parameters('dcSubnet')]",
-          "[parameters('webSubnet')]",
-          "[parameters('mgtSubnet')]",
-          "[parameters('appGatewaySubnet')]"
-      ],
+      "mgt": {
+        "imagePublisher": "MicrosoftWindowsServer",
+        "imageOffer": "WindowsServer",
+        "imageSKU": "2016-Datacenter"
+      },
+      "vmContainerName": "vhds"
+    },
+    "VnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkNameWithSuffix'))]",
+    "derivedIds": {
+      "keyVaultUrl": "[concat('https://', parameters('keyVaultName') ,'.vault.usgovcloudapi.net/')]",
+      "keyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]",
+      "dcSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('dcSubnet').name)]",
+      "sqlSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('sqlSubnet').name)]",
+      "webSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('webSubnet').name)]",
+      "mgtSubnet": "[concat(variables('VnetID'),'/subnets/', parameters('mgtSubnet').name)]",
+      "dcNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('resourceNames').nsgs.dc)]",
+      "sqlNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('resourceNames').nsgs.sql)]",
+      "webNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('resourceNames').nsgs.web)]",
+      "lbNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('resourceNames').nsgs.lb)]",
+      "mgtNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('resourceNames').nsgs.mgt)]",
+      "adIPConfigID": "[concat(resourceId('Microsoft.Network/networkInterfaces',variables('resourceNames').nics.adpdc),'/ipConfigurations/ipconfig1')]",
+      "rdplbFEConfigID": "[concat(resourceId('Microsoft.Network/loadBalancers',variables('lbSettings').rdpLBName),'/frontendIPConfigurations/',variables('lbSettings').rdpLBFEName)]",
+      "adRDPNATRuleID": "[concat(resourceId('Microsoft.Network/loadBalancers',variables('lbSettings').rdpLBName),'/inboundNatRules/',variables('RDPNAT'))]",
+      "adBEAddressPoolID": "[concat(resourceId('Microsoft.Network/loadBalancers',variables('lbSettings').rdpLBName),'/backendAddressPools/',variables('lbSettings').adLBBEName)]",
+      "sqlBEAddressPoolID": "[concat(resourceId('Microsoft.Network/loadBalancers',variables('lbSettings').sqlLBName),'/backendAddressPools/',variables('lbSettings').sqlLBBEName)]",
+      "sqllbFEConfigID": "[concat(resourceId('Microsoft.Network/loadBalancers',variables('lbSettings').sqlLBName),'/frontendIPConfigurations/',variables('lbSettings').sqlLBFEName)]",
+      "sqllbProbeID": "[concat(resourceId('Microsoft.Network/loadBalancers',variables('lbSettings').sqlLBName),'/probes/',variables('SQLAOProbe'))]"
+    },
+    "subnets": [
+      "[parameters('sqlSubnet')]",
+      "[parameters('dcSubnet')]",
+      "[parameters('webSubnet')]",
+      "[parameters('mgtSubnet')]",
+      "[parameters('appGatewaySubnet')]"
+    ],
+    "virtualNetworkNameWithSuffix": "[concat(parameters('virtualNetworkName'), uniqueString(resourceGroup().id))]",
+    "resourceNames": {
       "virtualNetworkNameWithSuffix": "[concat(parameters('virtualNetworkName'), uniqueString(resourceGroup().id))]",
-      "resourceNames": {
-          "virtualNetworkNameWithSuffix": "[concat(parameters('virtualNetworkName'), uniqueString(resourceGroup().id))]",
-          "nsgs": {
-              "mgt": "[concat('MGTNSG', parameters('environmentPrefix'))]",
-              "dc": "[concat('DCNSG', parameters('environmentPrefix'))]",
-              "web": "[concat('WEBNSG', parameters('environmentPrefix'))]",
-              "sql": "[concat('SQLNSG', parameters('environmentPrefix'))]",
-              "lb": "[concat('LBNSG', parameters('environmentPrefix'))]"
-          },
-          "storageAccounts": {
-              "sql": "[concat(uniqueString(resourceGroup().id), 'sql', parameters('environmentPrefix'))]",
-              "dc": "[concat(uniqueString(resourceGroup().id), 'dc', parameters('environmentPrefix'))]",
-              "web": "[concat(uniqueString(resourceGroup().id), 'web', parameters('environmentPrefix'))]",
-              "mgt": "[concat(uniqueString(resourceGroup().id), 'mgt', parameters('environmentPrefix'))]"
-          },
-          "vms": {
-              "adpdc": "[concat('AZ-PDC-VM', parameters('environmentPrefix'))]",
-              "adbdc": "[concat('AZ-BDC-VM', parameters('environmentPrefix'))]",
-              "sql": "[concat(parameters('environmentPrefix'), 'sqlserver-')]",
-              "sqlw": "[concat('cluster-fsw', parameters('environmentPrefix'))]",
-              "web": "[concat('AZ-WEB-VM', parameters('environmentPrefix'))]",
-              "mgt": "[concat('AZ-MGT-VM', parameters('environmentPrefix'))]"
-          },
-          "nics": {
-              "adpdc": "[concat('adPDC-nic', parameters('environmentPrefix'))]",
-              "adbdc": "[concat('adBDC-nic', parameters('environmentPrefix'))]",
-              "sqlw": "[concat('sqlw-nic', parameters('environmentPrefix'))]",
-              "sql0": "[concat('sql0-nic', parameters('environmentPrefix'))]",
-              "sql1": "[concat('sql1-nic', parameters('environmentPrefix'))]",
-              "web": "[concat('WEB-nic', parameters('environmentPrefix'))]",
-              "mgt": "[concat('MGT-nic', parameters('environmentPrefix'))]"
-          },
-          "loadBalancers": {
-              "rdpLBFEName": "rdpLBFE",
-              "sqlLBFEName": "sqlLBFE",
-              "adLBBEName": "adLBBE",
-              "sqlLBBEName": "sqlLBBE",
-              "rdpLBName": "rdpLoadBalancer",
-              "sqlLBName": "sqlLoadBalancer"
-          },
-          "availabilitySets": {
-              "sql": "[concat('sqlAvailabilitySet', parameters('environmentPrefix'))]",
-              "ad": "[concat('adAvailabilitySet', parameters('environmentPrefix'))]",
-              "web": "[concat('webAvailabilitySet', parameters('environmentPrefix'))]"
-          },
-          "publicIPs": {
-              "mgt": "mgtpublicip"
-          }
+      "nsgs": {
+        "mgt": "[concat('MGTNSG', parameters('environmentPrefix'))]",
+        "dc": "[concat('DCNSG', parameters('environmentPrefix'))]",
+        "web": "[concat('WEBNSG', parameters('environmentPrefix'))]",
+        "sql": "[concat('SQLNSG', parameters('environmentPrefix'))]",
+        "lb": "[concat('LBNSG', parameters('environmentPrefix'))]"
       },
+      "storageAccounts": {
+        "sql": "[concat(uniqueString(resourceGroup().id), 'sql', parameters('environmentPrefix'))]",
+        "dc": "[concat(uniqueString(resourceGroup().id), 'dc', parameters('environmentPrefix'))]",
+        "web": "[concat(uniqueString(resourceGroup().id), 'web', parameters('environmentPrefix'))]",
+        "mgt": "[concat(uniqueString(resourceGroup().id), 'mgt', parameters('environmentPrefix'))]"
+      },
+      "vms": {
+        "adpdc": "[concat('AZ-PDC-VM', parameters('environmentPrefix'))]",
+        "adbdc": "[concat('AZ-BDC-VM', parameters('environmentPrefix'))]",
+        "sql": "[concat(parameters('environmentPrefix'), 'sqlserver-')]",
+        "sqlw": "[concat('cluster-fsw', parameters('environmentPrefix'))]",
+        "web": "[concat('AZ-WEB-VM', parameters('environmentPrefix'))]",
+        "mgt": "[concat('AZ-MGT-VM', parameters('environmentPrefix'))]"
+      },
+      "nics": {
+        "adpdc": "[concat('adPDC-nic', parameters('environmentPrefix'))]",
+        "adbdc": "[concat('adBDC-nic', parameters('environmentPrefix'))]",
+        "sqlw": "[concat('sqlw-nic', parameters('environmentPrefix'))]",
+        "sql0": "[concat('sql0-nic', parameters('environmentPrefix'))]",
+        "sql1": "[concat('sql1-nic', parameters('environmentPrefix'))]",
+        "web": "[concat('WEB-nic', parameters('environmentPrefix'))]",
+        "mgt": "[concat('MGT-nic', parameters('environmentPrefix'))]"
+      },
+      "loadBalancers": {
+        "rdpLBFEName": "rdpLBFE",
+        "sqlLBFEName": "sqlLBFE",
+        "adLBBEName": "adLBBE",
+        "sqlLBBEName": "sqlLBBE",
+        "rdpLBName": "rdpLoadBalancer",
+        "sqlLBName": "sqlLoadBalancer"
+      },
+      "availabilitySets": {
+        "sql": "[concat('sqlAvailabilitySet', parameters('environmentPrefix'))]",
+        "ad": "[concat('adAvailabilitySet', parameters('environmentPrefix'))]",
+        "web": "[concat('webAvailabilitySet', parameters('environmentPrefix'))]"
+      },
+      "publicIPs": {
+        "mgt": "mgtpublicip"
+      }
+    },
     "artifacts": {
       "postDeployScriptUris": [
         "[concat(parameters('scriptsBaseUrl'),'/setPasswordPolicy.ps1')]"
@@ -863,17 +863,17 @@
       "availabilitySetURL": "[concat(parameters('templatesBaseUrl'),'/availabilitySet.json')]",
       "storageURL": "[concat(parameters('templatesBaseUrl'),'/storage.json')]",
       "virtualMachineURL": "[concat(parameters('templatesBaseUrl'),'/vm.json')]",
+      "diskEncryptionURL": "[concat(parameters('templatesBaseUrl'),'/diskEncryption-', parameters('useExistingKek'),'.json')]",
+      "backupVMProtectedItemURL": "[concat(parameters('templatesBaseUrl'),'/backupProtectedItemsV2.json')]",
       "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
       "nicTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateNic.json')]",
       "sqlLoadBalancerURL": "[concat(parameters('templatesBaseUrl'),'/sqlLoadBalancer.json')]",
       "applicationGatewayURL": "[concat(parameters('templatesBaseUrl'),'/applicationGateway.json')]",
-      "diskEncryptionURL": "[concat(parameters('templatesBaseUrl'),'/diskEncryption-', parameters('useExistingKek'),'.json')]",
       "provisioningNICsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningNICsSQLAD.json')]",
       "virtualNetworkNSGURL": "[concat(parameters('templatesBaseUrl'),'/virtualNetworkNSG.json')]",
       "provisioningVMsSQLADURL": "[concat(parameters('templatesBaseUrl'),'/provisioningVMsSQLAD.json')]",
       "provisioningAppVMsURL": "[concat(parameters('templatesBaseUrl'),'/provisioningAppVMs.json')]",
       "provisioningRCV": "[concat(parameters('templatesBaseUrl'),'/recoveryServicesVault.json')]",
-      "backupVMProtectedItem": "[concat(parameters('templatesBaseUrl'),'/backupProtectedItems.json')]",
       "backupPolicy": "[concat(parameters('templatesBaseUrl'),'/recoveryServicesBackupPolicy.json')]",
       "configuringBackupADVMURL": "[concat(parameters('templatesBaseUrl'),'/configuringBackupADVM.json')]",
       "preparingAlwaysOnSqlServerURL": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServer.json')]",
@@ -893,70 +893,70 @@
       "mgtModulesURL": "[concat(parameters('dscBaseUrl'),'/MGTBaselineDSC.ps1.zip')]",
       "mgtConfigurationFunction": "MGTBaselineDSC.ps1\\MGTBaselineDSC"
     },
-      "prepareAlwaysOnSQLInfo": {
-          "artifacts": "[variables('artifacts')]",
-          "resourceNames": "[variables('resourceNames')]",
-          "derivedIds": "[variables('derivedIds')]",
-          "vmSettings": "[variables('vmSettings')]",
-          "sqlServerServiceAccountUserName": "[parameters('sqlServerServiceAccountUserName')]",
-          "numberOfSqlVMDisks": "[parameters('numberOfSqlVMDisks')]"
+    "prepareAlwaysOnSQLInfo": {
+      "artifacts": "[variables('artifacts')]",
+      "resourceNames": "[variables('resourceNames')]",
+      "derivedIds": "[variables('derivedIds')]",
+      "vmSettings": "[variables('vmSettings')]",
+      "sqlServerServiceAccountUserName": "[parameters('sqlServerServiceAccountUserName')]",
+      "numberOfSqlVMDisks": "[parameters('numberOfSqlVMDisks')]"
+    },
+    "configuringAlwaysOnInfo": {
+      "lbSettings": "[variables('lbSettings')]",
+      "sqlLBIPAddress": "[parameters('sqlLBIPAddress')]"
+    },
+    "backupInfo": {
+      "rcVaultName": "[parameters('recoveryServicesVaultName')]",
+      "backupPolicy": "[parameters('backupPolicy')]",
+      "backupTemplateUrl": "[variables('artifacts').backupVMProtectedItem]",
+      "backupPolicyTemplateUrl": "[variables('artifacts').backupPolicy]",
+      "backupScheduleRunTimes": "[parameters('backupScheduleRunTimes')]",
+      "backupDailyRetentionDurationCount": "[parameters('backupDailyRetentionDurationCount')]",
+      "backupDaysOfTheWeek": "[parameters('backupDaysOfTheWeek')]",
+      "backupWeeklyRetentionDurationCount": "[parameters('backupWeeklyRetentionDurationCount')]",
+      "backupMonthlyRetentionDurationCount": "[parameters('backupMonthlyRetentionDurationCount')]",
+      "backupMonthsOfYear": "[parameters('backupMonthsOfYear')]",
+      "backupYearlyRetentionDurationCount": "[parameters('backupYearlyRetentionDurationCount')]"
+    },
+    "vmEncryptionSettings": {
+      "sequenceVersion": "1.0",
+      "volumeType": "All",
+      "diskEncryptionExtensionName": "AzureDiskEncryption",
+      "diskEncryptionExtensionVersion": "1.1",
+      "encryptionOperation": "EnableEncryption",
+      "keyEncryptionAlgorithm": "RSA-OAEP",
+      "keyVaultURL": "[concat('https://', parameters('keyVaultName'), '.vault.usgovcloudapi.net/')]",
+      "provisioningVMAzureDiskEncryptionUrl": "[concat(parameters('templatesBaseUrl'),'/configuringVMAzureDiskEncryption-', parameters('useExistingKek'),'.json')]",
+      "keyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]",
+      "keyVaultResourceID": "[concat(subscription().id,'/resourceGroups/',parameters('keyVaultResourceGroupName'),'/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+    },
+    "antimalwareInfo": {
+      "exclusionPath": {
+        "web": "[concat(parameters('exclusionPathWeb'),parameters('exclusionPathGen'))]",
+        "sql": "[concat(parameters('exclusionPathSQL'),parameters('exclusionPathGen'))]",
+        "sqlWS2012": "[parameters('exclusionPathSQLWS2012')]",
+        "ad": "[concat(parameters('exclusionPathAD'),parameters('exclusionPathGen'))]",
+        "mgt": "[concat(parameters('exclusionPathMgt'),parameters('exclusionPathGen'))]"
       },
-      "configuringAlwaysOnInfo": {
-          "lbSettings": "[variables('lbSettings')]",
-          "sqlLBIPAddress": "[parameters('sqlLBIPAddress')]"
+      "exclusionExtension": {
+        "web": "[concat(parameters('exclusionExtensionWeb'),parameters('exclusionExtensionGen'))]",
+        "sql": "[concat(parameters('exclusionExtensionSQL'),parameters('exclusionExtensionGen'))]",
+        "sqlWS2012": "[parameters('exclusionExtensionSQLWS2012')]",
+        "ad": "[concat(parameters('exclusionExtensionAD'),parameters('exclusionExtensionGen'))]",
+        "mgt": "[concat(parameters('exclusionExtensionMgt'),parameters('exclusionExtensionGen'))]"
       },
-      "backupInfo": {
-          "rcVaultName": "[parameters('recoveryServicesVaultName')]",
-          "backupPolicy": "[parameters('backupPolicy')]",
-          "backupTemplateUrl": "[variables('artifacts').backupVMProtectedItem]",
-          "backupPolicyTemplateUrl": "[variables('artifacts').backupPolicy]",
-          "backupScheduleRunTimes": "[parameters('backupScheduleRunTimes')]",
-          "backupDailyRetentionDurationCount": "[parameters('backupDailyRetentionDurationCount')]",
-          "backupDaysOfTheWeek": "[parameters('backupDaysOfTheWeek')]",
-          "backupWeeklyRetentionDurationCount": "[parameters('backupWeeklyRetentionDurationCount')]",
-          "backupMonthlyRetentionDurationCount": "[parameters('backupMonthlyRetentionDurationCount')]",
-          "backupMonthsOfYear": "[parameters('backupMonthsOfYear')]",
-          "backupYearlyRetentionDurationCount": "[parameters('backupYearlyRetentionDurationCount')]"
+      "exclusionProcess": {
+        "web": "[concat(parameters('exclusionProcessWeb'),parameters('exclusionProcessGen'))]",
+        "sql": "[concat(parameters('exclusionProcessSQL'),parameters('exclusionProcessGen'))]",
+        "sqlWS2012": "[parameters('exclusionProcessSQLWS2012')]",
+        "ad": "[concat(parameters('exclusionProcessAD'),parameters('exclusionProcessGen'))]",
+        "mgt": "[concat(parameters('exclusionProcessMgt'),parameters('exclusionProcessGen'))]"
       },
-      "vmEncryptionSettings": {
-          "sequenceVersion": "1.0",
-          "volumeType": "All",
-          "diskEncryptionExtensionName": "AzureDiskEncryption",
-          "diskEncryptionExtensionVersion": "1.1",
-          "encryptionOperation": "EnableEncryption",
-          "keyEncryptionAlgorithm": "RSA-OAEP",
-          "keyVaultURL": "[concat('https://', parameters('keyVaultName'), '.vault.usgovcloudapi.net/')]",
-          "provisioningVMAzureDiskEncryptionUrl": "[concat(parameters('templatesBaseUrl'),'/configuringVMAzureDiskEncryption-', parameters('useExistingKek'),'.json')]",
-          "keyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]",
-          "keyVaultResourceID": "[concat(subscription().id,'/resourceGroups/',parameters('keyVaultResourceGroupName'),'/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
-      },
-      "antimalwareInfo": {
-          "exclusionPath": {
-              "web": "[concat(parameters('exclusionPathWeb'),parameters('exclusionPathGen'))]",
-              "sql": "[concat(parameters('exclusionPathSQL'),parameters('exclusionPathGen'))]",
-              "sqlWS2012": "[parameters('exclusionPathSQLWS2012')]",
-              "ad": "[concat(parameters('exclusionPathAD'),parameters('exclusionPathGen'))]",
-              "mgt": "[concat(parameters('exclusionPathMgt'),parameters('exclusionPathGen'))]"
-          },
-          "exclusionExtension": {
-              "web": "[concat(parameters('exclusionExtensionWeb'),parameters('exclusionExtensionGen'))]",
-              "sql": "[concat(parameters('exclusionExtensionSQL'),parameters('exclusionExtensionGen'))]",
-              "sqlWS2012": "[parameters('exclusionExtensionSQLWS2012')]",
-              "ad": "[concat(parameters('exclusionExtensionAD'),parameters('exclusionExtensionGen'))]",
-              "mgt": "[concat(parameters('exclusionExtensionMgt'),parameters('exclusionExtensionGen'))]"
-          },
-          "exclusionProcess": {
-              "web": "[concat(parameters('exclusionProcessWeb'),parameters('exclusionProcessGen'))]",
-              "sql": "[concat(parameters('exclusionProcessSQL'),parameters('exclusionProcessGen'))]",
-              "sqlWS2012": "[parameters('exclusionProcessSQLWS2012')]",
-              "ad": "[concat(parameters('exclusionProcessAD'),parameters('exclusionProcessGen'))]",
-              "mgt": "[concat(parameters('exclusionProcessMgt'),parameters('exclusionProcessGen'))]"
-          },
-          "realTimeScanDirection": "[parameters('realTimeScanDirection')]",
-          "remediationScheduleDay": "[parameters('remediationScheduleDay')]",
-          "scanScheduleDay": "[parameters('scanScheduleDay')]",
-          "disableRealtimeMonitoring": "[parameters('disableRealtimeMonitoring')]"
-      }
+      "realTimeScanDirection": "[parameters('realTimeScanDirection')]",
+      "remediationScheduleDay": "[parameters('remediationScheduleDay')]",
+      "scanScheduleDay": "[parameters('scanScheduleDay')]",
+      "disableRealtimeMonitoring": "[parameters('disableRealtimeMonitoring')]"
+    }
   },
   "resources": [
     {
@@ -1901,6 +1901,33 @@
           }
         }
       }
+    },
+    {
+      "name": "BackupVMProtectedItem-Deployment",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "DiskEncryption-Deployment"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('artifacts').backupVMProtectedItemURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "resourceNames": {
+            "value": "[variables('resourceNames')]"
+          },
+          "numberOfWebInstances": {
+            "value": "[variables('numberOfWebInstances')]"
+          },
+          "backupInfo": {
+            "value": "[variables('backupInfo')]"
+          }
+        }
+      }
     }
-  ]
+  ],
+  "outputs": {}
 }

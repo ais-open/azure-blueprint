@@ -1,0 +1,117 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "resourceNames": {
+      "type": "object"
+    },
+    "numberOfWebInstances": {
+      "type": "int"
+    },
+    "backupInfo": {
+      "type": "object"
+    }
+  },
+  "variables": {
+    "backupFabric": "Azure",
+    "v2VmType": "Microsoft.Compute/virtualMachines",
+    "v2VmContainer": "iaasvmcontainer;iaasvmcontainerv2;",
+    "v2VmContainerNamePrefix": "iaasvmcontainerv2;",
+    "v2Vm": "vm;iaasvmcontainerv2;"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
+      "apiVersion": "2016-06-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[resourceGroup().location]",
+      "name": "[concat(parameters('backupInfo').rcVaultName,'/',variables('backupFabric'),'/',variables('v2VmContainer'),concat(resourceGroup().name,';',parameters('resourceNames').adpdc),'/',variables('v2Vm'),concat(resourceGroup().name,';',parameters('resourceNames').adpdc))]",
+      "properties": {
+        "protectedItemType": "[variables('v2VmType')]",
+        "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('backupInfo').rcVaultName,parameters('backupInfo').backupPolicy)]",
+        "sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('resourceNames').adpdc)]"
+      }
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
+      "apiVersion": "2016-06-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[resourceGroup().location]",
+      "name": "[concat(parameters('backupInfo').rcVaultName,'/',variables('backupFabric'),'/',variables('v2VmContainer'),concat(resourceGroup().name,';',parameters('resourceNames').adbdc),'/',variables('v2Vm'),concat(resourceGroup().name,';',parameters('resourceNames').adbdc))]",
+      "properties": {
+        "protectedItemType": "[variables('v2VmType')]",
+        "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('backupInfo').rcVaultName,parameters('backupInfo').backupPolicy)]",
+        "sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('resourceNames').adbdc)]"
+      }
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
+      "apiVersion": "2016-06-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[resourceGroup().location]",
+      "name": "[concat(parameters('backupInfo').rcVaultName,'/',variables('backupFabric'),'/',variables('v2VmContainer'),concat(resourceGroup().name,';',parameters('resourceNames').mgt),'/',variables('v2Vm'),concat(resourceGroup().name,';',parameters('resourceNames').mgt))]",
+      "properties": {
+        "protectedItemType": "[variables('v2VmType')]",
+        "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('backupInfo').rcVaultName,parameters('backupInfo').backupPolicy)]",
+        "sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('resourceNames').mgt)]"
+      }
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
+      "apiVersion": "2016-06-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[resourceGroup().location]",
+      "name": "[concat(parameters('backupInfo').rcVaultName,'/',variables('backupFabric'),'/',variables('v2VmContainer'),concat(resourceGroup().name,';',parameters('resourceNames').sqlw),'/',variables('v2Vm'),concat(resourceGroup().name,';',parameters('resourceNames').sqlw))]",
+      "properties": {
+        "protectedItemType": "[variables('v2VmType')]",
+        "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('backupInfo').rcVaultName,parameters('backupInfo').backupPolicy)]",
+        "sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('resourceNames').sqlw)]"
+      }
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
+      "apiVersion": "2016-06-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "sqlBackupVMProtectedItemLoop",
+        "count": 2
+      },
+      "name": "[concat(parameters('backupInfo').rcVaultName,'/',variables('backupFabric'),'/',variables('v2VmContainer'),concat(resourceGroup().name,';',concat(parameters('resourceNames').sql,copyIndex())),'/',variables('v2Vm'),concat(resourceGroup().name,';',concat(parameters('resourceNames').sql,copyIndex())))]",
+      "properties": {
+        "protectedItemType": "[variables('v2VmType')]",
+        "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('backupInfo').rcVaultName,parameters('backupInfo').backupPolicy)]",
+        "sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',concat(parameters('resourceNames').sql,copyIndex()))]"
+      }
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
+      "apiVersion": "2016-06-01",
+      "tags": {
+        "Project": "BluePrint"
+      },
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "webBackupVMProtectedItemLoop",
+        "count": "[parameters('numberOfWebInstances')]"
+      },
+      "name": "[concat(parameters('backupInfo').rcVaultName,'/',variables('backupFabric'),'/',variables('v2VmContainer'),concat(resourceGroup().name,';',concat(parameters('resourceNames').web,copyIndex())),'/',variables('v2Vm'),concat(resourceGroup().name,';',concat(parameters('resourceNames').web,copyIndex())))]",
+      "properties": {
+        "protectedItemType": "[variables('v2VmType')]",
+        "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('backupInfo').rcVaultName,parameters('backupInfo').backupPolicy)]",
+        "sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',concat(parameters('resourceNames').web,copyIndex()))]"
+      }
+    }
+  ],
+  "outputs": {}
+}

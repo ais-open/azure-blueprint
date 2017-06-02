@@ -200,10 +200,5 @@
       }
     }
   ],
-  "outputs": {
-    "adpdcBitLockerKey": {
-      "type": "string",
-      "value": "[reference(resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('resourceNames').vms.adpdc, parameters('vmEncryptionSettings').diskEncryptionExtensionName)).instanceView.statuses[0].message]"
-    }
-  }
+  "outputs": {}
 }
