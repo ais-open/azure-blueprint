@@ -960,7 +960,7 @@
     }
   },
   "resources": [
-    {
+    /*{
       "name": "OMSWorkspaceAutomationAccount-Deployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1218,7 +1218,7 @@
           }
         }
       }
-    },
+    },*/
     /*{
       "name": "ProvisioningNICsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
@@ -1719,7 +1719,7 @@
         }
       }
     },*/
-    {
+    /*{
       "name": "VirtualMachine-Deployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1929,8 +1929,7 @@
           }
         }
       }
-    }
-    /*,
+    },
     {
       "name": "EnterpriseCloudMonitoring-Deployment",
       "type": "Microsoft.Resources/deployments",
@@ -1971,9 +1970,9 @@
       "type": "string",
       "value": "[parameters('omsWorkspaceName')]"
     },
-    "artifacts": {
-      "type": "object",
-      "value": "[variables('artifacts')]"
+    "enterpriseCloudMonitoringUri": {
+      "type": "string",
+      "value": "[concat(parameters('templatesBaseUrl'),variables('artifacts').enterpriseCloudMonitoringURL)]"
     }
   }
 }

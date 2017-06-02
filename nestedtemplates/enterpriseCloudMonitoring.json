@@ -3,16 +3,39 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "resourceNames": {
-      "type": "object"
+      "type": "array"
     },
-    "numberOfWebInstances": {
+    /*"numberOfWebInstances": {
       "type": "int"
-    },
+    },*/
     "workspaceName": {
       "type": "string"
     }
   },
   "resources": [
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('resourceNames')[copyIndex()],'/EnterpriseCloudMonitoring')]",
+      "apiVersion": "2016-03-30",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [],
+      "copy": {
+        "name": "vmEnterpriseCloudMonitoringLoop",
+        "count": "[length(parameters('resourceNames'))]"
+      },
+      "properties": {
+        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+        "type": "MicrosoftMonitoringAgent",
+        "typeHandlerVersion": "1.0",
+        "autoUpgradeMinorVersion": false,
+        "settings": {
+          "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
+        },
+        "protectedSettings": {
+          "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
+        }
+      }
+    }/*,
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('resourceNames').vms.adpdc,'/EnterpriseCloudMonitoring')]",
@@ -37,9 +60,7 @@
       "name": "[concat(parameters('resourceNames').vms.adbdc,'/EnterpriseCloudMonitoring')]",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
-      "dependsOn": [
-        //"[concat('Microsoft.Compute/virtualMachines/',parameters('resourceNames').vms.adpdc,'/extensions/EnterpriseCloudMonitoring')]" 
-      ],
+      "dependsOn": [],
       "properties": {
         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
         "type": "MicrosoftMonitoringAgent",
@@ -58,9 +79,7 @@
       "name": "[concat(parameters('resourceNames').vms.mgt,'/EnterpriseCloudMonitoring')]",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
-      "dependsOn": [
-        //"[concat('Microsoft.Compute/virtualMachines/',parameters('resourceNames').vms.adbdc,'/extensions/EnterpriseCloudMonitoring')]" 
-      ],
+      "dependsOn": [],
       "properties": {
         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
         "type": "MicrosoftMonitoringAgent",
@@ -79,9 +98,7 @@
       "name": "[concat(parameters('resourceNames').vms.sqlw,'/EnterpriseCloudMonitoring')]",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
-      "dependsOn": [
-        //"[concat('Microsoft.Compute/virtualMachines/',parameters('resourceNames').vms.mgt,'/extensions/EnterpriseCloudMonitoring')]" 
-      ],
+      "dependsOn": [],
       "properties": {
         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
         "type": "MicrosoftMonitoringAgent",
@@ -100,9 +117,7 @@
       "name": "[concat(parameters('resourceNames').vms.sql,copyIndex(),'/EnterpriseCloudMonitoring')]",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
-      "dependsOn": [
-        //"[concat('Microsoft.Compute/virtualMachines/',parameters('resourceNames').vms.sqlw,'/extensions/EnterpriseCloudMonitoring')]" 
-      ],
+      "dependsOn": [],
       "copy": {
         "name": "sqlEnterpriseCLoudMonitoringLoop",
         "count": 2
@@ -125,9 +140,7 @@
       "name": "[concat(parameters('resourceNames').vms.web,copyIndex(),'/EnterpriseCloudMonitoring')]",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
-      "dependsOn": [
-        //"sqlEnterpriseCLoudMonitoringLoop" 
-      ],
+      "dependsOn": [],
       "copy": {
         "name": "webEnterpriseCLoudMonitoringLoop",
         "count": "[parameters('numberOfWebInstances')]"
@@ -144,7 +157,7 @@
           "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
         }
       }
-    }
+    }*/
   ],
   "outputs": {}
 }
