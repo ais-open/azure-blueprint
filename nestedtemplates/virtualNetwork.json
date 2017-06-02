@@ -38,10 +38,10 @@
           ]
         },
         "dhcpOptions": {
-          "dnsServers": [
+          /*"dnsServers": [
             "[parameters('pdcIP')]",
             "[parameters('bdcIP')]"
-          ]
+          ]*/
         },
         "subnets": "[reference('Subnets').outputs.subnets.value]"
       }
