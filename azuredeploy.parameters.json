@@ -2,11 +2,11 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-      "adminUsername": {
-          "value": "adminuser"
-      },
-      "scheduleJobGuid": {
-        "value": "a5f54ffa-e243-483a-bc05-5d1903c20fc0"
-      }
+    "adminUsername": {
+        "value": "adminuser"
+    },
+    "scheduleJobGuid": {
+      "value": "b365b1c2-87e1-4e14-a071-a65df34036d1"
     }
+  }
 }
