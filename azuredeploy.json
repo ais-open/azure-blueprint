@@ -960,7 +960,7 @@
     }
   },
   "resources": [
-    /*{
+   {
       "name": "OMSWorkspaceAutomationAccount-Deployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1218,7 +1218,7 @@
           }
         }
       }
-    },*/
+    },
     /*{
       "name": "ProvisioningNICsSQLADMGT",
       "type": "Microsoft.Resources/deployments",
@@ -1690,12 +1690,12 @@
         }
       }
     },*/
-    /*{
+    {
       "name": "ConfigurationAutomationSchedules",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/WebTier"
+        "OMSWorkspaceAutomationAccount-Deployment"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1718,8 +1718,8 @@
           }
         }
       }
-    },*/
-    /*{
+    },
+    {
       "name": "VirtualMachine-Deployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1929,33 +1929,7 @@
           }
         }
       }
-    },
-    {
-      "name": "EnterpriseCloudMonitoring-Deployment",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-        "DiskEncryption-Deployment"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('artifacts').enterpriseCloudMonitoringURL]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "resourceNames": {
-            "value": "[variables('resourceNames')]"
-          },
-          "numberOfWebInstances": {
-            "value": "[variables('numberOfWebInstances')]"
-          },
-          "workspaceName": {
-            "value": "[parameters('omsWorkspaceName')]"
-          }
-        }
-      }
-    }*/
+    }
   ],
   "outputs": {
     "resourceNames": {
