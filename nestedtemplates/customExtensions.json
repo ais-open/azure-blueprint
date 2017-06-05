@@ -28,8 +28,8 @@
     }
   },
   "variables": {
-      "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]",
-      "vmNames": {
+      "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]"//,
+      /*"vmNames": {
           "VMs": [{
                   "Name": "[parameters('adPDCVMName')]"
               },
@@ -49,7 +49,7 @@
                   "Name": "[concat(parameters('sqlVMName'),'1')]"
               }
           ]
-      }
+      }*/
   },
   "resources": [
     {
