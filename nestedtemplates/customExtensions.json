@@ -25,6 +25,9 @@
     },
     "pdcConfigurationFunction": {
       "type": "string"
+    },
+    "antimalwareInfo": {
+      "type": "object"
     }
   },
   "variables": {
@@ -74,7 +77,14 @@
             "adminCreds": {
               "userName": "[parameters('adminUserName')]",
               "password": "PrivateSettingsRef:adminPassword"
-            }
+            },
+            "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.ad]",
+            "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.ad]",
+            "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.ad]",
+            "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
+            "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
+            "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
+            "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
           }
         },
         "protectedSettings": {

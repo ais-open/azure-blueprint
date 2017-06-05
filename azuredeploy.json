@@ -1885,6 +1885,9 @@
           },
           "pdcConfigurationFunction": {
             "value": "[variables('artifacts').pdcConfigurationFunction]"
+          },
+          "antimalwareInfo": {
+            "value": "[variables('antimalwareInfo')]"
           }
         }
       }
