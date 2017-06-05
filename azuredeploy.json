@@ -867,6 +867,7 @@
       "backupVMProtectedItemURL": "[concat(parameters('templatesBaseUrl'),'/backupProtectedItemsV2.json')]",
       "enterpriseCloudMonitoringURL": "[concat(parameters('templatesBaseUrl'),'/enterpriseCloudMonitoring.json')]",
       "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json')]",
+      "customExtensionsURL": "[concat(parameters('templatesBaseUrl'),'/customExtensions.json')]",
       "nicTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateNic.json')]",
       "sqlLoadBalancerURL": "[concat(parameters('templatesBaseUrl'),'/sqlLoadBalancer.json')]",
       "applicationGatewayURL": "[concat(parameters('templatesBaseUrl'),'/applicationGateway.json')]",
