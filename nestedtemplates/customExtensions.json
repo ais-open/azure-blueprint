@@ -111,34 +111,7 @@
               "storageAccountKey": ""
             }
           }
-        }*/
-    /*{
-        "apiVersion": "2015-06-15",
-        "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
-        "dependsOn": [
-            "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]"
-        ],
-        "location": "[resourceGroup().location]",
-        "tags": {
-            "displayName": "adcse-pwd",
-            "Project": "BluePrint"
-        },
-        "properties": {
-            "publisher": "Microsoft.Compute",
-            "type": "CustomScriptExtension",
-            "typeHandlerVersion": "1.8",
-            "autoUpgradeMinorVersion": true,
-            "settings": {
-                "fileUris": "[parameters('postDeployScriptUris')]",
-                "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1"
-            },
-            "protectedSettings": {
-                "storageAccountName": "",
-                "storageAccountKey": ""
-            }
-        }
-    },*/    
+        }*/   
     /*{
       "name": "UpdatingDNStoPrimaryADVM",
       "type": "Microsoft.Resources/deployments",
