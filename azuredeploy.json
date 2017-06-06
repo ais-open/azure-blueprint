@@ -1920,8 +1920,8 @@
                 //"Microsoft.Resources/deployments/WebTier"
                 "monitorVMLoopSQLAD",
                 "monitorVMLoopWEB",
-                "CustomScriptExtensionLoopWEB",
-                "CustomScriptExtensionLoopSQLAD"
+                //"CustomScriptExtensionLoopWEB",
+                //"CustomScriptExtensionLoopSQLAD"
             ],
             "properties": {
                 "mode": "Incremental",
