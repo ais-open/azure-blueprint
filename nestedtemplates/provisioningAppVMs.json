@@ -132,7 +132,7 @@
                 }
             }
         },
-        {
+        /*{
           "type": "microsoft.insights/alertrules",
           "name": "[concat('capacity_alert_', parameters('WebStorageAccountName'))]",
           "apiVersion": "2014-04-01",
@@ -163,7 +163,7 @@
           "dependsOn": [
             "[resourceId('Microsoft.Storage/storageAccounts', parameters('WebStorageAccountName'))]"
           ]
-        },
+        },*/
         {
             "type": "Microsoft.Compute/availabilitySets",
             "name": "[parameters('WebAvailabilitySetName')]",
