@@ -136,16 +136,16 @@
                         "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
                         "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
                         "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
-                        "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]",
-                        /*"MachineName": "[parameters('sqlwVMName')]",
-                        "ResourceGroupName": "[parameters('ResourceGroupName')]",
-                        "AutomationAccountName": "[parameters('AutomationAccountName')]",
-                        "AzureAuthCreds": {
-                            "UserName": "[parameters('AzureUserName')]",
-                            "Password": "PrivateSettingsRef:AzurePassword"
-                        },
-                        "SubscriptionId": "[parameters('SubscriptionId')]",
-                        "EnvironmentName": "[parameters('EnvironmentName')]"*/
+                        "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+                            /*"MachineName": "[parameters('sqlwVMName')]",
+                            "ResourceGroupName": "[parameters('ResourceGroupName')]",
+                            "AutomationAccountName": "[parameters('AutomationAccountName')]",
+                            "AzureAuthCreds": {
+                                "UserName": "[parameters('AzureUserName')]",
+                                "Password": "PrivateSettingsRef:AzurePassword"
+                            },
+                            "SubscriptionId": "[parameters('SubscriptionId')]",
+                            "EnvironmentName": "[parameters('EnvironmentName')]"*/
 
                     }
                 },
@@ -231,6 +231,7 @@
                 }
             }
         },
+        /*
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('sqlVMName'),'0/SQL0BaselineDSC')]",
@@ -263,8 +264,8 @@
                             "password": "privateSettingsRef:SqlServerServiceAccountPassword"
                         },
                         "NumberOfDisks": "[parameters('numberOfDisks')]",
-                        "WorkloadType": "[parameters('workloadType')]"
-                            /*"MachineName": "[concat(parameters('sqlVMName'),'0')]",
+                        "WorkloadType": "[parameters('workloadType')]",
+                            "MachineName": "[concat(parameters('sqlVMName'),'0')]",
                             "ResourceGroupName": "[parameters('ResourceGroupName')]",
                             "AutomationAccountName": "[parameters('AutomationAccountName')]",
                             "AzureAuthCreds": {
@@ -272,7 +273,7 @@
                                 "Password": "PrivateSettingsRef:AzurePassword"
                             },
                             "SubscriptionId": "[parameters('SubscriptionId')]",
-                            "EnvironmentName": "[parameters('EnvironmentName')]"*/
+                            "EnvironmentName": "[parameters('EnvironmentName')]"
 
                     }
                 },
@@ -285,6 +286,7 @@
                 }
             }
         },
+        */
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('sqlVMName'),'0/Antimalware')]",
@@ -294,7 +296,7 @@
                 "Project": "BluePrint"
             },
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/',concat(parameters('sqlVMName'),'0'),'/extensions/SQL0BaselineDSC')]"
+                /*"[concat('Microsoft.Compute/virtualMachines/',concat(parameters('sqlVMName'),'0'),'/extensions/SQL0BaselineDSC')]"*/
             ],
             "properties": {
                 "publisher": "Microsoft.Azure.Security",

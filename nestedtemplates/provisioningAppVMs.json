@@ -100,6 +100,9 @@
         },
         "SubscriptionId": {
             "type": "string"
+        },
+        "provisioningHybridworkersUrl": {
+            "type": "string"
         }
     },
     "variables": {
@@ -129,6 +132,38 @@
                 }
             }
         },
+        /*{
+          "type": "microsoft.insights/alertrules",
+          "name": "[concat('capacity_alert_', parameters('WebStorageAccountName'))]",
+          "apiVersion": "2014-04-01",
+          "tags": {
+            "Project": "BluePrint"
+          },
+          "location": "[parameters('location')]",
+          "properties": {
+            "name": "capacity alert",
+            "description": "usage more than 450 TB",
+            "isEnabled": true,
+            "condition": {
+              "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
+              "dataSource": {
+                "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+                "resourceUri": "[concat(resourceId('Microsoft.Storage/storageAccounts', parameters('WebStorageAccountName')), '/services/blob')]",
+                "metricName": "Capacity"
+              },
+              "threshold": 4500000000000,
+              "windowSize": "P1D"
+            },
+            "action": {
+              "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+              "sendToServiceOwners": true,
+              "customEmails": []
+            }
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts', parameters('WebStorageAccountName'))]"
+          ]
+        },*/
         {
             "type": "Microsoft.Compute/availabilitySets",
             "name": "[parameters('WebAvailabilitySetName')]",
@@ -253,28 +288,6 @@
 
                     }
                 },
-                /*{
-                    "type": "Microsoft.Compute/virtualMachines/extensions",
-                    "name": "[concat(parameters('WebVMName'), copyindex(), '/EnterpriseCloudMonitoring')]",
-                    "apiVersion": "2016-03-30",
-                    "location": "[resourceGroup().location]",
-                    "dependsOn": [
-                        "[concat(parameters('WebVMName'), copyindex())]",
-                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat(parameters('WebVMName'),copyIndex()), 'joindomain')]"
-                    ],
-                    "properties": {
-                        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                        "type": "MicrosoftMonitoringAgent",
-                        "typeHandlerVersion": "1.0",
-                        "autoUpgradeMinorVersion": false,
-                        "settings": {
-                            "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
-                        },
-                        "protectedSettings": {
-                            "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
-                        }
-                    }
-                },*/
                 {
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('WebVMName'), copyindex(), '/WebBaselineDSC')]",
@@ -286,7 +299,6 @@
                     "dependsOn": [
                         "[concat(parameters('WebVMName'), copyindex())]",
                         "[resourceId('Microsoft.Compute/virtualMachines/extensions', concat(parameters('WebVMName'),copyIndex()), 'joindomain')]"
-                        //"[resourceId('Microsoft.Compute/virtualMachines/extensions', concat(parameters('WebVMName'),copyIndex()), 'EnterpriseCloudMonitoring')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
@@ -305,14 +317,6 @@
                                 "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
                                 "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
                                 "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
-                                    /*"ResourceGroupName": "[parameters('ResourceGroupName')]",
-                                    "AutomationAccountName": "[parameters('AutomationAccountName')]",
-                                    "AzureAuthCreds": {
-                                        "UserName": "[parameters('AzureUserName')]",
-                                        "Password": "PrivateSettingsRef:AzurePassword"
-                                    },
-                                    "SubscriptionId": "[parameters('SubscriptionId')]",
-                                    "EnvironmentName": "[parameters('EnvironmentName')]"*/
                             }
                         },
                         "protectedSettings": {
@@ -379,6 +383,30 @@
                     },
                     "workspaceName": {
                         "value": "[parameters('workspaceName')]"
+                    },
+                    "AutomationAccountName": {
+                        "value": "[parameters('AutomationAccountName')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[parameters('ResourceGroupName')]"
+                    },
+                    "AzureUserName": {
+                        "value": "[parameters('AzureUserName')]"
+                    },
+                    "AzurePassword": {
+                        "value": "[parameters('AzurePassword')]"
+                    },
+                    "SubscriptionId": {
+                        "value": "[parameters('SubscriptionId')]"
+                    },
+                    "provisioningHybridworkersUrl": {
+                        "value": "[parameters('provisioningHybridworkersUrl')]"
+                    },
+                    "MachinesToSetPasswordPolicy": {
+                        "value": ""
                     }
                 }
             }

@@ -87,7 +87,8 @@
             "type": "string"
         }
     },
-    "resources": [{
+    "resources": [
+      /*{
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('sqlVMName'),'1/SQL1BaselineDSC')]",
             "apiVersion": "2015-06-15",
@@ -135,15 +136,6 @@
                         },
                         "NumberOfDisks": "[parameters('numberOfDisks')]",
                         "WorkloadType": "[parameters('workloadType')]"
-                            /*"MachineName": "[concat(parameters('sqlVMName'),'1')]",
-                            "ResourceGroupName": "[parameters('ResourceGroupName')]",
-                            "AutomationAccountName": "[parameters('AutomationAccountName')]",
-                            "AzureAuthCreds": {
-                                "UserName": "[parameters('AzureUserName')]",
-                                "Password": "PrivateSettingsRef:AzurePassword"
-                            },
-                            "SubscriptionId": "[parameters('SubscriptionId')]",
-                            "EnvironmentName": "[parameters('EnvironmentName')]"*/
                     }
                 },
                 "protectedSettings": {
@@ -155,7 +147,7 @@
                     }
                 }
             }
-        },
+        },*/
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('sqlVMName'),'1/Antimalware')]",
@@ -165,7 +157,7 @@
                 "Project": "BluePrint"
             },
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/',concat(parameters('sqlVMName'),'1'),'/extensions/SQL1BaselineDSC')]"
+                /*"[concat('Microsoft.Compute/virtualMachines/',concat(parameters('sqlVMName'),'1'),'/extensions/SQL1BaselineDSC')]"*/
             ],
             "properties": {
                 "publisher": "Microsoft.Azure.Security",

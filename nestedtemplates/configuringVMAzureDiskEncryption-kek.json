@@ -25,7 +25,36 @@
         },
         "workspaceName": {
             "type": "string"
+        },
+        "ResourceGroupName": {
+            "type": "string"
+        },
+        "AutomationAccountName": {
+            "type": "string"
+        },
+        "AzureUserName": {
+            "type": "string"
+        },
+        "AzurePassword": {
+            "type": "securestring"
+        },
+        "SubscriptionId": {
+            "type": "string"
+        },
+        "EnvironmentName": {
+            "type": "string"
+        },
+        "provisioningHybridworkersUrl": {
+            "type": "string"
+        },
+        "MachinesToSetPasswordPolicy": {
+            "type": "string"
         }
+    },
+    "variables": {
+        "scriptFolder": ".",
+        "scriptFileName": "provisioningHybridworkers.ps1",
+        "scriptParameters": "[concat('-MachineName \"' ,parameters('vmName'), '\" -ResourceGroupName \"', parameters('ResourceGroupName'), '\" -AutomationAccountName \"', parameters('AutomationAccountName'), '\" -AzureUserName \"', parameters('AzureUserName'), '\" -AzurePassword \"', parameters('AzurePassword'),'\" -SubscriptionId \"', parameters('SubscriptionId'), '\" -EnvironmentName \"', parameters('EnvironmentName'), '\" -MachinesToSetPasswordPolicy \"', parameters('MachinesToSetPasswordPolicy'), '\"' )]"
     },
     "resources": [{
             "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -54,59 +83,50 @@
                 }
             }
         },
-        {
-            "apiVersion": "2016-04-30-preview",
-            "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('vmName')]",
+        /*{
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('vmName'), '/EnterpriseCloudMonitoring')]",
+            "apiVersion": "2016-03-30",
             "location": "[resourceGroup().location]",
-            "tags": {
-                "Project": "BluePrint"
-            },
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('vmName'), parameters('vmEncryptionSettings').diskEncryptionExtensionName)]"
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('vmName'),parameters('vmEncryptionSettings').diskEncryptionExtensionName)]"
             ],
             "properties": {
-                "storageProfile": {
-                    "osDisk": {
-                        "encryptionSettings": {
-                            "diskEncryptionKey": {
-                                "sourceVault": {
-                                    "id": "[parameters('vmEncryptionSettings').keyVaultResourceID]"
-                                },
-                                "secretUrl": "[reference(resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('vmName'), parameters('vmEncryptionSettings').diskEncryptionExtensionName)).instanceView.statuses[0].message]"
-                            },
-                            "keyEncryptionKey": {
-                                "sourceVault": {
-                                    "id": "[parameters('vmEncryptionSettings').keyVaultResourceID]"
-                                },
-                                "keyUrl": "[parameters('keyEncryptionKeyURL')]"
-                            }
-                        }
-                    }
+                "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                "type": "MicrosoftMonitoringAgent",
+                "typeHandlerVersion": "1.0",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
+                },
+                "protectedSettings": {
+                    "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
                 }
+            }
+        },
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('vmName'), '/provisioningHybridworkers')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('vmName'),'EnterpriseCloudMonitoring')]"
+            ],
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "provisioningHybridworkers",
+                "Project": "BluePrint"
             },
-            "resources": [{
-                "type": "extensions",
-                "name": "EnterpriseCloudMonitoring",
-                "apiVersion": "2016-03-30",
-                "location": "[resourceGroup().location]",
-                "dependsOn": [
-                    "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
-                ],
-                "properties": {
-                    "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                    "type": "MicrosoftMonitoringAgent",
-                    "typeHandlerVersion": "1.0",
-                    "autoUpgradeMinorVersion": false,
-                    "settings": {
-                        "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
-                    },
-                    "protectedSettings": {
-                        "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
-                    }
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.8",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": ["[parameters('provisioningHybridworkersUrl')]"],
+                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters') )]"
                 }
-            }]
-        }
+            }
+        }*/
     ],
     "outputs": {
         "BitLockerKey": {

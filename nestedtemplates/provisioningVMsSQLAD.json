@@ -224,6 +224,9 @@
         },
         "SubscriptionId": {
             "type": "string"
+        },
+        "provisioningHybridworkersUrl": {
+            "type": "string"
         }
     },
     "variables": {
@@ -478,109 +481,48 @@
                     }
                 }
             },
-            "resources": [
-                /*{
-                                    "type": "Microsoft.Compute/virtualMachines/extensions",
-                                    "name": "[concat(parameters('adPDCVMName'),'/EnterpriseCloudMonitoring')]",
-                                    "apiVersion": "2016-03-30",
-                                    "location": "[resourceGroup().location]",
-                                    "dependsOn": [
-                                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
-                                    ],
-                                    "properties": {
-                                        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                                        "type": "MicrosoftMonitoringAgent",
-                                        "typeHandlerVersion": "1.0",
-                                        "autoUpgradeMinorVersion": false,
-                                        "settings": {
-                                            "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
-                                        },
-                                        "protectedSettings": {
-                                            "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
-                                        }
-                                    }
-                                },*/
-                {
-                    "type": "Microsoft.Compute/virtualMachines/extensions",
-                    "name": "[concat(parameters('adPDCVMName'),'/PDCBaselineDSC')]",
-                    "apiVersion": "2015-06-15",
-                    "tags": {
-                        "Project": "BluePrint"
-                    },
-                    "location": "[parameters('location')]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
-                        //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'EnterpriseCloudMonitoring')]"
-                    ],
-                    "properties": {
-                        "publisher": "Microsoft.Powershell",
-                        "type": "DSC",
-                        "typeHandlerVersion": "2.19",
-                        "autoUpgradeMinorVersion": false,
-                        "settings": {
-                            "modulesURL": "[parameters('pdcModulesURL')]",
-                            "configurationFunction": "[parameters('pdcConfigurationFunction')]",
-                            "properties": {
-                                "domainName": "[parameters('domainName')]",
-                                "adminCreds": {
-                                    "userName": "[parameters('adminUserName')]",
-                                    "password": "PrivateSettingsRef:adminPassword"
-                                },
-                                "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.ad]",
-                                "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.ad]",
-                                "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.ad]",
-                                "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
-                                "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
-                                "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
-                                "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
-                                    /*"MachineName": "[parameters('adPDCVMName')]",
-                                    "ResourceGroupName": "[parameters('ResourceGroupName')]",
-                                    "AutomationAccountName": "[parameters('AutomationAccountName')]",
-                                    "AzureAuthCreds": {
-                                        "UserName": "[parameters('AzureUserName')]",
-                                        "Password": "PrivateSettingsRef:AzurePassword"
-                                    },
-                                    "SubscriptionId": "[parameters('SubscriptionId')]",
-                                    "EnvironmentName": "[parameters('EnvironmentName')]"*/
-                            }
-                        },
-                        "protectedSettings": {
-                            "items": {
-                                "adminPassword": "[parameters('adminPassword')]",
-                                "AzurePassword": "[parameters('AzurePassword')]"
-                            }
-                        }
-                    }
+            "resources": [{
+                "type": "Microsoft.Compute/virtualMachines/extensions",
+                "name": "[concat(parameters('adPDCVMName'),'/PDCBaselineDSC')]",
+                "apiVersion": "2015-06-15",
+                "tags": {
+                    "Project": "BluePrint"
                 },
-                {
-                    "apiVersion": "2015-06-15",
-                    "type": "Microsoft.Compute/virtualMachines/extensions",
-                    "name": "[concat(parameters('adPDCVMName'), '/adcse-pwd')]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]",
-                        //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]"
-                    ],
-                    "location": "[resourceGroup().location]",
-                    "tags": {
-                        "displayName": "adcse-pwd",
-                        "Project": "BluePrint"
+                "location": "[parameters('location')]",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
+                ],
+                "properties": {
+                    "publisher": "Microsoft.Powershell",
+                    "type": "DSC",
+                    "typeHandlerVersion": "2.19",
+                    "autoUpgradeMinorVersion": false,
+                    "settings": {
+                        "modulesURL": "[parameters('pdcModulesURL')]",
+                        "configurationFunction": "[parameters('pdcConfigurationFunction')]",
+                        "properties": {
+                            "domainName": "[parameters('domainName')]",
+                            "adminCreds": {
+                                "userName": "[parameters('adminUserName')]",
+                                "password": "PrivateSettingsRef:adminPassword"
+                            },
+                            "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.ad]",
+                            "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.ad]",
+                            "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.ad]",
+                            "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
+                            "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
+                            "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
+                            "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+                        }
                     },
-                    "properties": {
-                        "publisher": "Microsoft.Compute",
-                        "type": "CustomScriptExtension",
-                        "typeHandlerVersion": "1.8",
-                        "autoUpgradeMinorVersion": true,
-                        "settings": {
-                            "fileUris": "[parameters('postDeployScriptUris')]",
-                            "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1"
-                        },
-                        "protectedSettings": {
-                            "storageAccountName": "",
-                            "storageAccountKey": ""
+                    "protectedSettings": {
+                        "items": {
+                            "adminPassword": "[parameters('adminPassword')]",
+                            "AzurePassword": "[parameters('AzurePassword')]"
                         }
                     }
                 }
-            ]
+            }]
         },
         {
             "apiVersion": "2016-03-30",
@@ -650,27 +592,6 @@
             },
             "resources": [
                 /*{
-                                    "type": "Microsoft.Compute/virtualMachines/extensions",
-                                    "name": "[concat(parameters('adBDCVMName'),'/EnterpriseCloudMonitoring')]",
-                                    "apiVersion": "2016-03-30",
-                                    "location": "[resourceGroup().location]",
-                                    "dependsOn": [
-                                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('adBDCVMName'))]"
-                                    ],
-                                    "properties": {
-                                        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                                        "type": "MicrosoftMonitoringAgent",
-                                        "typeHandlerVersion": "1.0",
-                                        "autoUpgradeMinorVersion": false,
-                                        "settings": {
-                                            "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
-                                        },
-                                        "protectedSettings": {
-                                            "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
-                                        }
-                                    }
-                                },*/
-                {
                     "apiVersion": "2015-06-15",
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('adBDCVMName'), '/adcse-pwd')]",
@@ -696,7 +617,7 @@
                             "storageAccountKey": ""
                         }
                     }
-                }
+                }*/
             ]
         },
         {
@@ -778,29 +699,7 @@
                     }
                 }
             },
-            "resources": [
-                /*{
-                                "type": "Microsoft.Compute/virtualMachines/extensions",
-                                "name": "[concat(parameters('sqlVMName'), copyindex(), '/EnterpriseCloudMonitoring')]",
-                                "apiVersion": "2016-03-30",
-                                "location": "[resourceGroup().location]",
-                                "dependsOn": [
-                                    "[resourceId('Microsoft.Compute/virtualMachines', concat(parameters('sqlVMName'), copyindex()))]"
-                                ],
-                                "properties": {
-                                    "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                                    "type": "MicrosoftMonitoringAgent",
-                                    "typeHandlerVersion": "1.0",
-                                    "autoUpgradeMinorVersion": false,
-                                    "settings": {
-                                        "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
-                                    },
-                                    "protectedSettings": {
-                                        "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
-                                    }
-                                }
-                            }*/
-            ]
+            "resources": []
         },
         {
             "apiVersion": "2016-03-30",
@@ -866,29 +765,7 @@
                     }
                 }
             },
-            "resources": [
-                /*{
-                                "type": "Microsoft.Compute/virtualMachines/extensions",
-                                "name": "[concat(parameters('sqlwVMName'), '/EnterpriseCloudMonitoring')]",
-                                "apiVersion": "2016-03-30",
-                                "location": "[resourceGroup().location]",
-                                "dependsOn": [
-                                    "[resourceId('Microsoft.Compute/virtualMachines', parameters('sqlwVMName'))]"
-                                ],
-                                "properties": {
-                                    "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                                    "type": "MicrosoftMonitoringAgent",
-                                    "typeHandlerVersion": "1.0",
-                                    "autoUpgradeMinorVersion": false,
-                                    "settings": {
-                                        "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
-                                    },
-                                    "protectedSettings": {
-                                        "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
-                                    }
-                                }
-                            }*/
-            ]
+            "resources": []
         },
         {
             "name": "UpdatingDNStoPrimaryADVM",
@@ -1227,27 +1104,6 @@
                         }
                     }
                 },
-                /*{
-                    "type": "Microsoft.Compute/virtualMachines/extensions",
-                    "name": "[concat(parameters('mgtVMName'), '/EnterpriseCloudMonitoring')]",
-                    "apiVersion": "2016-03-30",
-                    "location": "[resourceGroup().location]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]"
-                    ],
-                    "properties": {
-                        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                        "type": "MicrosoftMonitoringAgent",
-                        "typeHandlerVersion": "1.0",
-                        "autoUpgradeMinorVersion": false,
-                        "settings": {
-                            "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]"
-                        },
-                        "protectedSettings": {
-                            "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
-                        }
-                    }
-                },*/
                 {
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('mgtVMName'),'/MGTBaselineDSC')]",
@@ -1257,8 +1113,8 @@
                         "Project": "BluePrint"
                     },
                     "dependsOn": [
-                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]"
-                        //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'EnterpriseCloudMonitoring')]"
+                        "[resourceId('Microsoft.Compute/virtualMachines', parameters('mgtVMName'))]",
+                        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'joindomain')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
@@ -1276,15 +1132,6 @@
                                 "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
                                 "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
                                 "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
-                                    /*"MachineName": "[parameters('mgtVMName')]",
-                                    "ResourceGroupName": "[parameters('ResourceGroupName')]",
-                                    "AutomationAccountName": "[parameters('AutomationAccountName')]",
-                                    "AzureAuthCreds": {
-                                        "UserName": "[parameters('AzureUserName')]",
-                                        "Password": "PrivateSettingsRef:AzurePassword"
-                                    },
-                                    "SubscriptionId": "[parameters('SubscriptionId')]",
-                                    "EnvironmentName": "[parameters('EnvironmentName')]"*/
                             }
                         },
                         "protectedSettings": {
@@ -1576,6 +1423,30 @@
                     },
                     "workspaceName": {
                         "value": "[parameters('workspaceName')]"
+                    },
+                    "AutomationAccountName": {
+                        "value": "[parameters('AutomationAccountName')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[parameters('ResourceGroupName')]"
+                    },
+                    "AzureUserName": {
+                        "value": "[parameters('AzureUserName')]"
+                    },
+                    "AzurePassword": {
+                        "value": "[parameters('AzurePassword')]"
+                    },
+                    "SubscriptionId": {
+                        "value": "[parameters('SubscriptionId')]"
+                    },
+                    "provisioningHybridworkersUrl": {
+                        "value": "[parameters('provisioningHybridworkersUrl')]"
+                    },
+                    "MachinesToSetPasswordPolicy": {
+                        "value": "[concat(parameters('adPDCVMName'),';', parameters('adBDCVMName'))]"
                     }
                 }
             }
@@ -1589,11 +1460,6 @@
                 "count": "[length(variables('vmNames').VMs)]"
             },
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('mgtVMName'))]",
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
-                "sqlvirtualMachineLoop",
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]",
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]",
                 "encryptSQLMGMTADLoop"
             ],
             "properties": {
