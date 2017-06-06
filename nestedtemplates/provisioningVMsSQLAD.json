@@ -610,7 +610,7 @@
                         "autoUpgradeMinorVersion": true,
                         "settings": {
                             "fileUris": "[parameters('postDeployScriptUris')]",
-                            "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1"
+                            "commandToExecute": "start powershell -ExecutionPolicy Unrestricted -File setPasswordPolicy.ps1 start powershell -ExecutionPolicy Unrestricted -File accountmanagementprincipals.ps1 "
                         },
                         "protectedSettings": {
                             "storageAccountName": "",
