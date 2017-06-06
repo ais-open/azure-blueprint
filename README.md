@@ -153,9 +153,9 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 
 * **OMS Workspace Name**: Name for new OMS workspace
 
-* **OMS Automation Account Name **: Name for new OMS Automation Account
+* **OMS Automation Account Name**: Name for new OMS Automation Account
 
-* **Job Schedule GUID **: guid for automation job schedule (use New-GUID in powershell)
+* **Job Schedule GUID**: guid for automation job schedule (use New-GUID in powershell)
 
 ### Deployment instructions
 1. Click [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
