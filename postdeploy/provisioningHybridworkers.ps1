@@ -347,29 +347,26 @@ catch{
 SetHybridWorderList -MachineName $MachineName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -AzureAuthCreds $AzureAuthCreds -SubscriptionId $SubscriptionId -EnvironmentName $EnvironmentName -ConfigurationData $ConfigData -Verbose
 Start-DscConfiguration -Wait -Force -Path .\SetHybridWorderList -Verbose
 
-# Temp Fix OMS Cloud Monitoring Connection Issue
-#try{
-#    $cloudMonitoring =Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Status
-#    $status = $cloudMonitoring.ProvisioningState
-#
-#    if($status -eq "Failed"){
-#        Remove-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Force
-#
-#        $Workspace = Get-AzureRmOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName  -ErrorAction Stop
-#        $OmsLocation = $Workspace.Location
-#        # Get the workspace ID
-#        $WorkspaceId = $Workspace.CustomerId
-#
-#        # Get the primary key for the OMS workspace
-#        $WorkspaceSharedKeys = Get-AzureRmOperationalInsightsWorkspaceSharedKeys -ResourceGroupName $ResourceGroupName -Name $WorkspaceName
-#        $WorkspaceKey = $WorkspaceSharedKeys.PrimarySharedKey
-#
-#        $PublicSettings = @{"workspaceId" = $WorkspaceId }
-#        $ProtectedSettings = @{"workspaceKey" = $WorkspaceKey}
-#
-#        Set-AzureRmVMExtension -ExtensionName "EnterpriseCloudMonitoring" -ResourceGroupName $ResourceGroupName -VMName $MachineName -Publisher "Microsoft.EnterpriseCloud.Monitoring" -ExtensionType "MicrosoftMonitoringAgent" -TypeHandlerVersion 1.0 -Settings $PublicSettings -ProtectedSettings $ProtectedSettings -Location $OmsLocation
-#    }
-#}
-#catch{
-#
-#}
+ Temp Fix OMS Cloud Monitoring Connection Issue
+try{
+    $cloudMonitoring =Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Status
+    $status = $cloudMonitoring.ProvisioningState
+
+    $Workspace = Get-AzureRmOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName  -ErrorAction Stop
+    $OmsLocation = $Workspace.Location
+     Get the workspace ID
+    $WorkspaceId = $Workspace.CustomerId
+
+     Get the primary key for the OMS workspace
+    $WorkspaceSharedKeys = Get-AzureRmOperationalInsightsWorkspaceSharedKeys -ResourceGroupName $ResourceGroupName -Name $WorkspaceName
+    $WorkspaceKey = $WorkspaceSharedKeys.PrimarySharedKey
+
+    $PublicSettings = @{"workspaceId" = $WorkspaceId }
+    $ProtectedSettings = @{"workspaceKey" = $WorkspaceKey}
+
+    Set-AzureRmVMExtension -ExtensionName "EnterpriseCloudMonitoring" -ResourceGroupName $ResourceGroupName -VMName $MachineName -Publisher "Microsoft.EnterpriseCloud.Monitoring" -ExtensionType "MicrosoftMonitoringAgent" -TypeHandlerVersion 1.0 -Settings $PublicSettings -ProtectedSettings $ProtectedSettings -Location $OmsLocation
+
+}
+catch{
+
+}
