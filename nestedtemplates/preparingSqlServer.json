@@ -264,8 +264,8 @@
                             "password": "privateSettingsRef:SqlServerServiceAccountPassword"
                         },
                         "NumberOfDisks": "[parameters('numberOfDisks')]",
-                        "WorkloadType": "[parameters('workloadType')]"
-                            /*"MachineName": "[concat(parameters('sqlVMName'),'0')]",
+                        "WorkloadType": "[parameters('workloadType')]",
+                            "MachineName": "[concat(parameters('sqlVMName'),'0')]",
                             "ResourceGroupName": "[parameters('ResourceGroupName')]",
                             "AutomationAccountName": "[parameters('AutomationAccountName')]",
                             "AzureAuthCreds": {
@@ -273,7 +273,7 @@
                                 "Password": "PrivateSettingsRef:AzurePassword"
                             },
                             "SubscriptionId": "[parameters('SubscriptionId')]",
-                            "EnvironmentName": "[parameters('EnvironmentName')]"*/
+                            "EnvironmentName": "[parameters('EnvironmentName')]"
 
                     }
                 },
