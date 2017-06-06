@@ -231,6 +231,7 @@
                 }
             }
         },
+        /*
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('sqlVMName'),'0/SQL0BaselineDSC')]",
@@ -285,6 +286,7 @@
                 }
             }
         },
+        */
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('sqlVMName'),'0/Antimalware')]",
