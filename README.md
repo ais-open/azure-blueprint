@@ -157,7 +157,7 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 
 ### Deployment instructions
 
-1. Click [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
+1. Click [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Ftesting%2Fazuredeploy.json)
 2. Enter the settings above
 3.
 4.
