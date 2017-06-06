@@ -151,17 +151,21 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 
 * **Admin Username**: User account name for local VM administrator accounts
 
+* **OMS Workspace Name**: Name for new OMS workspace
+
+* **OMS Automation Account Name **: Name for new OMS Automation Account
+
+* **Job Schedule GUID **: guid for automation job schedule (use New-GUID in powershell)
+
 ### Deployment instructions
 1. Click [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
 2. Enter the settings above
-3.
-4.
-5. Review the terms and conditions, then click **I agree to the terms and conditions stated above**.
-6. Click **Purchase**.
+3. Review the terms and conditions, then click **I agree to the terms and conditions stated above**.
+4. Click **Purchase**.
 
 ### Monitoring deployment status
 
-This solution uses multiple nested templates to deploy and configure the resources shown in the architecture diagram. The full deployment will take approximately **[xx]** minutes. You can monitor the deployment from the Azure portal.
+This solution uses multiple nested templates to deploy and configure the resources shown in the architecture diagram. The full deployment will take approximately **[115]** minutes. You can monitor the deployment from the Azure portal.
 
 [instructions / screen captures]
 
