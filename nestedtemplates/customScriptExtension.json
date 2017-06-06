@@ -60,7 +60,7 @@
                     "fileUris": [
                         "[parameters('postDeployScriptUris')]"
                     ],
-                    "commandToExecute": "[concat('start powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters'), 'start powershell -ExecutionPolicy Unrestricted -File settimezonelogsize.ps1' )]"
+                    "commandToExecute": "[concat('start powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParametersHybridWorkers'), 'start powershell -ExecutionPolicy Unrestricted -File settimezonelogsize.ps1' )]"
                 }
             }
         }
