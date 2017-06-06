@@ -349,8 +349,6 @@ Start-DscConfiguration -Wait -Force -Path .\SetHybridWorderList -Verbose
 
  Temp Fix OMS Cloud Monitoring Connection Issue
 try{
-    $cloudMonitoring =Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Status
-    $status = $cloudMonitoring.ProvisioningState
 
     $Workspace = Get-AzureRmOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName  -ErrorAction Stop
     $OmsLocation = $Workspace.Location
