@@ -1725,7 +1725,7 @@
                 }
             }
         },
-        {
+        /*{
             "name": "[concat('CustomScriptExtensionSQLAD-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1785,7 +1785,7 @@
                     }
                 }
             }
-        },
+        },*/
         {
             "name": "[concat('ConfigurationOMSMonitoringWEB-', variables('resourceNames').vms.web, copyindex())]",
             "type": "Microsoft.Resources/deployments",
@@ -1847,7 +1847,7 @@
                 }
             }
         },
-        {
+        */{
             "name": "[concat('CustomScriptExtensionWEB-', variables('resourceNames').vms.web, copyindex())]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1907,7 +1907,7 @@
                     }
                 }
             }
-        },
+        },*/
         {
             "name": "ConfigurationAutomationSchedules",
             "type": "Microsoft.Resources/deployments",
