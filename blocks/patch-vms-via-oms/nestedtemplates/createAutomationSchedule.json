@@ -1,0 +1,81 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "omsWorkspaceName": {
+            "type": "string"
+        },
+        "omsWorkspaceRegion": {
+            "type": "string"
+        },
+        "serviceTier": {
+            "type": "string"
+        },
+        "dataRetention": {
+            "type": "int"
+        },
+        "omsAutomationAccountName": {
+            "type": "string"
+        },
+        "scheduleName": {
+            "type": "string"
+        },
+        "scheduleJobGuid": {
+            "type": "string"
+        },
+        "computerIdList": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [{
+            "comments": "",
+            "type": "Microsoft.Automation/automationAccounts/schedules",
+            "name": "[concat(parameters('omsAutomationAccountName'),'/',parameters('scheduleName'))]",
+            "apiVersion": "2015-10-31",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "description": "VM Patch Automation Schedule",
+                "startTime": "",
+                "expiryTime": "",
+                "isEnabled": true,
+                "interval": 1,
+                "frequency": "Hour",
+                "timeZone": "America/New_York"
+            }
+        },
+        {
+            "comments": "",
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "name": "[concat(parameters('omsAutomationAccountName'),'/', parameters('scheduleJobGuid'))]",
+            "apiVersion": "2015-10-31",
+            "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Automation/automationAccounts/',parameters('omsAutomationAccountName'), '/jobSchedules/', parameters('scheduleJobGuid'))]",
+            "dependsOn": [
+
+                "[concat('Microsoft.Automation/automationAccounts/', parameters('omsAutomationAccountName'), '/schedules/', parameters('scheduleName'))]"
+            ],
+            "properties": {
+                "jobScheduleId": "[parameters('scheduleJobGuid')]",
+                "runbook": {
+                    "name": "Patch-MicrosoftOMSComputers"
+                },
+                "schedule": {
+                    "name": "[parameters('scheduleName')]"
+                },
+                "runOn": null,
+                "parameters": {
+                    "Duration": "01:30:00",
+                    "ScheduleName": "[parameters('scheduleName')]",
+                    "WorkspaceId": "[parameters('omsAutomationAccountName')]",
+                    "ComputerIdList": "[reference(Concat('Microsoft.Automation/automationAccounts/', parameters('omsAutomationAccountName'), '/variables/', 'ComputerIdList'), '2015-10-31').value]"
+                        //"ComputerIdList": "[reference(resourceId('/subscriptions/84fab12f-3ee8-4e20-9d7a-6fb8f59750a4/resourceGroups/AzureTest/providers/Microsoft.Automation/automationAccounts/DYCAISAutomationAccount/hybridRunbookWorkerGroups'))[0].name]=Windows"
+                        //"AdditionalOptions": "{\"cb560e4f-7ff8-4d3c-88c8-ec449d2af221\":\"MyOMSTestVM\",\"Timezone\":\"America/New_York\"}"
+                }
+            }
+        }
+    ],
+    "outputs": {
+
+    }
+}
