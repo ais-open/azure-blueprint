@@ -96,7 +96,7 @@
                 "Standalone",
                 "PerNode"
             ],
-            "defaultValue": "Free",
+            "defaultValue": "Standalone",
             "metadata": {
                 "description": "Service Tier: Free, Standalone, or PerNode"
             }
@@ -652,14 +652,14 @@
             "metadata": {
                 "description": "Linked Templates base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/nestedtemplates"
+            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/PatchingRevision/nestedtemplates"
         },
         "dscBaseUrl": {
             "type": "string",
             "metadata": {
                 "description": "DSC Scripts base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/DSC"
+            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/PatchingRevision/DSC"
         },
         "scriptsBaseUrl": {
             "type": "string",
@@ -667,7 +667,7 @@
                 "description": "DSC Scripts base url"
             },
 
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/postdeploy"
+            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/PatchingRevision/postdeploy"
         },
         "sqlServerVersion": {
             "type": "string",
