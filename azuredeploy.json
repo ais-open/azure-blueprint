@@ -96,7 +96,7 @@
                 "Standalone",
                 "PerNode"
             ],
-            "defaultValue": "Standalone",
+            "defaultValue": "PerNode",
             "metadata": {
                 "description": "Service Tier: Free, Standalone, or PerNode"
             }
