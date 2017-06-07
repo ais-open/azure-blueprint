@@ -14,7 +14,7 @@
         [String]$MachinesToSetPasswordPolicy
     )
     Enable-PSRemoting -Force
-
+    $ErrorActionPreference = “SilentlyContinue”
     Write-Host "Check Module exists"
     Install-Packageprovider -Name Nuget -MinimumVersion 2.8.5.201 -Force
 
@@ -349,6 +349,8 @@ Start-DscConfiguration -Wait -Force -Path .\SetHybridWorderList -Verbose
 
  Temp Fix OMS Cloud Monitoring Connection Issue
 try{
+    $cloudMonitoring =Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Status
+    $status = $cloudMonitoring.ProvisioningState
 
     $Workspace = Get-AzureRmOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName  -ErrorAction Stop
     $OmsLocation = $Workspace.Location
