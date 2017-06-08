@@ -227,6 +227,9 @@
         },
         "provisioningHybridworkersUrl": {
             "type": "string"
+        },
+        "omsWorkspaceName": {
+            "type":"string"
         }
     },
     "variables": {
@@ -304,6 +307,24 @@
             }
         },
         {
+          "apiVersion": "2015-11-01-preview",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', parameters('sqlStorageAccountName'))]",
+          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', parameters('sqlStorageAccountName'))]"
+          ],
+          "properties": {
+            "containers": [ ],
+            "tables": [
+              "[parameters('table')]"
+            ],
+            "storageAccount": {
+              "id": "[resourceId(parameters('sqlStorageAccountName'),'Microsoft.Storage/storageaccounts/', parameters('sqlStorageAccountName'))]",
+              "key": "[listKeys(resourceId(parameters('sqlStorageAccountName'),'Microsoft.Storage/storageAccounts', parameters('sqlStorageAccountName')),'2015-06-15').key1]"
+            }
+          }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('dcStorageAccountName')]",
             "apiVersion": "2016-01-01",
@@ -325,6 +346,24 @@
                     "keySource": "Microsoft.Storage"
                 }
             }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', parameters('dcStorageAccountName'))]",
+          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', parameters('dcStorageAccountName'))]"
+          ],
+          "properties": {
+            "containers": [ ],
+            "tables": [
+              "[parameters('table')]"
+            ],
+            "storageAccount": {
+              "id": "[resourceId(parameters('dcStorageAccountName'),'Microsoft.Storage/storageaccounts/', parameters('dcStorageAccountName'))]",
+              "key": "[listKeys(resourceId(parameters('dcStorageAccountName'),'Microsoft.Storage/storageAccounts', parameters('dcStorageAccountName')),'2015-06-15').key1]"
+            }
+          }
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
@@ -350,6 +389,24 @@
             }
         },
         {
+          "apiVersion": "2015-11-01-preview",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', parameters('fswstorageAccountName'))]",
+          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', parameters('fswstorageAccountName'))]"
+          ],
+          "properties": {
+            "containers": [ ],
+            "tables": [
+              "[parameters('table')]"
+            ],
+            "storageAccount": {
+              "id": "[resourceId(parameters('fswstorageAccountName'),'Microsoft.Storage/storageaccounts/', parameters('fswstorageAccountName'))]",
+              "key": "[listKeys(resourceId(parameters('fswstorageAccountName'),'Microsoft.Storage/storageAccounts', parameters('fswstorageAccountName')),'2015-06-15').key1]"
+            }
+          }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('mgtStorageAccountName')]",
             "apiVersion": "2016-01-01",
@@ -371,6 +428,24 @@
                     "keySource": "Microsoft.Storage"
                 }
             }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', parameters('mgtStorageAccountType'))]",
+          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', parameters('mgtStorageAccountType'))]"
+          ],
+          "properties": {
+            "containers": [ ],
+            "tables": [
+              "[parameters('table')]"
+            ],
+            "storageAccount": {
+              "id": "[resourceId(parameters('mgtStorageAccountType'),'Microsoft.Storage/storageaccounts/', parameters('mgtStorageAccountType'))]",
+              "key": "[listKeys(resourceId(parameters('mgtStorageAccountType'),'Microsoft.Storage/storageAccounts', parameters('mgtStorageAccountType')),'2015-06-15').key1]"
+            }
+          }
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
@@ -396,6 +471,24 @@
             }
         },
         {
+          "apiVersion": "2015-11-01-preview",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', variables('diagstorageNameSQL'))]",
+          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameSQL'))]"
+          ],
+          "properties": {
+            "containers": [ ],
+            "tables": [
+              "[parameters('table')]"
+            ],
+            "storageAccount": {
+              "id": "[resourceId(variables('diagstorageNameSQL'),'Microsoft.Storage/storageaccounts/', variables('diagstorageNameSQL'))]",
+              "key": "[listKeys(resourceId(variables('diagstorageNameSQL'),'Microsoft.Storage/storageAccounts', variables('diagstorageNameSQL')),'2015-06-15').key1]"
+            }
+          }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[variables('diagstorageNameDC')]",
             "apiVersion": "2016-01-01",
@@ -417,6 +510,24 @@
                     "keySource": "Microsoft.Storage"
                 }
             }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', parameters('diagstorageNameDC'))]",
+          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', parameters('diagstorageNameDC'))]"
+          ],
+          "properties": {
+            "containers": [ ],
+            "tables": [
+              "[parameters('table')]"
+            ],
+            "storageAccount": {
+              "id": "[resourceId(parameters('diagstorageNameDC'),'Microsoft.Storage/storageaccounts/', parameters('diagstorageNameDC'))]",
+              "key": "[listKeys(resourceId(parameters('diagstorageNameDC'),'Microsoft.Storage/storageAccounts', parameters('diagstorageNameDC')),'2015-06-15').key1]"
+            }
+          }
         },
         {
             "apiVersion": "2016-03-30",

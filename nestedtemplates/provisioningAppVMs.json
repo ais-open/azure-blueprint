@@ -132,6 +132,24 @@
                 }
             }
         },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', parameters('WebStorageAccountName'))]",
+          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', parameters('WebStorageAccountName'))]"
+          ],
+          "properties": {
+            "containers": [ ],
+            "tables": [
+              "[parameters('table')]"
+            ],
+            "storageAccount": {
+              "id": "[resourceId(parameters('WebStorageAccountName'),'Microsoft.Storage/storageaccounts/', parameters('WebStorageAccountName'))]",
+              "key": "[listKeys(resourceId(parameters('WebStorageAccountName'),'Microsoft.Storage/storageAccounts', parameters('WebStorageAccountName')),'2015-06-15').key1]"
+            }
+          }
+        },
         /*{
           "type": "microsoft.insights/alertrules",
           "name": "[concat('capacity_alert_', parameters('WebStorageAccountName'))]",
