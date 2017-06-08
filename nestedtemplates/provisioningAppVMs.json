@@ -145,7 +145,7 @@
           "properties": {
             "containers": [ ],
             "tables": [
-              "[parameters('table')]"
+              
             ],
             "storageAccount": {
               "id": "[resourceId('Microsoft.Storage/storageaccounts/', parameters('WebStorageAccountName'))]",
