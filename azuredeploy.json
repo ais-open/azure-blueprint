@@ -12,6 +12,18 @@
         "keyVaultResourceGroupName": {
             "type": "string"
         },
+        "certData": {
+          "type": "securestring",
+          "metadata": {
+            "description": "Cert 64bit encoded .pfx file for SSL"
+          }
+        },
+        "certPassword": {
+          "type": "securestring",
+          "metadata": {
+            "description": "Cert 64bit encoded .pfx file for SSL"
+          }
+        },
         "recoveryServicesVaultName": {
             "type": "string",
             "metadata": {

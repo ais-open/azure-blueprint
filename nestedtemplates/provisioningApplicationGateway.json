@@ -70,6 +70,18 @@
       "metadata": {
         "description": "WAF Rule Set Version"
       }
+    },
+    "certData": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Cert 64bit encoded .pfx file for SSL"
+      }
+    },
+    "certPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Cert 64bit encoded .pfx file for SSL"
+      }
     }
   },
   "variables": {
@@ -113,6 +125,15 @@
           "tier": "WAF",
           "capacity": "[parameters('capacity')]"
         },
+        "sslCertificates": [
+          {
+            "name": "appGatewaySslCert",
+            "properties": {
+              "data": "[parameters('certData')]",
+              "password": "[parameters('certPassword')]"
+            }
+          }
+        ],
         "gatewayIPConfigurations": [
           {
             "name": "appGatewayIpConfig",
@@ -135,9 +156,9 @@
         ],
         "frontendPorts": [
           {
-            "name": "appGatewayFrontendPort80",
+            "name": "appGatewayFrontendPort443",
             "properties": {
-              "Port": 80
+              "Port": 443
             }
           }
         ],
@@ -159,8 +180,8 @@
           {
             "name": "appGatewayBackendHttpSettings",
             "properties": {
-              "Port": 443,
-              "Protocol": "Https",
+              "Port": 80,
+              "Protocol": "Http",
               "CookieBasedAffinity": "Disabled"
             }
           }
@@ -173,10 +194,12 @@
                 "Id": "[concat(variables('applicationGatewayID'), '/frontendIPConfigurations/appGatewayFrontendPublicIP')]"
               },
               "FrontendPort": {
-                "Id": "[concat(variables('applicationGatewayID'), '/frontendPorts/appGatewayFrontendPort80')]"
+                "Id": "[concat(variables('applicationGatewayID'), '/frontendPorts/appGatewayFrontendPort443')]"
               },
               "Protocol": "Https",
-              "SslCertificate": null
+              "SslCertificate": {
+                "Id": "[concat(variables('applicationGatewayID'), '/sslCertificates/appGatewaySslCert')]"
+              }
             }
           }
         ],
