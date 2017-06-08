@@ -319,8 +319,8 @@
               "[parameters('table')]"
             ],
             "storageAccount": {
-              "id": "[resourceId(parameters('sqlStorageAccountName'),'Microsoft.Storage/storageaccounts/', parameters('sqlStorageAccountName'))]",
-              "key": "[listKeys(resourceId(parameters('sqlStorageAccountName'),'Microsoft.Storage/storageAccounts', parameters('sqlStorageAccountName')),'2015-06-15').key1]"
+              "id": "[resourceId('Microsoft.Storage/storageaccounts/', parameters('sqlStorageAccountName'))]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('sqlStorageAccountName')),'2015-06-15').key1]"
             }
           }
         },
@@ -360,8 +360,8 @@
               "[parameters('table')]"
             ],
             "storageAccount": {
-              "id": "[resourceId(parameters('dcStorageAccountName'),'Microsoft.Storage/storageaccounts/', parameters('dcStorageAccountName'))]",
-              "key": "[listKeys(resourceId(parameters('dcStorageAccountName'),'Microsoft.Storage/storageAccounts', parameters('dcStorageAccountName')),'2015-06-15').key1]"
+              "id": "[resourceId('Microsoft.Storage/storageaccounts/', parameters('dcStorageAccountName'))]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('dcStorageAccountName')),'2015-06-15').key1]"
             }
           }
         },
@@ -401,8 +401,8 @@
               "[parameters('table')]"
             ],
             "storageAccount": {
-              "id": "[resourceId(variables('fswstorageName'),'Microsoft.Storage/storageaccounts/', variables('fswstorageName'))]",
-              "key": "[listKeys(resourceId(variables('fswstorageName'),'Microsoft.Storage/storageAccounts', variables('fswstorageName')),'2015-06-15').key1]"
+              "id": "[resourceId('Microsoft.Storage/storageaccounts/', variables('fswstorageName'))]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('fswstorageName')),'2015-06-15').key1]"
             }
           }
         },
@@ -442,8 +442,8 @@
               "[parameters('table')]"
             ],
             "storageAccount": {
-              "id": "[resourceId(parameters('mgtStorageAccountName'),'Microsoft.Storage/storageaccounts/', parameters('mgtStorageAccountName'))]",
-              "key": "[listKeys(resourceId(parameters('mgtStorageAccountName'),'Microsoft.Storage/storageAccounts', parameters('mgtStorageAccountName')),'2015-06-15').key1]"
+              "id": "[resourceId('Microsoft.Storage/storageaccounts/', parameters('mgtStorageAccountName'))]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('mgtStorageAccountName')),'2015-06-15').key1]"
             }
           }
         },
@@ -483,8 +483,8 @@
               "[parameters('table')]"
             ],
             "storageAccount": {
-              "id": "[resourceId(variables('diagstorageNameSQL'),'Microsoft.Storage/storageaccounts/', variables('diagstorageNameSQL'))]",
-              "key": "[listKeys(resourceId(variables('diagstorageNameSQL'),'Microsoft.Storage/storageAccounts', variables('diagstorageNameSQL')),'2015-06-15').key1]"
+              "id": "[resourceId('Microsoft.Storage/storageaccounts/', variables('diagstorageNameSQL'))]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('diagstorageNameSQL')),'2015-06-15').key1]"
             }
           }
         },
@@ -524,8 +524,8 @@
               "[parameters('table')]"
             ],
             "storageAccount": {
-              "id": "[resourceId(variables('diagstorageNameDC'),'Microsoft.Storage/storageaccounts/', variables('diagstorageNameDC'))]",
-              "key": "[listKeys(resourceId(variables('diagstorageNameDC'),'Microsoft.Storage/storageAccounts', variables('diagstorageNameDC')),'2015-06-15').key1]"
+              "id": "[resourceId('Microsoft.Storage/storageaccounts/', variables('diagstorageNameDC'))]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('diagstorageNameDC')),'2015-06-15').key1]"
             }
           }
         },

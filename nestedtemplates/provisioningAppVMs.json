@@ -148,8 +148,8 @@
               "[parameters('table')]"
             ],
             "storageAccount": {
-              "id": "[resourceId(parameters('WebStorageAccountName'),'Microsoft.Storage/storageaccounts/', parameters('WebStorageAccountName'))]",
-              "key": "[listKeys(resourceId(parameters('WebStorageAccountName'),'Microsoft.Storage/storageAccounts', parameters('WebStorageAccountName')),'2015-06-15').key1]"
+              "id": "[resourceId('Microsoft.Storage/storageaccounts/', parameters('WebStorageAccountName'))]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('WebStorageAccountName')),'2015-06-15').key1]"
             }
           }
         },
