@@ -652,14 +652,14 @@
             "metadata": {
                 "description": "Linked Templates base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/PatchingRevision/nestedtemplates"
+            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/sqlbypass/nestedtemplates"
         },
         "dscBaseUrl": {
             "type": "string",
             "metadata": {
                 "description": "DSC Scripts base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/PatchingRevision/DSC"
+            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/sqlbypass/DSC"
         },
         "scriptsBaseUrl": {
             "type": "string",
@@ -667,7 +667,7 @@
                 "description": "DSC Scripts base url"
             },
 
-            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/PatchingRevision/postdeploy"
+            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/sqlbypass/postdeploy"
         },
         "sqlServerVersion": {
             "type": "string",
@@ -1533,6 +1533,9 @@
                     },
                     "provisioningHybridworkersUrl": {
                         "value": "[variables('artifacts').provisioningHybridworkerUrl]"
+                    },
+                    "omsWorkspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
                     }
                 }
             }
@@ -1664,6 +1667,9 @@
                     },
                     "provisioningHybridworkersUrl": {
                         "value": "[variables('artifacts').provisioningHybridworkerUrl]"
+                    },
+                    "omsWorkspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
                     }
                 }
             }
