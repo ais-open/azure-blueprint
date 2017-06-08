@@ -13,7 +13,7 @@
             "type": "string"
         },
         "certData": {
-          "type": "securestring",
+          "type": "string",
           "metadata": {
             "description": "Cert 64bit encoded .pfx file for SSL"
           }
@@ -1199,7 +1199,13 @@
                     },
                     "wafRuleSetVersion": {
                         "value": "[variables('wafSettings').wafRuleSetVersion]"
-                    }
+                    },
+                    "certData": {
+                      "value":"[parameters('certData')]"
+                    },
+                    "certPassword": {
+                      "value":"[parameters('certPassword')]"
+                    },
                 }
             }
         },
