@@ -159,8 +159,8 @@
           {
             "name": "appGatewayBackendHttpSettings",
             "properties": {
-              "Port": 80,
-              "Protocol": "Http",
+              "Port": 443,
+              "Protocol": "Https",
               "CookieBasedAffinity": "Disabled"
             }
           }
@@ -175,7 +175,7 @@
               "FrontendPort": {
                 "Id": "[concat(variables('applicationGatewayID'), '/frontendPorts/appGatewayFrontendPort80')]"
               },
-              "Protocol": "Http",
+              "Protocol": "Https",
               "SslCertificate": null
             }
           }
