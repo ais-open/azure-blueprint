@@ -13,7 +13,7 @@
             "type": "string"
         },
         "certData": {
-          "type": "string",
+          "type": "securestring",
           "metadata": {
             "description": "Cert 64bit encoded .pfx file for SSL"
           }
