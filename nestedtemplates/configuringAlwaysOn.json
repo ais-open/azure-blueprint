@@ -89,6 +89,59 @@
     },
     "resources": [
       {
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('sqlVMName'),'1/SQL1BaselineDSC')]",
+          "apiVersion": "2015-06-15",
+          "tags": {
+              "Project": "BluePrint"
+          },
+          "location": "[parameters('location')]",
+          "dependsOn": [
+
+          ],
+          "properties": {
+              "publisher": "Microsoft.Powershell",
+              "type": "DSC",
+              "typeHandlerVersion": "2.19",
+              "autoUpgradeMinorVersion": false,
+              "settings": {
+                  "modulesURL": "[parameters('sql1ModulesURL')]",
+                  "configurationFunction": "[parameters('sql1ConfigurationFunction')]",
+                  "properties": {
+                      "domainName": "[parameters('domainName')]",
+                      "sqlAlwaysOnEndpointName": "[parameters('sqlAOEPName')]",
+                      "adminCreds": {
+                          "userName": "[parameters('adminUserName')]",
+                          "password": "privateSettingsRef:AdminPassword"
+                      },
+                      "sqlServiceCreds": {
+                          "userName": "[parameters('sqlServerServiceAccountUserName')]",
+                          "password": "privateSettingsRef:SqlServerServiceAccountPassword"
+                      },
+                      "NumberOfDisks": "[parameters('numberOfDisks')]",
+                      "WorkloadType": "[parameters('workloadType')]",
+                      /*"MachineName": "[concat(parameters('sqlVMName'),'0')]",
+                      "ResourceGroupName": "[parameters('ResourceGroupName')]",
+                      "AutomationAccountName": "[parameters('AutomationAccountName')]",
+                      "AzureAuthCreds": {
+                          "UserName": "[parameters('AzureUserName')]",
+                          "Password": "PrivateSettingsRef:AzurePassword"
+                      },
+                      "SubscriptionId": "[parameters('SubscriptionId')]",
+                      "EnvironmentName": "[parameters('EnvironmentName')]"*/
+
+                  }
+              },
+              "protectedSettings": {
+                  "items": {
+                      "adminPassword": "[parameters('adminPassword')]",
+                      "sqlServerServiceAccountPassword": "[parameters('sqlServerServiceAccountPassword')]",
+                      "AzurePassword": "[parameters('AzurePassword')]"
+                  }
+              }
+          }
+      },
+      /*{
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('sqlVMName'),'1/SQL1BaselineDSC')]",
             "apiVersion": "2015-06-15",
@@ -147,7 +200,7 @@
                     }
                 }
             }
-        },
+        },*/
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('sqlVMName'),'1/Antimalware')]",

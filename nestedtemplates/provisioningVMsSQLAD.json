@@ -316,7 +316,7 @@
           "properties": {
             "containers": [ ],
             "tables": [
-              
+
             ],
             "storageAccount": {
               "id": "[resourceId('Microsoft.Storage/storageaccounts/', parameters('sqlStorageAccountName'))]",
@@ -357,7 +357,7 @@
           "properties": {
             "containers": [ ],
             "tables": [
-              
+
             ],
             "storageAccount": {
               "id": "[resourceId('Microsoft.Storage/storageaccounts/', parameters('dcStorageAccountName'))]",
@@ -398,7 +398,7 @@
           "properties": {
             "containers": [ ],
             "tables": [
-              
+
             ],
             "storageAccount": {
               "id": "[resourceId('Microsoft.Storage/storageaccounts/', variables('fswstorageName'))]",
@@ -439,7 +439,7 @@
           "properties": {
             "containers": [ ],
             "tables": [
-              
+
             ],
             "storageAccount": {
               "id": "[resourceId('Microsoft.Storage/storageaccounts/', parameters('mgtStorageAccountName'))]",
@@ -480,7 +480,7 @@
           "properties": {
             "containers": [ ],
             "tables": [
-              
+
             ],
             "storageAccount": {
               "id": "[resourceId('Microsoft.Storage/storageaccounts/', variables('diagstorageNameSQL'))]",
@@ -521,7 +521,7 @@
           "properties": {
             "containers": [ ],
             "tables": [
-              
+
             ],
             "storageAccount": {
               "id": "[resourceId('Microsoft.Storage/storageaccounts/', variables('diagstorageNameDC'))]",
@@ -1414,10 +1414,12 @@
                         }
                     },
                     "sql1ModulesURL": {
-                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql1ModulesURL]"
+                        //"value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql0ModulesURL]",
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql0ModulesURL]"
                     },
                     "sql1ConfigurationFunction": {
-                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql1ConfigurationFunction]"
+                        //"value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql1ConfigurationFunction]",
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql0ConfigurationFunction]"
                     },
                     "clusterName": {
                         "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.clusterName]"
