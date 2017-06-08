@@ -524,8 +524,8 @@
               "[parameters('table')]"
             ],
             "storageAccount": {
-              "id": "[resourceId variables('diagstorageNameDC'),'Microsoft.Storage/storageaccounts/', variables('diagstorageNameDC'))]",
-              "key": "[listKeys(resourceId variables('diagstorageNameDC'),'Microsoft.Storage/storageAccounts', variables('diagstorageNameDC')),'2015-06-15').key1]"
+              "id": "[resourceId(variables('diagstorageNameDC'),'Microsoft.Storage/storageaccounts/', variables('diagstorageNameDC'))]",
+              "key": "[listKeys(resourceId(variables('diagstorageNameDC'),'Microsoft.Storage/storageAccounts', variables('diagstorageNameDC')),'2015-06-15').key1]"
             }
           }
         },
