@@ -390,10 +390,10 @@
         },
         {
           "apiVersion": "2015-11-01-preview",
-          "name": "[concat(parameters('omsWorkspaceName'), '/', variables('fswstorageAccountName'))]",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', variables('fswstorageName'))]",
           "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
           "dependsOn": [
-            "[concat('Microsoft.Storage/storageAccounts/', variables('fswstorageAccountName'))]"
+            "[concat('Microsoft.Storage/storageAccounts/', variables('fswstorageName'))]"
           ],
           "properties": {
             "containers": [ ],
@@ -401,8 +401,8 @@
               "[parameters('table')]"
             ],
             "storageAccount": {
-              "id": "[resourceId(variables('fswstorageAccountName'),'Microsoft.Storage/storageaccounts/', variables('fswstorageAccountName'))]",
-              "key": "[listKeys(resourceId(variables('fswstorageAccountName'),'Microsoft.Storage/storageAccounts', variables('fswstorageAccountName')),'2015-06-15').key1]"
+              "id": "[resourceId(variables('fswstorageName'),'Microsoft.Storage/storageaccounts/', variables('fswstorageName'))]",
+              "key": "[listKeys(resourceId(variables('fswstorageName'),'Microsoft.Storage/storageAccounts', variables('fswstorageName')),'2015-06-15').key1]"
             }
           }
         },
