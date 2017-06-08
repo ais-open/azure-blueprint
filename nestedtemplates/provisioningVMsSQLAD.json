@@ -513,10 +513,10 @@
         },
         {
           "apiVersion": "2015-11-01-preview",
-          "name": "[concat(parameters('omsWorkspaceName'), '/', parameters('diagstorageNameDC'))]",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', variables('diagstorageNameDC'))]",
           "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
           "dependsOn": [
-            "[concat('Microsoft.Storage/storageAccounts/', parameters('diagstorageNameDC'))]"
+            "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameDC'))]"
           ],
           "properties": {
             "containers": [ ],
@@ -524,8 +524,8 @@
               "[parameters('table')]"
             ],
             "storageAccount": {
-              "id": "[resourceId(parameters('diagstorageNameDC'),'Microsoft.Storage/storageaccounts/', parameters('diagstorageNameDC'))]",
-              "key": "[listKeys(resourceId(parameters('diagstorageNameDC'),'Microsoft.Storage/storageAccounts', parameters('diagstorageNameDC')),'2015-06-15').key1]"
+              "id": "[resourceId variables('diagstorageNameDC'),'Microsoft.Storage/storageaccounts/', variables('diagstorageNameDC'))]",
+              "key": "[listKeys(resourceId variables('diagstorageNameDC'),'Microsoft.Storage/storageAccounts', variables('diagstorageNameDC')),'2015-06-15').key1]"
             }
           }
         },
