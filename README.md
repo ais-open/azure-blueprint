@@ -17,6 +17,7 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 
 	- [Solution Architecture](#architecture)
 	- [Pre-deployment Steps](#pre-deployment)
+		- [Pre-deployment Script Params](#pre-deployment-script)
 	- [Deployment Steps and Parameters](#Deployment)
 	- [Post-deployment Steps](#post-deployment)
 	- [Advanced Configuration](#extending-the-solution-with-advanced-configuration)
