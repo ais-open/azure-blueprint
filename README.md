@@ -153,7 +153,7 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 ### Monitoring deployment status
 This solution uses multiple nested templates to deploy and configure the resources shown in the architecture diagram. The full deployment will take approximately **[100]** minutes. You can monitor the deployment from Azure Portal.
 
-See [TIMELINE.md](/docs/Timeline.md).
+See [TIMELINE.md](/docs/TIMELINE.md).
 
 ## POST-DEPLOYMENT
 
