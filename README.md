@@ -15,12 +15,12 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 
 	##### READ MORE ABOUT:
 
-	- [SOLUTION ARCHITECTURE](## Architecture)
-	- [PRE-DEPLOYMENT STEPS](## PRE-DEPLOYMENT)
-	- [DEPLOYMENT STEPS](## DEPLOYMENT)
-	- [DEPLOYMENT PARAMS](#### Azure Resource Manager template deployment)
-	- [POST-DEPLOYMENT STEPS](## POST-DEPLOYMENT)
-	- [ADVANCED CONFIGURATION](## Configuration)
+	- [SOLUTION ARCHITECTURE](#Architecture)
+	- [PRE-DEPLOYMENT STEPS](#PRE-DEPLOYMENT)
+	- [DEPLOYMENT STEPS](#DEPLOYMENT)
+	- [DEPLOYMENT PARAMS](#Azure Resource Manager template deployment)
+	- [POST-DEPLOYMENT STEPS](#POST-DEPLOYMENT)
+	- [ADVANCED CONFIGURATION](#Configuration)
 
 ----------------------------------------------------------------
 
@@ -163,8 +163,8 @@ Post-deployment tasks include **[...]**
 
 ### Post-deployment instructions
 
-1.
-2.
+1. Set Retention time
+2. Configure Always On
 3.
 
 ### Accessing deployed resources
