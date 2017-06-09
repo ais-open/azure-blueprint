@@ -12,6 +12,14 @@
         "keyVaultResourceGroupName": {
             "type": "string"
         },
+        "configureSQLAO": {
+          "type": "string",
+          "defaultValue": "no",
+          "allowedValues": [
+            "yes",
+            "no"
+          ]
+        },
         "certData": {
           "type": "string",
           "metadata": {
@@ -891,6 +899,10 @@
             "sqlwConfigurationFunction": "SQLWBaselineDSC.ps1\\SQLWBaselineDSC",
             "sql0ModulesURL": "[concat(parameters('dscBaseUrl'),'/SQL0BaselineDSC.ps1.zip')]",
             "sql0ConfigurationFunction": "SQL0BaselineDSC.ps1\\SQL0BaselineDSC",
+            "configureSQLAO": {
+              "yes": "[concat(parameters('dscBaseUrl'),'/SQL1BaselineDSC.ps1.zip')]",
+              "no": "[concat(parameters('dscBaseUrl'),'/SQL1BaselineDSCAObypass.ps1.zip')]"
+            },
             "sql1ModulesURL": "[concat(parameters('dscBaseUrl'),'/SQL1BaselineDSC.ps1.zip')]",
             "sql1ConfigurationFunction": "SQL1BaselineDSC.ps1\\SQL1BaselineDSC",
             "webModulesURL": "[concat(parameters('dscBaseUrl'),'/WEBBaselineDSC.ps1.zip')]",
@@ -1554,6 +1566,9 @@
                     },
                     "omsWorkspaceName": {
                         "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "configureSQLAO": {
+                        "value": "[parameters('configureSQLAO')]"
                     }
                 }
             }

@@ -229,7 +229,10 @@
             "type": "string"
         },
         "omsWorkspaceName": {
-            "type":"string"
+            "type": "string"
+        },
+        "configureSQLAO": {
+            "type": "string"
         }
     },
     "variables": {
@@ -1414,7 +1417,7 @@
                         }
                     },
                     "sql1ModulesURL": {
-                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql1ModulesURL]"
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configureSQLAO[parameters('configureSQLAO')]]"
                     },
                     "sql1ConfigurationFunction": {
                         "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql1ConfigurationFunction]"
