@@ -44,6 +44,18 @@
                 "description": "The GUID for the runbook job to be started."
             }
         },
+        "omsWorkspaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "Assign a name for the Log Analytic Workspace Name"
+            }
+        },
+        "omsAutomationAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Assign a name for the Log Analytic Workspace Name"
+            }
+        },
         "recoveryServicesVaultName": {
             "type": "string",
             "metadata": {
@@ -107,12 +119,7 @@
                 "description": "Number of years you want to retain the backup"
             }
         },
-        "omsWorkspaceName": {
-            "type": "string",
-            "metadata": {
-                "description": "Assign a name for the Log Analytic Workspace Name"
-            }
-        },
+
         "omsWorkspaceRegion": {
             "type": "string",
             "defaultValue": "USGov Virginia",
@@ -140,12 +147,6 @@
             "maxValue": 730,
             "metadata": {
                 "description": "Number of days of retention. Free plans can only have 7 days, Standalone and OMS plans include 30 days for free"
-            }
-        },
-        "omsAutomationAccountName": {
-            "type": "string",
-            "metadata": {
-                "description": "Assign a name for the Log Analytic Workspace Name"
             }
         },
         "scheduleName": {
@@ -899,9 +900,13 @@
             "sqlwConfigurationFunction": "SQLWBaselineDSC.ps1\\SQLWBaselineDSC",
             "sql0ModulesURL": "[concat(parameters('dscBaseUrl'),'/SQL0BaselineDSC.ps1.zip')]",
             "sql0ConfigurationFunction": "SQL0BaselineDSC.ps1\\SQL0BaselineDSC",
-            "configureSQLAO": {
+            "configureSQL1AO": {
               "yes": "[concat(parameters('dscBaseUrl'),'/SQL1BaselineDSC.ps1.zip')]",
               "no": "[concat(parameters('dscBaseUrl'),'/SQL1BaselineDSCAObypass.ps1.zip')]"
+            },
+            "configureSQL0AO": {
+              "yes": "[concat(parameters('dscBaseUrl'),'/SQL0BaselineDSC.ps1.zip')]",
+              "no": "[concat(parameters('dscBaseUrl'),'/SQL0BaselineDSCAObypass.ps1.zip')]"
             },
             "sql1ModulesURL": "[concat(parameters('dscBaseUrl'),'/SQL1BaselineDSC.ps1.zip')]",
             "sql1ConfigurationFunction": "SQL1BaselineDSC.ps1\\SQL1BaselineDSC",

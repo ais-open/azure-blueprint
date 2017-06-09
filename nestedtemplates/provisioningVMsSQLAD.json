@@ -1292,7 +1292,7 @@
                         "value": "[parameters('domainName')]"
                     },
                     "sql0ModulesURL": {
-                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql0ModulesURL]"
+                        "value": "[[parameters('prepareAlwaysOnSQLInfo').artifacts.configureSQL0AO[parameters('configureSQLAO')]]"
                     },
                     "sql0ConfigurationFunction": {
                         "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql0ConfigurationFunction]"
@@ -1417,7 +1417,7 @@
                         }
                     },
                     "sql1ModulesURL": {
-                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configureSQLAO[parameters('configureSQLAO')]]"
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configureSQL1AO[parameters('configureSQLAO')]]"
                     },
                     "sql1ConfigurationFunction": {
                         "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql1ConfigurationFunction]"

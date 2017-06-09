@@ -157,6 +157,10 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 
 * **Job Scheduler GUID**: The GUID for the runbook job to be started (use New-GUID in Powershell)
 
+* **OMS Workspace Name**: Assign a name for the Log Analytic Workspace Name
+
+* **OMS Automation Account Name**: Assign a name for the automation account used with OMS
+
 ### Deployment instructions
 
 1. Click [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdavoodharun%2Fazure-blueprint%2Fsqlbypass%2Fazuredeploy.json)
