@@ -891,6 +891,8 @@
             "configuringBackupADVMURL": "[concat(parameters('templatesBaseUrl'),'/configuringBackupADVM.json')]",
             "preparingAlwaysOnSqlServerURL": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServer.json')]",
             "configuringAlwaysOnURL": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOn.json')]",
+            "preparingAlwaysOnSqlServerURLAObypass": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServerAObypass.json')]",
+            "configuringAlwaysOnURLAObypass": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOnAObypass.json')]",
             "provisioningOMSMonitoringUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningOMSMonitoring.json') ]",
             "pdcModulesURL": "[concat(parameters('dscBaseUrl'),'/PDCBaselineDSC.ps1.zip')]",
             "pdcConfigurationFunction": "PDCBaselineDSC.ps1\\PDCBaselineDSC",
@@ -900,14 +902,6 @@
             "sqlwConfigurationFunction": "SQLWBaselineDSC.ps1\\SQLWBaselineDSC",
             "sql0ModulesURL": "[concat(parameters('dscBaseUrl'),'/SQL0BaselineDSC.ps1.zip')]",
             "sql0ConfigurationFunction": "SQL0BaselineDSC.ps1\\SQL0BaselineDSC",
-            "configureSQL1AO": {
-              "yes": "[concat(parameters('dscBaseUrl'),'/SQL1BaselineDSC.ps1.zip')]",
-              "no": "[concat(parameters('dscBaseUrl'),'/SQL1BaselineDSCAObypass.ps1.zip')]"
-            },
-            "configureSQL0AO": {
-              "yes": "[concat(parameters('dscBaseUrl'),'/SQL0BaselineDSC.ps1.zip')]",
-              "no": "[concat(parameters('dscBaseUrl'),'/SQL0BaselineDSCAObypass.ps1.zip')]"
-            },
             "sql1ModulesURL": "[concat(parameters('dscBaseUrl'),'/SQL1BaselineDSC.ps1.zip')]",
             "sql1ConfigurationFunction": "SQL1BaselineDSC.ps1\\SQL1BaselineDSC",
             "webModulesURL": "[concat(parameters('dscBaseUrl'),'/WEBBaselineDSC.ps1.zip')]",

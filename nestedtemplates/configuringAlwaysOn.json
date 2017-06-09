@@ -17,6 +17,9 @@
         "domainName": {
             "type": "string"
         },
+        "domainJoinUserName": {
+            "type": "string"
+        },
         "sqlAOEPName": {
             "type": "string"
         },

@@ -262,6 +262,14 @@
                     "Name": "[concat(parameters('sqlVMName'),'1')]"
                 }
             ]
+        },
+        "configuringAlwaysOnURL": {
+          "yes": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURL]",
+          "no": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURLAObypass]"
+        },
+        "preparingAlwaysOnSqlServerURL": {
+          "yes": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURL]",
+          "no": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURLAObypass]"
         }
     },
     "resources": [{
@@ -1267,7 +1275,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURL]",
+                    "uri": "[variables('preparingAlwaysOnSqlServerURL')[parameters('configureSQLAO')]]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -1291,8 +1299,11 @@
                     "domainName": {
                         "value": "[parameters('domainName')]"
                     },
+                    "domainJoinUserName": {
+                        "value":"[variables('domainJoinUserName')]"
+                    },
                     "sql0ModulesURL": {
-                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configureSQL0AO[parameters('configureSQLAO')]]"
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql0ModulesURL]"
                     },
                     "sql0ConfigurationFunction": {
                         "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql0ConfigurationFunction]"
@@ -1378,7 +1389,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configuringAlwaysOnURL]",
+                    "uri": "[variables('configuringAlwaysOnURL')[parameters('configureSQLAO')]]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -1402,6 +1413,9 @@
                     "domainName": {
                         "value": "[parameters('domainName')]"
                     },
+                    "domainJoinUserName": {
+                        "value":"[variables('domainJoinUserName')]"
+                    },
                     "sqlAOEPName": {
                         "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sqlAOEPName]"
                     },
@@ -1417,7 +1431,7 @@
                         }
                     },
                     "sql1ModulesURL": {
-                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configureSQL1AO[parameters('configureSQLAO')]]"
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql1ModulesURL]"
                     },
                     "sql1ConfigurationFunction": {
                         "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql1ConfigurationFunction]"
