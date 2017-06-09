@@ -15,8 +15,8 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 
 	##### READ MORE ABOUT:
 
-	- [SOLUTION ARCHITECTURE](#Architecture)
-	- [PRE-DEPLOYMENT STEPS](#PRE-DEPLOYMENT)
+	- [SOLUTION ARCHITECTURE](#architecture)
+	- [PRE-DEPLOYMENT STEPS](#pre-deployment)
 	- [DEPLOYMENT STEPS](#DEPLOYMENT)
 	- [DEPLOYMENT PARAMS](#Azure Resource Manager template deployment)
 	- [POST-DEPLOYMENT STEPS](#POST-DEPLOYMENT)
@@ -123,7 +123,7 @@ The pre-deployment PowerShell script will verify that a supported version of Pow
 
 During this phase, an Azure Resource Manger (ARM) template will deploy Azure resources to your subscription and perform configuration activities.
 
-#### Azure Resource Manager template deployment
+### Azure Resource Manager template deployment
 
 After clicking the Deploy to Azure Gov button, the Azure portal will open and prompt for the following settings:
 
