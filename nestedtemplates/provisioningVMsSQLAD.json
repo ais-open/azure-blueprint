@@ -1292,7 +1292,7 @@
                         "value": "[parameters('domainName')]"
                     },
                     "sql0ModulesURL": {
-                        "value": "[[parameters('prepareAlwaysOnSQLInfo').artifacts.configureSQL0AO[parameters('configureSQLAO')]]"
+                        "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configureSQL0AO[parameters('configureSQLAO')]]"
                     },
                     "sql0ConfigurationFunction": {
                         "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql0ConfigurationFunction]"

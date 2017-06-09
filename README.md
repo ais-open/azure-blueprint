@@ -3,93 +3,73 @@
 
 This Azure Blueprint solution automatically deploys a multi-tier web application architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. The solution consists of Azure Resource Manager (ARM) templates and PowerShell scripts that guide resource deployment and configuration. An accompanying Blueprint compliance matrix is provided, showing security control inheritance from Azure and where deployed resources and configurations align with NIST SP 800-53 security controls, thereby enabling organizations to fast-track compliance obligations.
 
+#### Quickstart
+1. Clone repository
+2. Run azure-blueprint/predeploy/Orchestration_InitialSetup.ps1
+	- This script will create a resource group with a keyvault -- remember the names that you choose for these items because you will need them in the next step.
+3. Click the button below
+
+	[![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdavoodharun%2Fazure-blueprint%2Fsqlbypass%2Fazuredeploy.json)
+
+	\** You will need an SSL cert (.pfx) in 64bit encoded form along with its password before you can deploy to your Azure subscription
+
+	##### READ MORE ABOUT:
+
+	- [SOLUTION ARCHITECTURE](## Architecture)
+	- [PRE-DEPLOYMENT STEPS](## PRE-DEPLOYMENT)
+	- [DEPLOYMENT STEPS](## DEPLOYMENT)
+	- [DEPLOYMENT PARAMS](#### Azure Resource Manager template deployment)
+	- [POST-DEPLOYMENT STEPS](## POST-DEPLOYMENT)
+	- [ADVANCED CONFIGURATION](## Configuration)
+
+----------------------------------------------------------------
+
 ## Architecture
 
 This solution deploys a notional architecture for a web application with a database backend. The architecture includes a web tier, data tier, Active Directory infrastructure, application gateway and load balancer. Virtual machines deployed to the web and data tiers are configured in an availability set and SQL Servers are configured in an Always On availability group for high availability. A management jumpbox (bastion host) provides a secure connection for administrators to access deployed resources.
 
 
 ![alt text](docs/n-tier-diagram.png?raw=true "Azure Blueprint FedRAMP three-tier web-based application compliance architecture")
-**[AIS to update]**
 
 The architecture includes the following Azure products:
-* Virtual Machines
+* **Virtual Machines**
 	- (1) Management/Bastion (Windows Server 2016 Datacenter)
 	- (2) Active Directory Domain Controller (Windows Server 2016 Datacenter)
 	- (2) SQL Server Cluster Node (Windows Server 2012 R2)
 	- (1) SQL Server Witness (Windows Server 2016 Datacenter)
 	- (2) Web/IIS (Windows Server 2016 Datacenter)
-* AvailabilitySets
+* **AvailabilitySets**
 	- (1) Active Directory Domain Controllers
 	- (1) SQL Cluster Nodes and Witness
-* Virtual Network
+* **Virtual Network**
 	- (1) /16 VNet
 	- (5) /24 Subnets
 	- DNS Settings are set to both Domain Controllers
-* Load Balancer
+* **Load Balancer**
 	- (1) SQL Loadbalancer
-* Application Gateway
+* **Application Gateway**
 	- (1) WAF Application Gateway
 	-- Enabled
 	-- Firewall Mode: Prevention
 	-- Rule set: OWASP 3.0
 	-- Listener: Port 443
-* Storage
-* Backup
-* Key Vault
+* **Storage**
+* **Backup**
+* **Key Vault**
 	- (1) keyVault
 	-- (3) Access Policies (user, AADServicePrincipal, BackupFairFax)
 	-- (7) Secrets (aadClientID, aadClientSecret, adminPassword, azurePassword, azureUserName, keyEncryptionKeyURL, sqlServerServiceAccountPassword)
-* Azure Active Directory
-* Azure Resource Manager
-* Application Insights
-* Log Analytics
-* Automation
+* **Azure Active Directory**
+* **Azure Resource Manager**
+* **Application Insights**
+* **Log Analytics**
+* **Automation**
 	- (1) Automation Account
-* Scheduler
-* Operations Management Suite
+* **Scheduler**
+* **Operations Management Suite**
 	- (1) OMS Workspace
 
-## PRE-DEPLOYMENT
-
-During pre-deployment you will confirm that your Azure subscription and local workstation are prepared to deploy the solution. The final pre-deployment step will run a PowerShell script that verifies setup requirements, gathers parameters and credentials, and creates resources in Azure to prepare for deployment.
-
-### Azure subscription requirements
-
-This Azure Blueprint solution is designed to deploy to Azure Government regions. The solution does not currently support Azure commercial regions. Customers must have a paid Azure Government subscription or sponsored account to deploy this solution.
-
-The Azure Active Directory administrator with global privileges is required to deploy this solution.
-
-**[Are there any other steps that need to occur within the subscription to be able to deploy?]**
-
-### Local workstation requirements
-
-PowerShell is used to initiate pre-deployment, deployment, and post-deployment tasks. PowerShell version **[X.X]** or greater must be installed on your local workstation. In PowerShell, you can use the following command to check the version:
-
-`$PSVerstionTable.psversion`
-
-The PowerShell pre-deployment task includes installation of Azure PowerShell modules, so PowerShell must be run in administrator mode.
-
-### Pre-deployment script
-
-The pre-deployment PowerShell script will verify that a supported version of PowerShell is installed, that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters:
-
-**[For any other parameters that the customer needs to look up (e.g., subscription ID), provide instructions to find]**
-
-The architecture includes the following Azure products:
-* Virtual Machines (2 SQL IAAS, 1 Fileshare witness, x amount of WEB VMs, 2 Domain Controllers, 1 MGT/Bastion Host)
-* Virtual Network
-* Load Balancer (SQL Load Balancer)
-* Application Gateway
-* Storage Accounts
-* Backup
-* Key Vault
-* Azure Active Directory
-* Azure Resource Manager
-* Application Insights
-* Log Analytics
-* Automation
-* Scheduler
-* Operations Management Suite
+---------------------------------------------------------------
 
 ## PRE-DEPLOYMENT
 
@@ -137,11 +117,13 @@ The pre-deployment PowerShell script will verify that a supported version of Pow
 3. Run Orchestration_InitialSetup.ps1
 4. Enter the parameters above when prompted
 
+------------------------------------------------------------------------
+
 ## DEPLOYMENT
 
 During this phase, an Azure Resource Manger (ARM) template will deploy Azure resources to your subscription and perform configuration activities.
 
-#### Azure Resource Manager (ARM) template deployment
+#### Azure Resource Manager template deployment
 
 After clicking the Deploy to Azure Gov button, the Azure portal will open and prompt for the following settings:
 
@@ -163,9 +145,11 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 
 ### Deployment instructions
 
-1. Click [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdavoodharun%2Fazure-blueprint%2Fsqlbypass%2Fazuredeploy.json)
-2. Enter the settings above
-3. Review the terms and conditions, then click **I agree to the terms and conditions stated above**.
+1. Click the button below.
+
+	[![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdavoodharun%2Fazure-blueprint%2Fsqlbypass%2Fazuredeploy.json)
+2. Enter the settings from above.
+3. Review the terms and conditions and click **I agree to the terms and conditions stated above**.
 4. Click **Purchase**.
 
 ### Monitoring deployment status
