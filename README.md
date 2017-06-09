@@ -32,7 +32,7 @@ The architecture includes the following Azure products:
 	-- Enabled
 	-- Firewall Mode: Prevention
 	-- Rule set: OWASP 3.0
-	-- Listener: Port 80
+	-- Listener: Port 443
 * Storage
 * Backup
 * Key Vault
@@ -55,9 +55,9 @@ During pre-deployment you will confirm that your Azure subscription and local wo
 
 ### Azure subscription requirements
 
-This Azure Blueprint solution is designed to deploy to Azure Government regions. The solution does not currently support Azure commercial regions. Customers must have a paid Azure Government subscription or sponsored account to deploy this solution. **[need to confirm]**
+This Azure Blueprint solution is designed to deploy to Azure Government regions. The solution does not currently support Azure commercial regions. Customers must have a paid Azure Government subscription or sponsored account to deploy this solution.
 
-The Azure Active Directory administrator with global privileges is required to deploy this solution. **[need to confirm]**
+The Azure Active Directory administrator with global privileges is required to deploy this solution.
 
 **[Are there any other steps that need to occur within the subscription to be able to deploy?]**
 
@@ -95,11 +95,11 @@ The architecture includes the following Azure products:
 
 During pre-deployment you will confirm that your Azure subscription and local workstation are prepared to deploy the solution. The final pre-deployment step will run a PowerShell script that verifies setup requirements, gathers parameters and credentials, and creates resources in Azure to prepare for deployment.
 
-#### Azure subscription requirements
+### Azure subscription requirements
 
 This Azure Blueprint solution is designed to deploy to Azure Government regions. The solution does not currently support Azure commercial regions. Customers must have a paid Azure Government subscription or sponsored account to deploy this solution.
 
-#### Local workstation requirements
+### Local workstation requirements
 
 PowerShell is used to initiate pre-deployment, deployment, and post-deployment tasks. PowerShell version **[5.0]** or greater must be installed on your local workstation. In PowerShell, you can use the following command to check the version:
 
@@ -143,35 +143,31 @@ During this phase, an Azure Resource Manger (ARM) template will deploy Azure res
 
 #### Azure Resource Manager (ARM) template deployment
 
-**[Description of how the deployment works, ARM, PowerShell scripts used...]**
-
 After clicking the Deploy to Azure Gov button, the Azure portal will open and prompt for the following settings:
-
-**[For settings that the customer needs to look up (e.g., subscription ID), provide instructions to find]**
 
 * **Key Vault Name**: Name of the Key Vault created during pre-deployment
 
-* **Key Vault Resource Gorup Name**: Name of the resource group created during pre-deployment (e.g., blueprint-rg)
+* **Key Vault Resource Group Name**: Name of the resource group created during pre-deployment (e.g., blueprint-rg)
 
 * **Admin Username**: User account name for local VM administrator accounts
+
+* **Cert Data**: Cert 64bit encoded .pfx file for SSL
+
+* **Cert Password**: Password used to create cert for SSL
+
+* **Job Scheduler GUID**: The GUID for the runbook job to be started (use New-GUID in Powershell)
 
 ### Deployment instructions
 
 1. Click [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdavoodharun%2Fazure-blueprint%2Fsqlbypass%2Fazuredeploy.json)
 2. Enter the settings above
-3.
-4.
-5. Review the terms and conditions, then click **I agree to the terms and conditions stated above**.
-6. Click **Purchase**.
+3. Review the terms and conditions, then click **I agree to the terms and conditions stated above**.
+4. Click **Purchase**.
 
 ### Monitoring deployment status
-This solution uses multiple nested templates to deploy and configure the resources shown in the architecture diagram. The full deployment will take approximately **[xx]** minutes. You can monitor the deployment from the Azure portal.
+This solution uses multiple nested templates to deploy and configure the resources shown in the architecture diagram. The full deployment will take approximately **[100]** minutes. You can monitor the deployment from Azure Portal.
 
-[instructions / screen captures]
-
-The full timeline for the deployment is shown below.
-
-**[deployment timeline]**
+See [TIMELINE.md](/docs/Timeline.md).
 
 ## POST-DEPLOYMENT
 
