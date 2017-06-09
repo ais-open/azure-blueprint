@@ -252,7 +252,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "Name": "[parameters('domainName')]",
-                    "User": "[variables('domainJoinUserName')]",
+                    "User": "[parameters('domainJoinUserName')]",
                     "Restart": "true",
                     "Options": 3,
                     "OUPath": ""

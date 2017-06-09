@@ -7,7 +7,7 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 1. Clone repository
 2. Run azure-blueprint/predeploy/Orchestration_InitialSetup.ps1
 	- This script will create a resource group with a keyvault -- remember the names that you choose for these items because you will need them in the next step.
-3. Click the button below
+3. Click the button below, log in to Azure Portal Gov, fill out the parameters, and click "Purchase".
 
 	[![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdavoodharun%2Fazure-blueprint%2Fsqlbypass%2Fazuredeploy.json)
 
@@ -16,9 +16,8 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 	##### READ MORE ABOUT:
 
 	- [Solution Architecture](#architecture)
-	- [Pre-deployment Steps](#pre-deployment)
-		- [Pre-deployment Script Params](#pre-deployment-script)
-	- [Deployment Steps and Parameters](#Deployment)
+	- [Pre-deployment Steps](#pre-deployment) // [Pre-deployment Script Params](#pre-deployment-script)
+	- [Deployment Steps](#Deployment) // [Deployment Parameters](#Deployment)
 	- [Post-deployment Steps](#post-deployment)
 	- [Advanced Configuration](#extending-the-solution-with-advanced-configuration)
 
@@ -30,6 +29,7 @@ This solution deploys a notional architecture for a web application with a datab
 
 
 ![alt text](docs/n-tier-diagram.png?raw=true "Azure Blueprint FedRAMP three-tier web-based application compliance architecture")
+\* Not included in diagram: OMS, Automation Account, Key Vault, Recovery Vaults, Backups
 
 The architecture includes the following Azure products:
 * **Virtual Machines**
@@ -153,17 +153,15 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 ### Monitoring deployment status
 This solution uses multiple nested templates to deploy and configure the resources shown in the architecture diagram. The full deployment will take approximately **[100]** minutes. You can monitor the deployment from Azure Portal.
 
-See [TIMELINE.md](/docs/TIMELINE.md).
+See [TIMELINE.md](/docs/TIMELINE.md) for a resource depenency outline.
 
 ## POST-DEPLOYMENT
 
-Post-deployment tasks include **[...]**
 
 ### Post-deployment instructions
 
-1. Set Retention time
+1. Set Retention time -
 2. Configure Always On
-3.
 
 ### Accessing deployed resources
 
@@ -175,17 +173,20 @@ Post-deployment tasks include **[...]**
 
 Deploying this solution  will create resources within your Azure subscription. You will be responsible for the costs associated with these resources, so it is important that you review the applicable pricing and legal terms associated with all resources and offerings deployed as part of this solution. For cost estimates, you can use the Azure Pricing Calculator.
 
-**[Estimated monthly cost of deployed resources]**
-
 ## Extending the Solution with Advanced Configuration
 
-**[TBD]**
+If you have a basic knowledge of how Azure Resource Manager (ARM) templates work, you can customize the deployment by editing  azuredeploy.json or any of the templates located in the nested templates folder. Some items you might want to edit include but are not limited to :
+- Network Security Group rules (nestedtemplates/virtualNetworkNSG.json)
+- OMS alert rules and configuration (nestedtemplates/provisioningAutoAccOMSWorkspace)
+- Application Gateway routing rules (nestedtemplates/provisioningApplicationGateway.json)
+
+
+ If you do not want to specifically alter the template contents, you can edit the parameters section at the top level of the json object within azuredeploy.json.
 
 ## Troubleshooting
 
 If your deployment should fail, to avoid incurring costs and orphan resources it is advisable to delete the resource group associated with this solution in its entirety, fix the issue, and redeploy the solution. See the section below for instructions to delete all resources deployed by the solution.
 
-**[Common problems; where to obtain support, etc.]**
 
 ### How to delete deployed resources
 
