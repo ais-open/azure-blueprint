@@ -264,8 +264,8 @@
             ]
         },
         "configuringAlwaysOnURL": {
-          "yes": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURL]",
-          "no": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURLAObypass]"
+          "yes": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configuringAlwaysOn]",
+          "no": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configuringAlwaysOnAObypass]"
         },
         "preparingAlwaysOnSqlServerURL": {
           "yes": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURL]",
