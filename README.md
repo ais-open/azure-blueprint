@@ -157,17 +157,14 @@ See [TIMELINE.md](/docs/TIMELINE.md) for a resource depenency outline.
 
 ## POST-DEPLOYMENT
 
-
 ### Post-deployment instructions
 
-1. Set Retention time -
+1. Set Retention time
 2. Configure Always On
 
 ### Accessing deployed resources
 
-**[Instructions to access VMs]**
-
-**[Instructions to view OMS dashboard(s)]**
+You can access your machines through the MGT vm that is created from the deployment. From this VM, you can remote into and access any of the VMs in the network.
 
 ### Cost
 
@@ -187,7 +184,8 @@ If you have a basic knowledge of how Azure Resource Manager (ARM) templates work
 
 If your deployment should fail, to avoid incurring costs and orphan resources it is advisable to delete the resource group associated with this solution in its entirety, fix the issue, and redeploy the solution. See the section below for instructions to delete all resources deployed by the solution.
 
+Please feel free to open and submit a GitHub issue pertaining to the error you are experiencing.
 
 ### How to delete deployed resources
 
-TBD
+To help with deleting protected resources, use postdeploy/deleteProtectedItems.ps1 -- this will specifically help you with removing the delete lock on the resources inside your vault.

@@ -5,17 +5,19 @@ Import-Module AzureRm
 Add-AzureRmAccount -EnvironmentName AzureUSGovernment
 
 
-Select-AzureRmSubscription -SubscriptionId "9876753f-ae2e-46ef-b58a-2ddda6937ea3"
+Select-AzureRmSubscription -SubscriptionId "<enter your azure subscription here>"
 
-$rcvNames = @("AZ-RCV-01")
+$rcvNames = @("<enter the name of the recovery services vault you want to delete")
 
 for($i=0;$i -lt $rcvNames.Length;$i++){
-    $vault = Get-AzureRmRecoveryServicesVault | ?{$_.Name -eq $rcvNames[$i]}
-    Set-AzureRmRecoveryServicesVaultContext -Vault $vault
+    $vaults = Get-AzureRmRecoveryServicesVault | ?{$_.Name -eq $rcvNames[$i]}
+    for($j=0;$j -lt $vaults.Length;$j++){
+      Set-AzureRmRecoveryServicesVaultContext -Vault $vaults[$j]
 
-    $containers = Get-AzureRmRecoveryServicesBackupContainer -ContainerType AzureVM -BackupManagementType AzureVM
-    $containers | %{
-        $item = Get-AzureRmRecoveryServicesBackupItem -Container $_ -WorkloadType AzureVM
-        Disable-AzureRmRecoveryServicesBackupProtection -Item $item -RemoveRecoveryPoints -Force -Verbose
+      $containers = Get-AzureRmRecoveryServicesBackupContainer -ContainerType AzureVM -BackupManagementType AzureVM
+      $containers | %{
+          $item = Get-AzureRmRecoveryServicesBackupItem -Container $_ -WorkloadType AzureVM
+          Disable-AzureRmRecoveryServicesBackupProtection -Item $item -RemoveRecoveryPoints -Force -Verbose
+      }
     }
 }
