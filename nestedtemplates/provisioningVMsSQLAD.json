@@ -227,6 +227,12 @@
         },
         "provisioningHybridworkersUrl": {
             "type": "string"
+        },
+        "omsWorkspaceName": {
+            "type": "string"
+        },
+        "configureSQLAO": {
+            "type": "string"
         }
     },
     "variables": {
@@ -256,6 +262,14 @@
                     "Name": "[concat(parameters('sqlVMName'),'1')]"
                 }
             ]
+        },
+        "configuringAlwaysOnURL": {
+          "yes": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configuringAlwaysOnURL]",
+          "no": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configuringAlwaysOnURLAObypass]"
+        },
+        "preparingAlwaysOnSqlServerURL": {
+          "yes": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURL]",
+          "no": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURLAObypass]"
         }
     },
     "resources": [{
@@ -304,6 +318,24 @@
             }
         },
         {
+          "apiVersion": "2015-11-01-preview",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', parameters('sqlStorageAccountName'))]",
+          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', parameters('sqlStorageAccountName'))]"
+          ],
+          "properties": {
+            "containers": [ ],
+            "tables": [
+
+            ],
+            "storageAccount": {
+              "id": "[resourceId('Microsoft.Storage/storageaccounts/', parameters('sqlStorageAccountName'))]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('sqlStorageAccountName')),'2015-06-15').key1]"
+            }
+          }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('dcStorageAccountName')]",
             "apiVersion": "2016-01-01",
@@ -325,6 +357,24 @@
                     "keySource": "Microsoft.Storage"
                 }
             }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', parameters('dcStorageAccountName'))]",
+          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', parameters('dcStorageAccountName'))]"
+          ],
+          "properties": {
+            "containers": [ ],
+            "tables": [
+
+            ],
+            "storageAccount": {
+              "id": "[resourceId('Microsoft.Storage/storageaccounts/', parameters('dcStorageAccountName'))]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('dcStorageAccountName')),'2015-06-15').key1]"
+            }
+          }
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
@@ -350,6 +400,24 @@
             }
         },
         {
+          "apiVersion": "2015-11-01-preview",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', variables('fswstorageName'))]",
+          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', variables('fswstorageName'))]"
+          ],
+          "properties": {
+            "containers": [ ],
+            "tables": [
+
+            ],
+            "storageAccount": {
+              "id": "[resourceId('Microsoft.Storage/storageaccounts/', variables('fswstorageName'))]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('fswstorageName')),'2015-06-15').key1]"
+            }
+          }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('mgtStorageAccountName')]",
             "apiVersion": "2016-01-01",
@@ -371,6 +439,24 @@
                     "keySource": "Microsoft.Storage"
                 }
             }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', parameters('mgtStorageAccountName'))]",
+          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', parameters('mgtStorageAccountName'))]"
+          ],
+          "properties": {
+            "containers": [ ],
+            "tables": [
+
+            ],
+            "storageAccount": {
+              "id": "[resourceId('Microsoft.Storage/storageaccounts/', parameters('mgtStorageAccountName'))]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('mgtStorageAccountName')),'2015-06-15').key1]"
+            }
+          }
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
@@ -396,6 +482,24 @@
             }
         },
         {
+          "apiVersion": "2015-11-01-preview",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', variables('diagstorageNameSQL'))]",
+          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameSQL'))]"
+          ],
+          "properties": {
+            "containers": [ ],
+            "tables": [
+
+            ],
+            "storageAccount": {
+              "id": "[resourceId('Microsoft.Storage/storageaccounts/', variables('diagstorageNameSQL'))]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('diagstorageNameSQL')),'2015-06-15').key1]"
+            }
+          }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[variables('diagstorageNameDC')]",
             "apiVersion": "2016-01-01",
@@ -417,6 +521,24 @@
                     "keySource": "Microsoft.Storage"
                 }
             }
+        },
+        {
+          "apiVersion": "2015-11-01-preview",
+          "name": "[concat(parameters('omsWorkspaceName'), '/', variables('diagstorageNameDC'))]",
+          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', variables('diagstorageNameDC'))]"
+          ],
+          "properties": {
+            "containers": [ ],
+            "tables": [
+
+            ],
+            "storageAccount": {
+              "id": "[resourceId('Microsoft.Storage/storageaccounts/', variables('diagstorageNameDC'))]",
+              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('diagstorageNameDC')),'2015-06-15').key1]"
+            }
+          }
         },
         {
             "apiVersion": "2016-03-30",
@@ -1153,7 +1275,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURL]",
+                    "uri": "[variables('preparingAlwaysOnSqlServerURL')[parameters('configureSQLAO')]]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -1176,6 +1298,9 @@
                     },
                     "domainName": {
                         "value": "[parameters('domainName')]"
+                    },
+                    "domainJoinUserName": {
+                        "value":"[variables('domainJoinUserName')]"
                     },
                     "sql0ModulesURL": {
                         "value": "[parameters('prepareAlwaysOnSQLInfo').artifacts.sql0ModulesURL]"
@@ -1264,7 +1389,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configuringAlwaysOnURL]",
+                    "uri": "[variables('configuringAlwaysOnURL')[parameters('configureSQLAO')]]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -1287,6 +1412,9 @@
                     },
                     "domainName": {
                         "value": "[parameters('domainName')]"
+                    },
+                    "domainJoinUserName": {
+                        "value":"[variables('domainJoinUserName')]"
                     },
                     "sqlAOEPName": {
                         "value": "[parameters('prepareAlwaysOnSQLInfo').vmSettings.sql.sqlAOEPName]"

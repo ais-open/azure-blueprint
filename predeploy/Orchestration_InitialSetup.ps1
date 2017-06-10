@@ -217,9 +217,4 @@ if (-not (Get-AzureRMKeyVault -VaultName $keyVaultName -ResourceGroupName $resou
 ########################################################################################################################
 #  Displays values that should be used while enabling encryption. Please note these down
 ########################################################################################################################
-    Write-Host "Please note down below aadClientID, aadClientSecret, diskEncryptionKeyVaultUrl, keyVaultResourceId values that will be needed to enable encryption on your VMs " -foregroundcolor Green;
-    Write-Host "`t aadClientID: $aadClientID" -foregroundcolor Green;
-    Write-Host "`t aadClientSecret: $aadClientSecret" -foregroundcolor Green;
-    Write-Host "`t keyEncryptionKeyURL: $keyEncryptionKeyUrl" -foregroundcolor Green;
-    Write-Host "Please Press [Enter] after saving values displayed above. They are needed to enable encryption using Set-AzureRmVmDiskEncryptionExtension cmdlet" -foregroundcolor Green;
-    Read-Host;
+    Write-Host "Please note that you will need to provide the keyVaultId and keyVaultResourceGroupName when deploying your template" -foregroundcolor Green;

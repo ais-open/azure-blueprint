@@ -1,6 +1,6 @@
 
-    
-    
+
+
     param
     (
         [String]$MachineName,
@@ -14,11 +14,11 @@
         [String]$MachinesToSetPasswordPolicy
     )
     Enable-PSRemoting -Force
-
+    $ErrorActionPreference = “SilentlyContinue”
     Write-Host "Check Module exists"
     Install-Packageprovider -Name Nuget -MinimumVersion 2.8.5.201 -Force
-    
-        
+
+
     # Add and update modules on the Automation account
     Write-Output "Importing necessary modules..."
 
@@ -30,7 +30,7 @@
     foreach ($Module in $Modules) {
         $ModuleName = $Module.Name
         # Find the module version
-        if ([string]::IsNullOrEmpty($Module.Version)){            
+        if ([string]::IsNullOrEmpty($Module.Version)){
             # Find the latest module version if a version wasn't provided
             $ModuleVersion = (Find-Module -Name $ModuleName).Version
         } else {
@@ -47,28 +47,28 @@
         }
     }
 
-    Import-Module -Name AzureRM    
+    Import-Module -Name AzureRM
 
     $AzureAuthCreds = New-Object System.Management.Automation.PSCredential -ArgumentList @($AzureUserName,(ConvertTo-SecureString -String $AzurePassword -AsPlainText -Force))
 
 
      $azureEnv = Get-AzureRmEnvironment -Name $EnvironmentName
-     Login-AzureRmAccount -Environment $azureEnv -Credential $AzureAuthCreds    
+     Login-AzureRmAccount -Environment $azureEnv -Credential $AzureAuthCreds
 
     if($SubscriptionId)
     {
         Select-AzureRmSubscription -SubscriptionId $SubscriptionId;
-    }      
+    }
 
     ########################################################################################################################
     # Add Hybrid Worker Group If not exist
     ########################################################################################################################
     try{
-                        
+
         $i = 18
 
         do {
-                            
+
             # Check for the MMA folders
             try {
                 # Change the directory to the location of the hybrid registration module
@@ -98,16 +98,16 @@
 
         $Account = Get-AzureRmAutomationAccount -ResourceGroupName  $ResourceGroupName -Name  $AutomationAccountName
         $RegistrationInfo = $Account | Get-AzureRmAutomationRegistrationInfo
-        $endPointUrl = $RegistrationInfo.EndPoint  
+        $endPointUrl = $RegistrationInfo.EndPoint
         $token = $RegistrationInfo.PrimaryKey
         $_id = New-Guid
-        $runBookName = $MachineName + "_" + $_id                    
+        $runBookName = $MachineName + "_" + $_id
         Add-HybridRunbookWorker -Name $runBookName -EndPoint $endPointUrl -Token $token
     }
     catch{
         #don nothing is group exists
     }
-                    
+
     ########################################################################################################################
     # Section2:  Get Hybrid Worker Group Name
     ########################################################################################################################
@@ -125,9 +125,9 @@
                 if ($HybridWorkerGroups -ne ""){
                     #write-host "Hybrid Workers Provisioned!"
                     return
-                }                    
+                }
                 start-sleep -seconds 5
-            }                    
+            }
             #"Timed out"
         }
 
@@ -137,7 +137,7 @@
             $computerIdList = $computerIdList + $worker.name + "=Windows;"
         }
 
-        if($computerIdList -ne "" -and $computerIdList -match '.+?;$'){   
+        if($computerIdList -ne "" -and $computerIdList -match '.+?;$'){
             # Remove the last Character
             $computerIdList = $computerIdList.Substring(0,$computerIdList.Length-1)
         }
@@ -148,15 +148,15 @@
         $VariableName = "ComputerIdList"
 
         if(-not (Get-AzureRmAutomationVariable -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName | Where-Object { $_.Name -eq $VariableName } ) ){
-                            
+
             New-AzureRmAutomationVariable -Name $VariableName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Encrypted $false -Value $computerIdList
         }
-        else{                    
+        else{
             Set-AzureRmAutomationVariable -Name $VariableName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Encrypted $false -Value $computerIdList
-        } 
+        }
     }
     catch{
-                        
+
     }
 
 
@@ -165,7 +165,7 @@
 
     Configuration SetHybridWorderList
     {
-        
+
         param
         (
         [String]$MachineName,
@@ -181,10 +181,10 @@
         )
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-Module -Name AzureRM    
+        Import-Module -Name AzureRM
 
         Node $MachineName
-        {    
+        {
             WindowsFeature PSWA
             {
                 Name = 'WindowsPowerShellWebAccess'
@@ -212,7 +212,7 @@
             SetScript = {
                 Set-AppLockerPolicy -XMLPolicy 'C:\windows\temp\polApplocker.xml'
             }
-            TestScript = { 
+            TestScript = {
                 if(
                 Compare-Object -ReferenceObject  ([xml](Get-AppLockerPolicy -Effective -Xml)).InnerXML `
                                -DifferenceObject ([xml](Get-Content 'C:\windows\temp\polApplocker.xml')).InnerXml
@@ -228,7 +228,7 @@
             DestinationPath = 'C:\windows\temp\polApplocker.xml'
             Ensure = 'Present';
             Force = $true
-            Contents = @'        
+            Contents = @'
 <AppLockerPolicy Version="1">
   <RuleCollection Type="Appx" EnforcementMode="Enabled" />
   <RuleCollection Type="Dll" EnforcementMode="NotConfigured" />
@@ -318,7 +318,8 @@
 
 try{
     # Set Password Policy
-    if($MachinesToSetPasswordPolicy -ne ""){
+
+    if([string]::IsNullOrWhiteSpace($MachinesToSetPasswordPolicy)){
         $adMachineArray = $MachinesToSetPasswordPolicy.Split(";")
         $index = $adMachineArray.IndexOf($MachineName)
         if($index -gt -1){
@@ -346,30 +347,26 @@ catch{
 SetHybridWorderList -MachineName $MachineName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -AzureAuthCreds $AzureAuthCreds -SubscriptionId $SubscriptionId -EnvironmentName $EnvironmentName -ConfigurationData $ConfigData -Verbose
 Start-DscConfiguration -Wait -Force -Path .\SetHybridWorderList -Verbose
 
-# Temp Fix OMS Cloud Monitoring Connection Issue
+ Temp Fix OMS Cloud Monitoring Connection Issue
 try{
     $cloudMonitoring =Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Status
-    $status = $cloudMonitoring.ProvisioningState    
+    $status = $cloudMonitoring.ProvisioningState
 
-    if($status -eq "Failed"){
-        Remove-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Force        
+    $Workspace = Get-AzureRmOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName  -ErrorAction Stop
+    $OmsLocation = $Workspace.Location
+     Get the workspace ID
+    $WorkspaceId = $Workspace.CustomerId
 
-        $Workspace = Get-AzureRmOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName  -ErrorAction Stop
-        $OmsLocation = $Workspace.Location
-        # Get the workspace ID
-        $WorkspaceId = $Workspace.CustomerId
+     Get the primary key for the OMS workspace
+    $WorkspaceSharedKeys = Get-AzureRmOperationalInsightsWorkspaceSharedKeys -ResourceGroupName $ResourceGroupName -Name $WorkspaceName
+    $WorkspaceKey = $WorkspaceSharedKeys.PrimarySharedKey
 
-        # Get the primary key for the OMS workspace
-        $WorkspaceSharedKeys = Get-AzureRmOperationalInsightsWorkspaceSharedKeys -ResourceGroupName $ResourceGroupName -Name $WorkspaceName
-        $WorkspaceKey = $WorkspaceSharedKeys.PrimarySharedKey
+    $PublicSettings = @{"workspaceId" = $WorkspaceId }
+    $ProtectedSettings = @{"workspaceKey" = $WorkspaceKey}
 
-        $PublicSettings = @{"workspaceId" = $WorkspaceId }
-        $ProtectedSettings = @{"workspaceKey" = $WorkspaceKey}
+    Set-AzureRmVMExtension -ExtensionName "EnterpriseCloudMonitoring" -ResourceGroupName $ResourceGroupName -VMName $MachineName -Publisher "Microsoft.EnterpriseCloud.Monitoring" -ExtensionType "MicrosoftMonitoringAgent" -TypeHandlerVersion 1.0 -Settings $PublicSettings -ProtectedSettings $ProtectedSettings -Location $OmsLocation
 
-        Set-AzureRmVMExtension -ExtensionName "EnterpriseCloudMonitoring" -ResourceGroupName $ResourceGroupName -VMName $MachineName -Publisher "Microsoft.EnterpriseCloud.Monitoring" -ExtensionType "MicrosoftMonitoringAgent" -TypeHandlerVersion 1.0 -Settings $PublicSettings -ProtectedSettings $ProtectedSettings -Location $OmsLocation
-    }
 }
 catch{
 
 }
-

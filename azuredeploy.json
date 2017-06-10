@@ -6,11 +6,55 @@
             "type": "string",
             "defaultValue": "AzureUSGovernment"
         },
+        "adminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the Administrator of the new VMs and Domain"
+            }
+        },
         "keyVaultName": {
             "type": "string"
         },
         "keyVaultResourceGroupName": {
             "type": "string"
+        },
+        "configureSQLAO": {
+          "type": "string",
+          "defaultValue": "no",
+          "allowedValues": [
+            "yes",
+            "no"
+          ]
+        },
+        "certData": {
+          "type": "string",
+          "metadata": {
+            "description": "Cert 64bit encoded .pfx file for SSL"
+          }
+        },
+        "certPassword": {
+          "type": "securestring",
+          "metadata": {
+            "description": "Cert 64bit encoded .pfx file for SSL"
+          }
+        },
+        "scheduleJobGuid": {
+            "type": "string",
+            "metadata": {
+                "description": "The GUID for the runbook job to be started."
+            }
+        },
+        "omsWorkspaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "Assign a name for the Log Analytic Workspace Name"
+            }
+        },
+        "omsAutomationAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Assign a name for the Log Analytic Workspace Name"
+            }
         },
         "recoveryServicesVaultName": {
             "type": "string",
@@ -75,12 +119,7 @@
                 "description": "Number of years you want to retain the backup"
             }
         },
-        "omsWorkspaceName": {
-            "type": "string",
-            "metadata": {
-                "description": "Assign a name for the Log Analytic Workspace Name"
-            }
-        },
+
         "omsWorkspaceRegion": {
             "type": "string",
             "defaultValue": "USGov Virginia",
@@ -96,7 +135,7 @@
                 "Standalone",
                 "PerNode"
             ],
-            "defaultValue": "Free",
+            "defaultValue": "PerNode",
             "metadata": {
                 "description": "Service Tier: Free, Standalone, or PerNode"
             }
@@ -110,21 +149,9 @@
                 "description": "Number of days of retention. Free plans can only have 7 days, Standalone and OMS plans include 30 days for free"
             }
         },
-        "omsAutomationAccountName": {
-            "type": "string",
-            "metadata": {
-                "description": "Assign a name for the Log Analytic Workspace Name"
-            }
-        },
         "scheduleName": {
             "type": "string",
             "defaultValue": "VM-Patching-Schedule"
-        },
-        "scheduleJobGuid": {
-            "type": "string",
-            "metadata": {
-                "description": "The GUID for the runbook job to be started."
-            }
         },
         "exclusionPathWeb": {
             "type": "array",
@@ -228,12 +255,6 @@
         "disableRealtimeMonitoring": {
             "type": "bool",
             "defaultValue": false
-        },
-        "adminUsername": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the Administrator of the new VMs and Domain"
-            }
         },
         "environmentPrefix": {
             "type": "string",
@@ -652,14 +673,14 @@
             "metadata": {
                 "description": "Linked Templates base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/nestedtemplates"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/nestedtemplates"
         },
         "dscBaseUrl": {
             "type": "string",
             "metadata": {
                 "description": "DSC Scripts base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/DSC"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/DSC"
         },
         "scriptsBaseUrl": {
             "type": "string",
@@ -667,7 +688,7 @@
                 "description": "DSC Scripts base url"
             },
 
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/testing/postdeploy"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/postdeploy"
         },
         "sqlServerVersion": {
             "type": "string",
@@ -870,6 +891,8 @@
             "configuringBackupADVMURL": "[concat(parameters('templatesBaseUrl'),'/configuringBackupADVM.json')]",
             "preparingAlwaysOnSqlServerURL": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServer.json')]",
             "configuringAlwaysOnURL": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOn.json')]",
+            "preparingAlwaysOnSqlServerURLAObypass": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServerAObypass.json')]",
+            "configuringAlwaysOnURLAObypass": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOnAObypass.json')]",
             "provisioningOMSMonitoringUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningOMSMonitoring.json') ]",
             "pdcModulesURL": "[concat(parameters('dscBaseUrl'),'/PDCBaselineDSC.ps1.zip')]",
             "pdcConfigurationFunction": "PDCBaselineDSC.ps1\\PDCBaselineDSC",
@@ -1187,7 +1210,13 @@
                     },
                     "wafRuleSetVersion": {
                         "value": "[variables('wafSettings').wafRuleSetVersion]"
-                    }
+                    },
+                    "certData": {
+                      "value":"[parameters('certData')]"
+                    },
+                    "certPassword": {
+                      "value":"[parameters('certPassword')]"
+                    },
                 }
             }
         },
@@ -1533,6 +1562,12 @@
                     },
                     "provisioningHybridworkersUrl": {
                         "value": "[variables('artifacts').provisioningHybridworkerUrl]"
+                    },
+                    "omsWorkspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "configureSQLAO": {
+                        "value": "[parameters('configureSQLAO')]"
                     }
                 }
             }
@@ -1664,6 +1699,9 @@
                     },
                     "provisioningHybridworkersUrl": {
                         "value": "[variables('artifacts').provisioningHybridworkerUrl]"
+                    },
+                    "omsWorkspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
                     }
                 }
             }
@@ -1790,13 +1828,76 @@
                 }
             }
         },
+        /*{
+            "name": "[concat('CustomScriptExtensionWEB-', variables('resourceNames').vms.web, copyindex())]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "monitorVMLoopWEB"
+            ],
+            "copy": {
+                "name": "CustomScriptExtensionLoopWEB",
+                "count": "[variables('numberOfWebInstances')]"
+            },
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningcustomScriptExtensionUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[concat(variables('resourceNames').vms.web, copyindex())]"
+                    },
+                    "workspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "AutomationAccountName": {
+                        "value": "[parameters('omsAutomationAccountName')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
+                    },
+                    "AzureUserName": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azureUserName"
+                        }
+                    },
+                    "AzurePassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azurePassword"
+                        }
+                    },
+                    "SubscriptionId": {
+                        "value": "[subscription().subscriptionId]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[resourceGroup().name]"
+                    },
+                    "postDeployScriptUris": {
+                        "value": "[variables('artifacts').postDeployScriptUris]"
+                    },
+                    "MachinesToSetPasswordPolicy": {
+                        "value": ""
+                    }
+                }
+            }
+        },*/
         {
             "name": "ConfigurationAutomationSchedules",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
                 "monitorVMLoopSQLAD",
-                "monitorVMLoopWEB"
+                "monitorVMLoopWEB",
+                //"CustomScriptExtensionLoopWEB",
+                //"CustomScriptExtensionLoopSQLAD"
             ],
             "properties": {
                 "mode": "Incremental",

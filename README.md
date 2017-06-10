@@ -2,50 +2,72 @@
 
 This Azure Blueprint solution automatically deploys a multi-tier web application architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. The solution consists of Azure Resource Manager (ARM) templates and PowerShell scripts that guide resource deployment and configuration. An accompanying Blueprint compliance matrix is provided, showing security control inheritance from Azure and where deployed resources and configurations align with NIST SP 800-53 security controls, thereby enabling organizations to fast-track compliance obligations.
 
+#### Quickstart
+1. Clone repository
+2. Run azure-blueprint/predeploy/Orchestration_InitialSetup.ps1
+	- This script will create a resource group with a keyvault -- remember the names that you choose for these items because you will need them in the next step.
+3. Click the button below, log in to Azure Portal Gov, fill out the parameters, and click "Purchase".
+
+	[![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdavoodharun%2Fazure-blueprint%2Fsqlbypass%2Fazuredeploy.json)
+
+	\** You will need an SSL cert (.pfx) in 64bit encoded form along with its password before you can deploy to your Azure subscription
+
+	##### READ MORE ABOUT:
+
+	- [Solution Architecture](#architecture)
+	- [Pre-deployment Steps](#pre-deployment) // [Pre-deployment Script Params](#pre-deployment-script)
+	- [Deployment Steps](#Deployment) // [Deployment Parameters](#Deployment)
+	- [Post-deployment Steps](#post-deployment)
+	- [Advanced Configuration](#extending-the-solution-with-advanced-configuration)
+
+----------------------------------------------------------------
+
 ## Architecture
 
 This solution deploys a notional architecture for a web application with a database backend. The architecture includes a web tier, data tier, Active Directory infrastructure, application gateway and load balancer. Virtual machines deployed to the web and data tiers are configured in an availability set and SQL Servers are configured in an Always On availability group for high availability. A management jumpbox (bastion host) provides a secure connection for administrators to access deployed resources.
 
 ![alt text](docs/n-tier-diagram.png?raw=true "Azure Blueprint FedRAMP three-tier web-based application compliance architecture")
-**[AIS to update]**
+\* Not included in diagram: OMS, Automation Account, Key Vault, Recovery Vaults, Backups
 
 The architecture includes the following Azure products:
-* Virtual Machines
+* **Virtual Machines**
 	- (1) Management/Bastion (Windows Server 2016 Datacenter)
 	- (2) Active Directory Domain Controller (Windows Server 2016 Datacenter)
 	- (2) SQL Server Cluster Node (Windows Server 2012 R2)
 	- (1) SQL Server Witness (Windows Server 2016 Datacenter)
 	- (2) Web/IIS (Windows Server 2016 Datacenter)
-* AvailabilitySets
+* **AvailabilitySets**
 	- (1) Active Directory Domain Controllers
 	- (1) SQL Cluster Nodes and Witness
-* Virtual Network
+* **Virtual Network**
 	- (1) /16 VNet
 	- (5) /24 Subnets
 	- DNS Settings are set to both Domain Controllers
-* Load Balancer
+* **Load Balancer**
 	- (1) SQL Loadbalancer
-* Application Gateway
+* **Application Gateway**
 	- (1) WAF Application Gateway
 	-- Enabled
 	-- Firewall Mode: Prevention
 	-- Rule set: OWASP 3.0
-	-- Listener: Port 80
-* Storage
-* Backup
-* Key Vault
+	-- Listener: Port 443
+* **Storage**
+* **Backup**
+* **Key Vault**
 	- (1) keyVault
 	-- (3) Access Policies (user, AADServicePrincipal, BackupFairFax)
 	-- (7) Secrets (aadClientID, aadClientSecret, adminPassword, azurePassword, azureUserName, keyEncryptionKeyURL, sqlServerServiceAccountPassword)
-* Azure Active Directory
-* Azure Resource Manager
-* Application Insights
-* Log Analytics
-* Automation
+* **Azure Active Directory**
+* **Azure Resource Manager**
+* **Application Insights**
+* **Log Analytics**
+* **Automation**
 	- (1) Automation Account
-* Scheduler
-* Operations Management Suite
+* **Scheduler**
+* **Operations Management Suite**
 	- (1) OMS Workspace
+
+---------------------------------------------------------------
 
 ## PRE-DEPLOYMENT
 
@@ -53,51 +75,9 @@ During pre-deployment you will confirm that your Azure subscription and local wo
 
 ### Azure subscription requirements
 
-This Azure Blueprint solution is designed to deploy to Azure Government regions. The solution does not currently support Azure commercial regions. Customers must have a paid Azure Government subscription or sponsored account to deploy this solution. **[need to confirm]**
-
-The Azure Active Directory administrator with global privileges is required to deploy this solution. **[need to confirm]**
-
-**[Are there any other steps that need to occur within the subscription to be able to deploy?]**
-
-### Local workstation requirements
-
-PowerShell is used to initiate pre-deployment, deployment, and post-deployment tasks. PowerShell version **[X.X]** or greater must be installed on your local workstation. In PowerShell, you can use the following command to check the version:
-
-`$PSVerstionTable.psversion`
-
-The PowerShell pre-deployment task includes installation of Azure PowerShell modules, so PowerShell must be run in administrator mode.
-
-### Pre-deployment script
-
-The pre-deployment PowerShell script will verify that a supported version of PowerShell is installed, that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters:
-
-**[For any other parameters that the customer needs to look up (e.g., subscription ID), provide instructions to find]**
-
-The architecture includes the following Azure products:
-* Virtual Machines (2 SQL IAAS, 1 Fileshare witness, x amount of WEB VMs, 2 Domain Controllers, 1 MGT/Bastion Host)
-* Virtual Network
-* Load Balancer (SQL Load Balancer)
-* Application Gateway
-* Storage Accounts
-* Backup
-* Key Vault
-* Azure Active Directory
-* Azure Resource Manager
-* Application Insights
-* Log Analytics
-* Automation
-* Scheduler
-* Operations Management Suite
-
-## PRE-DEPLOYMENT
-
-During pre-deployment you will confirm that your Azure subscription and local workstation are prepared to deploy the solution. The final pre-deployment step will run a PowerShell script that verifies setup requirements, gathers parameters and credentials, and creates resources in Azure to prepare for deployment.
-
-#### Azure subscription requirements
-
 This Azure Blueprint solution is designed to deploy to Azure Government regions. The solution does not currently support Azure commercial regions. Customers must have a paid Azure Government subscription or sponsored account to deploy this solution.
 
-#### Local workstation requirements
+### Local workstation requirements
 
 PowerShell is used to initiate pre-deployment, deployment, and post-deployment tasks. PowerShell version **[5.0]** or greater must be installed on your local workstation. In PowerShell, you can use the following command to check the version:
 
@@ -133,79 +113,75 @@ The pre-deployment PowerShell script will verify that a supported version of Pow
 3. Run Orchestration_InitialSetup.ps1
 4. Enter the parameters above when prompted
 
+------------------------------------------------------------------------
+
 ## DEPLOYMENT
 
 During this phase, an Azure Resource Manger (ARM) template will deploy Azure resources to your subscription and perform configuration activities.
 
-#### Azure Resource Manager (ARM) template deployment
-
-**[Description of how the deployment works, ARM, PowerShell scripts used...]**
-
 After clicking the Deploy to Azure Gov button, the Azure portal will open and prompt for the following settings:
-
-**[For settings that the customer needs to look up (e.g., subscription ID), provide instructions to find]**
 
 * **Key Vault Name**: Name of the Key Vault created during pre-deployment
 
-* **Key Vault Resource Gorup Name**: Name of the resource group created during pre-deployment (e.g., blueprint-rg)
+* **Key Vault Resource Group Name**: Name of the resource group created during pre-deployment (e.g., blueprint-rg)
 
 * **Admin Username**: User account name for local VM administrator accounts
 
-* **OMS Workspace Name**: Name for new OMS workspace
+* **Cert Data**: Cert 64bit encoded .pfx file for SSL
 
-* **OMS Automation Account Name**: Name for new OMS Automation Account
+* **Cert Password**: Password used to create cert for SSL
 
-* **Job Schedule GUID**: guid for automation job schedule (use New-GUID in powershell)
+* **Job Scheduler GUID**: The GUID for the runbook job to be started (use New-GUID in Powershell)
+
+* **OMS Workspace Name**: Assign a name for the Log Analytic Workspace Name
+
+* **OMS Automation Account Name**: Assign a name for the automation account used with OMS
 
 ### Deployment instructions
-1. Click [![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
-2. Enter the settings above
-3. Review the terms and conditions, then click **I agree to the terms and conditions stated above**.
+
+1. Click the button below.
+
+	[![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliediIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
+2. Enter the settings from above.
+3. Review the terms and conditions and click **I agree to the terms and conditions stated above**.
 4. Click **Purchase**.
 
 ### Monitoring deployment status
+This solution uses multiple nested templates to deploy and configure the resources shown in the architecture diagram. The full deployment will take approximately **[100]** minutes. You can monitor the deployment from Azure Portal.
 
-This solution uses multiple nested templates to deploy and configure the resources shown in the architecture diagram. The full deployment will take approximately **[115]** minutes. You can monitor the deployment from the Azure portal.
-
-[instructions / screen captures]
-
-The full timeline for the deployment is shown below.
-
-**[deployment timeline]**
+See [TIMELINE.md](/docs/TIMELINE.md) for a resource depenency outline.
 
 ## POST-DEPLOYMENT
 
-Post-deployment tasks include **[...]**
-
 ### Post-deployment instructions
 
-1.
-2.
-3.
+1. Set Retention time
+2. Configure Always On
 
 ### Accessing deployed resources
 
-**[Instructions to access VMs]**
-
-**[Instructions to view OMS dashboard(s)]**
+You can access your machines through the MGT vm that is created from the deployment. From this VM, you can remote into and access any of the VMs in the network.
 
 ### Cost
 
 Deploying this solution  will create resources within your Azure subscription. You will be responsible for the costs associated with these resources, so it is important that you review the applicable pricing and legal terms associated with all resources and offerings deployed as part of this solution. For cost estimates, you can use the Azure Pricing Calculator.
 
-**[Estimated monthly cost of deployed resources]**
+## Extending the Solution with Advanced Configuration
 
-### Extending and modifying the solution
+If you have a basic knowledge of how Azure Resource Manager (ARM) templates work, you can customize the deployment by editing  azuredeploy.json or any of the templates located in the nested templates folder. Some items you might want to edit include but are not limited to :
+- Network Security Group rules (nestedtemplates/virtualNetworkNSG.json)
+- OMS alert rules and configuration (nestedtemplates/provisioningAutoAccOMSWorkspace)
+- Application Gateway routing rules (nestedtemplates/provisioningApplicationGateway.json)
 
-**[TBD]**
+
+ If you do not want to specifically alter the template contents, you can edit the parameters section at the top level of the json object within azuredeploy.json.
 
 ## Troubleshooting
 
 If your deployment should fail, to avoid incurring costs and orphan resources it is advisable to delete the resource group associated with this solution in its entirety, fix the issue, and redeploy the solution. See the section below for instructions to delete all resources deployed by the solution.
 
-**[Common problems; where to obtain support, etc.]**
+Please feel free to open and submit a GitHub issue pertaining to the error you are experiencing.
 
 ### How to delete deployed resources
 
-TBD
-
+To help with deleting protected resources, use postdeploy/deleteProtectedItems.ps1 -- this will specifically help you with removing the delete lock on the resources inside your vault.
