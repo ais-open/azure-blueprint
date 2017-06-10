@@ -242,7 +242,8 @@
                 "Project": "BluePrint"
             },
             "dependsOn": [
-
+                "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlwVMName'),'/extensions/SQLWBaselineDSC')]",
+                "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlVMName'),'0/extensions/SqlVmIaasExtension')]"
             ],
             "location": "[parameters('location')]",
             "properties": {
