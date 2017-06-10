@@ -19,6 +19,7 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 	- [Deployment Steps](#Deployment) // [Deployment Parameters](#Deployment)
 	- [Post-deployment Steps](#post-deployment)
 	- [Advanced Configuration](#extending-the-solution-with-advanced-configuration)
+	- [Known Issues](#Known Issues)
 
 ----------------------------------------------------------------
 
@@ -185,3 +186,8 @@ Please feel free to open and submit a GitHub issue pertaining to the error you a
 ### How to delete deployed resources
 
 To help with deleting protected resources, use postdeploy/deleteProtectedItems.ps1 -- this will specifically help you with removing the delete lock on the resources inside your vault.
+
+## Known Issues
+
+1. SQL Always On configuration is currently broken. [See issue #73](https://github.com/AppliedIS/azure-blueprint/issues/73)
+2. Deployment only works sucessfully with a new key vault (it does not work with an existing key vault).
