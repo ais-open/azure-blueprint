@@ -1,6 +1,5 @@
 # Azure Blueprint multi-tier web application solution for FedRAMP
 
-
 This Azure Blueprint solution automatically deploys a multi-tier web application architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. The solution consists of Azure Resource Manager (ARM) templates and PowerShell scripts that guide resource deployment and configuration. An accompanying Blueprint compliance matrix is provided, showing security control inheritance from Azure and where deployed resources and configurations align with NIST SP 800-53 security controls, thereby enabling organizations to fast-track compliance obligations.
 
 #### Quickstart
@@ -26,7 +25,6 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 ## Architecture
 
 This solution deploys a notional architecture for a web application with a database backend. The architecture includes a web tier, data tier, Active Directory infrastructure, application gateway and load balancer. Virtual machines deployed to the web and data tiers are configured in an availability set and SQL Servers are configured in an Always On availability group for high availability. A management jumpbox (bastion host) provides a secure connection for administrators to access deployed resources.
-
 
 ![alt text](docs/n-tier-diagram.png?raw=true "Azure Blueprint FedRAMP three-tier web-based application compliance architecture")
 \* Not included in diagram: OMS, Automation Account, Key Vault, Recovery Vaults, Backups
@@ -97,9 +95,7 @@ The pre-deployment PowerShell script will verify that a supported version of Pow
 
 * **resourceGroupName**: The resource group name must be a string of 1-90 alphanumeric characters (0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis and cannot end in a period (e.g., `blueprint-rg`).
 
-
 * **keyVaultName**: The Key Vault name must be a string 3-24 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government.
-
 
 * **adminPassword**: Administrator password for local VM accounts (must complexity requirements)
 
@@ -145,7 +141,7 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 
 1. Click the button below.
 
-	[![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdavoodharun%2Fazure-blueprint%2Fsqlbypass%2Fazuredeploy.json)
+	[![Deploy to Azure](http://azuredeploy.net/deploybutton.svg)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliediIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
 2. Enter the settings from above.
 3. Review the terms and conditions and click **I agree to the terms and conditions stated above**.
 4. Click **Purchase**.

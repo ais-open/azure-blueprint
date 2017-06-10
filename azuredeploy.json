@@ -673,14 +673,14 @@
             "metadata": {
                 "description": "Linked Templates base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/sqlbypass/nestedtemplates"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/nestedtemplates"
         },
         "dscBaseUrl": {
             "type": "string",
             "metadata": {
                 "description": "DSC Scripts base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/sqlbypass/DSC"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/DSC"
         },
         "scriptsBaseUrl": {
             "type": "string",
@@ -688,7 +688,7 @@
                 "description": "DSC Scripts base url"
             },
 
-            "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-blueprint/sqlbypass/postdeploy"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/postdeploy"
         },
         "sqlServerVersion": {
             "type": "string",
@@ -1767,67 +1767,6 @@
                 }
             }
         },
-        /*{
-            "name": "[concat('CustomScriptExtensionSQLAD-', variables('vmNames').VMs[copyIndex()].Name)]",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
-            "dependsOn": [
-                "monitorVMLoopSQLAD"
-            ],
-            "copy": {
-                "name": "CustomScriptExtensionLoopSQLAD",
-                "count": "[length(variables('vmNames').VMs)]"
-            },
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('artifacts').provisioningcustomScriptExtensionUrl]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "vmName": {
-                        "value": "[variables('vmNames').VMs[copyIndex()].Name]"
-                    },
-                    "workspaceName": {
-                        "value": "[parameters('omsWorkspaceName')]"
-                    },
-                    "AutomationAccountName": {
-                        "value": "[parameters('omsAutomationAccountName')]"
-                    },
-                    "EnvironmentName": {
-                        "value": "[parameters('EnvironmentName')]"
-                    },
-                    "AzureUserName": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[variables('derivedIds').keyVaultId]"
-                            },
-                            "secretName": "azureUserName"
-                        }
-                    },
-                    "AzurePassword": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[variables('derivedIds').keyVaultId]"
-                            },
-                            "secretName": "azurePassword"
-                        }
-                    },
-                    "SubscriptionId": {
-                        "value": "[subscription().subscriptionId]"
-                    },
-                    "ResourceGroupName": {
-                        "value": "[resourceGroup().name]"
-                    },
-                    "postDeployScriptUris": {
-                        "value": "[variables('artifacts').postDeployScriptUris]"
-                    },
-                    "MachinesToSetPasswordPolicy": {
-                        "value": "[concat(variables('resourceNames').vms.adpdc,';', variables('resourceNames').vms.adbdc)]"
-                    }
-                }
-            }
-        },*/
         {
             "name": "[concat('ConfigurationOMSMonitoringWEB-', variables('resourceNames').vms.web, copyindex())]",
             "type": "Microsoft.Resources/deployments",
@@ -1955,7 +1894,6 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                //"Microsoft.Resources/deployments/WebTier"
                 "monitorVMLoopSQLAD",
                 "monitorVMLoopWEB",
                 //"CustomScriptExtensionLoopWEB",
