@@ -156,8 +156,8 @@ See [TIMELINE.md](/docs/TIMELINE.md) for a resource depenency outline.
 
 ### Post-deployment instructions
 
-1. Set Retention time
-2. Configure Always On
+1. Set Retention time - Set the data retention time in the OMS portal from 31 to 365 days.
+2. Configure Always On - See this [documentation](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sqlclassic/virtual-machines-windows-classic-ps-sql-alwayson-availability-groups)
 
 ### Accessing deployed resources
 
