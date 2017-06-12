@@ -190,4 +190,4 @@ To help with deleting protected resources, use postdeploy/deleteProtectedItems.p
 ## Known Issues
 
 1. SQL Always On configuration is currently broken. [See issue #73](https://github.com/AppliedIS/azure-blueprint/issues/73)
-2. Deployment only works sucessfully with a new key vault (it does not work with an existing key vault).
+2. Deployment only works successfully with a new key vault (it does not work with an existing key vault).
