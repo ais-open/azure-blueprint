@@ -4,7 +4,6 @@ Param(
   [string]$password
 )
 
-$password
 Function checkPassword()    {
   Param(
     [Parameter(Mandatory=$true)]
