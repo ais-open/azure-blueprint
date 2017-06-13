@@ -259,8 +259,9 @@ function orchestration
 			$keyEncryptionKeyUrlSecureString = ConvertTo-SecureString $keyEncryptionKeyUrl -AsPlainText -Force
 		$secret = Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'keyEncryptionKeyURL' -SecretValue $keyEncryptionKeyUrlSecureString
 	}
-
+			$guid = new-guid
 			Write-Host "Please note that you will need to provide the keyVaultId and keyVaultResourceGroupName when deploying your template" -foregroundcolor Green;
+			Write-Host "You will also need a new GUID to use for deployment: $($guid)" -foregroundcolor Green;
 }
 
 for($i=0;$i -lt $passwordNames.Length;$i++){
