@@ -23,7 +23,7 @@ Must meet complexity requirements
 #>
 
 $passwordNames = @("azurePassword","adminPassword","sqlServerServiceAccountPassword")
-$passwords = New-Object –TypeName PSObject
+$passwords = New-Object -TypeName PSObject
 
 function checkPasswords
 {
@@ -74,7 +74,7 @@ function checkPasswords
         checkPasswords -name $name
     }
 		If ($isGood -ge 4) {
-      $passwords | Add-Member –MemberType NoteProperty –Name $name –Value $password
+      $passwords | Add-Member -MemberType NoteProperty -Name $name -Value $password
       return
     } Else {
       "Password does not meet complexity requirements"
