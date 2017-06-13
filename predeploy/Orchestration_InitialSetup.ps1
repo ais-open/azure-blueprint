@@ -43,7 +43,7 @@ function checkPasswords
 	$passLength = 14
 
 	if ($pw2test.Length -ge $passLength) {
-		$isGood = 0
+		$isGood = 1
     If ($pw2test -match " "){
       "Password does not meet complexity requirements. Password cannot contain spaces"
       checkPasswords -name $name
