@@ -25,28 +25,79 @@ Must meet complexity requirements
 14+ characters, 2 numbers, 2 upper and lower case, and 2 special chars
 #>
 
-checkPasswords();
+$passwordNames = @("azurePassword","adminPassword","sqlServerServiceAccountPassword")
+$passwords = New-Object –TypeName PSObject
+
 function checkPasswords
 {
 	Param(
 		[Parameter(Mandatory=$true)]
-		[SecureString]$azurePassword,
-		[Parameter(Mandatory=$true)]
-		[SecureString]$adminPassword,
-		[Parameter(Mandatory=$true)]
-		[SecureString]$sqlServerServiceAccountPassword
+		[string]$name
 	)
+
+	$password = Read-Host -assecurestring "Enter $($name)"
+  $Ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToCoTaskMemUnicode($password)
+  $pw2test = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($Ptr)
+  [System.Runtime.InteropServices.Marshal]::ZeroFreeCoTaskMemUnicode($Ptr)
+
+	$passLength = 14
+
+	if ($pw2test.Length -ge $passLength) {
+		$isGood = 1
+    If ($pw2test -match " "){
+      "Password does not meet complexity requirements. Password cannot contain spaces"
+      checkPasswords -name $name
+    } Else {
+      $isGood++
+    }
+		If ($pw2test -match "[^a-zA-Z0-9]"){
+			$isGood++
+    } Else {
+        "Password does not meet complexity requirements. Password must contain a special character"
+        checkPasswords -name $name
+    }
+		If ($pw2test -match "[0-9]") {
+			$isGood++
+    } Else {
+        "Password does not meet complexity requirements. Password must contain a numerical character"
+        checkPasswords -name $name
+    }
+		If ($pw2test -cmatch "[a-z]") {
+			$isGood++
+    } Else {
+      "Password must contain a lowercase letter"
+        "Password does not meet complexity requirements"
+        checkPasswords -name $name
+    }
+		If ($pw2test -cmatch "[A-Z]"){
+			$isGood++
+    } Else {
+      "Password must contain an uppercase character"
+        "Password does not meet complexity requirements"
+        checkPasswords -name $name
+    }
+		If ($isGood -ge 4) {
+      $passwords | Add-Member –MemberType NoteProperty –Name $name –Value $password
+      return
+    } Else {
+      "Password does not meet complexity requirements"
+      checkPasswords -name $name
+    }
+  } Else {
+
+    "Password is not long enough - Passwords must be at least " + $passLength + " characters long"
+    checkPasswords -name $name
+
+  }
 
 }
 
-function main
+function orchestration
 {
 	Param(
 		[string]$environmentName = "AzureUSGovernment",
 		[string]$location = "USGov Virginia",
 		[string]$recoveryServicesAADServicePrincipalName = "ff281ffe-705c-4f53-9f37-a40e6f2c68f3",
-		[Parameter(Mandatory=$true)]
-		[string]$BaseSourceControl,
 		[Parameter(Mandatory=$true)]
 		[string]$subscriptionId,
 		[Parameter(Mandatory=$true)]
@@ -68,26 +119,6 @@ function main
 		[Parameter(Mandatory = $true)]
 		[string]$keyEncryptionKeyName
 	)
-
-	try {
-		$Ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToCoTaskMemUnicode($adminPassword)
-		$result = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($Ptr)
-		[System.Runtime.InteropServices.Marshal]::ZeroFreeCoTaskMemUnicode($Ptr)
-		& "$BaseSourceControl\checkPassword.ps1" -password $result
-	}
-	catch {
-		Throw "Administrator password did not meet the complexity requirements"
-	}
-
-	try {
-		$Ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToCoTaskMemUnicode($sqlServerServiceAccountPassword)
-		$result = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($Ptr)
-		[System.Runtime.InteropServices.Marshal]::ZeroFreeCoTaskMemUnicode($Ptr)
-		& "$BaseSourceControl\checkPassword.ps1" -password $result
-	}
-	catch {
-		Throw "sqlServerServiceAccountPassword  did not meet the complexity requirements"
-	}
 
 	$errorActionPreference = 'stop'
 
@@ -228,9 +259,14 @@ function main
 			$keyEncryptionKeyUrlSecureString = ConvertTo-SecureString $keyEncryptionKeyUrl -AsPlainText -Force
 		$secret = Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'keyEncryptionKeyURL' -SecretValue $keyEncryptionKeyUrlSecureString
 	}
-
-	########################################################################################################################
-	#  Displays values that should be used while enabling encryption. Please note these down
-	########################################################################################################################
+			$guid = new-guid
 			Write-Host "Please note that you will need to provide the keyVaultId and keyVaultResourceGroupName when deploying your template" -foregroundcolor Green;
+			Write-Host "You will also need a new GUID to use for deployment: $($guid)" -foregroundcolor Green;
 }
+
+for($i=0;$i -lt $passwordNames.Length;$i++){
+   checkPasswords -name $passwordNames[$i]
+}
+
+
+orchestration -azurePassword $passwords.azurePassword -adminPassword $passwords.adminPassword -sqlServerServiceAccountPassword $passwords.sqlServerServiceAccountPassword
