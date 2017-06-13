@@ -9,9 +9,6 @@ This script will create a Key Vault with a Key Encryption Key for VM DIsk Encryp
 $BaseSourceControl = 'C:\Users\davoodharun\Desktop\azure-blueprint'
 . "$BaseSourceControl\predeploy\Orchestration_InitialSetup.ps1" @MyParams -verbose
 
-.Parameter BaseSourceControl
-Should be the string path to the predeploy directory in the format c:\path\to\source\control\predeploy
-
 .Parameter recoveryServicesAADServicePrincipalName
 This is the ApplicationId for the BackupFairfax (usgovvirginia) AzureAD Service Principal
 Azure commercial Backup Management Service ApplicationId is 262044b1-e2ce-469f-a196-69ab7ada62d3
