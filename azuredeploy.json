@@ -874,7 +874,7 @@
                 "[concat(parameters('scriptsBaseUrl'),'/settimezonelogsize.ps1')]"
             ],
             "provisioningHybridworkerUrl": "[concat(parameters('scriptsBaseUrl'),'/provisioningHybridworkers.ps1')]",
-            "customScriptExtensionUrl": "[concat(parameters('scriptsBaseUrl'),'/customScriptExtensionUrl.ps1')]",
+            "customScriptBaselineUrl": "[concat(parameters('scriptsBaseUrl'),'/customScriptBaseline.ps1')]",
             "provisioningCustomScriptExtensionUrl": "[concat(parameters('templatesBaseUrl'),'/customScriptExtension.json')]",
             "provisioningOMSWorkspaceUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutoAccOMSWorkspace.json')]",
             "provisioningOMSAutomationScheduleUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutomationSchedule.json')]",
