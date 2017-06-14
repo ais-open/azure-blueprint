@@ -874,6 +874,7 @@
                 "[concat(parameters('scriptsBaseUrl'),'/settimezonelogsize.ps1')]"
             ],
             "provisioningHybridworkerUrl": "[concat(parameters('scriptsBaseUrl'),'/provisioningHybridworkers.ps1')]",
+            "customScriptExtensionUrl": "[concat(parameters('scriptsBaseUrl'),'/customScriptExtensionUrl.ps1')]",
             "provisioningCustomScriptExtensionUrl": "[concat(parameters('templatesBaseUrl'),'/customScriptExtension.json')]",
             "provisioningOMSWorkspaceUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutoAccOMSWorkspace.json')]",
             "provisioningOMSAutomationScheduleUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningAutomationSchedule.json')]",
@@ -1758,8 +1759,8 @@
                     "ResourceGroupName": {
                         "value": "[resourceGroup().name]"
                     },
-                    "provisioningHybridworkersUrl": {
-                        "value": "[variables('artifacts').provisioningHybridworkerUrl]"
+                    "customScriptBaselineUrl": {
+                        "value": "[variables('artifacts').customScriptBaselineUrl]"
                     },
                     "MachinesToSetPasswordPolicy": {
                         "value": "[concat(variables('resourceNames').vms.adpdc,';', variables('resourceNames').vms.adbdc)]"
@@ -1819,8 +1820,8 @@
                     "ResourceGroupName": {
                         "value": "[resourceGroup().name]"
                     },
-                    "provisioningHybridworkersUrl": {
-                        "value": "[variables('artifacts').provisioningHybridworkerUrl]"
+                    "customScriptBaselineUrl": {
+                        "value": "[variables('artifacts').customScriptBaselineUrl]"
                     },
                     "MachinesToSetPasswordPolicy": {
                         "value": ""

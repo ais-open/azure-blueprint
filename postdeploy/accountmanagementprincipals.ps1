@@ -91,4 +91,4 @@ $Task | Register-ScheduledTask -TaskName ‘Inactive accounts script'
 #########################################################################
 
 #this is required for policies to apply- should be applied at the end of the Custom script extension only
-#Invoke-GPUpdate -Boot
+Invoke-GPUpdate -Boot

@@ -1,7 +1,7 @@
 # SQL Transaction Recovery
 This request enables the **Automated backup** feature for the IaaS Sql server VM. The automated backup uses the feature lets us configure the backup storage location, retention period and the encryption credentials.  However the time to backup and frequency are decided by Azure based on the usage. [this link](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sql/virtual-machines-windows-sql-automated-backup ) identifies the Automated backup reference.
 
-# Configuration
+## Implementation and Configuration
 - Retention Period
 - Storage Account
 - Enable Encryption(this is to enable encryption of the Database backups at rest)
@@ -18,3 +18,5 @@ To verify if the Automated backup has been enabled for the IaaS Sql Server VM
 6) Create a new database in the Sql Server
 7) In Storage Account --> Containers --> <<IaasSqlServerVM>>-mssqlserver, the .bak(backup file) and .log(log files) will be written to the storage account
 8) .Bak and .Log files are then written as per SQL Server load.
+
+## Compliance Documentation
