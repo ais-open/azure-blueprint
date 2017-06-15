@@ -59,6 +59,29 @@
         Select-AzureRmSubscription -SubscriptionId $SubscriptionId;
     }
 
+    try{
+        # $cloudMonitoring =Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Status
+        # $status = $cloudMonitoring.ProvisioningState
+
+        $Workspace = Get-AzureRmOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName  -ErrorAction Stop
+        $OmsLocation = $Workspace.Location
+         Get the workspace ID
+        $WorkspaceId = $Workspace.CustomerId
+
+         Get the primary key for the OMS workspace
+        $WorkspaceSharedKeys = Get-AzureRmOperationalInsightsWorkspaceSharedKeys -ResourceGroupName $ResourceGroupName -Name $WorkspaceName
+        $WorkspaceKey = $WorkspaceSharedKeys.PrimarySharedKey
+
+        $PublicSettings = @{"workspaceId" = $WorkspaceId }
+        $ProtectedSettings = @{"workspaceKey" = $WorkspaceKey}
+
+        Set-AzureRmVMExtension -ExtensionName "EnterpriseCloudMonitoring" -ResourceGroupName $ResourceGroupName -VMName $MachineName -Publisher "Microsoft.EnterpriseCloud.Monitoring" -ExtensionType "MicrosoftMonitoringAgent" -TypeHandlerVersion 1.0 -Settings $PublicSettings -ProtectedSettings $ProtectedSettings -Location $OmsLocation
+
+    }
+    catch{
+
+    }
+
     ########################################################################################################################
     # Add Hybrid Worker Group If not exist
     ########################################################################################################################
@@ -334,8 +357,8 @@ try{
             Set-ADDefaultDomainPasswordPolicy -Identity $Domain -AuthType Negotiate -MaxPasswordAge 60.00:00:00 -MinPasswordAge 1.00:00:00 -PasswordHistoryCount 24 -ComplexityEnabled $true -ReversibleEncryptionEnabled $true -MinPasswordLength 14
             Set-GPLink -Guid (Get-GPO -Name "Default Domain Policy").id -Target $target -LinkEnabled Yes -Enforced Yes
 
-
         }
+
     }
 }
 catch{
@@ -345,29 +368,3 @@ catch{
 # calling the configuration
 SetHybridWorderList -MachineName $MachineName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -AzureAuthCreds $AzureAuthCreds -SubscriptionId $SubscriptionId -EnvironmentName $EnvironmentName -ConfigurationData $ConfigData -Verbose
 Start-DscConfiguration -Wait -Force -Path .\SetHybridWorderList -Verbose
-
-<#
- Temp Fix OMS Cloud Monitoring Connection Issue
-try{
-    $cloudMonitoring =Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Status
-    $status = $cloudMonitoring.ProvisioningState
-
-    $Workspace = Get-AzureRmOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName  -ErrorAction Stop
-    $OmsLocation = $Workspace.Location
-     Get the workspace ID
-    $WorkspaceId = $Workspace.CustomerId
-
-     Get the primary key for the OMS workspace
-    $WorkspaceSharedKeys = Get-AzureRmOperationalInsightsWorkspaceSharedKeys -ResourceGroupName $ResourceGroupName -Name $WorkspaceName
-    $WorkspaceKey = $WorkspaceSharedKeys.PrimarySharedKey
-
-    $PublicSettings = @{"workspaceId" = $WorkspaceId }
-    $ProtectedSettings = @{"workspaceKey" = $WorkspaceKey}
-
-    Set-AzureRmVMExtension -ExtensionName "EnterpriseCloudMonitoring" -ResourceGroupName $ResourceGroupName -VMName $MachineName -Publisher "Microsoft.EnterpriseCloud.Monitoring" -ExtensionType "MicrosoftMonitoringAgent" -TypeHandlerVersion 1.0 -Settings $PublicSettings -ProtectedSettings $ProtectedSettings -Location $OmsLocation
-
-}
-catch{
-
-}
-#>
