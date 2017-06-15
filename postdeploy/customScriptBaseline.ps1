@@ -1,14 +1,4 @@
 
-
-$MachineName = "AZ-WEB-VM0"
-$ResourceGroupName = "azbpA15"
-$AutomationAccountName = "omsaaA15"
-$WorkspaceName = "omsaaA15"
-$AzureUserName = "appliedisadmin"
-$AzurePassword = "CVizj@0Jxd1XL*9"
-$SubscriptionId = "9876753f-ae2e-46ef-b58a-2ddda6937ea3"
-$EnvironmentName = "AzureUSGovernment"
-$MachinesToSetPasswordPolicy = ""
     param
     (
         [String]$MachineName,
