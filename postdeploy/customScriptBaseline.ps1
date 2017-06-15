@@ -1,6 +1,14 @@
 
 
-
+$MachineName = "AZ-WEB-VM0"
+$ResourceGroupName = "azbpA15"
+$AutomationAccountName = "omsaaA15"
+$WorkspaceName = "omsaaA15"
+$AzureUserName = "appliedisadmin"
+$AzurePassword = "CVizj@0Jxd1XL*9"
+$SubscriptionId = "9876753f-ae2e-46ef-b58a-2ddda6937ea3"
+$EnvironmentName = "AzureUSGovernment"
+$MachinesToSetPasswordPolicy = ""
     param
     (
         [String]$MachineName,
@@ -65,10 +73,10 @@
 
         $Workspace = Get-AzureRmOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName  -ErrorAction Stop
         $OmsLocation = $Workspace.Location
-         Get the workspace ID
+        #Get the workspace ID
         $WorkspaceId = $Workspace.CustomerId
 
-         Get the primary key for the OMS workspace
+        #Get the primary key for the OMS workspace
         $WorkspaceSharedKeys = Get-AzureRmOperationalInsightsWorkspaceSharedKeys -ResourceGroupName $ResourceGroupName -Name $WorkspaceName
         $WorkspaceKey = $WorkspaceSharedKeys.PrimarySharedKey
 
@@ -76,7 +84,6 @@
         $ProtectedSettings = @{"workspaceKey" = $WorkspaceKey}
 
         Set-AzureRmVMExtension -ExtensionName "EnterpriseCloudMonitoring" -ResourceGroupName $ResourceGroupName -VMName $MachineName -Publisher "Microsoft.EnterpriseCloud.Monitoring" -ExtensionType "MicrosoftMonitoringAgent" -TypeHandlerVersion 1.0 -Settings $PublicSettings -ProtectedSettings $ProtectedSettings -Location $OmsLocation
-
     }
     catch{
 
