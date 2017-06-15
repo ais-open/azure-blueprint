@@ -21,8 +21,19 @@ Must meet complexity requirements
 Must meet complexity requirements
 14+ characters, 2 numbers, 2 upper and lower case, and 2 special chars
 #>
+$azureUserName = Read-Host "Enter your Azure username"
+$azurePassword = Read-Host -assecurestring "Enter your Azure password"
 
-$passwordNames = @("azurePassword","adminPassword","sqlServerServiceAccountPassword")
+try {
+	$AzureAuthCreds = New-Object System.Management.Automation.PSCredential -ArgumentList @($azureUserName,$azurePassword)
+	$azureEnv = Get-AzureRmEnvironment -Name $EnvironmentName
+  Login-AzureRmAccount -EnvironmentName "AzureUSGovernment" -Credential $AzureAuthCreds
+} catch {
+	Throw "Your credentials are incorrect or invalid. Make sure you are using your Azure Government account information"
+}
+$adminUsername = Read-Host "Enter an admin username"
+
+$passwordNames = @("adminPassword","sqlServerServiceAccountPassword")
 $passwords = New-Object -TypeName PSObject
 
 function checkPasswords
@@ -261,9 +272,10 @@ function orchestration
 			Write-Host "You will also need a new GUID to use for deployment: $($guid)" -foregroundcolor Green;
 }
 
+
 for($i=0;$i -lt $passwordNames.Length;$i++){
    checkPasswords -name $passwordNames[$i]
 }
 
 
-orchestration -azurePassword $passwords.azurePassword -adminPassword $passwords.adminPassword -sqlServerServiceAccountPassword $passwords.sqlServerServiceAccountPassword
+orchestration -azureUsername $azureUsername -adminUsername $adminUsername -azurePassword $azurePassword -adminPassword $passwords.adminPassword -sqlServerServiceAccountPassword $passwords.sqlServerServiceAccountPassword
