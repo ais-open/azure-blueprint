@@ -11,6 +11,8 @@
         [String]$EnvironmentName,
         [String]$MachinesToSetPasswordPolicy
     )
+    
+    Disable-AzureRmDataCollection
     Enable-PSRemoting -Force
     Write-Host "Check Module exists"
     Install-Packageprovider -Name Nuget -MinimumVersion 2.8.5.201 -Force
