@@ -176,8 +176,13 @@ If you have a basic knowledge of how Azure Resource Manager (ARM) templates work
 - OMS alert rules and configuration (nestedtemplates/provisioningAutoAccOMSWorkspace)
 - Application Gateway routing rules (nestedtemplates/provisioningApplicationGateway.json)
 
+For more information about template deployment read the following links:
 
- If you do not want to specifically alter the template contents, you can edit the parameters section at the top level of the json object within azuredeploy.json.
+1. [Azure Resource Manager Templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment)
+2. [ARM Template Functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-functions)
+3. [ARM Templating and Nesting Resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates)
+
+If you do not want to specifically alter the template contents, you can edit the parameters section at the top level of the json object within azuredeploy.json.
 
 #### Troubleshooting
 
