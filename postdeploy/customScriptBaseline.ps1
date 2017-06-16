@@ -11,7 +11,8 @@
         [String]$EnvironmentName,
         [String]$MachinesToSetPasswordPolicy
     )
-
+    
+    $ErrorActionPreference = 'SilentlyContinue'    
     Disable-AzureRmDataCollection
     Enable-PSRemoting -Force
     Write-Host "Check Module exists"
