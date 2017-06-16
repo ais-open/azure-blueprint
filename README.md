@@ -35,7 +35,7 @@ The architecture includes the following Azure products:
 * **Virtual Machines**
 	- (1) Management/Bastion (Windows Server 2016 Datacenter)
 	- (2) Active Directory Domain Controller (Windows Server 2016 Datacenter)
-	- (2) SQL Server Cluster Node (Windows Server 2012 R2)
+	- (2) SQL Server Cluster Node (Windows Server 2012 R2 on SQL2014SP2)
 	- (1) SQL Server Witness (Windows Server 2016 Datacenter)
 	- (2) Web/IIS (Windows Server 2016 Datacenter)
 * **AvailabilitySets**
