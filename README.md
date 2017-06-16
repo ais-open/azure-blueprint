@@ -1,11 +1,12 @@
 # Azure Blueprint multi-tier web application solution for FedRAMP
 
-This Azure Blueprint solution automatically deploys a multi-tier web application architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. The solution consists of Azure Resource Manager (ARM) templates and PowerShell scripts that guide resource deployment and configuration. An accompanying Blueprint compliance matrix is provided, showing security control inheritance from Azure and where deployed resources and configurations align with NIST SP 800-53 security controls, thereby enabling organizations to fast-track compliance obligations.
+This Azure Blueprint solution automatically deploys a multi-tier web application architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. The solution consists of Azure Resource Manager (ARM) templates and PowerShell scripts that guide resource deployment and configuration. An accompanying Blueprint [compliance documentation](https://github.com/AppliedIS/azure-blueprint/wiki) is provided, showing security control inheritance from Azure and where deployed resources and configurations align with NIST SP 800-53 security controls, thereby enabling organizations to fast-track compliance obligations.
 
 #### Quickstart
 1. Clone repository
-2. Run azure-blueprint/predeploy/Orchestration_InitialSetup.ps1
-	- This script will create a resource group with a keyvault -- remember the names that you choose for these items because you will need them in the next step.
+2. Run azure-blueprint/predeploy/Orchestration_InitialSetup.ps1. [Read more about pre-deployment.](#pre-deployment-script)
+	- This script will ask you to login to Azure Gov and supply a new admin username/password for user and sql accounts.
+	- This script will create a resource group with a keyvault -- remember the names that you choose for these items because you will need them in the next step. The script will also output a GUID that you can use in the next step.
 3. Click the button below, log in to Azure Portal Gov, fill out the parameters, and click "Purchase".
 
 	[![Deploy to Azure](http://azuredeploy.net/AzureGov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
