@@ -8,7 +8,7 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 	- This script will create a resource group with a keyvault -- remember the names that you choose for these items because you will need them in the next step.
 3. Click the button below, log in to Azure Portal Gov, fill out the parameters, and click "Purchase".
 
-	[![Deploy to Azure](http://azuredeploy.net/AzureGov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdavoodharun%2Fazure-blueprint%2Fsqlconfig%2Fazuredeploy.json)
+	[![Deploy to Azure](http://azuredeploy.net/AzureGov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
 
 	\** You will need an SSL cert (.pfx) in 64bit encoded form along with its password before you can deploy to your Azure subscription
 
