@@ -2,6 +2,12 @@
 
 This Azure Blueprint solution automatically deploys a multi-tier web application architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. The solution consists of Azure Resource Manager (ARM) templates and PowerShell scripts that guide resource deployment and configuration. An accompanying Blueprint [compliance documentation](https://github.com/AppliedIS/azure-blueprint/wiki) is provided, showing security control inheritance from Azure and where deployed resources and configurations align with NIST SP 800-53 security controls, thereby enabling organizations to fast-track compliance obligations.
 
+This Azure Blueprint solution is made up of a combination of JSON configuration files and PowerShell scripts that are handled by Azure Resource Manager's API service to deploy network resources within Azure Government Cloud. For more information about template deployment read the following links:
+
+1. [Azure Resource Manager Templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment)
+2. [ARM Template Functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-functions)
+3. [ARM Templating and Nesting Resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates)
+
 #### Quickstart
 1. Clone repository
 2. Run azure-blueprint/predeploy/Orchestration_InitialSetup.ps1. [Read more about pre-deployment.](#pre-deployment-script)
