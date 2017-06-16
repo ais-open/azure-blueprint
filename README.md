@@ -70,21 +70,24 @@ The architecture includes the following Azure products:
 	- (1) OMS Workspace
 
 ---------------------------------------------------------------
+
+## Instructions
+
 This Azure Blueprint solution is made up of a combination of JSON configuration files and PowerShell scripts that are handled by Azure Resource Manager's API service to deploy network resources within Azure Government Cloud. For more information about template deployment read the following links:
 
 1. [Azure Resource Manager Templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment)
 2. [ARM Template Functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-functions)
 3. [ARM Templating and Nesting Resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates)
 
-## PRE-DEPLOYMENT
+### PRE-DEPLOYMENT
 
 During pre-deployment you will confirm that your Azure subscription and local workstation are prepared to deploy the solution. The final pre-deployment step will run a PowerShell script that verifies setup requirements, gathers parameters and credentials, and creates resources in Azure to prepare for deployment.
 
-### Azure subscription requirements
+#### Azure subscription requirements
 
 This Azure Blueprint solution is designed to deploy to Azure Government regions. The solution does not currently support Azure commercial regions. Customers must have a paid Azure Government subscription or sponsored account to deploy this solution.
 
-### Local workstation requirements
+#### Local workstation requirements
 
 PowerShell is used to initiate pre-deployment, deployment, and post-deployment tasks. PowerShell version **[5.0]** or greater must be installed on your local workstation. In PowerShell, you can use the following command to check the version:
 
@@ -106,7 +109,7 @@ The pre-deployment PowerShell script will verify that a supported version of Pow
 * **aadAppName**: Name for a new Azure Active Directory application that will be created
 * **keyEncryptionKeyName**: Name for a new key used in SQL Server Encryption
 
-### Pre-deployment instructions
+#### Pre-deployment instructions
 
 1. Clone this GitHub repository to your local workstation
 `git clone https://github.com/AppliedIS/azure-blueprint.git`
@@ -116,7 +119,7 @@ The pre-deployment PowerShell script will verify that a supported version of Pow
 
 ------------------------------------------------------------------------
 
-## DEPLOYMENT
+### DEPLOYMENT
 
 During this phase, an Azure Resource Manger (ARM) template will deploy Azure resources to your subscription and perform configuration activities.
 
@@ -138,7 +141,7 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 
 * **OMS Automation Account Name**: Assign a name for the automation account used with OMS
 
-### Deployment instructions
+#### Deployment instructions
 
 1. Click the button below.
 
@@ -147,26 +150,26 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 3. Review the terms and conditions and click **I agree to the terms and conditions stated above**.
 4. Click **Purchase**.
 
-### Monitoring deployment status
+#### Monitoring deployment status
 This solution uses multiple nested templates to deploy and configure the resources shown in the architecture diagram. The full deployment will take approximately **[120]** minutes. You can monitor the deployment from Azure Portal.
 
 See [TIMELINE.md](/docs/TIMELINE.md) for a resource depenency outline.
 
-## POST-DEPLOYMENT
+### POST-DEPLOYMENT
 
-### Post-deployment instructions
+#### Post-deployment instructions
 
 1. Set Retention time - Set the data retention time in the OMS resource blade from 31 to 365 days to meet FedRamp compliance
 
-### Accessing deployed resources
+#### Accessing deployed resources
 
 You can access your machines through the MGT vm that is created from the deployment. From this VM, you can remote into and access any of the VMs in the network.
 
-### Cost
+#### Cost
 
 Deploying this solution  will create resources within your Azure subscription. You will be responsible for the costs associated with these resources, so it is important that you review the applicable pricing and legal terms associated with all resources and offerings deployed as part of this solution. For cost estimates, you can use the Azure Pricing Calculator.
 
-## Extending the Solution with Advanced Configuration
+#### Extending the Solution with Advanced Configuration
 
 If you have a basic knowledge of how Azure Resource Manager (ARM) templates work, you can customize the deployment by editing  azuredeploy.json or any of the templates located in the nested templates folder. Some items you might want to edit include but are not limited to :
 - Network Security Group rules (nestedtemplates/virtualNetworkNSG.json)
@@ -176,13 +179,13 @@ If you have a basic knowledge of how Azure Resource Manager (ARM) templates work
 
  If you do not want to specifically alter the template contents, you can edit the parameters section at the top level of the json object within azuredeploy.json.
 
-## Troubleshooting
+#### Troubleshooting
 
 If your deployment should fail, to avoid incurring costs and orphan resources it is advisable to delete the resource group associated with this solution in its entirety, fix the issue, and redeploy the solution. See the section below for instructions to delete all resources deployed by the solution.
 
 Please feel free to open and submit a GitHub issue pertaining to the error you are experiencing.
 
-### How to delete deployed resources
+#### How to delete deployed resources
 
 To help with deleting protected resources, use postdeploy/deleteProtectedItems.ps1 -- this will specifically help you with removing the delete lock on the resources inside your vault.
 
