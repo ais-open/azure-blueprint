@@ -143,7 +143,7 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 4. Click **Purchase**.
 
 ### Monitoring deployment status
-This solution uses multiple nested templates to deploy and configure the resources shown in the architecture diagram. The full deployment will take approximately **[100]** minutes. You can monitor the deployment from Azure Portal.
+This solution uses multiple nested templates to deploy and configure the resources shown in the architecture diagram. The full deployment will take approximately **[120]** minutes. You can monitor the deployment from Azure Portal.
 
 See [TIMELINE.md](/docs/TIMELINE.md) for a resource depenency outline.
 
@@ -151,8 +151,7 @@ See [TIMELINE.md](/docs/TIMELINE.md) for a resource depenency outline.
 
 ### Post-deployment instructions
 
-1. Set Retention time - Set the data retention time in the OMS portal from 31 to 365 days.
-2. Configure Always On - See this [documentation](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sqlclassic/virtual-machines-windows-classic-ps-sql-alwayson-availability-groups)
+1. Set Retention time - Set the data retention time in the OMS resource blade from 31 to 365 days to meet FedRamp compliance
 
 ### Accessing deployed resources
 
@@ -184,5 +183,5 @@ To help with deleting protected resources, use postdeploy/deleteProtectedItems.p
 
 ## Known Issues
 
-1. SQL Always On configuration is currently broken. [See issue #73](https://github.com/AppliedIS/azure-blueprint/issues/73)
+1. SQL Always On configuration is currently broken for SQL2016-WS2012R2 . [See issue #73](https://github.com/AppliedIS/azure-blueprint/issues/73)
 2. Deployment only works successfully with a new key vault (it does not work with an existing key vault).
