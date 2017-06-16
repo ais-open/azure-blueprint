@@ -1,6 +1,4 @@
 
-
-
     param
     (
         [String]$MachineName,
@@ -13,6 +11,8 @@
         [String]$EnvironmentName,
         [String]$MachinesToSetPasswordPolicy
     )
+    
+    Disable-AzureRmDataCollection
     Enable-PSRemoting -Force
     Write-Host "Check Module exists"
     Install-Packageprovider -Name Nuget -MinimumVersion 2.8.5.201 -Force
@@ -65,10 +65,10 @@
 
         $Workspace = Get-AzureRmOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName  -ErrorAction Stop
         $OmsLocation = $Workspace.Location
-         Get the workspace ID
+        #Get the workspace ID
         $WorkspaceId = $Workspace.CustomerId
 
-         Get the primary key for the OMS workspace
+        #Get the primary key for the OMS workspace
         $WorkspaceSharedKeys = Get-AzureRmOperationalInsightsWorkspaceSharedKeys -ResourceGroupName $ResourceGroupName -Name $WorkspaceName
         $WorkspaceKey = $WorkspaceSharedKeys.PrimarySharedKey
 
@@ -76,10 +76,9 @@
         $ProtectedSettings = @{"workspaceKey" = $WorkspaceKey}
 
         Set-AzureRmVMExtension -ExtensionName "EnterpriseCloudMonitoring" -ResourceGroupName $ResourceGroupName -VMName $MachineName -Publisher "Microsoft.EnterpriseCloud.Monitoring" -ExtensionType "MicrosoftMonitoringAgent" -TypeHandlerVersion 1.0 -Settings $PublicSettings -ProtectedSettings $ProtectedSettings -Location $OmsLocation
-
     }
     catch{
-
+      Throw "Something went wrong trying to connect to oms"
     }
 
     ########################################################################################################################

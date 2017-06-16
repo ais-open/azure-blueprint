@@ -20,7 +20,7 @@
         },
         "configureSQLAO": {
           "type": "string",
-          "defaultValue": "no",
+          "defaultValue": "yes",
           "allowedValues": [
             "yes",
             "no"
@@ -702,7 +702,7 @@
             "metadata": {
                 "description": "The Sql Server Version"
             },
-            "defaultValue": "SQL2016-WS2012R2"
+            "defaultValue": "SQL2014SP2-WS2012R2"
         },
         "numberOfSqlVMDisks": {
             "type": "string",

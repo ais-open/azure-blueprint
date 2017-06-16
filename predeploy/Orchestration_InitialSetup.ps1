@@ -21,6 +21,7 @@ Must meet complexity requirements
 Must meet complexity requirements
 14+ characters, 2 numbers, 2 upper and lower case, and 2 special chars
 #>
+
 $azureUserName = Read-Host "Enter your Azure username"
 $azurePassword = Read-Host -assecurestring "Enter your Azure password"
 
