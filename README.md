@@ -89,25 +89,17 @@ The PowerShell pre-deployment task includes installation of Azure PowerShell mod
 
 #### Pre-deployment script
 
-The pre-deployment PowerShell script will verify that a supported version of PowerShell is installed, that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters:
-
+The pre-deployment PowerShell script will verify that a supported version of PowerShell is installed, that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters in order:
+* **azureUsername**: Username for Azure (ex. someuser@orggov.onmicrosoft.com)
+* **azurePassword**: Password for Azure account above
+* **adminUsername**: Username you want to use for adminstrative accounts for resulting deployment
 * **adminPassword**: Administrator password for local VM accounts (must complexity requirements)
-
 * **sqlServerServiceAccountPassword**: SQL service account password (must complexity requirements)
-
-* **azurePassword**: Password for Azure used to run custom script extenstions (must complexity requirements)
-
 * **subscriptionID**: To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu, and begin typing "subscription" in the filter box. Click on **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
-
-* **azureUsername**: Username for Azure used to run custom script extenstions
-
 * **resourceGroupName**: The resource group name must be a string of 1-90 alphanumeric characters (0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis and cannot end in a period (e.g., `blueprint-rg`).
-
 * **keyVaultName**: The Key Vault name must be a string 3-24 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government.
-
-* **aadAppName**: name for a new Azure Active Directory application that will be created
-
-* **keyEncryptionKeyName**: name for a new key used in SQL Server Encryption
+* **aadAppName**: Name for a new Azure Active Directory application that will be created
+* **keyEncryptionKeyName**: Name for a new key used in SQL Server Encryption
 
 ### Pre-deployment instructions
 
