@@ -78,7 +78,9 @@
                 "settings": {
                     "fileUris": [
                         "[parameters('customScriptBaselineUrl')]"
-                    ],
+                    ]
+                },
+                "protectedSettings": {
                     "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters'))]"
                 }
             }
