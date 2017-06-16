@@ -91,7 +91,7 @@ This Azure Blueprint solution is designed to deploy to Azure Government regions.
 
 PowerShell is used to initiate pre-deployment, deployment, and post-deployment tasks. PowerShell version **[5.0]** or greater must be installed on your local workstation. In PowerShell, you can use the following command to check the version:
 
-`$PSVerstionTable.psversion`
+`$PSVersionTable.psversion`
 
 The PowerShell pre-deployment task includes installation of Azure PowerShell modules, so PowerShell must be run in administrator mode.
 
