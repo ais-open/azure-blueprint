@@ -11,7 +11,7 @@
         [String]$EnvironmentName,
         [String]$MachinesToSetPasswordPolicy
     )
-    
+
     Disable-AzureRmDataCollection
     Enable-PSRemoting -Force
     Write-Host "Check Module exists"
@@ -78,7 +78,7 @@
         Set-AzureRmVMExtension -ExtensionName "EnterpriseCloudMonitoring" -ResourceGroupName $ResourceGroupName -VMName $MachineName -Publisher "Microsoft.EnterpriseCloud.Monitoring" -ExtensionType "MicrosoftMonitoringAgent" -TypeHandlerVersion 1.0 -Settings $PublicSettings -ProtectedSettings $ProtectedSettings -Location $OmsLocation
     }
     catch{
-      Throw "Something went wrong trying to connect to oms"
+      
     }
 
     ########################################################################################################################
