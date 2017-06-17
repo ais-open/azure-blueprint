@@ -59,7 +59,7 @@
         Select-AzureRmSubscription -SubscriptionId $SubscriptionId;
     }
 
-
+    <#
     try{
         # $cloudMonitoring =Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Status
         # $status = $cloudMonitoring.ProvisioningState
@@ -90,6 +90,7 @@
        Start-Sleep -s 10
        $ext = Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring"
      }
+     #>
     ########################################################################################################################
     # Add Hybrid Worker Group If not exist
     ########################################################################################################################
