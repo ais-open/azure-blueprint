@@ -12,8 +12,6 @@
         [String]$MachinesToSetPasswordPolicy
     )
     
-    $ErrorActionPreference = 'SilentlyContinue'    
-    
     Disable-AzureRmDataCollection
     Enable-PSRemoting -Force
     Write-Host "Check Module exists"
@@ -61,6 +59,7 @@
         Select-AzureRmSubscription -SubscriptionId $SubscriptionId;
     }
 
+    <#
     try{
         # $cloudMonitoring =Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring" -Status
         # $status = $cloudMonitoring.ProvisioningState
@@ -76,13 +75,22 @@
 
         $PublicSettings = @{"workspaceId" = $WorkspaceId }
         $ProtectedSettings = @{"workspaceKey" = $WorkspaceKey}
-
+        Write-Output "Setting EnterpriseCloudMonitoring Extension"
         Set-AzureRmVMExtension -ExtensionName "EnterpriseCloudMonitoring" -ResourceGroupName $ResourceGroupName -VMName $MachineName -Publisher "Microsoft.EnterpriseCloud.Monitoring" -ExtensionType "MicrosoftMonitoringAgent" -TypeHandlerVersion 1.0 -Settings $PublicSettings -ProtectedSettings $ProtectedSettings -Location $OmsLocation
     }
     catch{
-      
+
     }
 
+    $ext = Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring"
+    $ext
+    while($ext.ProvisioningState -ne "Succeeded")
+     {
+       Write-Output "Not ready..."
+       Start-Sleep -s 10
+       $ext = Get-AzureRmVMExtension -ResourceGroupName $ResourceGroupName -VMName $MachineName -Name "EnterpriseCloudMonitoring"
+     }
+     #>
     ########################################################################################################################
     # Add Hybrid Worker Group If not exist
     ########################################################################################################################

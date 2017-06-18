@@ -196,7 +196,7 @@ function orchestration
 	# Create KeyVault or setup existing keyVault
 	########################################################################################################################
 
-	Write-Host "Creating resource group '$($resourceGroupName)' to hold the automation account, key vault, and template storage account."
+	Write-Host "Creating resource group '$($resourceGroupName)' to hold key vault"
 
 	if (-not (Get-AzureRmResourceGroup -Name $resourceGroupName -Location $location -ErrorAction SilentlyContinue)) {
 		New-AzureRmResourceGroup -Name $resourceGroupName -Location $location  | Out-String | Write-Verbose
@@ -204,14 +204,15 @@ function orchestration
 
 	#Create a new vault if vault doesn't exist
 	if (-not (Get-AzureRMKeyVault -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ErrorAction SilentlyContinue )) {
-		Write-Host "Create a keyVault '$($keyVaultName)' to store the service principal ids, key, certificate"
+		Write-Host "Create a keyVault '$($keyVaultName)' to store the service principal ids and passwords"
 		New-AzureRMKeyVault -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -EnabledForTemplateDeployment -Location $location | Out-String | Write-Verbose
 				Write-Host "Created a new KeyVault named $keyVaultName to store encryption keys";
 
 		# Specify privileges to the vault for the AAD application - https://msdn.microsoft.com/en-us/library/mt603625.aspx
-			 Write-Host "Set Azure Key Vault Access Policy. Set ServicePrincipalName: $aadClientID in Key Vault: $keyVaultName";
+			 Write-Host "Set Azure Key Vault Access Policy."
+			 Write-Host "Set ServicePrincipalName: $aadClientID in Key Vault: $keyVaultName";
 			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ServicePrincipalName $aadClientID -PermissionsToKeys wrapKey -PermissionsToSecrets set;
-		Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ServicePrincipalName $recoveryServicesAADServicePrincipalName -PermissionsToKeys backup,get,list -PermissionsToSecrets get,list;
+			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ServicePrincipalName $recoveryServicesAADServicePrincipalName -PermissionsToKeys backup,get,list -PermissionsToSecrets get,list;
 			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -EnabledForDiskEncryption;
 
 			if($keyEncryptionKeyName)
