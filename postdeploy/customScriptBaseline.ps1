@@ -11,7 +11,7 @@
         [String]$EnvironmentName,
         [String]$MachinesToSetPasswordPolicy
     )
-
+    
     Disable-AzureRmDataCollection
     Enable-PSRemoting -Force
     Write-Host "Check Module exists"
