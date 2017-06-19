@@ -96,17 +96,15 @@ PowerShell is used to initiate pre-deployment, deployment, and post-deployment t
 The PowerShell pre-deployment task includes installation of Azure PowerShell modules, so PowerShell must be run in administrator mode.
 
 #### SSL Cert
-To generate a self-signed SSL cert using powershell try:
+To generate a self-signed SSL cert using powershell :
 ```
-
-
-
 New-SelfSignedCertificate -certstorelocation cert:\localmachine\my -dnsname orin.windowsitpro.internal
+>> CE0976529B02DE058C9CB2C0E64AD79DAFB18CF4
 $pwd = ConvertTo-SecureString -String "Pa$$w0rd" -Force -AsPlainText
 Export-PfxCertificate -cert cert:\localMachine\my\CE0976529B02DE058C9CB2C0E64AD79DAFB18CF4 -FilePath e:\temp\cert.pfx -Password $pwd
 $fileContentBytes = get-content 'C:\path\to\cert.pfx' -Encoding Byte
-
 [System.Convert]::ToBase64String($fileContentBytes) | Out-File 'pfx-bytes.txt'
+```
 
 #### Pre-deployment script
 
