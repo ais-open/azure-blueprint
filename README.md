@@ -11,7 +11,7 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 
 	[![Deploy to Azure](http://azuredeploy.net/AzureGov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
 
-	\** You will need an SSL cert (.pfx) in 64bit encoded form along with its password before you can deploy to your Azure subscription
+	\** You will need an SSL cert (.pfx) in 64bit encoded form along with its password before you can deploy to your Azure subscription (see (ssl cert)[#sslcert]).
 
 	##### READ MORE ABOUT:
 
@@ -96,12 +96,26 @@ PowerShell is used to initiate pre-deployment, deployment, and post-deployment t
 The PowerShell pre-deployment task includes installation of Azure PowerShell modules, so PowerShell must be run in administrator mode.
 
 #### SSL Cert
-To generate a self-signed SSL cert using powershell :
+To generate a self-signed SSL cert using powershell ([ref](http://windowsitpro.com/blog/creating-self-signed-certificates-powershell):
+1. First - you need the FQDN that you want to use for the certificate. For example, orin.windowsitpro.internal. You then use the command below. 
 ```
 New-SelfSignedCertificate -certstorelocation cert:\localmachine\my -dnsname orin.windowsitpro.internal
->> CE0976529B02DE058C9CB2C0E64AD79DAFB18CF4
+```
+2. Running the command above will add the self signed certificate to the local certificate store. When you run the command, you'll also get a certificate thumbprint that will look something like
+```
+CE0976529B02DE058C9CB2C0E64AD79DAFB18CF4
+```
+
+3. Next you need to populate a variable with a password you'll use when exporting the certificate from the local certificate store. Use something similar to the following to do this:
+```
 $pwd = ConvertTo-SecureString -String "Pa$$w0rd" -Force -AsPlainText
+```
+4. Once you've done that, use the Export-PfxCertificate cmdlet with the thumbprint generated when you created the certificate to export the certificate from the local certificate store. For example
+```
 Export-PfxCertificate -cert cert:\localMachine\my\CE0976529B02DE058C9CB2C0E64AD79DAFB18CF4 -FilePath e:\temp\cert.pfx -Password $pwd
+```
+5. Now, convert and export your pfx files as a 64bit string
+```
 $fileContentBytes = get-content 'C:\path\to\cert.pfx' -Encoding Byte
 [System.Convert]::ToBase64String($fileContentBytes) | Out-File 'pfx-bytes.txt'
 ```
