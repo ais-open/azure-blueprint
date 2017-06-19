@@ -11,7 +11,7 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 
 	[![Deploy to Azure](http://azuredeploy.net/AzureGov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
 
-	\** You will need an SSL cert (.pfx) in 64bit encoded form along with its password before you can deploy to your Azure subscription (see (ssl cert)[#sslcert]).
+	\** You will need an SSL cert (.pfx) in 64bit encoded form along with its password before you can deploy to your Azure subscription (see [ssl cert](#sslcert)).
 
 	##### READ MORE ABOUT:
 
