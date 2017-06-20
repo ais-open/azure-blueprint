@@ -86,6 +86,7 @@ During pre-deployment you will confirm that your Azure subscription and local wo
 #### Azure subscription requirements
 
 This Azure Blueprint solution is designed to deploy to Azure Government regions. The solution does not currently support Azure commercial regions. Customers must have a paid Azure Government subscription or sponsored account to deploy this solution.
+Incase the user has a multi-tenant environment, then the user must be created as part of the Azure Active Directory which is linked to the subscription where the template must be deployed.
 
 #### Local workstation requirements
 
