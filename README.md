@@ -222,5 +222,5 @@ To help with deleting protected resources, use postdeploy/deleteProtectedItems.p
 ## Known Issues
 
 1. OMS Monitoring Extension fails intermittently on different machines [See issue #95](https://github.com/AppliedIS/azure-blueprint/issues/95) 
-SQL Always On configuration is currently broken for SQL2016-WS2012R2 . [See issue #73](https://github.com/AppliedIS/azure-blueprint/issues/73)
-2. Deployment only works successfully with a new key vault (it does not work with an existing key vault). This will force the user to run the pre-deployment script to create a new resource group and key vault before each deployment.
+2. SQL Always On configuration is currently broken for SQL2016-WS2012R2 . [See issue #73](https://github.com/AppliedIS/azure-blueprint/issues/73)
+3. Deployment only works successfully with a new key vault (it does not work with an existing key vault). This will force the user to run the pre-deployment script to create a new resource group and key vault before each deployment.
