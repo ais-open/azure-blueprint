@@ -131,7 +131,7 @@ The pre-deployment PowerShell script will verify that a supported version of Pow
 * **subscriptionID**: To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu, and begin typing "subscription" in the filter box. Click on **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
 * **resourceGroupName**: The resource group name must be a string of 1-90 alphanumeric characters (0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis and cannot end in a period (e.g., `blueprint-rg`).
 * **keyVaultName**: The Key Vault name must be a string 3-24 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government.
-* **aadAppName**: Name for a new Azure Active Directory application that will be created
+* **aadAppName**: Name for a new Azure Active Directory application that will be created; the resulting app client id and resepective client secret are needed for disk encryption.
 * **keyEncryptionKeyName**: Name for a new key used in SQL Server Encryption
 
 #### Pre-deployment instructions
