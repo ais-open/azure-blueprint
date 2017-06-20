@@ -94,7 +94,7 @@ PowerShell is used to initiate pre-deployment, deployment, and post-deployment t
 `$PSVersionTable.psversion`
 
 In order to run the pre-deployment script, you will need to have the AzureRM modules installed.
-	- [Installing AzureRM Modules](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.1.0) 
+	-[Installing AzureRM Modules](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.1.0) 
 
 #### SSL Cert
 To generate a self-signed SSL cert using powershell ([ref](http://windowsitpro.com/blog/creating-self-signed-certificates-powershell)):
@@ -123,7 +123,7 @@ $fileContentBytes = get-content 'C:\path\to\cert.pfx' -Encoding Byte
 
 #### Pre-deployment script
 
-The pre-deployment PowerShell script will verify that a supported version of PowerShell is installed, that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters in order:
+The pre-deployment PowerShell script will verify that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters in order:
 * **azureUsername**: Username for Azure (ex. someuser@orggov.onmicrosoft.com)
 * **azurePassword**: Password for Azure account above
 * **adminUsername**: Username you want to use for adminstrative accounts for resulting deployment
