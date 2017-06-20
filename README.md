@@ -93,8 +93,7 @@ PowerShell is used to initiate pre-deployment, deployment, and post-deployment t
 
 `$PSVersionTable.psversion`
 
-In order to run the pre-deployment script, you will need to have the AzureRM modules installed.
-	-[Installing AzureRM Modules](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.1.0) 
+In order to run the pre-deployment script, you will need to have the AzureRM modules installed (see [Installing AzureRM Modules](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.1.0)). 
 
 #### SSL Cert
 To generate a self-signed SSL cert using powershell ([ref](http://windowsitpro.com/blog/creating-self-signed-certificates-powershell)):
