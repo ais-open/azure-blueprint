@@ -113,13 +113,17 @@
         "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]"
     },
     "resources": [
-      {
+        {
               "comments": "Join domain - JsonADDomainExtension",
               "apiVersion": "2015-06-15",
               "type": "Microsoft.Compute/virtualMachines/extensions",
               "name": "[concat(parameters('WebVMName'), copyindex(), '/joindomain')]",
               "tags": {
                   "Project": "BluePrint"
+              },
+              "copy": {
+                  "name": "vmLoopJoin",
+                  "count": "[parameters('numberOfWebInstances')]"
               },
               "dependsOn": [
               ],
@@ -148,6 +152,10 @@
             "apiVersion": "2015-05-01-preview",
             "tags": {
                 "Project": "BluePrint"
+            },
+            "copy": {
+                "name": "vmLoopBaseline",
+                "count": "[parameters('numberOfWebInstances')]"
             },
             "location": "[parameters('location')]",
             "dependsOn": [
@@ -188,9 +196,8 @@
                 "count": "[parameters('numberOfWebInstances')]"
             },
             "dependsOn": [
-
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions',concat(parameters('WebVMName'),copyindex()),'WebBaselineDSC')]"
-
+                "vmLoopJoin",
+                "vmLoopBaseline"
             ],
             "properties": {
                 "mode": "Incremental",
