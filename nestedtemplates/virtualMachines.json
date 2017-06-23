@@ -426,7 +426,7 @@
             "Project": "BluePrint"
         },
         "dependsOn": [
-            "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
+
         ],
         "properties": {
             "hardwareProfile": {

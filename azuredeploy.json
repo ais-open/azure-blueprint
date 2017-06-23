@@ -1392,9 +1392,6 @@
                     "webNICName": {
                         "value": "[variables('resourceNames').nics.web]"
                     },
-                    "WEBNICName": {
-                        "value": "[variables('resourceNames').nics.web]"
-                    },
                     "webNSGid": {
                         "value": "[variables('derivedIds').webNSG]"
                     },
