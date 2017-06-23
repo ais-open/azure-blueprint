@@ -9,7 +9,7 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 	- This script will create a resource group with a Key Vault -- remember the names that you choose for these items because you will need them in the next step. The script will also output a GUID that you can use in the next step.
 3. Click the button below, log in to Azure Gov portal, fill out the parameters, and click "Purchase".
 
-	[![Deploy to Azure](http://azuredeploy.net/AzureGov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
+	[![Deploy to Azure](http://azuredeploy.net/AzureGov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdavoodharun%2Fazure-blueprint%2Freconfigure%2Fazuredeploy.json)
 
 	\** You will need an SSL cert (.pfx) in 64bit encoded form along with its password before you can deploy to your Azure subscription (see [SSL cert](#ssl-cert)...)
 
@@ -95,7 +95,7 @@ PowerShell is used to initiate some pre-deployment, deployment, and post-deploym
 
 `$PSVersionTable.psversion`
 
-In order to run the pre-deployment script, you will need to have the AzureRM modules installed (see [Installing AzureRM modules](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.1.0)). 
+In order to run the pre-deployment script, you will need to have the AzureRM modules installed (see [Installing AzureRM modules](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.1.0)).
 
 #### SSL certificate
 This solution deploys an Applicaiton Gateway and requires an SSL certificate. To generate a self-signed SSL certificate using PowerShell, run [this script](predeploy/generateCert.ps1). Note: self-signed certificates are not recommended for use in production environments.
@@ -204,6 +204,6 @@ To help with deleting protected resources, use postdeploy/deleteProtectedItems.p
 
 ## Known Issues
 
-1. OMS Monitoring Extension fails intermittently on different machines ([See issue #95](https://github.com/AppliedIS/azure-blueprint/issues/95)). 
+1. OMS Monitoring Extension fails intermittently on different machines ([See issue #95](https://github.com/AppliedIS/azure-blueprint/issues/95)).
 2. SQL Always On configuration is currently broken for SQL2016-WS2012R2 ([See issue #73](https://github.com/AppliedIS/azure-blueprint/issues/73)).
 3. Deployment only works successfully with a new key vault (it does not work with an existing key vault). This will force the user to run the pre-deployment script to create a new resource group and key vault before each deployment.
