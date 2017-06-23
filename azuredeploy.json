@@ -875,7 +875,7 @@
             ],
             "provisioningHybridworkerUrl": "[concat(parameters('scriptsBaseUrl'),'/provisioningHybridworkers.ps1')]",
             "provisioningStorageAccountsUrl": "[concat(parameters('templatesBaseUrl'),'/storageAccounts.json')]",
-            "provisioningVirtualMachinesUrl": "[concat(parameters('templatesBaseUrl'),'/vritualMachines.json')]",
+            "provisioningVirtualMachinesUrl": "[concat(parameters('templatesBaseUrl'),'/virtualMachines.json')]",
             "provisioningAvailabilitySetsUrl": "[concat(parameters('templatesBaseUrl'),'/availabilitySets.json')]",
             "customScriptBaselineUrl": "[concat(parameters('scriptsBaseUrl'),'/customScriptBaseline.ps1')]",
             "provisioningCustomScriptExtensionUrl": "[concat(parameters('templatesBaseUrl'),'/customScriptExtension.json')]",
