@@ -2366,7 +2366,7 @@
             "apiVersion": "2015-01-01",
             "dependsOn": [
                 "ConfigureSQL",
-                "ConfigureWebTier"
+                "ConfigureWebTier",
                 "monitorVMLoopSQLAD",
                 "monitorVMLoopWEB",
                 //"CustomScriptExtensionLoopWEB",
