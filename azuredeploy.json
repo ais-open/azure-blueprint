@@ -1563,6 +1563,9 @@
                   },
                   "mgtVMName": {
                       "value": "[variables('resourceNames').vms.mgt]"
+                  },
+                  "mgtVMSize": {
+                      "value": "[parameters('mgtVMSize')]"
                   }
                 }
             }
