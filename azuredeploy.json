@@ -2235,7 +2235,7 @@
                     }
                 }
             }
-        },
+        },*/
         {
             "name": "[concat('ConfigurationOMSMonitoringSQLAD-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
@@ -2296,7 +2296,7 @@
                     }
                 }
             }
-        },*/
+        },
         {
             "name": "[concat('ConfigurationOMSMonitoringWEB-', variables('resourceNames').vms.web, copyindex())]",
             "type": "Microsoft.Resources/deployments",
