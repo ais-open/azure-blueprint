@@ -25,6 +25,12 @@
     },
     "omsWorkspaceName": {
       "type": "string"
+    },
+    "mgtStorageAccountName": {
+        "type": "string"
+    },
+    "mgtStorageAccountType": {
+        "type": "string"
     }
   },
   "variables": {

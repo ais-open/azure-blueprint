@@ -1262,6 +1262,12 @@
                     },
                     "omsWorkspaceName": {
                         "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "mgtStorageAccountName": {
+                        "value": "[variables('resourceNames').storageAccounts.mgt]"
+                    },
+                    "mgtStorageAccountType": {
+                        "value": "[parameters('mgtStorageAccountType')]"
                     }
                 }
             }
@@ -1284,26 +1290,14 @@
                     "location": {
                         "value": "[resourceGroup().location]"
                     },
-                    "webStorageAccountName": {
-                        "value": "[variables('resourceNames').storageAccounts.web]"
+                    "adAvailabilitySetName": {
+                        "value": "[variables('resourceNames').availabilitySets.ad]"
                     },
-                    "webStorageAccountType": {
-                        "value": "[parameters('webStorageAccountType')]"
+                    "sqlAvailabilitySetName": {
+                        "value": "[variables('resourceNames').availabilitySets.sql]"
                     },
-                    "sqlStorageAccountName": {
-                        "value": "[variables('resourceNames').storageAccounts.sql]"
-                    },
-                    "dcStorageAccountName": {
-                        "value": "[variables('resourceNames').storageAccounts.dc]"
-                    },
-                    "sqlStorageAccountType": {
-                        "value": "[parameters('sqlStorageAccountType')]"
-                    },
-                    "dcStorageAccountType": {
-                        "value": "[parameters('dcStorageAccountType')]"
-                    },
-                    "omsWorkspaceName": {
-                        "value": "[parameters('omsWorkspaceName')]"
+                    "webAvailabilitySetName": {
+                        "value": "[variables('resourceNames').availabilitySets.web]"
                     }
                 }
             }
@@ -1391,6 +1385,27 @@
                     },
                     "mgtPublicIPName": {
                         "value": "[variables('resourceNames').publicIPs.mgt]"
+                    },
+                    "numberOfWebInstances": {
+                      "value": "[variables('numberOfWebInstances')]"
+                    },
+                    "webNICName": {
+                        "value": "[variables('resourceNames').nics.web]"
+                    },
+                    "WEBNICName": {
+                        "value": "[variables('resourceNames').nics.web]"
+                    },
+                    "webNSGid": {
+                        "value": "[variables('derivedIds').webNSG]"
+                    },
+                    "staticIPWEBStart": {
+                        "value": "[variables('staticIPWEBStart')]"
+                    },
+                    "subnetRef": {
+                        "value": "[variables('derivedIds').webSubnet]"
+                    },
+                    "webSubnetAddressRange": {
+                        "value": "[parameters('webSubnet').properties.addressPrefix]"
                     }
                 }
             }
@@ -1412,30 +1427,146 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "location": {
-                        "value": "[resourceGroup().location]"
-                    },
-                    "webStorageAccountName": {
-                        "value": "[variables('resourceNames').storageAccounts.web]"
-                    },
-                    "webStorageAccountType": {
-                        "value": "[parameters('webStorageAccountType')]"
-                    },
-                    "sqlStorageAccountName": {
-                        "value": "[variables('resourceNames').storageAccounts.sql]"
-                    },
-                    "dcStorageAccountName": {
-                        "value": "[variables('resourceNames').storageAccounts.dc]"
-                    },
-                    "sqlStorageAccountType": {
-                        "value": "[parameters('sqlStorageAccountType')]"
-                    },
-                    "dcStorageAccountType": {
-                        "value": "[parameters('dcStorageAccountType')]"
-                    },
-                    "omsWorkspaceName": {
-                        "value": "[parameters('omsWorkspaceName')]"
-                    }
+                  "location": {
+                      "value": "[resourceGroup().location]"
+                  },
+                  "numberOfWebInstances": {
+                      "value": "[variables('numberOfWebInstances')]"
+                  },
+                  "WebVMName": {
+                      "value": "[variables('resourceNames').vms.web]"
+                  },
+                  "WebStorageAccountName": {
+                      "value": "[variables('resourceNames').storageAccounts.web]"
+                  },
+                  "WebVMSize": {
+                      "value": "[parameters('webVMSize')]"
+                  },
+                  "webNICName": {
+                      "value": "[variables('resourceNames').nics.web]"
+                  },
+                  "appImagePublisher": {
+                      "value": "[variables('vmSettings').web.imagePublisher]"
+                  },
+                  "appImageOffer": {
+                      "value": "[variables('vmSettings').web.imageOffer]"
+                  },
+                  "appImageSKU": {
+                      "value": "[variables('vmSettings').web.imageSKU]"
+                  },
+                  "webAvailabilitySetName": {
+                      "value": "[variables('resourceNames').availabilitySets.web]"
+                  },
+                  "adAvailabilitySetName": {
+                      "value": "[variables('resourceNames').availabilitySets.ad]"
+                  },
+                  "sqlAvailabilitySetName": {
+                      "value": "[variables('resourceNames').availabilitySets.sql]"
+                  },
+                  "adPDCVMName": {
+                      "value": "[variables('resourceNames').vms.adpdc]"
+                  },
+                  "adVMSize": {
+                      "value": "[parameters('adVMSize')]"
+                  },
+                  "adminUsername": {
+                      "value": "[parameters('adminUsername')]"
+                  },
+                  "environmentPrefix": {
+                      "value": "[parameters('environmentPrefix')]"
+                  },
+                  "adminPassword": {
+                      "reference": {
+                          "keyVault": {
+                              "id": "[variables('derivedIds').keyVaultId]"
+                          },
+                          "secretName": "adminPassword"
+                      }
+                  },
+                  "adImagePublisher": {
+                      "value": "[variables('vmSettings').dc.imagePublisher]"
+                  },
+                  "adImageOffer": {
+                      "value": "[variables('vmSettings').dc.imageOffer]"
+                  },
+                  "adImageSKU": {
+                      "value": "[variables('vmSettings').dc.imageSKU]"
+                  },
+                  "adPDCNicName": {
+                      "value": "[variables('resourceNames').nics.adpdc]"
+                  },
+                  "adBDCVMName": {
+                      "value": "[variables('resourceNames').vms.adbdc]"
+                  },
+                  "adBDCNicName": {
+                      "value": "[variables('resourceNames').nics.adbdc]"
+                  },
+                  "sqlVMName": {
+                      "value": "[variables('resourceNames').vms.sql]"
+                  },
+                  "sqlStorageAccountName": {
+                      "value": "[variables('resourceNames').storageAccounts.sql]"
+                  },
+                  "dcStorageAccountName": {
+                      "value": "[variables('resourceNames').storageAccounts.dc]"
+                  },
+                  "mgtStorageAccountName": {
+                      "value": "[variables('resourceNames').storageAccounts.mgt]"
+                  },
+                  "sqlVMSize": {
+                      "value": "[parameters('sqlVMSize')]"
+                  },
+                  "fswImagePublisher": {
+                      "value": "[variables('vmSettings').sqlw.imagePublisher]"
+                  },
+                  "fswImageOffer": {
+                      "value": "[variables('vmSettings').sqlw.imageOffer]"
+                  },
+                  "fswImageSKU": {
+                      "value": "[variables('vmSettings').sqlw.imageSKU]"
+                  },
+                  "vmContainerName": {
+                      "value": "[variables('vmSettings').vmContainerName]"
+                  },
+                  "sqlImagePublisher": {
+                      "value": "[variables('vmSettings').sql.imagePublisher]"
+                  },
+                  "sqlImageOffer": {
+                      "value": "[variables('vmSettings').sql.imageOffer]"
+                  },
+                  "sqlImageSKU": {
+                      "value": "[variables('vmSettings').sql.imageSKU]"
+                  },
+                  "mgtImagePublisher": {
+                      "value": "[variables('vmSettings').mgt.imagePublisher]"
+                  },
+                  "mgtImageOffer": {
+                      "value": "[variables('vmSettings').mgt.imageOffer]"
+                  },
+                  "mgtImageSKU": {
+                      "value": "[variables('vmSettings').mgt.imageSKU]"
+                  },
+                  "domainName": {
+                      "value": "[parameters('domainName')]"
+                  },
+                  "witnessVMSize": {
+                      "value": "[parameters('witnessVMSize')]"
+                  },
+                  "sqlwVMName": {
+                      "value": "[variables('resourceNames').vms.sqlw]"
+                  },
+                  "sqlwNicName": {
+                      "value": "[variables('resourceNames').nics.sqlw]"
+                  },
+                  "sql0NicName": {
+                      "value": "[variables('resourceNames').nics.sql0]"
+                  },
+                  "sql1NicName": {
+                      "value": "[variables('resourceNames').nics.sql1]"
+                  },
+                  "mgtVMName": {
+                      "value": "[variables('resourceNames').vms.mgt]"
+                  }
                 }
             }
         },

@@ -5,7 +5,7 @@
     "location": {
       "type": "string"
     },
-    "WebAvailabilitySetName": {
+    "webAvailabilitySetName": {
         "type": "string"
     },
     "adAvailabilitySetName": {
@@ -40,7 +40,7 @@
     },
     {
         "type": "Microsoft.Compute/availabilitySets",
-        "name": "[parameters('WebAvailabilitySetName')]",
+        "name": "[parameters('webAvailabilitySetName')]",
         "apiVersion": "2015-06-15",
         "tags": {
             "Project": "BluePrint"
