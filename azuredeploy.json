@@ -1582,7 +1582,9 @@
                 "Microsoft.Resources/deployments/ProvisioningNICs",
                 "Microsoft.Resources/deployments/ProvisioningStorageAccounts",
                 "Microsoft.Resources/deployments/ProvisioningAvailabilitySets",
-                "Microsoft.Resources/deployments/ProvisioningVirtualMachines"
+                "Microsoft.Resources/deployments/ProvisioningVirtualMachines",
+                "monitorVMLoopSQLAD",
+                "monitorVMLoopWEB"
             ],
             "properties": {
                 "mode": "Incremental",
