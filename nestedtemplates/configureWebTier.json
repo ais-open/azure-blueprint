@@ -103,6 +103,9 @@
         },
         "provisioningHybridworkersUrl": {
             "type": "string"
+        },
+        "omsWorkspaceName": {
+            "type": "string"
         }
     },
     "variables": {
