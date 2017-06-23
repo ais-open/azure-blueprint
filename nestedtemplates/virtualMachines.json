@@ -142,6 +142,9 @@
     },
     "mgtVMSize": {
         "type": "string"
+    },
+    "mgtNICName": {
+        "type": "string"
     }
   },
   "variables": {

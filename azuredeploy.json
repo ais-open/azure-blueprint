@@ -1566,6 +1566,9 @@
                   },
                   "mgtVMSize": {
                       "value": "[parameters('mgtVMSize')]"
+                  },
+                  "mgtNICName": {
+                      "value": "[variables('resourceNames').nics.mgt]"
                   }
                 }
             }
