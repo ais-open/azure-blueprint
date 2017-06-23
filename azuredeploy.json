@@ -2368,8 +2368,8 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "ConfigureSQL",
-                "ConfigureWebTier",
+                //"ConfigureSQL",
+                //"ConfigureWebTier",
                 "monitorVMLoopSQLAD",
                 "monitorVMLoopWEB"
             ],
