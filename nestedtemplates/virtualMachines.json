@@ -285,7 +285,7 @@
             "Project": "BluePrint"
         },
         "dependsOn": [
-            "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
+
         ],
         "copy": {
             "name": "sqlvirtualMachineLoop",
@@ -363,7 +363,7 @@
             "Project": "BluePrint"
         },
         "dependsOn": [
-            "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
+
         ],
         "properties": {
             "hardwareProfile": {
