@@ -282,7 +282,7 @@
             },
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
+
             ],
             "properties": {
                 "publisher": "Microsoft.Powershell",

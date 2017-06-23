@@ -2368,9 +2368,7 @@
                 "ConfigureSQL",
                 "ConfigureWebTier",
                 "monitorVMLoopSQLAD",
-                "monitorVMLoopWEB",
-                //"CustomScriptExtensionLoopWEB",
-                //"CustomScriptExtensionLoopSQLAD"
+                "monitorVMLoopWEB"
             ],
             "properties": {
                 "mode": "Incremental",
