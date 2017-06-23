@@ -103,56 +103,13 @@
         },
         "provisioningHybridworkersUrl": {
             "type": "string"
-        },
-        "omsWorkspaceName": {
-            "type": "string"
         }
     },
     "variables": {
         "domainJoinOptions": 3,
         "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]"
     },
-    "resources": [{
-            "type": "Microsoft.Storage/storageAccounts",
-            "name": "[parameters('WebStorageAccountName')]",
-            "apiVersion": "2016-01-01",
-            "tags": {
-                "Project": "BluePrint"
-            },
-            "location": "[resourceGroup().location]",
-            "sku": {
-                "name": "[parameters('webStorageAccountType')]"
-            },
-            "kind": "Storage",
-            "properties": {
-                "encryption": {
-                    "services": {
-                        "blob": {
-                            "enabled": true
-                        }
-                    },
-                    "keySource": "Microsoft.Storage"
-                }
-            }
-        },
-        {
-          "apiVersion": "2015-11-01-preview",
-          "name": "[concat(parameters('omsWorkspaceName'), '/', parameters('WebStorageAccountName'))]",
-          "type": "Microsoft.OperationalInsights/workspaces/storageInsightConfigs",
-          "dependsOn": [
-            "[concat('Microsoft.Storage/storageAccounts/', parameters('WebStorageAccountName'))]"
-          ],
-          "properties": {
-            "containers": [ ],
-            "tables": [
-              
-            ],
-            "storageAccount": {
-              "id": "[resourceId('Microsoft.Storage/storageaccounts/', parameters('WebStorageAccountName'))]",
-              "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('WebStorageAccountName')),'2015-06-15').key1]"
-            }
-          }
-        },
+    "resources": [
         /*{
           "type": "microsoft.insights/alertrules",
           "name": "[concat('capacity_alert_', parameters('WebStorageAccountName'))]",
@@ -185,48 +142,7 @@
             "[resourceId('Microsoft.Storage/storageAccounts', parameters('WebStorageAccountName'))]"
           ]
         },*/
-        {
-            "type": "Microsoft.Compute/availabilitySets",
-            "name": "[parameters('WebAvailabilitySetName')]",
-            "apiVersion": "2015-06-15",
-            "tags": {
-                "Project": "BluePrint"
-            },
-            "location": "[parameters('location')]",
-            "properties": {
-                "platformFaultDomainCount": "2",
-                "platformUpdateDomainCount": "2"
-            }
-        },
-        {
-            "apiVersion": "2015-05-01-preview",
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(parameters('WEBNICName'), copyindex())]",
-            "location": "[resourceGroup().location]",
-            "tags": {
-                "Project": "BluePrint"
-            },
-            "copy": {
-                "name": "nicLoopDEL",
-                "count": "[parameters('numberOfWebInstances')]"
-            },
-            "dependsOn": [],
-            "properties": {
-                "ipConfigurations": [{
-                    "name": "ipconfig1",
-                    "properties": {
-                        "privateIPAllocationMethod": "Static",
-                        "privateIPAddress": "[concat(split(parameters('webSubnetAddressRange'), '0/')[0], add(copyindex(), parameters('staticIPWEBStart')))]",
-                        "subnet": {
-                            "id": "[parameters('subnetRef')]"
-                        }
-                    }
-                }],
-                "networkSecurityGroup": {
-                    "id": "[parameters('webNSGid')]"
-                }
-            }
-        },
+
         {
             "apiVersion": "2016-03-30",
             "type": "Microsoft.Compute/virtualMachines",
@@ -240,9 +156,7 @@
                 "count": "[parameters('numberOfWebInstances')]"
             },
             "dependsOn": [
-                "[concat('Microsoft.Storage/storageAccounts/', parameters('WebStorageAccountName'))]",
-                "[concat('Microsoft.Compute/availabilitySets/', parameters('WebAvailabilitySetName'))]",
-                "[concat('Microsoft.Network/networkInterfaces/', concat(parameters('WEBNICName'), copyindex()))]"
+              
             ],
             "properties": {
                 "hardwareProfile": {

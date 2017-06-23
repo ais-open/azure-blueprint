@@ -5,6 +5,27 @@
     "location": {
       "type": "string"
     },
+    "numberOfWebInstances": {
+        "type": "int",
+        "defaultValue": 2,
+        "minValue": 2,
+        "maxValue": 5
+    },
+    "webNICName": {
+        "type": "string"
+    },
+    "subnetRef": {
+        "type": "string"
+    },
+    "webSubnetAddressRange": {
+        "type": "string"
+    },
+    "staticIPWEBStart": {
+        "type": "int"
+    },
+    "webNSGid": {
+        "type": "string"
+    },
     "adPDCNicName": {
       "type": "string"
     },
@@ -256,6 +277,35 @@
           "id": "[parameters('mgtNSGid')]"
         }
       }
+    },
+    {
+        "apiVersion": "2015-05-01-preview",
+        "type": "Microsoft.Network/networkInterfaces",
+        "name": "[concat(parameters('webNICName'), copyindex())]",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "Project": "BluePrint"
+        },
+        "copy": {
+            "name": "nicLoopDEL",
+            "count": "[parameters('numberOfWebInstances')]"
+        },
+        "dependsOn": [],
+        "properties": {
+            "ipConfigurations": [{
+                "name": "ipconfig1",
+                "properties": {
+                    "privateIPAllocationMethod": "Static",
+                    "privateIPAddress": "[concat(split(parameters('webSubnetAddressRange'), '0/')[0], add(copyindex(), parameters('staticIPWEBStart')))]",
+                    "subnet": {
+                        "id": "[parameters('subnetRef')]"
+                    }
+                }
+            }],
+            "networkSecurityGroup": {
+                "id": "[parameters('webNSGid')]"
+            }
+        }
     }
   ],
   "outputs": {}
