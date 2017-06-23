@@ -1845,7 +1845,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "Microsoft.Resources/deployments/WebTier"
+                "Microsoft.Resources/deployments/ProvisioningVirtualMachines"
             ],
             "copy": {
                 "name": "monitorVMLoopSQLAD",
@@ -1906,7 +1906,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "Microsoft.Resources/deployments/WebTier"
+                "Microsoft.Resources/deployments/ProvisioningVirtualMachines"
             ],
             "copy": {
                 "name": "monitorVMLoopWEB",
