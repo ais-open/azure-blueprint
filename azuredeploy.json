@@ -1573,16 +1573,11 @@
                 }
             }
         },
-        /*{
+        {
             "name": "ConfigureADMGT",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "Microsoft.Resources/deployments/BackupPolicyCustom",
-                "Microsoft.Resources/deployments/ProvisioningNICs",
-                "Microsoft.Resources/deployments/ProvisioningStorageAccounts",
-                "Microsoft.Resources/deployments/ProvisioningAvailabilitySets",
-                "Microsoft.Resources/deployments/ProvisioningVirtualMachines",
                 "monitorVMLoopSQLAD",
                 "monitorVMLoopWEB"
             ],
@@ -2240,7 +2235,7 @@
                     }
                 }
             }
-        },*/
+        },
         {
             "name": "[concat('ConfigurationOMSMonitoringSQLAD-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
