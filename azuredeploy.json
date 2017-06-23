@@ -1581,7 +1581,8 @@
                 "Microsoft.Resources/deployments/BackupPolicyCustom",
                 "Microsoft.Resources/deployments/ProvisioningNICs",
                 "Microsoft.Resources/deployments/ProvisioningStorageAccounts",
-                "Microsoft.Resources/deployments/ProvisioningAvailabilitySets"
+                "Microsoft.Resources/deployments/ProvisioningAvailabilitySets",
+                "Microsoft.Resources/deployments/ProvisioningVirtualMachines"
             ],
             "properties": {
                 "mode": "Incremental",
