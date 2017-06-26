@@ -815,7 +815,13 @@
             "[parameters('dcSubnet')]",
             "[parameters('webSubnet')]",
             "[parameters('mgtSubnet')]",
-            "[parameters('appGatewaySubnet')]"
+            "[parameters('appGatewaySubnet')]",
+            {
+                "name": "GatewaySubnet",
+                "properties": {
+                    "addressPrefix": "10.200.0.0/24"
+                }
+            }
         ],
         "virtualNetworkNameWithSuffix": "[concat(parameters('virtualNetworkName'), uniqueString(resourceGroup().id))]",
         "resourceNames": {
@@ -1000,7 +1006,7 @@
         }
     },
     "resources": [
-      /*{
+      {
             "name": "CreateAutomationAccountAndOMSWorkspace",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1727,8 +1733,8 @@
                     }
                 }
             }
-        },*/
-        {
+        },
+        /*{
             "name": "ConfigureADMGT",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -2390,6 +2396,140 @@
                     }
                 }
             }
-        }
+        },
+        {
+            "name": "ConfigureWebTier",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/ConfigureADMGT"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').configureWebTierUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "numberOfWebInstances": {
+                        "value": "[variables('numberOfWebInstances')]"
+                    },
+                    "WebVMName": {
+                        "value": "[variables('resourceNames').vms.web]"
+                    },
+                    "WebAvailabilitySetName": {
+                        "value": "[variables('resourceNames').availabilitySets.web]"
+                    },
+                    "WebStorageAccountName": {
+                        "value": "[variables('resourceNames').storageAccounts.web]"
+                    },
+                    "webStorageAccountType": {
+                        "value": "[parameters('webStorageAccountType')]"
+                    },
+                    "location": {
+                        "value": "[resourceGroup().location]"
+                    },
+                    "WebVMSize": {
+                        "value": "[parameters('webVMSize')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "adminPassword"
+                        }
+                    },
+                    "appImagePublisher": {
+                        "value": "[variables('vmSettings').web.imagePublisher]"
+                    },
+                    "appImageOffer": {
+                        "value": "[variables('vmSettings').web.imageOffer]"
+                    },
+                    "appImageSKU": {
+                        "value": "[variables('vmSettings').web.imageSKU]"
+                    },
+                    "vmContainerName": {
+                        "value": "[variables('vmSettings').vmContainerName]"
+                    },
+                    "WEBNICName": {
+                        "value": "[variables('resourceNames').nics.web]"
+                    },
+                    "subnetRef": {
+                        "value": "[variables('derivedIds').webSubnet]"
+                    },
+                    "webNSGid": {
+                        "value": "[variables('derivedIds').webNSG]"
+                    },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "webModulesURL": {
+                        "value": "[variables('artifacts').webModulesURL]"
+                    },
+                    "webConfigurationFunction": {
+                        "value": "[variables('artifacts').webConfigurationFunction]"
+                    },
+                    "staticIPWEBStart": {
+                        "value": "[variables('staticIPWEBStart')]"
+                    },
+                    "webSubnetAddressRange": {
+                        "value": "[parameters('webSubnet').properties.addressPrefix]"
+                    },
+                    "backupInfo": {
+                        "value": "[variables('backupInfo')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('keyVaultName')]"
+                    },
+                    "vmEncryptionSettings": {
+                        "value": "[variables('vmEncryptionSettings')]"
+                    },
+                    "antimalwareInfo": {
+                        "value": "[variables('antimalwareInfo')]"
+                    },
+                    "workspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "AutomationAccountName": {
+                        "value": "[parameters('omsAutomationAccountName')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
+                    },
+                    "AzureUserName": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azureUserName"
+                        }
+                    },
+                    "AzurePassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azurePassword"
+                        }
+                    },
+                    "SubscriptionId": {
+                        "value": "[subscription().subscriptionId]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[resourceGroup().name]"
+                    },
+                    "provisioningHybridworkersUrl": {
+                        "value": "[variables('artifacts').provisioningHybridworkerUrl]"
+                    },
+                    "omsWorkspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
+                    }
+                }
+            }
+        }*/
     ]
 }
