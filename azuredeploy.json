@@ -815,13 +815,7 @@
             "[parameters('dcSubnet')]",
             "[parameters('webSubnet')]",
             "[parameters('mgtSubnet')]",
-            "[parameters('appGatewaySubnet')]",
-            {
-                "name": "GatewaySubnet",
-                "properties": {
-                    "addressPrefix": "10.200.0.0/24"
-                }
-            }
+            "[parameters('appGatewaySubnet')]"
         ],
         "virtualNetworkNameWithSuffix": "[concat(parameters('virtualNetworkName'), uniqueString(resourceGroup().id))]",
         "resourceNames": {
