@@ -1701,8 +1701,8 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                //"ConfigureSQL",
-                //"ConfigureWebTier",
+                "ConfigureSQL",
+                "ConfigureWebTier",
                 "monitorVMLoopSQLAD",
                 "monitorVMLoopWEB"
             ],
@@ -1734,8 +1734,7 @@
             "apiVersion": "2015-01-01",
             "dependsOn": [
                 "monitorVMLoopSQLAD",
-                "monitorVMLoopWEB",
-                "Microsoft.Resources/deployments/ConfigurationAutomationSchedules"
+                "monitorVMLoopWEB"
             ],
             "properties": {
                 "mode": "Incremental",
