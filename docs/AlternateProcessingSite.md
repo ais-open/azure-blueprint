@@ -4,7 +4,7 @@ The following steps will describe how to setup a N-tier application infrastructu
 
 1. Deploy n-tier application to the "US Gov Virginia" region using the [README](https://github.com/AppliedIS/azure-blueprint/new/master/README.md) as a guide.
 2. Deploy a second n-tier application to the "US Gov Iowa" region using the [README](https://github.com/AppliedIS/azure-blueprint/new/master/README.md) as a guide.
-3.    dasfasdf
+3.
 4.
 5.
 6.
