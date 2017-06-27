@@ -454,7 +454,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'MGTBaselineDSC')]"
+                  "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
             ],
             "copy": {
                 "name": "encryptADMGTLoop",
