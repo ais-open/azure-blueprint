@@ -1033,7 +1033,7 @@
             }
         },
         {
-            "name": "RecoverServicesVault",
+            "name": "RecoveryServicesVault",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [],
@@ -1055,7 +1055,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "Microsoft.Resources/deployments/RecoverServicesVault"
+                "Microsoft.Resources/deployments/RecoveryServicesVault"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -1171,7 +1171,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "Microsoft.Resources/deployments/VirtualNetworkNSG"
+                "Microsoft.Resources/deployments/ConfigureADMGT"
             ],
             "properties": {
                 "mode": "Incremental",
