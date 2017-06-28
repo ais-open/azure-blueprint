@@ -566,7 +566,7 @@
                 "Project": "BluePrint"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]"
+                "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
             ],
             "location": "[parameters('location')]",
             "properties": {
