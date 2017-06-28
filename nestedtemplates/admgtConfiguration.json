@@ -241,7 +241,7 @@
         "fswstorageName": "[concat(parameters('sqlStorageAccountName'), 'fsw')]",
         "diagstorageNameSQL": "[concat(parameters('sqlStorageAccountName'), 'diag')]",
         "diagstorageNameDC": "[concat(parameters('dcStorageAccountName'), 'diag')]",
-        "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]",
+        "domainJoinUserName": "[concat(parameters('domainName'), '\\', parameters('adminUsername'))]",
         "vmNames": {
             "VMs": [{
                     "Name": "[parameters('adPDCVMName')]"
@@ -579,7 +579,7 @@
                     "User": "[variables('domainJoinUserName')]",
                     "Restart": "true",
                     "Options": 3,
-                    "OUPath": "Management"
+                    "OUPath": ""
                 },
                 "protectedSettings": {
                     "Password": "[parameters('adminPassword')]"
