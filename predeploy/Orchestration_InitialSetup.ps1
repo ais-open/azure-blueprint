@@ -38,7 +38,7 @@ try {
    return true
 } catch {
 
-if($lginCount -le 3){
+if($lginCount -lt 3){
 $lginCount = $lginCount + 1
 loginToAzure -lginCount $lginCount
 }
