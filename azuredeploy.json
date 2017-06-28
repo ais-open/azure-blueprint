@@ -1574,7 +1574,7 @@
                 }
             }
         },
-        /*{
+        {
             "name": "[concat('ConfigurationOMSMonitoringSQLAD-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1727,14 +1727,14 @@
                     }
                 }
             }
-        },*/
+        },
         {
             "name": "ConfigureADMGT",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                //"monitorVMLoopSQLAD",
-                //"monitorVMLoopWEB",
+                "monitorVMLoopSQLAD",
+                "monitorVMLoopWEB",
                 "Microsoft.Resources/deployments/ProvisioningVirtualMachines"
             ],
             "properties": {
