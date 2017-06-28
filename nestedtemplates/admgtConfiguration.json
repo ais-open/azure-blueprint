@@ -449,7 +449,7 @@
                 }
             }
         },
-        {
+        /*{
             "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -556,7 +556,7 @@
                     }
                 }
             }
-        },
+        },*/
         {
             "comments": "Join domain - JsonADDomainExtension",
             "apiVersion": "2015-06-15",
