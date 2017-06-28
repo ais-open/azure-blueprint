@@ -22,16 +22,37 @@ Must meet complexity requirements
 14+ characters, 2 numbers, 2 upper and lower case, and 2 special chars
 #>
 
+function loginToAzure{
+Param(
+		[Parameter(Mandatory=$true)]
+		[int]$lginCount
+	)
+
 $azureUserName = Read-Host "Enter your Azure username"
 $azurePassword = Read-Host -assecurestring "Enter your Azure password"
 
 try {
 	$AzureAuthCreds = New-Object System.Management.Automation.PSCredential -ArgumentList @($azureUserName,$azurePassword)
 	$azureEnv = Get-AzureRmEnvironment -Name $EnvironmentName
-  Login-AzureRmAccount -EnvironmentName "AzureUSGovernment" -Credential $AzureAuthCreds
+   Login-AzureRmAccount -EnvironmentName "AzureUSGovernment" -Credential $AzureAuthCreds -ErrorAction Suspend
+   return true
 } catch {
+
+if($lginCount -le 3){
+$lginCount = $lginCount + 1
+loginToAzure -lginCount $lginCount
+}
+else{
+
 	Throw "Your credentials are incorrect or invalid. Make sure you are using your Azure Government account information"
 }
+}
+
+}
+
+
+loginToAzure -lginCount 1
+
 $adminUsername = Read-Host "Enter an admin username"
 
 $passwordNames = @("adminPassword","sqlServerServiceAccountPassword")
