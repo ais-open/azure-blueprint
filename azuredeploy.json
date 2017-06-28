@@ -1000,13 +1000,83 @@
         }
     },
     "resources": [
+      {
+            "name": "CreateAutomationAccountAndOMSWorkspace",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningOMSWorkspaceUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "omsWorkspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "omsWorkspaceRegion": {
+                        "value": "[parameters('omsWorkspaceRegion')]"
+                    },
+                    "serviceTier": {
+                        "value": "[parameters('serviceTier')]"
+                    },
+                    "dataRetention": {
+                        "value": "[parameters('dataRetention')]"
+                    },
+                    "omsAutomationAccountName": {
+                        "value": "[parameters('omsAutomationAccountName')]"
+                    },
+                    "artifactsLocation": {
+                        "value": "[parameters('scriptsBaseUrl')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "RecoveryServicesVault",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningRCV]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "backupInfo": {
+                        "value": "[variables('backupInfo')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "BackupPolicyCustom",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/RecoveryServicesVault"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').backupPolicy]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "backupInfo": {
+                        "value": "[variables('backupInfo')]"
+                    }
+                }
+            }
+        },
         {
             "name": "VirtualNetworkNSG",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "comments": "This resource will create storage accounts for Active Directory, SQL Server, File Share Witness and Diagnostics. It will also create the Virtual Network and public IP addresses",
             "dependsOn": [
-
+                "Microsoft.Resources/deployments/CreateAutomationAccountAndOMSWorkspace"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -1504,7 +1574,7 @@
                 }
             }
         },
-        {
+        /*{
             "name": "[concat('ConfigurationOMSMonitoringSQLAD-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1657,14 +1727,15 @@
                     }
                 }
             }
-        },
+        },*/
         {
             "name": "ConfigureADMGT",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "monitorVMLoopSQLAD",
-                "monitorVMLoopWEB"
+                //"monitorVMLoopSQLAD",
+                //"monitorVMLoopWEB",
+                "Microsoft.Resources/deployments/ProvisioningVirtualMachines"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -2320,83 +2391,6 @@
                     }
                 }
             }
-        },
-        {
-              "name": "CreateAutomationAccountAndOMSWorkspace",
-              "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2015-01-01",
-              "dependsOn":[
-                "Microsoft.Resources/deployments/ConfigureWebTier",
-                "Microsoft.Resources/deployments/ConfigureSQL"
-              ],
-              "properties": {
-                  "mode": "Incremental",
-                  "templateLink": {
-                      "uri": "[variables('artifacts').provisioningOMSWorkspaceUrl]",
-                      "contentVersion": "1.0.0.0"
-                  },
-                  "parameters": {
-                      "omsWorkspaceName": {
-                          "value": "[parameters('omsWorkspaceName')]"
-                      },
-                      "omsWorkspaceRegion": {
-                          "value": "[parameters('omsWorkspaceRegion')]"
-                      },
-                      "serviceTier": {
-                          "value": "[parameters('serviceTier')]"
-                      },
-                      "dataRetention": {
-                          "value": "[parameters('dataRetention')]"
-                      },
-                      "omsAutomationAccountName": {
-                          "value": "[parameters('omsAutomationAccountName')]"
-                      },
-                      "artifactsLocation": {
-                          "value": "[parameters('scriptsBaseUrl')]"
-                      }
-                  }
-              }
-          },
-          {
-              "name": "RecoveryServicesVault",
-              "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2015-01-01",
-              "dependsOn": [
-                "Microsoft.Resources/deployments/ConfigureWebTier",
-                "Microsoft.Resources/deployments/ConfigureSQL"
-              ],
-              "properties": {
-                  "mode": "Incremental",
-                  "templateLink": {
-                      "uri": "[variables('artifacts').provisioningRCV]",
-                      "contentVersion": "1.0.0.0"
-                  },
-                  "parameters": {
-                      "backupInfo": {
-                          "value": "[variables('backupInfo')]"
-                      }
-                  }
-              }
-          },
-          {
-              "name": "BackupPolicyCustom",
-              "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2015-01-01",
-              "dependsOn": [
-                  "Microsoft.Resources/deployments/RecoveryServicesVault"
-              ],
-              "properties": {
-                  "mode": "Incremental",
-                  "templateLink": {
-                      "uri": "[variables('artifacts').backupPolicy]",
-                      "contentVersion": "1.0.0.0"
-                  },
-                  "parameters": {
-                      "backupInfo": {
-                          "value": "[variables('backupInfo')]"
-                      }
-                  }
-              }
-          }
+        }
     ]
 }
