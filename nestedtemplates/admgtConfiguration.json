@@ -566,7 +566,7 @@
                 "Project": "BluePrint"
             },
             "dependsOn": [
-                "backupSQLMGMTADLoop"
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('adPDCVMName'), 'PDCBaselineDSC')]"
             ],
             "location": "[parameters('location')]",
             "properties": {
