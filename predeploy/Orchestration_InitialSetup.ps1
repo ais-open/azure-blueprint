@@ -22,41 +22,38 @@ Must meet complexity requirements
 14+ characters, 2 numbers, 2 upper and lower case, and 2 special chars
 #>
 
+$global:azureUserName = $null
+$global:azurePassword = $null
+
 function loginToAzure{
 Param(
 		[Parameter(Mandatory=$true)]
 		[int]$lginCount
 	)
 
-$azureUserName = Read-Host "Enter your Azure username"
-$azurePassword = Read-Host -assecurestring "Enter your Azure password"
+$global:azureUserName = Read-Host "Enter your Azure username"
+$global:azurePassword = Read-Host -assecurestring "Enter your Azure password"
 
 try {
-	$AzureAuthCreds = New-Object System.Management.Automation.PSCredential -ArgumentList @($azureUserName,$azurePassword)
+	$AzureAuthCreds = New-Object System.Management.Automation.PSCredential -ArgumentList @($global:azureUserName,$global:azurePassword)
 	$azureEnv = Get-AzureRmEnvironment -Name $EnvironmentName
-   Login-AzureRmAccount -EnvironmentName "AzureUSGovernment" -Credential $AzureAuthCreds -ErrorAction Suspend
-   return true
+   Login-AzureRmAccount -EnvironmentName "AzureUSGovernment" -Credential $AzureAuthCreds
 } catch {
 
 if($lginCount -lt 3){
 $lginCount = $lginCount + 1
+
+Write-Host "Invalid Credentials! Try Logging in again"
+
 loginToAzure -lginCount $lginCount
 }
 else{
 
-	Throw "Your credentials are incorrect or invalid. Make sure you are using your Azure Government account information"
+	Throw "Your credentials are incorrect or invalid exceeding maximum retries. Make sure you are using your Azure Government account information"  
 }
 }
 
 }
-
-
-loginToAzure -lginCount 1
-
-$adminUsername = Read-Host "Enter an admin username"
-
-$passwordNames = @("adminPassword","sqlServerServiceAccountPassword")
-$passwords = New-Object -TypeName PSObject
 
 function checkPasswords
 {
@@ -143,11 +140,7 @@ function orchestration
 		[Parameter(Mandatory=$true)]
 		[SecureString]$adminPassword,
 		[Parameter(Mandatory=$true)]
-		[SecureString]$sqlServerServiceAccountPassword,
-		[Parameter(Mandatory = $true)]
-		[string]$aadAppName,
-		[Parameter(Mandatory = $true)]
-		[string]$keyEncryptionKeyName
+		[SecureString]$sqlServerServiceAccountPassword
 	)
 
 	$errorActionPreference = 'stop'
@@ -173,8 +166,9 @@ function orchestration
 	########################################################################################################################
 	# Create AAD app . Fill in $aadClientSecret variable if AAD app was already created
 	########################################################################################################################
+            $guid = [Guid]::NewGuid().toString();
 
-
+            $aadAppName = "Blueprint" + $guid ;
 			# Check if AAD app with $aadAppName was already created
 			$SvcPrincipals = (Get-AzureRmADServicePrincipal -SearchString $aadAppName);
 			if(-not $SvcPrincipals)
@@ -233,8 +227,10 @@ function orchestration
 			 Write-Host "Set Azure Key Vault Access Policy."
 			 Write-Host "Set ServicePrincipalName: $aadClientID in Key Vault: $keyVaultName";
 			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ServicePrincipalName $aadClientID -PermissionsToKeys wrapKey -PermissionsToSecrets set;
-			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ServicePrincipalName $recoveryServicesAADServicePrincipalName -PermissionsToKeys backup,get,list -PermissionsToSecrets get,list;
+			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ServicePrincipalName $aadClientID -PermissionsToKeys backup,get,list -PermissionsToSecrets get,list;
 			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -EnabledForDiskEncryption;
+
+            $keyEncryptionKeyName = $keyVaultName + "kek"
 
 			if($keyEncryptionKeyName)
 			{
@@ -296,9 +292,28 @@ function orchestration
 }
 
 
+
+try{
+
+
+loginToAzure -lginCount 1
+
+$adminUsername = Read-Host "Enter an admin username"
+
+$passwordNames = @("adminPassword","sqlServerServiceAccountPassword")
+$passwords = New-Object -TypeName PSObject
+
+
 for($i=0;$i -lt $passwordNames.Length;$i++){
    checkPasswords -name $passwordNames[$i]
 }
 
 
-orchestration -azureUsername $azureUsername -adminUsername $adminUsername -azurePassword $azurePassword -adminPassword $passwords.adminPassword -sqlServerServiceAccountPassword $passwords.sqlServerServiceAccountPassword
+orchestration -azureUsername $global:azureUsername -adminUsername $adminUsername -azurePassword $global:azurePassword -adminPassword $passwords.adminPassword -sqlServerServiceAccountPassword $passwords.sqlServerServiceAccountPassword
+
+}
+catch{
+Write-Host $PSItem.Exception.Message
+Write-Host "Thank You"
+}
+
