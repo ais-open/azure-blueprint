@@ -5,6 +5,9 @@
         "vmName": {
             "type": "string"
         },
+        "location": {
+            "type": "string"
+        },
         "workspaceName": {
             "type": "string"
         },
@@ -43,7 +46,7 @@
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'), '/EnterpriseCloudMonitoring')]",
             "apiVersion": "2016-03-30",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "dependsOn": [],
             "properties": {
                 "publisher": "Microsoft.EnterpriseCloud.Monitoring",
@@ -65,7 +68,7 @@
             "dependsOn": [
               "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('vmName'),'EnterpriseCloudMonitoring')]"
             ],
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "tags": {
                 "displayName": "customScriptBaseline",
                 "Project": "BluePrint"
