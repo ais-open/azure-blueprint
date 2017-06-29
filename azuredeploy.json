@@ -26,6 +26,13 @@
             "no"
           ]
         },
+        "vmLocation": {
+            "type": "string",
+            "allowedValues": [
+              "USGov Virginia",
+              "USGov Iowa"
+            ]
+        },
         "certData": {
           "type": "string",
           "metadata": {
@@ -1086,7 +1093,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('vmLocation')]"
                     },
                     "virtualNetworkName": {
                         "value": "[variables('virtualNetworkNameWithSuffix')]"
@@ -1134,7 +1141,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('vmLocation')]"
                     },
                     "sqlLBName": {
                         "value": "[variables('lbSettings').sqlLBName]"
@@ -1241,7 +1248,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('vmLocation')]"
                     },
                     "webStorageAccountName": {
                         "value": "[variables('resourceNames').storageAccounts.web]"
@@ -1289,7 +1296,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('vmLocation')]"
                     },
                     "adAvailabilitySetName": {
                         "value": "[variables('resourceNames').availabilitySets.ad]"
@@ -1318,7 +1325,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('vmLocation')]"
                     },
                     "adPDCNicName": {
                         "value": "[variables('resourceNames').nics.adpdc]"
@@ -1426,7 +1433,7 @@
                 },
                 "parameters": {
                   "location": {
-                      "value": "[resourceGroup().location]"
+                      "value": "[parameters('vmLocation')]"
                   },
                   "numberOfWebInstances": {
                       "value": "[variables('numberOfWebInstances')]"

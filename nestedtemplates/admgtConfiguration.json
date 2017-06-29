@@ -364,7 +364,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('location')]"
                     },
                     "adBDCVMName": {
                         "value": "[parameters('adBDCVMName')]"
@@ -429,7 +429,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('location')]"
                     },
                     "virtualNetworkName": {
                         "value": "[parameters('virtualNetworkNameWithSuffix')]"
