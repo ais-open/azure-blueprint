@@ -58,7 +58,7 @@
         "tags": {
             "Project": "BluePrint"
         },
-        "location": "[resourceGroup().location]",
+        "location": "[parameters('location')]",
         "properties": {
             "publisher": "Microsoft.Powershell",
             "type": "DSC",
