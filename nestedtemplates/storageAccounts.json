@@ -48,7 +48,7 @@
         "tags": {
             "Project": "BluePrint"
         },
-        "location": "[resourceGroup().location]",
+        "location": "[parameters('location')]",
         "sku": {
             "name": "[parameters('webStorageAccountType')]"
         },
@@ -212,7 +212,7 @@
         "tags": {
             "Project": "BluePrint"
         },
-        "location": "[resourceGroup().location]",
+        "location": "[parameters('location')]",
         "sku": {
             "name": "[parameters('mgtStorageAccountType')]"
         },
