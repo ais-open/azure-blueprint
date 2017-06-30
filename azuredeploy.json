@@ -882,6 +882,7 @@
             ],
             "provisioningHybridworkerUrl": "[concat(parameters('scriptsBaseUrl'),'/provisioningHybridworkers.ps1')]",
             "provisioningStorageAccountsUrl": "[concat(parameters('templatesBaseUrl'),'/storageAccounts.json')]",
+            "provisioningMGTUrl": "[concat(parameters('templatesBaseUrl'),'/provisioningMGT.json')]",
             "provisioningVirtualMachinesUrl": "[concat(parameters('templatesBaseUrl'),'/virtualMachines.json')]",
             "provisioningAvailabilitySetsUrl": "[concat(parameters('templatesBaseUrl'),'/availabilitySets.json')]",
             "customScriptBaselineUrl": "[concat(parameters('scriptsBaseUrl'),'/customScriptBaseline.ps1')]",
@@ -1588,7 +1589,8 @@
             "dependsOn": [
                 "Microsoft.Resources/deployments/ProvisioningVirtualMachines",
                 "ConfigureSQL",
-                "ConfigureWebTier"
+                "ConfigureWebTier",
+                "Microsoft.Resources/deployments/ProvisionMGT"
             ],
             "copy": {
                 "name": "monitorVMLoopSQLAD",
@@ -1654,7 +1656,8 @@
             "dependsOn": [
                 "Microsoft.Resources/deployments/ProvisioningVirtualMachines",
                 "ConfigureSQL",
-                "ConfigureWebTier"
+                "ConfigureWebTier",
+                "Microsoft.Resources/deployments/ProvisionMGT"
             ],
             "copy": {
                 "name": "monitorVMLoopWEB",
@@ -1721,7 +1724,8 @@
                 "ConfigureSQL",
                 "ConfigureWebTier",
                 "monitorVMLoopSQLAD",
-                "monitorVMLoopWEB"
+                "monitorVMLoopWEB",
+                "Microsoft.Resources/deployments/ProvisionMGT"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -2008,6 +2012,70 @@
                     "configureSQLAO": {
                         "value": "[parameters('configureSQLAO')]"
                     }
+                }
+            }
+        },
+        {
+            "name": "ProvisionMGT",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "comments": "This resource will create storage accounts for Active Directory, SQL Server, File Share Witness and Diagnostics. It will also create the Virtual Network and public IP addresses",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/ConfigureADMGT"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisionMGTUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                  "existingVNETName": {
+                    "value": "[variables('resourceNames').virtualNetworkNameWithSuffix]"
+                  },
+                  "existingSubnetName": {
+                    "value": "[parameters('mgtSubnet').name]"
+                  },
+                  "vmLocation": {
+                    "value": "[parameters('vmLocation')]"
+                  },
+                  "dnsLabelPrefix": {
+                    "value": "VMtestmgt"
+                  },
+                  "vmSize": {
+                    "value": "[parameters('mgtVMSize')]"
+                  },
+                  "domainToJoin": {
+                    "value": "[parameters('domainName')]"
+                  },
+                  "domainUsername": {
+                    "value": "[parameters('adminUsername')]"
+                  },
+                  "domainPassword": {
+                    "reference": {
+                        "keyVault": {
+                            "id": "[variables('derivedIds').keyVaultId]"
+                        },
+                        "secretName": "adminPassword"
+                    }
+                  },
+                  "ouPath": {
+                    "value": ""
+                  },
+                  "domainJoinOptions": {
+                    "value": 3
+                  },
+                  "vmAdminUsername": {
+                    "value": "[parameters('adminUsername')]"
+                  },
+                  "vmAdminPassword": {
+                    "reference": {
+                        "keyVault": {
+                            "id": "[variables('derivedIds').keyVaultId]"
+                        },
+                        "secretName": "adminPassword"
+                    }
+                  }
                 }
             }
         },
