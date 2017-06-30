@@ -576,7 +576,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "Name": "[parameters('domainName')]",
-                    "User": "[variables('domainJoinUserName')]",
+                    "User": "[concat(parameters('domainName'), '\\', parameters('adminUsername'))]",
                     "Restart": "true",
                     "Options": 3,
                     "OUPath": ""
