@@ -1194,6 +1194,9 @@
                     "virtualNetworkName": {
                         "value": "[variables('resourceNames').virtualNetworkNameWithSuffix]"
                     },
+                    "vmLocation": {
+                        "value": "[parameters('vmLocation')]"
+                    },
                     "subnetPrefix": {
                         "value": "[parameters('appGatewaySubnet').properties.addressPrefix]"
                     },

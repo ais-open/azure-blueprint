@@ -14,6 +14,9 @@
         "description": "Address prefix for the Virtual Network"
       }
     },
+    "vmLocation": {
+        "type": "string"
+    },
     "subnetPrefix": {
       "type": "string",
       "metadata": {
