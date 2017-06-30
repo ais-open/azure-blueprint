@@ -9,10 +9,6 @@ This script will create a Key Vault with a Key Encryption Key for VM DIsk Encryp
 $BaseSourceControl = 'C:\Users\davoodharun\Desktop\azure-blueprint'
 . "$BaseSourceControl\predeploy\Orchestration_InitialSetup.ps1" @MyParams -verbose
 
-.Parameter recoveryServicesAADServicePrincipalName
-This is the ApplicationId for the BackupFairfax (usgovvirginia) AzureAD Service Principal
-Azure commercial Backup Management Service ApplicationId is 262044b1-e2ce-469f-a196-69ab7ada62d3
-
 .Parameter adminPassword
 Must meet complexity requirements
 14+ characters, 2 numbers, 2 upper and lower case, and 2 special chars
@@ -124,7 +120,6 @@ function orchestration
 	Param(
 		[string]$environmentName = "AzureUSGovernment",
 		[string]$location = "USGov Virginia",
-		[string]$recoveryServicesAADServicePrincipalName = "ff281ffe-705c-4f53-9f37-a40e6f2c68f3",
 		[Parameter(Mandatory=$true)]
 		[string]$subscriptionId,
 		[Parameter(Mandatory=$true)]
