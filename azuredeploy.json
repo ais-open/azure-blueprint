@@ -2115,7 +2115,7 @@
                         "value": "[parameters('dcStorageAccountType')]"
                     },
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('vmLocation')]"
                     },
                     "adVMSize": {
                         "value": "[parameters('adVMSize')]"
@@ -2373,7 +2373,7 @@
                         "value": "[parameters('webStorageAccountType')]"
                     },
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('vmLocation')]"
                     },
                     "WebVMSize": {
                         "value": "[parameters('webVMSize')]"

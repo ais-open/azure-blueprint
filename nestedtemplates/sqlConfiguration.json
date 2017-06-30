@@ -5,6 +5,9 @@
         "adPDCVMName": {
             "type": "string"
         },
+        "vmLocation": {
+            "type": "string"
+        },
         "adAvailabilitySetName": {
             "type": "string"
         },
