@@ -2029,7 +2029,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('artifacts').provisionMGTUrl]",
+                    "uri": "[variables('artifacts').provisioningMGTUrl]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
