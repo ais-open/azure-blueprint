@@ -83,7 +83,7 @@
     "windowsOSVersion": "2016-Datacenter",
     "apiVersion": "2015-06-15",
     "nicName": "[concat(parameters('dnsLabelPrefix'),'Nic')]",
-    "publicIPName": "[concat(parameters('dnsLabelPrefix'),'Pip')]",
+    "publicIPName": "[concat(parameters('dnsLabelPrefix'),'Pip1')]",
     "vnetID": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', parameters('existingVNETName'))]",
     "subnetId": "[concat(variables('vnetID'),'/subnets/', parameters('existingSubnetName'))]"
   },
