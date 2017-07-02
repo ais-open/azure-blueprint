@@ -2043,7 +2043,7 @@
                     "value": "[parameters('vmLocation')]"
                   },
                   "dnsLabelPrefix": {
-                    "value": "VMtestmgt"
+                    "value": "vmtesting"
                   },
                   "vmSize": {
                     "value": "[parameters('mgtVMSize')]"
