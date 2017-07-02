@@ -110,7 +110,7 @@
     },
     "variables": {
         "domainJoinOptions": 3,
-        "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]"
+        "domainJoinUserName": "[concat(parameters('domainName'), '\\', parameters('adminUsername'))]"
     },
     "resources": [
         {
