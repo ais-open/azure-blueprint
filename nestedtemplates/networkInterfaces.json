@@ -272,7 +272,10 @@
               }
             }
           }
-        ]
+        ],
+        "networkSecurityGroup": {
+          "id": "[parameters('mgtNSGid')]"
+        }
       }
     },
     {
