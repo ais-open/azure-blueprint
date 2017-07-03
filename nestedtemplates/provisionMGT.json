@@ -88,7 +88,7 @@
     "subnetId": "[concat(variables('vnetID'),'/subnets/', parameters('existingSubnetName'))]"
   },
   "resources": [
-    {
+    /*{
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[variables('publicIPName')]",
@@ -194,14 +194,14 @@
           }
         }
       }
-    },
+    },*/
     {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('dnsLabelPrefix'),'/joindomain')]",
       "location": "[parameters('vmLocation')]",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('dnsLabelPrefix'))]"
+        //"[concat('Microsoft.Compute/virtualMachines/', parameters('dnsLabelPrefix'))]"
       ],
       "properties": {
         "publisher": "Microsoft.Compute",
@@ -211,7 +211,7 @@
         "settings": {
           "Name": "[parameters('domainToJoin')]",
           "OUPath": "[parameters('ouPath')]",
-          "User": "[concat(parameters('domainToJoin'), '\\', parameters('domainUsername'))]",
+          "User": "[concat(parameters('domainUsername'),'@',parameters('domainToJoin'))]",
           "Restart": "true",
           "Options": "[parameters('domainJoinOptions')]"
         },
