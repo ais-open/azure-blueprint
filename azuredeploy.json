@@ -2046,7 +2046,7 @@
                     "value": "[parameters('vmLocation')]"
                   },
                   "dnsLabelPrefix": {
-                    "value": "vmtesting3"
+                    "value": "vmtesting4"
                   },
                   "vmSize": {
                     "value": "[parameters('mgtVMSize')]"
