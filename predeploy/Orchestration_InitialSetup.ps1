@@ -9,10 +9,6 @@ This script will create a Key Vault with a Key Encryption Key for VM DIsk Encryp
 $BaseSourceControl = 'C:\Users\davoodharun\Desktop\azure-blueprint'
 . "$BaseSourceControl\predeploy\Orchestration_InitialSetup.ps1" @MyParams -verbose
 
-.Parameter recoveryServicesAADServicePrincipalName
-This is the ApplicationId for the BackupFairfax (usgovvirginia) AzureAD Service Principal
-Azure commercial Backup Management Service ApplicationId is 262044b1-e2ce-469f-a196-69ab7ada62d3
-
 .Parameter adminPassword
 Must meet complexity requirements
 14+ characters, 2 numbers, 2 upper and lower case, and 2 special chars
@@ -22,20 +18,38 @@ Must meet complexity requirements
 14+ characters, 2 numbers, 2 upper and lower case, and 2 special chars
 #>
 
-$azureUserName = Read-Host "Enter your Azure username"
-$azurePassword = Read-Host -assecurestring "Enter your Azure password"
+$global:azureUserName = $null
+$global:azurePassword = $null
+
+function loginToAzure{
+Param(
+		[Parameter(Mandatory=$true)]
+		[int]$lginCount
+	)
+
+$global:azureUserName = Read-Host "Enter your Azure username"
+$global:azurePassword = Read-Host -assecurestring "Enter your Azure password"
 
 try {
-	$AzureAuthCreds = New-Object System.Management.Automation.PSCredential -ArgumentList @($azureUserName,$azurePassword)
+	$AzureAuthCreds = New-Object System.Management.Automation.PSCredential -ArgumentList @($global:azureUserName,$global:azurePassword)
 	$azureEnv = Get-AzureRmEnvironment -Name $EnvironmentName
-  Login-AzureRmAccount -EnvironmentName "AzureUSGovernment" -Credential $AzureAuthCreds
+   Login-AzureRmAccount -EnvironmentName "AzureUSGovernment" -Credential $AzureAuthCreds
 } catch {
-	Throw "Your credentials are incorrect or invalid. Make sure you are using your Azure Government account information"
-}
-$adminUsername = Read-Host "Enter an admin username"
 
-$passwordNames = @("adminPassword","sqlServerServiceAccountPassword")
-$passwords = New-Object -TypeName PSObject
+if($lginCount -lt 3){
+$lginCount = $lginCount + 1
+
+Write-Host "Invalid Credentials! Try Logging in again"
+
+loginToAzure -lginCount $lginCount
+}
+else{
+
+	Throw "Your credentials are incorrect or invalid exceeding maximum retries. Make sure you are using your Azure Government account information"
+}
+}
+
+}
 
 function checkPasswords
 {
@@ -50,9 +64,9 @@ function checkPasswords
   [System.Runtime.InteropServices.Marshal]::ZeroFreeCoTaskMemUnicode($Ptr)
 
 	$passLength = 14
-
+	$isGood = 0
 	if ($pw2test.Length -ge $passLength) {
-		$isGood = 1
+		$isGood++
     If ($pw2test -match " "){
       "Password does not meet complexity requirements. Password cannot contain spaces"
       checkPasswords -name $name
@@ -85,7 +99,7 @@ function checkPasswords
         "Password does not meet complexity requirements"
         checkPasswords -name $name
     }
-		If ($isGood -ge 4) {
+		If ($isGood -ge 6) {
       $passwords | Add-Member -MemberType NoteProperty -Name $name -Value $password
       return
     } Else {
@@ -106,7 +120,6 @@ function orchestration
 	Param(
 		[string]$environmentName = "AzureUSGovernment",
 		[string]$location = "USGov Virginia",
-		[string]$recoveryServicesAADServicePrincipalName = "ff281ffe-705c-4f53-9f37-a40e6f2c68f3",
 		[Parameter(Mandatory=$true)]
 		[string]$subscriptionId,
 		[Parameter(Mandatory=$true)]
@@ -122,11 +135,7 @@ function orchestration
 		[Parameter(Mandatory=$true)]
 		[SecureString]$adminPassword,
 		[Parameter(Mandatory=$true)]
-		[SecureString]$sqlServerServiceAccountPassword,
-		[Parameter(Mandatory = $true)]
-		[string]$aadAppName,
-		[Parameter(Mandatory = $true)]
-		[string]$keyEncryptionKeyName
+		[SecureString]$sqlServerServiceAccountPassword
 	)
 
 	$errorActionPreference = 'stop'
@@ -152,8 +161,9 @@ function orchestration
 	########################################################################################################################
 	# Create AAD app . Fill in $aadClientSecret variable if AAD app was already created
 	########################################################################################################################
+            $guid = [Guid]::NewGuid().toString();
 
-
+            $aadAppName = "Blueprint" + $guid ;
 			# Check if AAD app with $aadAppName was already created
 			$SvcPrincipals = (Get-AzureRmADServicePrincipal -SearchString $aadAppName);
 			if(-not $SvcPrincipals)
@@ -212,8 +222,10 @@ function orchestration
 			 Write-Host "Set Azure Key Vault Access Policy."
 			 Write-Host "Set ServicePrincipalName: $aadClientID in Key Vault: $keyVaultName";
 			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ServicePrincipalName $aadClientID -PermissionsToKeys wrapKey -PermissionsToSecrets set;
-			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ServicePrincipalName $recoveryServicesAADServicePrincipalName -PermissionsToKeys backup,get,list -PermissionsToSecrets get,list;
+			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ServicePrincipalName $aadClientID -PermissionsToKeys backup,get,list -PermissionsToSecrets get,list;
 			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -EnabledForDiskEncryption;
+
+            $keyEncryptionKeyName = $keyVaultName + "kek"
 
 			if($keyEncryptionKeyName)
 			{
@@ -275,9 +287,27 @@ function orchestration
 }
 
 
+
+try{
+
+
+loginToAzure -lginCount 1
+
+$adminUsername = Read-Host "Enter an admin username"
+
+$passwordNames = @("adminPassword","sqlServerServiceAccountPassword")
+$passwords = New-Object -TypeName PSObject
+
+
 for($i=0;$i -lt $passwordNames.Length;$i++){
    checkPasswords -name $passwordNames[$i]
 }
 
 
-orchestration -azureUsername $azureUsername -adminUsername $adminUsername -azurePassword $azurePassword -adminPassword $passwords.adminPassword -sqlServerServiceAccountPassword $passwords.sqlServerServiceAccountPassword
+orchestration -azureUsername $global:azureUsername -adminUsername $adminUsername -azurePassword $global:azurePassword -adminPassword $passwords.adminPassword -sqlServerServiceAccountPassword $passwords.sqlServerServiceAccountPassword
+
+}
+catch{
+Write-Host $PSItem.Exception.Message
+Write-Host "Thank You"
+}

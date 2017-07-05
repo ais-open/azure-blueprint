@@ -476,7 +476,7 @@
       ],
       "properties": {
         "hardwareProfile": {
-          "vmSize": "[parameters('vmSize')]"
+          "vmSize": "[parameters('mgtVMSize')]"
         },
         "osProfile": {
           "computerName": "[parameters('mgtVMName')]",
