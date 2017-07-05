@@ -116,58 +116,6 @@
       }
     },
     {
-      "name": "[parameters('adPDCNicName')]",
-      "type": "Microsoft.Network/networkInterfaces",
-      "location": "[parameters('location')]",
-      "apiVersion": "2015-06-15",
-      "tags": {
-        "Project": "BluePrint"
-      },
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('adPDCNICIPAddress')]",
-              "subnet": {
-                "id": "[parameters('dcSubnetRef')]"
-              }
-            }
-          }
-        ],
-        "networkSecurityGroup": {
-          "id": "[parameters('dcNSGid')]"
-        }
-      }
-    },
-    {
-      "name": "[parameters('adBDCNicName')]",
-      "type": "Microsoft.Network/networkInterfaces",
-      "location": "[parameters('location')]",
-      "apiVersion": "2015-06-15",
-      "tags": {
-        "Project": "BluePrint"
-      },
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('adBDCNICIPAddress')]",
-              "subnet": {
-                "id": "[parameters('dcSubnetRef')]"
-              }
-            }
-          }
-        ],
-        "networkSecurityGroup": {
-          "id": "[parameters('dcNSGid')]"
-        }
-      }
-    },
-    {
       "name": "[parameters('sql0NicName')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",

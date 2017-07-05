@@ -55,7 +55,9 @@ function checkPasswords
 {
 	Param(
 		[Parameter(Mandatory=$true)]
-		[string]$name
+		[string]$name,
+		[Parameter(Mandatory=$true)]
+		[string]$count
 	)
 
 	$password = Read-Host -assecurestring "Enter $($name)"
@@ -66,40 +68,41 @@ function checkPasswords
 	$passLength = 14
 	$isGood = 0
 	if ($pw2test.Length -ge $passLength) {
-		$isGood++
+		$isGood = 1
     If ($pw2test -match " "){
       "Password does not meet complexity requirements. Password cannot contain spaces"
       checkPasswords -name $name
     } Else {
-      $isGood++
+      $isGood = 2
     }
 		If ($pw2test -match "[^a-zA-Z0-9]"){
-			$isGood++
+			$isGood = 3
     } Else {
         "Password does not meet complexity requirements. Password must contain a special character"
         checkPasswords -name $name
     }
 		If ($pw2test -match "[0-9]") {
-			$isGood++
+			$isGood = 4
     } Else {
         "Password does not meet complexity requirements. Password must contain a numerical character"
         checkPasswords -name $name
     }
 		If ($pw2test -cmatch "[a-z]") {
-			$isGood++
+			$isGood = 5
     } Else {
       "Password must contain a lowercase letter"
         "Password does not meet complexity requirements"
         checkPasswords -name $name
     }
 		If ($pw2test -cmatch "[A-Z]"){
-			$isGood++
+			$isGood = 6
     } Else {
       "Password must contain an uppercase character"
         "Password does not meet complexity requirements"
         checkPasswords -name $name
     }
 		If ($isGood -ge 6) {
+		"ADDED PASS"
       $passwords | Add-Member -MemberType NoteProperty -Name $name -Value $password
       return
     } Else {

@@ -5,6 +5,12 @@
         "adPDCVMName": {
             "type": "string"
         },
+        "dcSubnetRef": {
+            "type": "string"
+        },
+        "dcNSGid": {
+            "type": "string"
+        },
         "adAvailabilitySetName": {
             "type": "string"
         },
@@ -12,9 +18,6 @@
             "type": "string"
         },
         "adminUsername": {
-            "type": "string"
-        },
-        "environmentPrefix": {
             "type": "string"
         },
         "adminPassword": {
@@ -44,106 +47,13 @@
         "adBDCNicName": {
             "type": "string"
         },
-        "sqlVMName": {
-            "type": "string"
-        },
         "location": {
-            "type": "string"
-        },
-        "sqlStorageAccountName": {
-            "type": "string"
-        },
-        "dcStorageAccountName": {
-            "type": "string"
-        },
-        "SqlStorageAccountType": {
-            "type": "string"
-        },
-        "DcStorageAccountType": {
-            "type": "string"
-        },
-        "sqlAvailabilitySetName": {
-            "type": "string"
-        },
-        "sqlVMSize": {
-            "type": "string"
-        },
-        "fswImagePublisher": {
-            "type": "string"
-        },
-        "fswImageOffer": {
-            "type": "string"
-        },
-        "fswImageSKU": {
             "type": "string"
         },
         "vmContainerName": {
             "type": "string"
         },
-        "sqlImagePublisher": {
-            "type": "string"
-        },
-        "sqlImageOffer": {
-            "type": "string"
-        },
-        "sqlImageSKU": {
-            "type": "string"
-        },
-        "mgtImagePublisher": {
-            "type": "string"
-        },
-        "mgtImageOffer": {
-            "type": "string"
-        },
-        "mgtImageSKU": {
-            "type": "string"
-        },
         "domainName": {
-            "type": "string"
-        },
-        "witnessVMSize": {
-            "type": "string"
-        },
-        "sqlwVMName": {
-            "type": "string"
-        },
-        "sqlwNicName": {
-            "type": "string"
-        },
-        "sql0NicName": {
-            "type": "string"
-        },
-        "sql1NicName": {
-            "type": "string"
-        },
-        "mgtVMName": {
-            "type": "string"
-        },
-        "mgtStorageAccountName": {
-            "type": "string"
-        },
-        "mgtStorageAccountType": {
-            "type": "string"
-        },
-        "mgtVMSize": {
-            "type": "string"
-        },
-        "mgtNICName": {
-            "type": "string"
-        },
-        "mgtIPAddress": {
-            "type": "string"
-        },
-        "mgtSubnetRef": {
-            "type": "string"
-        },
-        "mgtNSGid": {
-            "type": "string"
-        },
-        "mgtModulesURL": {
-            "type": "string"
-        },
-        "mgtConfigurationFunction": {
             "type": "string"
         },
         "updateVnetWithDNSTemplateURL": {
@@ -176,21 +86,6 @@
         "updateNicTemplateURL": {
             "type": "string"
         },
-        "sqlSubnetRef": {
-            "type": "string"
-        },
-        "sqlBEAddressPoolID": {
-            "type": "string"
-        },
-        "postDeployScriptUris": {
-            "type": "array"
-        },
-        "prepareAlwaysOnSQLInfo": {
-            "type": "object"
-        },
-        "configuringAlwaysOnInfo": {
-            "type": "object"
-        },
         "backupInfo": {
             "type": "object"
         },
@@ -200,7 +95,6 @@
         "vmEncryptionSettings": {
             "type": "object"
         },
-
         "antimalwareInfo": {
             "type": "object"
         },
@@ -223,15 +117,6 @@
             "type": "securestring"
         },
         "SubscriptionId": {
-            "type": "string"
-        },
-        "provisioningHybridworkersUrl": {
-            "type": "string"
-        },
-        "omsWorkspaceName": {
-            "type": "string"
-        },
-        "configureSQLAO": {
             "type": "string"
         }
     },
@@ -273,6 +158,184 @@
         }
     },
     "resources": [
+      {
+        "name": "[parameters('adPDCNicName')]",
+        "type": "Microsoft.Network/networkInterfaces",
+        "location": "[parameters('location')]",
+        "apiVersion": "2015-06-15",
+        "tags": {
+          "Project": "BluePrint"
+        },
+        "properties": {
+          "ipConfigurations": [
+            {
+              "name": "ipconfig1",
+              "properties": {
+                "privateIPAllocationMethod": "Static",
+                "privateIPAddress": "[parameters('adPDCNICIPAddress')]",
+                "subnet": {
+                  "id": "[parameters('dcSubnetRef')]"
+                }
+              }
+            }
+          ],
+          "networkSecurityGroup": {
+            "id": "[parameters('dcNSGid')]"
+          }
+        }
+      },
+      {
+        "name": "[parameters('adBDCNicName')]",
+        "type": "Microsoft.Network/networkInterfaces",
+        "location": "[parameters('location')]",
+        "apiVersion": "2015-06-15",
+        "tags": {
+          "Project": "BluePrint"
+        },
+        "properties": {
+          "ipConfigurations": [
+            {
+              "name": "ipconfig1",
+              "properties": {
+                "privateIPAllocationMethod": "Static",
+                "privateIPAddress": "[parameters('adBDCNICIPAddress')]",
+                "subnet": {
+                  "id": "[parameters('dcSubnetRef')]"
+                }
+              }
+            }
+          ],
+          "networkSecurityGroup": {
+            "id": "[parameters('dcNSGid')]"
+          }
+        }
+      },
+      {
+          "apiVersion": "2016-03-30",
+          "type": "Microsoft.Compute/virtualMachines",
+          "name": "[parameters('adPDCVMName')]",
+          "location": "[parameters('location')]",
+          "tags": {
+              "Project": "BluePrint"
+          },
+          "dependsOn": [
+
+          ],
+          "properties": {
+              "hardwareProfile": {
+                  "vmSize": "[parameters('adVMSize')]"
+              },
+              "availabilitySet": {
+                  "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('adAvailabilitySetName'))]"
+              },
+              "osProfile": {
+                  "computername": "[parameters('adPDCVMName')]",
+                  "adminUsername": "[parameters('adminUsername')]",
+                  "adminPassword": "[parameters('adminPassword')]"
+              },
+              "storageProfile": {
+                  "imageReference": {
+                      "publisher": "[parameters('adImagePublisher')]",
+                      "offer": "[parameters('adImageOffer')]",
+                      "sku": "[parameters('adImageSKU')]",
+                      "version": "latest"
+                  },
+                  "osDisk": {
+                      "name": "osdisk",
+                      "vhd": {
+                          "uri": "[concat('http://',variables('dcstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('adPDCVMName'),'-osdisk.vhd')]"
+                      },
+                      "caching": "ReadWrite",
+                      "createOption": "FromImage"
+                  },
+                  "dataDisks": [{
+                      "vhd": {
+                          "uri": "[concat('http://',variables('dcstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/', parameters('adPDCVMName'),'data-1.vhd')]"
+                      },
+                      "name": "[concat(parameters('adPDCVMName'),'-data-disk1')]",
+                      "createOption": "empty",
+                      "caching": "None",
+                      "diskSizeGB": 128,
+                      "lun": 0
+                  }]
+              },
+              "networkProfile": {
+                  "networkInterfaces": [{
+                      "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces',parameters('adPDCNicName'))]"
+                  }]
+              },
+              "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                      "enabled": "true",
+                      "storageUri": "[concat('http://',variables('diagstorageNameDC'),'.blob.core.usgovcloudapi.net')]"
+                  }
+              }
+          },
+          "resources": []
+      },
+      {
+          "apiVersion": "2016-03-30",
+          "type": "Microsoft.Compute/virtualMachines",
+          "name": "[parameters('adBDCVMName')]",
+          "location": "[parameters('location')]",
+          "tags": {
+              "Project": "BluePrint"
+          },
+          "dependsOn": [
+
+          ],
+          "properties": {
+              "hardwareProfile": {
+                  "vmSize": "[parameters('adVMSize')]"
+              },
+              "availabilitySet": {
+                  "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('adAvailabilitySetName'))]"
+              },
+              "osProfile": {
+                  "computername": "[parameters('adBDCVMName')]",
+                  "adminUsername": "[parameters('adminUsername')]",
+                  "adminPassword": "[parameters('adminPassword')]"
+              },
+              "storageProfile": {
+                  "imageReference": {
+                      "publisher": "[parameters('adImagePublisher')]",
+                      "offer": "[parameters('adImageOffer')]",
+                      "sku": "[parameters('adImageSKU')]",
+                      "version": "latest"
+                  },
+                  "osDisk": {
+                      "name": "osdisk",
+                      "vhd": {
+                          "uri": "[concat('http://',variables('dcstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('adBDCVMName'),'-osdisk.vhd')]"
+                      },
+                      "caching": "ReadWrite",
+                      "createOption": "FromImage"
+                  },
+                  "dataDisks": [{
+                      "vhd": {
+                          "uri": "[concat('http://',variables('dcstorageName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/', parameters('adBDCVMName'),'data-1.vhd')]"
+                      },
+                      "name": "[concat(parameters('adBDCVMName'),'-data-disk1')]",
+                      "createOption": "empty",
+                      "caching": "None",
+                      "diskSizeGB": 128,
+                      "lun": 0
+                  }]
+              },
+              "networkProfile": {
+                  "networkInterfaces": [{
+                      "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces', parameters('adBDCNicName'))]"
+                  }]
+              },
+              "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                      "enabled": "true",
+                      "storageUri": "[concat('http://',variables('diagstorageNameDC'),'.blob.core.usgovcloudapi.net')]"
+                  }
+              }
+          },
+          "resources": []
+      },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('adPDCVMName'),'/PDCBaselineDSC')]",
@@ -557,71 +620,6 @@
                 }
             }
         },*/
-        {
-            "comments": "Join domain - JsonADDomainExtension",
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('mgtVMName'),'/joindomain')]",
-            "tags": {
-                "Project": "BluePrint"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'MGTBaselineDSC')]"
-            ],
-            "location": "[parameters('location')]",
-            "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "JsonADDomainExtension",
-                "typeHandlerVersion": "1.3",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "Name": "[parameters('domainName')]",
-                    "User": "[concat(parameters('domainName'), '\\', parameters('adminUsername'))]",
-                    "Restart": "true",
-                    "Options": 3,
-                    "OUPath": ""
-                },
-                "protectedSettings": {
-                    "Password": "[parameters('adminPassword')]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('mgtVMName'),'/MGTBaselineDSC')]",
-            "apiVersion": "2015-06-15",
-            "location": "[parameters('location')]",
-            "tags": {
-                "Project": "BluePrint"
-            },
-            "dependsOn": [
-                "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Powershell",
-                "type": "DSC",
-                "typeHandlerVersion": "2.19",
-                "autoUpgradeMinorVersion": false,
-                "settings": {
-                    "modulesUrl": "[parameters('mgtModulesURL')]",
-                    "configurationFunction": "[parameters('mgtConfigurationFunction')]",
-                    "properties": {
-                        "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.mgt]",
-                        "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.mgt]",
-                        "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.mgt]",
-                        "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
-                        "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
-                        "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
-                        "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
-                    }
-                },
-                "protectedSettings": {
-                    "items": {
-                        "AzurePassword": "[parameters('AzurePassword')]"
-                    }
-                }
-            }
-        }
     ],
     "outputs": {}
 }

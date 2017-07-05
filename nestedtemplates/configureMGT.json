@@ -1,0 +1,111 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "mgtVMName": {
+      "type": "string",
+      "metadata": {
+        "description": ""
+      }
+    },
+    "location": {
+      "type": "string"
+    },
+    "domainName": {
+      "type": "string",
+      "metadata": {
+        "description": "The FQDN of the AD domain"
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Username of the account on the domain"
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password of the account on the domain"
+      }
+    },
+    "mgtModulesURL": {
+      "type": "string"
+    },
+    "antimalwareInfo": {
+      "type": "object"
+    },
+    "mgtConfigurationFunction": {
+      "type": "string"
+    }
+  },
+  "variables": {
+  },
+  "resources": [
+    {
+        "comments": "Join domain - JsonADDomainExtension",
+        "apiVersion": "2015-06-15",
+        "type": "Microsoft.Compute/virtualMachines/extensions",
+        "name": "[concat(parameters('mgtVMName'),'/joindomain')]",
+        "tags": {
+            "Project": "BluePrint"
+        },
+        "dependsOn": [
+
+        ],
+        "location": "[parameters('location')]",
+        "properties": {
+            "publisher": "Microsoft.Compute",
+            "type": "JsonADDomainExtension",
+            "typeHandlerVersion": "1.3",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+                "Name": "[parameters('domainName')]",
+                "User": "[concat(parameters('domainName'), '\\', parameters('adminUsername'))]",
+                "Restart": "true",
+                "Options": 3,
+                "OUPath": ""
+            },
+            "protectedSettings": {
+                "Password": "[parameters('adminPassword')]"
+            }
+        }
+    },
+    {
+        "type": "Microsoft.Compute/virtualMachines/extensions",
+        "name": "[concat(parameters('mgtVMName'),'/MGTBaselineDSC')]",
+        "apiVersion": "2015-06-15",
+        "location": "[parameters('location')]",
+        "tags": {
+            "Project": "BluePrint"
+        },
+        "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'joindomain')]"
+        ],
+        "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.19",
+            "autoUpgradeMinorVersion": false,
+            "settings": {
+                "modulesUrl": "[parameters('mgtModulesURL')]",
+                "configurationFunction": "[parameters('mgtConfigurationFunction')]",
+                "properties": {
+                    "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.mgt]",
+                    "ExclusionExtension": "[parameters('antimalwareInfo').exclusionExtension.mgt]",
+                    "ExclusionProcess": "[parameters('antimalwareInfo').exclusionProcess.mgt]",
+                    "RealTimeScanDirection": "[parameters('antimalwareInfo').realTimeScanDirection]",
+                    "RemediationScheduleDay": "[parameters('antimalwareInfo').remediationScheduleDay]",
+                    "ScanScheduleDay": "[parameters('antimalwareInfo').scanScheduleDay]",
+                    "DisableRealtimeMonitoring": "[parameters('antimalwareInfo').disableRealtimeMonitoring]"
+                }
+            },
+            "protectedSettings": {
+                "items": {
+                    "AzurePassword": "[parameters('AzurePassword')]"
+                }
+            }
+        }
+    }
+  ]
+}
