@@ -255,7 +255,7 @@
         }
       }
     },
-    {
+    /*{
       "name": "[parameters('mgtNicName')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
@@ -276,6 +276,31 @@
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('mgtPublicIPName'))]"
               },
               "privateIPAddress": "[parameters('mgtIPAddress')]",
+              "subnet": {
+                "id": "[parameters('mgtSubnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },*/
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[parameters('mgtNicName')]",
+      "location": "[parameters('vmLocation')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', parameters('mgtPublicIPName'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('mgtPublicIPName'))]"
+              },
               "subnet": {
                 "id": "[parameters('mgtSubnetRef')]"
               }

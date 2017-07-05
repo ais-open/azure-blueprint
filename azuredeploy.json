@@ -846,7 +846,7 @@
                 "sql": "[concat(parameters('environmentPrefix'), 'sqlserver-')]",
                 "sqlw": "[concat('cluster-fsw', parameters('environmentPrefix'))]",
                 "web": "[concat('AZ-WEB-VM', parameters('environmentPrefix'))]",
-                "mgt": "[concat('azmgtvm', parameters('environmentPrefix'))]"
+                "mgt": "[concat('azmgtvm6', parameters('environmentPrefix'))]"
             },
             "nics": {
                 "adpdc": "[concat('adPDC-nic', parameters('environmentPrefix'))]",
