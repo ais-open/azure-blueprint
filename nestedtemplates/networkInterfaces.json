@@ -288,7 +288,7 @@
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[parameters('mgtNicName')]",
-      "location": "[parameters('vmLocation')]",
+      "location": "[parameters('location')]",
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/', parameters('mgtPublicIPName'))]"
       ],
