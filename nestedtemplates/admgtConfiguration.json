@@ -566,7 +566,7 @@
                 "Project": "BluePrint"
             },
             "dependsOn": [
-                "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'MGTBaselineDSC')]"
             ],
             "location": "[parameters('location')]",
             "properties": {
@@ -595,7 +595,7 @@
                 "Project": "BluePrint"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'joindomain')]"
+                "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
             ],
             "properties": {
                 "publisher": "Microsoft.Powershell",
