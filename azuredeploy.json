@@ -1332,6 +1332,9 @@
                     "adPDCVMName": {
                         "value": "[variables('resourceNames').vms.adpdc]"
                     },
+                    "dcStorageAccountName": {
+                        "value": "[variables('resourceNames').storageAccounts.dc]"
+                    },
                     "dcSubnetRef": {
                         "value": "[variables('derivedIds').dcSubnet]"
                     },

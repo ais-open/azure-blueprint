@@ -5,6 +5,9 @@
         "adPDCVMName": {
             "type": "string"
         },
+        "dcStorageAccountName": {
+            "type": "string"
+        },
         "dcSubnetRef": {
             "type": "string"
         },
