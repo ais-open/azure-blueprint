@@ -121,10 +121,7 @@
         }
     },
     "variables": {
-        "sqlstorageName": "[parameters('sqlStorageAccountName')]",
         "dcstorageName": "[parameters('dcStorageAccountName')]",
-        "fswstorageName": "[concat(parameters('sqlStorageAccountName'), 'fsw')]",
-        "diagstorageNameSQL": "[concat(parameters('sqlStorageAccountName'), 'diag')]",
         "diagstorageNameDC": "[concat(parameters('dcStorageAccountName'), 'diag')]",
         "domainJoinUserName": "[concat(parameters('domainName'), '\\', parameters('adminUsername'))]",
         "vmNames": {
@@ -133,28 +130,8 @@
                 },
                 {
                     "Name": "[parameters('adBDCVMName')]"
-                },
-                {
-                    "Name": "[parameters('sqlwVMName')]"
-                },
-                {
-                    "Name": "[parameters('mgtVMName')]"
-                },
-                {
-                    "Name": "[concat(parameters('sqlVMName'),'0')]"
-                },
-                {
-                    "Name": "[concat(parameters('sqlVMName'),'1')]"
                 }
             ]
-        },
-        "configuringAlwaysOnURL": {
-          "yes": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configuringAlwaysOnURL]",
-          "no": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configuringAlwaysOnURLAObypass]"
-        },
-        "preparingAlwaysOnSqlServerURL": {
-          "yes": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURL]",
-          "no": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURLAObypass]"
         }
     },
     "resources": [
