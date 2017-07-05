@@ -846,7 +846,7 @@
                 "sql": "[concat(parameters('environmentPrefix'), 'sqlserver-')]",
                 "sqlw": "[concat('cluster-fsw', parameters('environmentPrefix'))]",
                 "web": "[concat('AZ-WEB-VM', parameters('environmentPrefix'))]",
-                "mgt": "[concat('azmgtvm6', parameters('environmentPrefix'))]"
+                "mgt": "[concat('azmgtvm7', parameters('environmentPrefix'))]"
             },
             "nics": {
                 "adpdc": "[concat('adPDC-nic', parameters('environmentPrefix'))]",
@@ -2046,7 +2046,7 @@
                     "value": "[parameters('vmLocation')]"
                   },
                   "dnsLabelPrefix": {
-                    "value": "vmtesting4"
+                    "value": "vmtesting9"
                   },
                   "vmSize": {
                     "value": "[parameters('mgtVMSize')]"
