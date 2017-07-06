@@ -843,8 +843,8 @@
             "vms": {
                 "adpdc": "[concat('AZ-PDC-VM', parameters('environmentPrefix'))]",
                 "adbdc": "[concat('AZ-BDC-VM', parameters('environmentPrefix'))]",
-                "sql0": "[concat(parameters('environmentPrefix'), 'sqlserver0'))]",
-                "sql1": "[concat(parameters('environmentPrefix'), 'sqlserver1'))]",
+                "sql0": "[concat('sqlserver0', parameters('environmentPrefix')))]",
+                "sql1": "[concat('sqlserver1', parameters('environmentPrefix')))]",
                 "sqlw": "[concat('cluster-fsw', parameters('environmentPrefix'))]",
                 "web": "[concat('AZ-WEB-VM', parameters('environmentPrefix'))]",
                 "mgt": "[concat('AZ-MGT-VM', parameters('environmentPrefix'))]"
