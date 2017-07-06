@@ -121,6 +121,9 @@
         },
         "SubscriptionId": {
             "type": "string"
+        },
+        "provisioningHybridworkersUrl": {
+            "type": "string"
         }
     },
     "variables": {

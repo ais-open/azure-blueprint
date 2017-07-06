@@ -1465,6 +1465,9 @@
                     },
                     "SubscriptionId": {
                         "value": "[subscription().subscriptionId]"
+                    },
+                    "provisioningHybridworkersUrl": {
+                        "value": "[variables('artifacts').provisioningHybridworkerUrl]"
                     }
                 }
             }
@@ -1831,6 +1834,9 @@
                   },
                   "backupInfo": {
                       "value": "[variables('backupInfo')]"
+                  },
+                  "provisioningHybridworkersUrl": {
+                      "value": "[variables('artifacts').provisioningHybridworkerUrl]"
                   }
                 }
             }

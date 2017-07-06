@@ -73,6 +73,9 @@
     },
     "keyVaultName": {
         "type": "string"
+    },
+    "provisioningHybridworkersUrl": {
+        "type": "string"
     }
   },
   "variables": {
@@ -226,7 +229,7 @@
                     "value": "[parameters('provisioningHybridworkersUrl')]"
                 },
                 "MachinesToSetPasswordPolicy": {
-                    "value": "[concat(parameters('adPDCVMName'),';', parameters('adBDCVMName'))]"
+                    "value": ""
                 }
             }
         }
