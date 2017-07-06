@@ -904,7 +904,7 @@
             "configuringBackupADVMURL": "[concat(parameters('templatesBaseUrl'),'/configuringBackupADVM.json')]",
             "configureSQLUrl": "[concat(parameters('templatesBaseUrl'),'/configureSQL.json')]",
             "configuringAlwaysOnURL": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOn.json')]",
-            "prepareingSQLAOURL": "[concat(parameters('templatesBaseUrl'),'/prepareingSQLA0.json')]",
+            "preparingSQLAOUrl": "[concat(parameters('templatesBaseUrl'),'/preparingSQLA0.json')]",
             "preparingAlwaysOnSqlServerURLAObypass": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServerAObypass.json')]",
             "configuringAlwaysOnURLAObypass": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOnAObypass.json')]",
             "provisioningOMSMonitoringUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningOMSMonitoring.json') ]",
