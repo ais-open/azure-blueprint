@@ -2,7 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sqlVMName": {
+        "sql0VMName": {
+            "type": "string"
+        },
+        "sql1VMName": {
             "type": "string"
         },
         "location": {
@@ -163,7 +166,7 @@
         {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('sqlVMName'),'0/SqlVmIaasExtension')]",
+            "name": "[concat(parameters('sql0VMName'),'/SqlVmIaasExtension')]",
             "location": "[parameters('location')]",
             "tags": {
                 "Project": "BluePrint"
@@ -200,7 +203,7 @@
         {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('sqlVMName'),'1/SqlVmIaasExtension')]",
+            "name": "[concat(parameters('sql1VMName'),'/SqlVmIaasExtension')]",
             "location": "[parameters('location')]",
             "tags": {
                 "Project": "BluePrint"
@@ -236,7 +239,7 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('sqlVMName'),'0/SQL0BaselineDSC')]",
+            "name": "[concat(parameters('sql0VMName'),'/SQL0BaselineDSC')]",
             "apiVersion": "2015-06-15",
             "tags": {
                 "Project": "BluePrint"
@@ -244,7 +247,7 @@
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlwVMName'),'/extensions/SQLWBaselineDSC')]",
-                "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlVMName'),'0/extensions/SqlVmIaasExtension')]"
+                "[concat('Microsoft.Compute/virtualMachines/',parameters('sql0VMName'),'/extensions/SqlVmIaasExtension')]"
             ],
             "properties": {
                 "publisher": "Microsoft.Powershell",
@@ -297,7 +300,7 @@
                 "Project": "BluePrint"
             },
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/',concat(parameters('sqlVMName'),'0'),'/extensions/SQL0BaselineDSC')]"
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('sql0VMName'), '/extensions/SQL0BaselineDSC')]"
             ],
             "properties": {
                 "publisher": "Microsoft.Azure.Security",

@@ -47,7 +47,10 @@
         "adBDCNicName": {
             "type": "string"
         },
-        "sqlVMName": {
+        "sql0VMName": {
+            "type": "string"
+        },
+        "sql1VMName": {
             "type": "string"
         },
         "location": {
@@ -251,10 +254,10 @@
                     "Name": "[parameters('sqlwVMName')]"
                 },
                 {
-                    "Name": "[concat(parameters('sqlVMName'),'0')]"
+                    "Name": "[parameters('sql0VMName')]"
                 },
                 {
-                    "Name": "[concat(parameters('sqlVMName'),'1')]"
+                    "Name": "[parameters('sql1VMName')]"
                 }
             ]
         },
@@ -263,7 +266,7 @@
           "no": "[parameters('prepareAlwaysOnSQLInfo').artifacts.configuringAlwaysOnURLAObypass]"
         },
         "preparingAlwaysOnSqlServerURL": {
-          "yes": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURL]",
+          "yes": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingSQLAOUrl]",
           "no": "[parameters('prepareAlwaysOnSQLInfo').artifacts.preparingAlwaysOnSqlServerURLAObypass]"
         }
     },
@@ -323,7 +326,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('location')]"
                     },
                     "nicName": {
                         "value": "[parameters('sql0NicName')]"
@@ -408,11 +411,14 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "sqlVMName": {
-                        "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.sql]"
+                    "sql0VMName": {
+                        "value": "[parameters('sql0VMName')]"
+                    },
+                    "sql1VMName": {
+                        "value": "[parameters('sql1VMName')]"
                     },
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('location')]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
@@ -522,11 +528,14 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "sqlVMName": {
-                        "value": "[parameters('prepareAlwaysOnSQLInfo').resourceNames.vms.sql]"
+                    "sql0VMName": {
+                        "value": "[parameters('sql0VMName')]"
+                    },
+                    "sql1VMName": {
+                        "value": "[parameters('sql1VMName')]"
                     },
                     "location": {
-                        "value": "[resourceGroup().location]"
+                        "value": "[parameters('location')]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
@@ -622,7 +631,7 @@
                 }
             }
         },
-        {
+        /*{
             "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -729,7 +738,7 @@
                     }
                 }
             }
-        }
+        }*/
     ],
     "outputs": {}
 }

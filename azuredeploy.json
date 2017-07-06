@@ -843,7 +843,8 @@
             "vms": {
                 "adpdc": "[concat('AZ-PDC-VM', parameters('environmentPrefix'))]",
                 "adbdc": "[concat('AZ-BDC-VM', parameters('environmentPrefix'))]",
-                "sql": "[concat(parameters('environmentPrefix'), 'sqlserver-')]",
+                "sql0": "[concat(parameters('environmentPrefix'), 'sqlserver-1')]",
+                "sql1": "[concat(parameters('environmentPrefix'), 'sqlserver-0')]",
                 "sqlw": "[concat('cluster-fsw', parameters('environmentPrefix'))]",
                 "web": "[concat('AZ-WEB-VM', parameters('environmentPrefix'))]",
                 "mgt": "[concat('AZ-MGT-VM', parameters('environmentPrefix'))]"
@@ -901,8 +902,9 @@
             "backupVMProtectedItem": "[concat(parameters('templatesBaseUrl'),'/backupProtectedItems.json')]",
             "backupPolicy": "[concat(parameters('templatesBaseUrl'),'/recoveryServicesBackupPolicy.json')]",
             "configuringBackupADVMURL": "[concat(parameters('templatesBaseUrl'),'/configuringBackupADVM.json')]",
-            "preparingAlwaysOnSqlServerURL": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServer.json')]",
+            "configureSQLUrl": "[concat(parameters('templatesBaseUrl'),'/configureSQL.json')]",
             "configuringAlwaysOnURL": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOn.json')]",
+            "prepareingSQLAOURL": "[concat(parameters('templatesBaseUrl'),'/prepareingSQLA0.json')]",
             "preparingAlwaysOnSqlServerURLAObypass": "[concat(parameters('templatesBaseUrl'),'/preparingSqlServerAObypass.json')]",
             "configuringAlwaysOnURLAObypass": "[concat(parameters('templatesBaseUrl'),'/configuringAlwaysOnAObypass.json')]",
             "provisioningOMSMonitoringUrl": "[concat(parameters('templatesBaseUrl'), '/provisioningOMSMonitoring.json') ]",
@@ -1667,8 +1669,11 @@
                   "adBDCNicName": {
                       "value": "[variables('resourceNames').nics.adbdc]"
                   },
-                  "sqlVMName": {
-                      "value": "[variables('resourceNames').vms.sql]"
+                  "sql0VMName": {
+                      "value": "[variables('resourceNames').vms.sql0]"
+                  },
+                  "sql1VMName": {
+                      "value": "[variables('resourceNames').vms.sql1]"
                   },
                   "sqlStorageAccountName": {
                       "value": "[variables('resourceNames').storageAccounts.sql]"
@@ -1945,6 +1950,14 @@
                         "secretName": "adminPassword"
                     }
                   },
+                  "AzurePassword": {
+                      "reference": {
+                          "keyVault": {
+                              "id": "[variables('derivedIds').keyVaultId]"
+                          },
+                          "secretName": "azurePassword"
+                      }
+                  },
                   "mgtModulesURL": {
                       "value": "[variables('artifacts').mgtModulesURL]"
                   },
@@ -1953,11 +1966,54 @@
                   },
                   "mgtConfigurationFunction": {
                       "value": "[variables('artifacts').mgtConfigurationFunction]"
+                  },
+                  "vmEncryptionSettings": {
+                      "value": "[variables('vmEncryptionSettings')]"
+                  },
+                  "keyVaultName": {
+                      "value": "[parameters('keyVaultName')]"
+                  },
+                  "antimalwareInfo": {
+                      "value": "[variables('antimalwareInfo')]"
+                  },
+                  "workspaceName": {
+                      "value": "[parameters('omsWorkspaceName')]"
+                  },
+                  "AutomationAccountName": {
+                      "value": "[parameters('omsAutomationAccountName')]"
+                  },
+                  "EnvironmentName": {
+                      "value": "[parameters('EnvironmentName')]"
+                  },
+                  "ResourceGroupName": {
+                      "value": "[resourceGroup().name]"
+                  },
+                  "AzureUserName": {
+                      "reference": {
+                          "keyVault": {
+                              "id": "[variables('derivedIds').keyVaultId]"
+                          },
+                          "secretName": "azureUserName"
+                      }
+                  },
+                  "AzurePassword": {
+                      "reference": {
+                          "keyVault": {
+                              "id": "[variables('derivedIds').keyVaultId]"
+                          },
+                          "secretName": "azurePassword"
+                      }
+                  },
+                  "SubscriptionId": {
+                      "value": "[subscription().subscriptionId]"
+                  },
+                  "backupInfo": {
+                      "value": "[variables('backupInfo')]"
                   }
                 }
             }
         },
-        /*{
+        {
             "name": "ConfigureSQL",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1967,225 +2023,91 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('artifacts').preparingAlwaysOnSqlServerURL]",
+                    "uri": "[variables('artifacts').configureSQLUrl]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "adPDCVMName": {
-                        "value": "[variables('resourceNames').vms.adpdc]"
+                    "sql0VMName": {
+                        "value": "[variables('resourceNames').vms.sql0]"
                     },
-                    "adAvailabilitySetName": {
-                        "value": "[variables('resourceNames').availabilitySets.ad]"
-                    },
-                    "sqlAvailabilitySetName": {
-                        "value": "[variables('resourceNames').availabilitySets.sql]"
-                    },
-                    "sqlStorageAccountName": {
-                        "value": "[variables('resourceNames').storageAccounts.sql]"
-                    },
-                    "dcStorageAccountName": {
-                        "value": "[variables('resourceNames').storageAccounts.dc]"
-                    },
-                    "SqlStorageAccountType": {
-                        "value": "[parameters('sqlStorageAccountType')]"
-                    },
-                    "DcStorageAccountType": {
-                        "value": "[parameters('dcStorageAccountType')]"
+                    "sql1VMName": {
+                        "value": "[variables('resourceNames').vms.sql1]"
                     },
                     "location": {
-                        "value": "[parameters('vmLocation')]"
-                    },
-                    "adVMSize": {
-                        "value": "[parameters('adVMSize')]"
+                      "value": "[parameters('vmLocation')]"
                     },
                     "adminUsername": {
-                        "value": "[parameters('adminUsername')]"
+                      "value": "[parameters('adminUsername')]"
                     },
                     "adminPassword": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[variables('derivedIds').keyVaultId]"
-                            },
-                            "secretName": "adminPassword"
-                        }
-                    },
-                    "adImagePublisher": {
-                        "value": "[variables('vmSettings').dc.imagePublisher]"
-                    },
-                    "adImageOffer": {
-                        "value": "[variables('vmSettings').dc.imageOffer]"
-                    },
-                    "adImageSKU": {
-                        "value": "[variables('vmSettings').dc.imageSKU]"
-                    },
-                    "vmContainerName": {
-                        "value": "[variables('vmSettings').vmContainerName]"
-                    },
-                    "adPDCNicName": {
-                        "value": "[variables('resourceNames').nics.adpdc]"
+                      "reference": {
+                        "keyVault": {
+                          "id": "[variables('derivedIds').keyVaultId]"
+                        },
+                        "secretName": "adminPassword"
+                      }
                     },
                     "domainName": {
-                        "value": "[parameters('domainName')]"
+                      "value": "[parameters('domainName')]"
                     },
-                    "pdcConfigurationFunction": {
-                        "value": "[variables('artifacts').pdcConfigurationFunction]"
+                    "sql0ModulesURL": {
+                      "value": "[variables('artifacts').sql0ModulesURL]"
                     },
-                    "pdcModulesURL": {
-                        "value": "[variables('artifacts').pdcModulesURL]"
+                    "sql0ConfigurationFunction": {
+                      "value": "[variables('artifacts').sql0ConfigurationFunction]"
                     },
-                    "adBDCVMName": {
-                        "value": "[variables('resourceNames').vms.adbdc]"
+                    "sqlAOEPName": {
+                      "value": "[variables('vmSettings').sql.sqlAOEPName]"
                     },
-                    "adBDCNicName": {
-                        "value": "[variables('resourceNames').nics.adbdc]"
+                    "sqlServerServiceAccountUserName":{
+                      "value": "[parameters('sqlServerServiceAccountUserName')]"
                     },
-                    "sqlVMName": {
-                        "value": "[variables('resourceNames').vms.sql]"
+                    "sqlServerServiceAccountPassword": {
+                      "reference": {
+                        "keyVault": {
+                          "id": "[variables('derivedIds').keyVaultId]"
+                        },
+                        "secretName": "sqlServerServiceAccountPassword"
+                      }
                     },
-                    "sqlVMSize": {
-                        "value": "[parameters('sqlVMSize')]"
-                    },
-                    "fswImagePublisher": {
-                        "value": "[variables('vmSettings').sqlw.imagePublisher]"
-                    },
-                    "fswImageOffer": {
-                        "value": "[variables('vmSettings').sqlw.imageOffer]"
-                    },
-                    "fswImageSKU": {
-                        "value": "[variables('vmSettings').sqlw.imageSKU]"
-                    },
-                    "sqlImagePublisher": {
-                        "value": "[variables('vmSettings').sql.imagePublisher]"
-                    },
-                    "sqlImageOffer": {
-                        "value": "[variables('vmSettings').sql.imageOffer]"
-                    },
-                    "sqlImageSKU": {
-                        "value": "[variables('vmSettings').sql.imageSKU]"
-                    },
-                    "mgtImagePublisher": {
-                        "value": "[variables('vmSettings').mgt.imagePublisher]"
-                    },
-                    "mgtImageOffer": {
-                        "value": "[variables('vmSettings').mgt.imageOffer]"
-                    },
-                    "mgtImageSKU": {
-                        "value": "[variables('vmSettings').mgt.imageSKU]"
-                    },
-                    "witnessVMSize": {
-                        "value": "[parameters('witnessVMSize')]"
+                    "sharePath": {
+                        "value": "[variables('vmSettings').sql.sharePath]"
                     },
                     "sqlwVMName": {
                         "value": "[variables('resourceNames').vms.sqlw]"
                     },
-                    "sqlwNicName": {
-                        "value": "[variables('resourceNames').nics.sqlw]"
+                    "sqlwModulesURL": {
+                      "value": "[variables('artifacts').sqlwModulesURL]"
                     },
-                    "sql0NicName": {
-                        "value": "[variables('resourceNames').nics.sql0]"
+                    "sqlwConfigurationFunction": {
+                      "value": "[variables('artifacts').sqlwConfigurationFunction]"
                     },
-                    "sql1NicName": {
-                        "value": "[variables('resourceNames').nics.sql1]"
+                    "autoPatchingEnable": {
+                        "value":"[variables('vmSettings').sql.autoPatchingEnable]"
                     },
-                    "environmentPrefix": {
-                        "value": "[parameters('environmentPrefix')]"
+                    "autoPatchingDay": {
+                        "value":"[variables('vmSettings').sql.autoPatchingDay]"
                     },
-                    "mgtVMName": {
-                        "value": "[variables('resourceNames').vms.mgt]"
+                    "autoPatchingStartHour": {
+                        "value":"[variables('vmSettings').sql.autoPatchingStartHour]"
                     },
-                    "mgtStorageAccountName": {
-                        "value": "[variables('resourceNames').storageAccounts.mgt]"
+                    "numberOfDisks": {
+                        "value":"[variables('vmSettings').sql.numberOfDisks]"
                     },
-                    "mgtStorageAccountType": {
-                        "value": "[parameters('mgtStorageAccountType')]"
-                    },
-                    "mgtVMSize": {
-                        "value": "[parameters('mgtVMSize')]"
-                    },
-                    "mgtNICName": {
-                        "value": "[variables('resourceNames').nics.mgt]"
-                    },
-                    "mgtIPAddress": {
-                        "value": "[parameters('mgtIPAddress')]"
-                    },
-                    "mgtSubnetRef": {
-                        "value": "[variables('derivedIds').mgtSubnet]"
-                    },
-                    "mgtNSGid": {
-                        "value": "[variables('derivedIds').mgtNSG]"
-                    },
-                    "mgtModulesURL": {
-                        "value": "[variables('artifacts').mgtModulesURL]"
-                    },
-                    "mgtConfigurationFunction": {
-                        "value": "[variables('artifacts').mgtConfigurationFunction]"
-                    },
-                    "updateVnetWithDNSTemplateURL": {
-                        "value": "[variables('artifacts').vnetwithDNSTemplateURL]"
-                    },
-                    "virtualNetworkNameWithSuffix": {
-                        "value": "[variables('resourceNames').virtualNetworkNameWithSuffix]"
-                    },
-                    "virtualNetworkAddressRange": {
-                        "value": "[parameters('virtualNetworkAddressRange')]"
-                    },
-                    "subnets": {
-                        "value": "[variables('subnets')]"
-                    },
-                    "adPDCNICIPAddress": {
-                        "value": "[parameters('adPDCNICIPAddress')]"
-                    },
-                    "adBDCNICIPAddress": {
-                        "value": "[parameters('adBDCNICIPAddress')]"
-                    },
-                    "bdcConfigurationFunction": {
-                        "value": "[variables('artifacts').bdcConfigurationFunction]"
-                    },
-                    "bdcModulesURL": {
-                        "value": "[variables('artifacts').bdcModulesURL]"
-                    },
-                    "configuringBackupADVMURL": {
-                        "value": "[variables('artifacts').configuringBackupADVMURL]"
-                    },
-                    "updateNicTemplateURL": {
-                        "value": "[variables('artifacts').nicTemplateURL]"
-                    },
-                    "sqlBEAddressPoolID": {
-                        "value": "[variables('derivedIds').sqlBEAddressPoolID]"
-                    },
-                    "sqlSubnetRef": {
-                        "value": "[variables('derivedIds').sqlSubnet]"
-                    },
-
-                    "postDeployScriptUris": {
-                        "value": "[variables('artifacts').postDeployScriptUris]"
-                    },
-                    "prepareAlwaysOnSQLInfo": {
-                        "value": "[variables('prepareAlwaysOnSQLInfo')]"
-                    },
-                    "configuringAlwaysOnInfo": {
-                        "value": "[variables('configuringAlwaysOnInfo')]"
-                    },
-                    "backupInfo": {
-                        "value": "[variables('backupInfo')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[parameters('keyVaultName')]"
-                    },
-                    "vmEncryptionSettings": {
-                        "value": "[variables('vmEncryptionSettings')]"
+                    "workloadType": {
+                        "value":"[variables('vmSettings').sql.workloadType]"
                     },
                     "antimalwareInfo": {
                         "value": "[variables('antimalwareInfo')]"
-                    },
-                    "workspaceName": {
-                        "value": "[parameters('omsWorkspaceName')]"
                     },
                     "AutomationAccountName": {
                         "value": "[parameters('omsAutomationAccountName')]"
                     },
                     "EnvironmentName": {
                         "value": "[parameters('EnvironmentName')]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[resourceGroup().name]"
                     },
                     "AzureUserName": {
                         "reference": {
@@ -2206,21 +2128,15 @@
                     "SubscriptionId": {
                         "value": "[subscription().subscriptionId]"
                     },
-                    "ResourceGroupName": {
-                        "value": "[resourceGroup().name]"
+                    "vmEncryptionSettings": {
+                        "value": "[variables('vmEncryptionSettings')]"
                     },
-                    "provisioningHybridworkersUrl": {
-                        "value": "[variables('artifacts').provisioningHybridworkerUrl]"
-                    },
-                    "omsWorkspaceName": {
-                        "value": "[parameters('omsWorkspaceName')]"
-                    },
-                    "configureSQLAO": {
-                        "value": "[parameters('configureSQLAO')]"
+                    "keyVaultName": {
+                        "value": "[parameters('keyVaultName')]"
                     }
                 }
             }
-        },*/
+        },
         {
             "name": "ConfigureWebTier",
             "type": "Microsoft.Resources/deployments",

@@ -3,43 +3,83 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "mgtVMName": {
-      "type": "string",
-      "metadata": {
-        "description": ""
-      }
+        "type": "string",
+        "metadata": {
+          "description": ""
+        }
     },
     "location": {
-      "type": "string"
+        "type": "string"
     },
     "domainName": {
-      "type": "string",
-      "metadata": {
-        "description": "The FQDN of the AD domain"
-      }
+        "type": "string",
+        "metadata": {
+          "description": "The FQDN of the AD domain"
+        }
     },
     "adminUsername": {
-      "type": "string",
-      "metadata": {
-        "description": "Username of the account on the domain"
-      }
+        "type": "string",
+        "metadata": {
+          "description": "Username of the account on the domain"
+        }
     },
     "adminPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Password of the account on the domain"
-      }
+        "type": "securestring",
+        "metadata": {
+          "description": "Password of the account on the domain"
+        }
     },
     "mgtModulesURL": {
-      "type": "string"
+        "type": "string"
     },
     "antimalwareInfo": {
-      "type": "object"
+        "type": "object"
     },
     "mgtConfigurationFunction": {
-      "type": "string"
+        "type": "string"
+    },
+    "azurePassword": {
+        "type": "securestring"
+    },
+    "vmEncryptionSettings": {
+        "type": "object"
+    },
+    "antimalwareInfo": {
+        "type": "object"
+    },
+    "workspaceName": {
+        "type": "string"
+    },
+    "AutomationAccountName": {
+        "type": "string"
+    },
+    "EnvironmentName": {
+        "type": "string"
+    },
+    "ResourceGroupName": {
+        "type": "string"
+    },
+    "AzureUserName": {
+        "type": "string"
+    },
+    "AzurePassword": {
+        "type": "securestring"
+    },
+    "SubscriptionId": {
+        "type": "string"
+    },
+    "backupInfo": {
+        "type": "object"
     }
   },
   "variables": {
+    "vmNames": {
+        "VMs": [
+            {
+                "Name": "[parameters('mgtVMName)]"
+            }
+        ]
+    }
   },
   "resources": [
     {
@@ -102,10 +142,118 @@
             },
             "protectedSettings": {
                 "items": {
-                    "AzurePassword": "[parameters('AzurePassword')]"
+                    "AzurePassword": "[parameters('azurePassword')]"
                 }
             }
         }
-    }
+    },
+    /*{
+        "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2015-01-01",
+        "dependsOn": [
+              "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'MGTBaselineDSC')]"
+        ],
+        "copy": {
+            "name": "encryptADMGTLoop",
+            "count": "[length(variables('vmNames').VMs)]"
+        },
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+                "uri": "[parameters('vmEncryptionSettings').provisioningVMAzureDiskEncryptionUrl]",
+                "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+                "vmName": {
+                    "value": "[variables('vmNames').VMs[copyIndex()].Name]"
+                },
+                "keyVaultName": {
+                    "value": "[parameters('keyVaultName')]"
+                },
+                "vmEncryptionSettings": {
+                    "value": "[parameters('vmEncryptionSettings')]"
+                },
+                "aadClientID": {
+                    "reference": {
+                        "keyVault": {
+                            "id": "[parameters('vmEncryptionSettings').keyVaultId]"
+                        },
+                        "secretName": "aadClientID"
+                    }
+                },
+                "aadClientSecret": {
+                    "reference": {
+                        "keyVault": {
+                            "id": "[parameters('vmEncryptionSettings').keyVaultId]"
+                        },
+                        "secretName": "aadClientSecret"
+                    }
+                },
+                "keyEncryptionKeyURL": {
+                    "reference": {
+                        "keyVault": {
+                            "id": "[parameters('vmEncryptionSettings').keyVaultId]"
+                        },
+                        "secretName": "keyEncryptionKeyURL"
+                    }
+                },
+                "workspaceName": {
+                    "value": "[parameters('workspaceName')]"
+                },
+                "AutomationAccountName": {
+                    "value": "[parameters('AutomationAccountName')]"
+                },
+                "EnvironmentName": {
+                    "value": "[parameters('EnvironmentName')]"
+                },
+                "ResourceGroupName": {
+                    "value": "[parameters('ResourceGroupName')]"
+                },
+                "AzureUserName": {
+                    "value": "[parameters('AzureUserName')]"
+                },
+                "AzurePassword": {
+                    "value": "[parameters('AzurePassword')]"
+                },
+                "SubscriptionId": {
+                    "value": "[parameters('SubscriptionId')]"
+                },
+                "provisioningHybridworkersUrl": {
+                    "value": "[parameters('provisioningHybridworkersUrl')]"
+                },
+                "MachinesToSetPasswordPolicy": {
+                    "value": "[concat(parameters('adPDCVMName'),';', parameters('adBDCVMName'))]"
+                }
+            }
+        }
+    },
+    {
+        "name": "[concat('BackupVM-',variables('vmNames').VMs[copyIndex()].Name)]",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2015-01-01",
+        "copy": {
+            "name": "backupSQLMGMTADLoop",
+            "count": "[length(variables('vmNames').VMs)]"
+        },
+        "dependsOn": [
+            "encryptADMGTLoop"
+        ],
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+                "uri": "[parameters('backupInfo').backupTemplateUrl]",
+                "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+                "backupInfo": {
+                    "value": "[parameters('backupInfo')]"
+                },
+                "vmName": {
+                    "value": "[variables('vmNames').VMs[copyIndex()].Name]"
+                }
+            }
+        }
+    }*/
   ]
 }
