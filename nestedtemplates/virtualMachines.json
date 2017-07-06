@@ -171,10 +171,6 @@
         "dependsOn": [
 
         ],
-        "copy": {
-            "name": "sqlvirtualMachineLoop",
-            "count": 2
-        },
         "properties": {
             "hardwareProfile": {
                 "vmSize": "[parameters('sqlVMSize')]"
@@ -249,10 +245,6 @@
         "dependsOn": [
 
         ],
-        "copy": {
-            "name": "sqlvirtualMachineLoop",
-            "count": 2
-        },
         "properties": {
             "hardwareProfile": {
                 "vmSize": "[parameters('sqlVMSize')]"
