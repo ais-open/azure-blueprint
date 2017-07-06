@@ -1993,14 +1993,6 @@
                           "secretName": "azureUserName"
                       }
                   },
-                  "AzurePassword": {
-                      "reference": {
-                          "keyVault": {
-                              "id": "[variables('derivedIds').keyVaultId]"
-                          },
-                          "secretName": "azurePassword"
-                      }
-                  },
                   "SubscriptionId": {
                       "value": "[subscription().subscriptionId]"
                   },

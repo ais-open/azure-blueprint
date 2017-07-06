@@ -55,9 +55,7 @@ function checkPasswords
 {
 	Param(
 		[Parameter(Mandatory=$true)]
-		[string]$name,
-		[Parameter(Mandatory=$true)]
-		[string]$count
+		[string]$name
 	)
 
 	$password = Read-Host -assecurestring "Enter $($name)"
@@ -72,6 +70,7 @@ function checkPasswords
     If ($pw2test -match " "){
       "Password does not meet complexity requirements. Password cannot contain spaces"
       checkPasswords -name $name
+      return
     } Else {
       $isGood = 2
     }
@@ -80,12 +79,14 @@ function checkPasswords
     } Else {
         "Password does not meet complexity requirements. Password must contain a special character"
         checkPasswords -name $name
+        return
     }
 		If ($pw2test -match "[0-9]") {
 			$isGood = 4
     } Else {
         "Password does not meet complexity requirements. Password must contain a numerical character"
         checkPasswords -name $name
+        return
     }
 		If ($pw2test -cmatch "[a-z]") {
 			$isGood = 5
@@ -93,6 +94,7 @@ function checkPasswords
       "Password must contain a lowercase letter"
         "Password does not meet complexity requirements"
         checkPasswords -name $name
+        return
     }
 		If ($pw2test -cmatch "[A-Z]"){
 			$isGood = 6
@@ -108,11 +110,13 @@ function checkPasswords
     } Else {
       "Password does not meet complexity requirements"
       checkPasswords -name $name
+      return
     }
   } Else {
 
     "Password is not long enough - Passwords must be at least " + $passLength + " characters long"
     checkPasswords -name $name
+    return
 
   }
 
