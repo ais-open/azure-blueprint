@@ -1927,6 +1927,9 @@
                   "mgtVMName": {
                       "value": "[variables('resourceNames').vms.mgt]"
                   },
+                  "location": {
+                      "value": "[parameters('vmLocation')]"
+                  },
                   "domainName": {
                     "value": "[parameters('domainName')]"
                   },
