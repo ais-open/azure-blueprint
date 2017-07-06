@@ -270,7 +270,7 @@
                         },
                         "NumberOfDisks": "[parameters('numberOfDisks')]",
                         "WorkloadType": "[parameters('workloadType')]",
-                        /*"MachineName": "[concat(parameters('sqlVMName'),'0')]",
+                        /*"MachineName": "[parameters('sql0VMName')]",
                         "ResourceGroupName": "[parameters('ResourceGroupName')]",
                         "AutomationAccountName": "[parameters('AutomationAccountName')]",
                         "AzureAuthCreds": {
@@ -293,7 +293,7 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('sqlVMName'),'0/Antimalware')]",
+            "name": "[concat(parameters('sql0VMName'),'/Antimalware')]",
             "apiVersion": "2016-04-30-preview",
             "location": "[parameters('location')]",
             "tags": {
