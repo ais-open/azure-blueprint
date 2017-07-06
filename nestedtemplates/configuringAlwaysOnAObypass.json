@@ -2,7 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-      "sqlVMName": {
+      "sql0VMName": {
+          "type": "string"
+      },
+      "sql1VMName": {
           "type": "string"
       },
       "location": {
@@ -95,7 +98,7 @@
           "comments": "Join domain - JsonADDomainExtension",
           "apiVersion": "2015-06-15",
           "type": "Microsoft.Compute/virtualMachines/extensions",
-          "name": "[concat(parameters('sqlVMName'),'1/joindomain')]",
+          "name": "[concat(parameters('sql1VMName'),'/joindomain')]",
           "tags": {
               "Project": "BluePrint"
           },
