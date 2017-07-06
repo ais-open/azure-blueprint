@@ -95,9 +95,6 @@
         "provisioningHybridworkersUrl": {
             "type": "string"
         },
-        "omsWorkspaceName": {
-            "type": "string"
-        },
         "configureSQLAO": {
             "type": "string"
         }
