@@ -79,7 +79,7 @@
     "vmNames": {
         "VMs": [
             {
-                "Name": "[parameters('mgtVMName)]"
+                "Name": "[parameters('mgtVMName')]"
             }
         ]
     }
