@@ -125,8 +125,8 @@
                         "databaseNames": "AutoHa-sample",
                         "lbName": "[parameters('sqlLBName')]",
                         "lbAddress": "[parameters('sqlLBIPAddress')]",
-                        "primaryReplica": "[parameters('sql0VMName')]",
-                        "secondaryReplica": "[parameters('sql1VMName')]",
+                        "primaryReplica": "[parameters('sql1VMName')]",
+                        "secondaryReplica": "[parameters('sql0VMName')]",
                         "dnsServerName": "[parameters('adPDCVMName')]",
                         "adminCreds": {
                             "userName": "[parameters('adminUsername')]",
@@ -135,6 +135,10 @@
                         "sqlServiceCreds": {
                             "userName": "[parameters('sqlServerServiceAccountUserName')]",
                             "password": "privateSettingsRef:sqlServerServiceAccountPassword"
+                        },
+                        "SQLAuthCreds": {
+                            "userName": "sqlsa",
+                            "password": "privateSettingsRef:sqlAuthPassword"
                         },
                         "NumberOfDisks": "[parameters('numberOfDisks')]"
                     }
