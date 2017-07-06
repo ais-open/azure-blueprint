@@ -338,7 +338,7 @@
                     "properties": {
                         "domainName": "[parameters('domainName')]",
                         "adminCreds": {
-                            "userName": "[parameters('adminUserName')]",
+                            "userName": "[parameters('adminUsername')]",
                             "password": "PrivateSettingsRef:adminPassword"
                         },
                         "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.ad]",
@@ -411,9 +411,6 @@
                     },
                     "adBDCVMName": {
                         "value": "[parameters('adBDCVMName')]"
-                    },
-                    "adminUserName": {
-                        "value": "[parameters('adminUsername')]"
                     },
                     "adminPassword": {
                         "value": "[parameters('adminPassword')]"

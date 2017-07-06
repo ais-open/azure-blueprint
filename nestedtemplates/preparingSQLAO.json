@@ -133,7 +133,7 @@
                         "domainName": "[parameters('domainName')]",
                         "SharePath": "[parameters('sharePath')]",
                         "adminCreds": {
-                            "userName": "[parameters('adminUserName')]",
+                            "userName": "[parameters('adminUsername')]",
                             "password": "privateSettingsRef:adminPassword"
                         },
                         "ExclusionPath": "[parameters('antimalwareInfo').exclusionPath.sql]",
@@ -261,7 +261,7 @@
                         "domainName": "[parameters('domainName')]",
                         "sqlAlwaysOnEndpointName": "[parameters('sqlAOEPName')]",
                         "adminCreds": {
-                            "userName": "[parameters('adminUserName')]",
+                            "userName": "[parameters('adminUsername')]",
                             "password": "privateSettingsRef:AdminPassword"
                         },
                         "sqlServiceCreds": {
@@ -274,7 +274,7 @@
                         "ResourceGroupName": "[parameters('ResourceGroupName')]",
                         "AutomationAccountName": "[parameters('AutomationAccountName')]",
                         "AzureAuthCreds": {
-                            "UserName": "[parameters('AzureUserName')]",
+                            "UserName": "[parameters('AzureUsername')]",
                             "Password": "PrivateSettingsRef:AzurePassword"
                         },
                         "SubscriptionId": "[parameters('SubscriptionId')]",

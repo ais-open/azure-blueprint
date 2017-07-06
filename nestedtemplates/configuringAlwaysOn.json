@@ -129,16 +129,12 @@
                         "secondaryReplica": "[parameters('sql1VMName')]",
                         "dnsServerName": "[parameters('adPDCVMName')]",
                         "adminCreds": {
-                            "userName": "[parameters('adminUserName')]",
+                            "userName": "[parameters('adminUsername')]",
                             "password": "privateSettingsRef:adminPassword"
                         },
                         "sqlServiceCreds": {
                             "userName": "[parameters('sqlServerServiceAccountUserName')]",
                             "password": "privateSettingsRef:sqlServerServiceAccountPassword"
-                        },
-                        "SQLAuthCreds": {
-                            "userName": "sqlsa",
-                            "password": "privateSettingsRef:sqlAuthPassword"
                         },
                         "NumberOfDisks": "[parameters('numberOfDisks')]"
                     }

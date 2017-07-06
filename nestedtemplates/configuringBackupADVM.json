@@ -8,9 +8,6 @@
         "location": {
             "type": "string"
         },
-        "adminUserName": {
-            "type": "string"
-        },
         "adminPassword": {
             "type": "securestring"
         },
