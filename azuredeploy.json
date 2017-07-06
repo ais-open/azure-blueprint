@@ -1748,7 +1748,7 @@
             "apiVersion": "2015-01-01",
             "dependsOn": [
                 "Microsoft.Resources/deployments/ProvisioningVirtualMachines",
-                "ConfigureSQL",
+                //"ConfigureSQL",
                 "ConfigureWebTier",
                 "Microsoft.Resources/deployments/ConfigureMGT"
             ],
@@ -1815,7 +1815,7 @@
             "apiVersion": "2015-01-01",
             "dependsOn": [
                 "Microsoft.Resources/deployments/ProvisioningVirtualMachines",
-                "ConfigureSQL",
+                //"ConfigureSQL",
                 "ConfigureWebTier",
                 "Microsoft.Resources/deployments/ConfigureMGT"
             ],
@@ -1881,7 +1881,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "ConfigureSQL",
+                //"ConfigureSQL",
                 "ConfigureWebTier",
                 "monitorVMLoopSQLAD",
                 "monitorVMLoopWEB",
