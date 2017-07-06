@@ -1748,173 +1748,6 @@
             }
         },
         {
-            "name": "[concat('ConfigurationOMSMonitoringSQLAD-', variables('vmNames').VMs[copyIndex()].Name)]",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
-            "dependsOn": [
-                "Microsoft.Resources/deployments/ProvisioningVirtualMachines",
-                //"ConfigureSQL",
-                "ConfigureWebTier",
-                "Microsoft.Resources/deployments/ConfigureMGT"
-            ],
-            "copy": {
-                "name": "monitorVMLoopSQLAD",
-                "count": "[length(variables('vmNames').VMs)]"
-            },
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('artifacts').provisioningOMSMonitoringUrl]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "vmName": {
-                        "value": "[variables('vmNames').VMs[copyIndex()].Name]"
-                    },
-                    "workspaceName": {
-                        "value": "[parameters('omsWorkspaceName')]"
-                    },
-                    "AutomationAccountName": {
-                        "value": "[parameters('omsAutomationAccountName')]"
-                    },
-                    "EnvironmentName": {
-                        "value": "[parameters('EnvironmentName')]"
-                    },
-                    "AzureUserName": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[variables('derivedIds').keyVaultId]"
-                            },
-                            "secretName": "azureUserName"
-                        }
-                    },
-                    "AzurePassword": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[variables('derivedIds').keyVaultId]"
-                            },
-                            "secretName": "azurePassword"
-                        }
-                    },
-                    "SubscriptionId": {
-                        "value": "[subscription().subscriptionId]"
-                    },
-                    "ResourceGroupName": {
-                        "value": "[resourceGroup().name]"
-                    },
-                    "customScriptBaselineUrl": {
-                        "value": "[variables('artifacts').customScriptBaselineUrl]"
-                    },
-                    "MachinesToSetPasswordPolicy": {
-                        "value": "[concat(variables('resourceNames').vms.adpdc,';', variables('resourceNames').vms.adbdc)]"
-                    },
-                    "location": {
-                        "value": "[parameters('vmLocation')]"
-                    }
-                }
-            }
-        },
-        {
-            "name": "[concat('ConfigurationOMSMonitoringWEB-', variables('resourceNames').vms.web, copyindex())]",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
-            "dependsOn": [
-                "Microsoft.Resources/deployments/ProvisioningVirtualMachines",
-                //"ConfigureSQL",
-                "ConfigureWebTier",
-                "Microsoft.Resources/deployments/ConfigureMGT"
-            ],
-            "copy": {
-                "name": "monitorVMLoopWEB",
-                "count": "[variables('numberOfWebInstances')]"
-            },
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('artifacts').provisioningOMSMonitoringUrl]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "vmName": {
-                        "value": "[concat(variables('resourceNames').vms.web, copyindex())]"
-                    },
-                    "workspaceName": {
-                        "value": "[parameters('omsWorkspaceName')]"
-                    },
-                    "AutomationAccountName": {
-                        "value": "[parameters('omsAutomationAccountName')]"
-                    },
-                    "EnvironmentName": {
-                        "value": "[parameters('EnvironmentName')]"
-                    },
-                    "AzureUserName": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[variables('derivedIds').keyVaultId]"
-                            },
-                            "secretName": "azureUserName"
-                        }
-                    },
-                    "AzurePassword": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[variables('derivedIds').keyVaultId]"
-                            },
-                            "secretName": "azurePassword"
-                        }
-                    },
-                    "SubscriptionId": {
-                        "value": "[subscription().subscriptionId]"
-                    },
-                    "ResourceGroupName": {
-                        "value": "[resourceGroup().name]"
-                    },
-                    "customScriptBaselineUrl": {
-                        "value": "[variables('artifacts').customScriptBaselineUrl]"
-                    },
-                    "MachinesToSetPasswordPolicy": {
-                        "value": ""
-                    },
-                    "location": {
-                        "value": "[parameters('vmLocation')]"
-                    }
-                }
-            }
-        },
-        {
-            "name": "ConfigurationAutomationSchedules",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
-            "dependsOn": [
-                //"ConfigureSQL",
-                "ConfigureWebTier",
-                "monitorVMLoopSQLAD",
-                "monitorVMLoopWEB",
-                "Microsoft.Resources/deployments/ConfigureMGT"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('artifacts').provisioningOMSAutomationScheduleUrl]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "omsAutomationAccountName": {
-                        "value": "[parameters('omsAutomationAccountName')]"
-                    },
-                    "scheduleName": {
-                        "value": "[parameters('scheduleName')]"
-                    },
-                    "scheduleJobGuid": {
-                        "value": "[parameters('scheduleJobGuid')]"
-                    },
-                    "computerIdList": {
-                        "value": ""
-                    }
-                }
-            }
-        },
-        {
             "name": "ConfigureMGT",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -2261,6 +2094,173 @@
                     },
                     "omsWorkspaceName": {
                         "value": "[parameters('omsWorkspaceName')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "[concat('ConfigurationOMSMonitoringSQLAD-', variables('vmNames').VMs[copyIndex()].Name)]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/ProvisioningVirtualMachines",
+                "ConfigureSQL",
+                "ConfigureWebTier",
+                "Microsoft.Resources/deployments/ConfigureMGT"
+            ],
+            "copy": {
+                "name": "monitorVMLoopSQLAD",
+                "count": "[length(variables('vmNames').VMs)]"
+            },
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningOMSMonitoringUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[variables('vmNames').VMs[copyIndex()].Name]"
+                    },
+                    "workspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "AutomationAccountName": {
+                        "value": "[parameters('omsAutomationAccountName')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
+                    },
+                    "AzureUserName": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azureUserName"
+                        }
+                    },
+                    "AzurePassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azurePassword"
+                        }
+                    },
+                    "SubscriptionId": {
+                        "value": "[subscription().subscriptionId]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[resourceGroup().name]"
+                    },
+                    "customScriptBaselineUrl": {
+                        "value": "[variables('artifacts').customScriptBaselineUrl]"
+                    },
+                    "MachinesToSetPasswordPolicy": {
+                        "value": "[concat(variables('resourceNames').vms.adpdc,';', variables('resourceNames').vms.adbdc)]"
+                    },
+                    "location": {
+                        "value": "[parameters('vmLocation')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "[concat('ConfigurationOMSMonitoringWEB-', variables('resourceNames').vms.web, copyindex())]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/ProvisioningVirtualMachines",
+                "ConfigureSQL",
+                "ConfigureWebTier",
+                "Microsoft.Resources/deployments/ConfigureMGT"
+            ],
+            "copy": {
+                "name": "monitorVMLoopWEB",
+                "count": "[variables('numberOfWebInstances')]"
+            },
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningOMSMonitoringUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[concat(variables('resourceNames').vms.web, copyindex())]"
+                    },
+                    "workspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
+                    },
+                    "AutomationAccountName": {
+                        "value": "[parameters('omsAutomationAccountName')]"
+                    },
+                    "EnvironmentName": {
+                        "value": "[parameters('EnvironmentName')]"
+                    },
+                    "AzureUserName": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azureUserName"
+                        }
+                    },
+                    "AzurePassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('derivedIds').keyVaultId]"
+                            },
+                            "secretName": "azurePassword"
+                        }
+                    },
+                    "SubscriptionId": {
+                        "value": "[subscription().subscriptionId]"
+                    },
+                    "ResourceGroupName": {
+                        "value": "[resourceGroup().name]"
+                    },
+                    "customScriptBaselineUrl": {
+                        "value": "[variables('artifacts').customScriptBaselineUrl]"
+                    },
+                    "MachinesToSetPasswordPolicy": {
+                        "value": ""
+                    },
+                    "location": {
+                        "value": "[parameters('vmLocation')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "ConfigurationAutomationSchedules",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "ConfigureSQL",
+                "ConfigureWebTier",
+                "monitorVMLoopSQLAD",
+                "monitorVMLoopWEB",
+                "Microsoft.Resources/deployments/ConfigureMGT"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').provisioningOMSAutomationScheduleUrl]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "omsAutomationAccountName": {
+                        "value": "[parameters('omsAutomationAccountName')]"
+                    },
+                    "scheduleName": {
+                        "value": "[parameters('scheduleName')]"
+                    },
+                    "scheduleJobGuid": {
+                        "value": "[parameters('scheduleJobGuid')]"
+                    },
+                    "computerIdList": {
+                        "value": ""
                     }
                 }
             }
