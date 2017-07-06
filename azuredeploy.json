@@ -2123,6 +2123,9 @@
                     },
                     "configureSQLAO": {
                         "value": "[parameters('configureSQLAO')]"
+                    },
+                    "workspaceName": {
+                        "value": "[parameters('omsWorkspaceName')]"
                     }
 
                 }
