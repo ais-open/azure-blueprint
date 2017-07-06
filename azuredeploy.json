@@ -1004,7 +1004,7 @@
                     "Name": "[variables('resourceNames').vms.sql0]"
                 },
                 {
-                    "Name": "[variables('resourceNames').vms.sql1']"
+                    "Name": "[variables('resourceNames').vms.sql1]"
                 }
             ]
         }
