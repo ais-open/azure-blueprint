@@ -2016,14 +2016,8 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "sql0VMName": {
-                        "value": "[variables('resourceNames').vms.sql0]"
-                    },
-                    "sql1VMName": {
-                        "value": "[variables('resourceNames').vms.sql1]"
-                    },
-                    "location": {
-                      "value": "[parameters('vmLocation')]"
+                    "adPDCVMName": {
+                        "value": "[variables('resourceNames').vms.adpdc]"
                     },
                     "adminUsername": {
                       "value": "[parameters('adminUsername')]"
@@ -2036,55 +2030,56 @@
                         "secretName": "adminPassword"
                       }
                     },
+                    "adBDCVMName": {
+                        "value": "[variables('resourceNames').vms.adbdc]"
+                    },
+                    "sql0VMName": {
+                        "value": "[variables('resourceNames').vms.sql0]"
+                    },
+                    "sql1VMName": {
+                        "value": "[variables('resourceNames').vms.sql1]"
+                    },
+                    "location": {
+                      "value": "[parameters('vmLocation')]"
+                    },
                     "domainName": {
                       "value": "[parameters('domainName')]"
-                    },
-                    "sql0ModulesURL": {
-                      "value": "[variables('artifacts').sql0ModulesURL]"
-                    },
-                    "sql0ConfigurationFunction": {
-                      "value": "[variables('artifacts').sql0ConfigurationFunction]"
-                    },
-                    "sqlAOEPName": {
-                      "value": "[variables('vmSettings').sql.sqlAOEPName]"
-                    },
-                    "sqlServerServiceAccountUserName":{
-                      "value": "[parameters('sqlServerServiceAccountUserName')]"
-                    },
-                    "sqlServerServiceAccountPassword": {
-                      "reference": {
-                        "keyVault": {
-                          "id": "[variables('derivedIds').keyVaultId]"
-                        },
-                        "secretName": "sqlServerServiceAccountPassword"
-                      }
-                    },
-                    "sharePath": {
-                        "value": "[variables('vmSettings').sql.sharePath]"
                     },
                     "sqlwVMName": {
                         "value": "[variables('resourceNames').vms.sqlw]"
                     },
-                    "sqlwModulesURL": {
-                      "value": "[variables('artifacts').sqlwModulesURL]"
+                    "sqlwNicName": {
+                        "value": "[variables('resourceNames').nics.sqlw]"
                     },
-                    "sqlwConfigurationFunction": {
-                      "value": "[variables('artifacts').sqlwConfigurationFunction]"
+                    "sql0NicName": {
+                        "value": "[variables('resourceNames').nics.sql0]"
                     },
-                    "autoPatchingEnable": {
-                        "value":"[variables('vmSettings').sql.autoPatchingEnable]"
+                    "sql1NicName": {
+                        "value": "[variables('resourceNames').nics.sql1]"
                     },
-                    "autoPatchingDay": {
-                        "value":"[variables('vmSettings').sql.autoPatchingDay]"
+                    "adPDCNICIPAddress": {
+                        "value": "[parameters('adPDCNICIPAddress')]"
                     },
-                    "autoPatchingStartHour": {
-                        "value":"[variables('vmSettings').sql.autoPatchingStartHour]"
+                    "adBDCNICIPAddress": {
+                        "value": "[parameters('adBDCNICIPAddress')]"
                     },
-                    "numberOfDisks": {
-                        "value":"[variables('vmSettings').sql.numberOfDisks]"
+                    "updateNicTemplateURL": {
+                        "value": "[variables('artifacts').nicTemplateURL]"
                     },
-                    "workloadType": {
-                        "value":"[variables('vmSettings').sql.workloadType]"
+                    "sqlSubnetRef": {
+                        "value": "[variables('derivedIds').sqlSubnet]"
+                    },
+                    "sqlBEAddressPoolID": {
+                        "value": "[variables('derivedIds').sqlBEAddressPoolID]"
+                    },
+                    "prepareAlwaysOnSQLInfo": {
+                        "value": "[variables('prepareAlwaysOnSQLInfo')]"
+                    },
+                    "configuringAlwaysOnInfo": {
+                        "value": "[variables('configuringAlwaysOnInfo')]"
+                    },
+                    "backupInfo": {
+                        "value": "[variables('backupInfo')]"
                     },
                     "antimalwareInfo": {
                         "value": "[variables('antimalwareInfo')]"
@@ -2122,7 +2117,14 @@
                     },
                     "keyVaultName": {
                         "value": "[parameters('keyVaultName')]"
+                    },
+                    "provisioningHybridworkersUrl": {
+                        "value": "[variables('artifacts').provisioningHybridworkerUrl]"
+                    },
+                    "configureSQLAO": {
+                        "value": "[parameters('configureSQLAO')]"
                     }
+
                 }
             }
         },

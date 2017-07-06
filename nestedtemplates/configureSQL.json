@@ -5,46 +5,13 @@
         "adPDCVMName": {
             "type": "string"
         },
-        "vmLocation": {
-            "type": "string"
-        },
-        "adAvailabilitySetName": {
-            "type": "string"
-        },
-        "adVMSize": {
-            "type": "string"
-        },
         "adminUsername": {
-            "type": "string"
-        },
-        "environmentPrefix": {
             "type": "string"
         },
         "adminPassword": {
             "type": "securestring"
         },
-        "adImagePublisher": {
-            "type": "string"
-        },
-        "adImageOffer": {
-            "type": "string"
-        },
-        "adImageSKU": {
-            "type": "string"
-        },
-        "adPDCNicName": {
-            "type": "string"
-        },
-        "pdcConfigurationFunction": {
-            "type": "string"
-        },
-        "pdcModulesURL": {
-            "type": "string"
-        },
         "adBDCVMName": {
-            "type": "string"
-        },
-        "adBDCNicName": {
             "type": "string"
         },
         "sql0VMName": {
@@ -56,58 +23,7 @@
         "location": {
             "type": "string"
         },
-        "sqlStorageAccountName": {
-            "type": "string"
-        },
-        "dcStorageAccountName": {
-            "type": "string"
-        },
-        "SqlStorageAccountType": {
-            "type": "string"
-        },
-        "DcStorageAccountType": {
-            "type": "string"
-        },
-        "sqlAvailabilitySetName": {
-            "type": "string"
-        },
-        "sqlVMSize": {
-            "type": "string"
-        },
-        "fswImagePublisher": {
-            "type": "string"
-        },
-        "fswImageOffer": {
-            "type": "string"
-        },
-        "fswImageSKU": {
-            "type": "string"
-        },
-        "vmContainerName": {
-            "type": "string"
-        },
-        "sqlImagePublisher": {
-            "type": "string"
-        },
-        "sqlImageOffer": {
-            "type": "string"
-        },
-        "sqlImageSKU": {
-            "type": "string"
-        },
-        "mgtImagePublisher": {
-            "type": "string"
-        },
-        "mgtImageOffer": {
-            "type": "string"
-        },
-        "mgtImageSKU": {
-            "type": "string"
-        },
         "domainName": {
-            "type": "string"
-        },
-        "witnessVMSize": {
             "type": "string"
         },
         "sqlwVMName": {
@@ -122,58 +38,7 @@
         "sql1NicName": {
             "type": "string"
         },
-        "mgtVMName": {
-            "type": "string"
-        },
-        "mgtStorageAccountName": {
-            "type": "string"
-        },
-        "mgtStorageAccountType": {
-            "type": "string"
-        },
-        "mgtVMSize": {
-            "type": "string"
-        },
-        "mgtNICName": {
-            "type": "string"
-        },
-        "mgtIPAddress": {
-            "type": "string"
-        },
-        "mgtSubnetRef": {
-            "type": "string"
-        },
-        "mgtNSGid": {
-            "type": "string"
-        },
-        "mgtModulesURL": {
-            "type": "string"
-        },
-        "mgtConfigurationFunction": {
-            "type": "string"
-        },
-        "updateVnetWithDNSTemplateURL": {
-            "type": "string"
-        },
-        "virtualNetworkNameWithSuffix": {
-            "type": "string"
-        },
-        "virtualNetworkAddressRange": {
-            "type": "string"
-        },
-        "subnets": {
-            "type": "array"
-        },
         "adPDCNICIPAddress": {
-            "type": "string"
-        },
-        "bdcConfigurationFunction": {
-            "type": "string"
-        },
-        "bdcModulesURL": {
-            "type": "string"
-        },
-        "configuringBackupADVMURL": {
             "type": "string"
         },
         "adBDCNICIPAddress": {
@@ -187,9 +52,6 @@
         },
         "sqlBEAddressPoolID": {
             "type": "string"
-        },
-        "postDeployScriptUris": {
-            "type": "array"
         },
         "prepareAlwaysOnSQLInfo": {
             "type": "object"
@@ -206,7 +68,6 @@
         "vmEncryptionSettings": {
             "type": "object"
         },
-
         "antimalwareInfo": {
             "type": "object"
         },
@@ -242,11 +103,6 @@
         }
     },
     "variables": {
-        "sqlstorageName": "[parameters('sqlStorageAccountName')]",
-        "dcstorageName": "[parameters('dcStorageAccountName')]",
-        "fswstorageName": "[concat(parameters('sqlStorageAccountName'), 'fsw')]",
-        "diagstorageNameSQL": "[concat(parameters('sqlStorageAccountName'), 'diag')]",
-        "diagstorageNameDC": "[concat(parameters('dcStorageAccountName'), 'diag')]",
         "domainJoinUserName": "[concat(split(parameters('domainName'), '.')[0], '\\', parameters('adminUsername'))]",
         "vmNames": {
             "VMs": [
