@@ -1181,7 +1181,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "Microsoft.Resources/deployments/ConfigureAD"
+                "Microsoft.Resources/deployments/ProvisioningNICs"
             ],
             "properties": {
                 "mode": "Incremental",
