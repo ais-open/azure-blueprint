@@ -325,7 +325,7 @@
             },
             "location": "[parameters('location')]",
             "dependsOn": [
-
+              "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'))]"
             ],
             "properties": {
                 "publisher": "Microsoft.Powershell",
