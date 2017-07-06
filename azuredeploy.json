@@ -1973,9 +1973,6 @@
                   "keyVaultName": {
                       "value": "[parameters('keyVaultName')]"
                   },
-                  "antimalwareInfo": {
-                      "value": "[variables('antimalwareInfo')]"
-                  },
                   "workspaceName": {
                       "value": "[parameters('omsWorkspaceName')]"
                   },
