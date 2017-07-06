@@ -17,7 +17,14 @@ Must meet complexity requirements
 Must meet complexity requirements
 14+ characters, 2 numbers, 2 upper and lower case, and 2 special chars
 #>
+Write-Host "`n `n AZURE BLUEPRINT MULTI-TIER WEB APPLICATION SOLUTION FOR FEDRAMP: Pre-Deployment Script `n" -foregroundcolor green
+Write-Host "This script can be used for creating the necessary preliminary resources to deploy a multi-tier web application architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. See https://github.com/AppliedIS/azure-blueprint#pre-deployment for more information. `n " -foregroundcolor yellow
 
+Write-Host "Press any key to continue ..."
+
+$x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
+Write-Host "`n LOGIN TO AZURE `n" -foregroundcolor green
 $global:azureUserName = $null
 $global:azurePassword = $null
 
@@ -104,7 +111,7 @@ function checkPasswords
         checkPasswords -name $name
     }
 		If ($isGood -ge 6) {
-		"ADDED PASS"
+		"ADDED PASSWORD TO KEYVAULT"
       $passwords | Add-Member -MemberType NoteProperty -Name $name -Value $password
       return
     } Else {
@@ -299,6 +306,14 @@ try{
 
 
 loginToAzure -lginCount 1
+
+Write-Host "You will now be asked to create credentials for the administrator and sql service accounts. `n"
+
+Write-Host "Press any key to continue ..."
+
+$x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
+Write-Host "`n CREATE CREDENTIALS `n" -foregroundcolor green
 
 $adminUsername = Read-Host "Enter an admin username"
 

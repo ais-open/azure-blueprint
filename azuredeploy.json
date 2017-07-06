@@ -1001,10 +1001,10 @@
                     "Name": "[variables('resourceNames').vms.sqlw]"
                 },
                 {
-                    "Name": "[concat(variables('resourceNames').vms.sql,'0')]"
+                    "Name": "[variables('resourceNames').vms.sql0]"
                 },
                 {
-                    "Name": "[concat(variables('resourceNames').vms.sql,'1')]"
+                    "Name": "[variables('resourceNames').vms.sql1']"
                 }
             ]
         }
