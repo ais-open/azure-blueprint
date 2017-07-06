@@ -109,10 +109,7 @@
         "Project": "BluePrint"
       },
       "properties": {
-        "publicIPAllocationMethod": "Dynamic",
-        "dnsSettings": {
-          "domainNameLabel": "[parameters('dnsLabelPrefix')]"
-        }
+        "publicIPAllocationMethod": "Dynamic"
       }
     },
     {

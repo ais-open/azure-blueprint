@@ -846,7 +846,7 @@
                 "sql": "[concat(parameters('environmentPrefix'), 'sqlserver-')]",
                 "sqlw": "[concat('cluster-fsw', parameters('environmentPrefix'))]",
                 "web": "[concat('AZ-WEB-VM', parameters('environmentPrefix'))]",
-                "mgt": "[concat('azmgtvm7', parameters('environmentPrefix'))]"
+                "mgt": "[concat('AZ-MGT-VM', parameters('environmentPrefix'))]"
             },
             "nics": {
                 "adpdc": "[concat('adPDC-nic', parameters('environmentPrefix'))]",
@@ -1915,7 +1915,8 @@
             "apiVersion": "2015-01-01",
             "comments": "This resource will create storage accounts for Active Directory, SQL Server, File Share Witness and Diagnostics. It will also create the Virtual Network and public IP addresses",
             "dependsOn": [
-                "Microsoft.Resources/deployments/ConfigureAD"
+                "Microsoft.Resources/deployments/ProvisioningVirtualMachines"
+
             ],
             "properties": {
                 "mode": "Incremental",
@@ -1961,7 +1962,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "Microsoft.Resources/deployments/ConfigureAD"
+                "Microsoft.Resources/deployments/ProvisioningVirtualMachines"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -2225,7 +2226,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "Microsoft.Resources/deployments/ConfigureAD"
+                "Microsoft.Resources/deployments/ProvisioningVirtualMachines"
             ],
             "properties": {
                 "mode": "Incremental",
