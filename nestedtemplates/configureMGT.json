@@ -150,7 +150,7 @@
             }
         }
     },
-    /*{
+    {
         "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
         "type": "Microsoft.Resources/deployments",
         "apiVersion": "2015-01-01",
@@ -158,7 +158,7 @@
               "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('mgtVMName'), 'MGTBaselineDSC')]"
         ],
         "copy": {
-            "name": "encryptADMGTLoop",
+            "name": "encryptMGTLoop",
             "count": "[length(variables('vmNames').VMs)]"
         },
         "properties": {
@@ -236,11 +236,11 @@
         "type": "Microsoft.Resources/deployments",
         "apiVersion": "2015-01-01",
         "copy": {
-            "name": "backupSQLMGMTADLoop",
+            "name": "backupMGTLoop",
             "count": "[length(variables('vmNames').VMs)]"
         },
         "dependsOn": [
-            "encryptADMGTLoop"
+            "encryptMGTLoop"
         ],
         "properties": {
             "mode": "Incremental",
@@ -257,6 +257,6 @@
                 }
             }
         }
-    }*/
+    }
   ]
 }

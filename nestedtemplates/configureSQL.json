@@ -482,7 +482,7 @@
                 }
             }
         },
-        /*{
+        {
             "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -490,7 +490,7 @@
                 "ConfiguringAlwaysOn"
             ],
             "copy": {
-                "name": "encryptSQLMGMTADLoop",
+                "name": "encryptSQLLoop",
                 "count": "[length(variables('vmNames').VMs)]"
             },
             "properties": {
@@ -568,11 +568,11 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "copy": {
-                "name": "backupSQLMGMTADLoop",
+                "name": "backupSQLLoop",
                 "count": "[length(variables('vmNames').VMs)]"
             },
             "dependsOn": [
-                "encryptSQLMGMTADLoop"
+                "encryptSQLLoop"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -589,7 +589,7 @@
                     }
                 }
             }
-        }*/
+        }
     ],
     "outputs": {}
 }

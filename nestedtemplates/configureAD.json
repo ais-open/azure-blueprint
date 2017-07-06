@@ -489,7 +489,7 @@
                 }
             }
         },
-        /*{
+        {
             "name": "[concat('ConfigurationVMEncryption-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -497,7 +497,7 @@
                   "Microsoft.Resources/deployments/UpdatingDNSwithBackupADVM"
             ],
             "copy": {
-                "name": "encryptADMGTLoop",
+                "name": "encryptADLoop",
                 "count": "[length(variables('vmNames').VMs)]"
             },
             "properties": {
@@ -575,11 +575,11 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "copy": {
-                "name": "backupSQLMGMTADLoop",
+                "name": "backupADLoop",
                 "count": "[length(variables('vmNames').VMs)]"
             },
             "dependsOn": [
-                "encryptADMGTLoop"
+                "encryptADLoop"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -596,7 +596,7 @@
                     }
                 }
             }
-        },*/
+        }
     ],
     "outputs": {}
 }
