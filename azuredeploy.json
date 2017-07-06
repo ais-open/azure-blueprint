@@ -1963,7 +1963,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('artifacts').configureADUrl]",
+                    "uri": "[variables('artifacts').preparingAlwaysOnSqlServerURL]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
