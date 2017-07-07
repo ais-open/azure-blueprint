@@ -236,7 +236,7 @@ function orchestration
 			 Write-Host "Set Azure Key Vault Access Policy."
 			 Write-Host "Set ServicePrincipalName: $aadClientID in Key Vault: $keyVaultName";
 			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ServicePrincipalName $aadClientID -PermissionsToKeys wrapKey -PermissionsToSecrets set;
-			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ServicePrincipalName $aadClientID -PermissionsToKeys backup,get,list -PermissionsToSecrets get,list;
+			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ServicePrincipalName $aadClientID -PermissionsToKeys backup,get,list,wrapKey -PermissionsToSecrets get,list,set;
 			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -EnabledForDiskEncryption;
 
             $keyEncryptionKeyName = $keyVaultName + "kek"
