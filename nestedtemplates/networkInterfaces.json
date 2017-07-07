@@ -228,7 +228,7 @@
           }
         ],
         "networkSecurityGroup": {
-            "id": "[parameters('mgt')]"
+            "id": "[parameters('mgtNSGid')]"
         }
       }
     },
