@@ -19,13 +19,16 @@
       "metadata": {
         "Description": "The DNS Servers of the NIC"
       }
+    },
+    "location": {
+        "type": "string"
     }
   },
   "resources": [
     {
       "name": "[parameters('nicName')]",
       "type": "Microsoft.Network/networkInterfaces",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('location')]",
       "apiVersion": "2016-10-01",
       "tags": {
         "Project": "BluePrint"

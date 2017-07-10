@@ -2,7 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sqlVMName": {
+        "sql0VMName": {
+            "type": "string"
+        },
+        "sql1VMName": {
             "type": "string"
         },
         "location": {
@@ -162,7 +165,7 @@
         {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('sqlVMName'),'0/SqlVmIaasExtension')]",
+            "name": "[concat(parameters('sql0VMName'),'/SqlVmIaasExtension')]",
             "location": "[parameters('location')]",
             "tags": {
                 "Project": "BluePrint"
@@ -199,7 +202,7 @@
         {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('sqlVMName'),'1/SqlVmIaasExtension')]",
+            "name": "[concat(parameters('sql1VMName'),'/SqlVmIaasExtension')]",
             "location": "[parameters('location')]",
             "tags": {
                 "Project": "BluePrint"
@@ -237,13 +240,13 @@
             "comments": "Join domain - JsonADDomainExtension",
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('sqlVMName'),'0/joindomain')]",
+            "name": "[concat(parameters('sql0VMName'),'/joindomain')]",
             "tags": {
                 "Project": "BluePrint"
             },
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlwVMName'),'/extensions/SQLWBaselineDSC')]",
-                "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlVMName'),'0/extensions/SqlVmIaasExtension')]"
+                "[concat('Microsoft.Compute/virtualMachines/',parameters('sql0VMName'),'/extensions/SqlVmIaasExtension')]"
             ],
             "location": "[parameters('location')]",
             "properties": {
@@ -265,14 +268,14 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('sqlVMName'),'0/Antimalware')]",
+            "name": "[concat(parameters('sql0VMName'),'/Antimalware')]",
             "apiVersion": "2016-04-30-preview",
             "location": "[parameters('location')]",
             "tags": {
                 "Project": "BluePrint"
             },
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/',concat(parameters('sqlVMName'),'0'),'/extensions/joindomain')]"
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('sql0VMName'),'/extensions/joindomain')]"
             ],
             "properties": {
                 "publisher": "Microsoft.Azure.Security",

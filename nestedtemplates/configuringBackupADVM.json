@@ -8,9 +8,6 @@
         "location": {
             "type": "string"
         },
-        "adminUserName": {
-            "type": "string"
-        },
         "adminPassword": {
             "type": "securestring"
         },
@@ -58,7 +55,7 @@
         "tags": {
             "Project": "BluePrint"
         },
-        "location": "[resourceGroup().location]",
+        "location": "[parameters('location')]",
         "properties": {
             "publisher": "Microsoft.Powershell",
             "type": "DSC",

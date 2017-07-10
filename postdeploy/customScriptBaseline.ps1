@@ -11,7 +11,7 @@
         [String]$EnvironmentName,
         [String]$MachinesToSetPasswordPolicy
     )
-    
+
     Disable-AzureRmDataCollection
     Enable-PSRemoting -Force
     Write-Host "Check Module exists"
@@ -377,3 +377,10 @@ catch{
 # calling the configuration
 SetHybridWorderList -MachineName $MachineName -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -AzureAuthCreds $AzureAuthCreds -SubscriptionId $SubscriptionId -EnvironmentName $EnvironmentName -ConfigurationData $ConfigData -Verbose
 Start-DscConfiguration -Wait -Force -Path .\SetHybridWorderList -Verbose
+
+Invoke-Expression "tzutil.exe /s ""UTC"""
+
+
+$Logs = Get-Eventlog -List |ForEach {
+Limit-Eventlog -Logname $_.Log -MaximumSize 64000Kb
+}

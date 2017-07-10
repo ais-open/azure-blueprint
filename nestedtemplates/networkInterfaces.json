@@ -5,6 +5,27 @@
     "location": {
       "type": "string"
     },
+    "numberOfWebInstances": {
+        "type": "int",
+        "defaultValue": 2,
+        "minValue": 2,
+        "maxValue": 5
+    },
+    "webNICName": {
+        "type": "string"
+    },
+    "subnetRef": {
+        "type": "string"
+    },
+    "webSubnetAddressRange": {
+        "type": "string"
+    },
+    "staticIPWEBStart": {
+        "type": "int"
+    },
+    "webNSGid": {
+        "type": "string"
+    },
     "adPDCNicName": {
       "type": "string"
     },
@@ -70,6 +91,12 @@
     },
     "mgtPublicIPName": {
       "type": "string"
+    },
+    "dnsLabelPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Unique public DNS prefix for the deployment. The fqdn will look something like '<dnsname>.westus.cloudapp.azure.com'. Up to 62 chars, digits or dashes, lowercase, should start with a letter: must conform to '^[a-z][a-z0-9-]{1,61}[a-z0-9]$'."
+      }
     }
   },
   "resources": [
@@ -77,64 +104,12 @@
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[parameters('mgtPublicIPName')]",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('location')]",
       "tags": {
         "Project": "BluePrint"
       },
       "properties": {
         "publicIPAllocationMethod": "Dynamic"
-      }
-    },
-    {
-      "name": "[parameters('adPDCNicName')]",
-      "type": "Microsoft.Network/networkInterfaces",
-      "location": "[parameters('location')]",
-      "apiVersion": "2015-06-15",
-      "tags": {
-        "Project": "BluePrint"
-      },
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('adPDCNICIPAddress')]",
-              "subnet": {
-                "id": "[parameters('dcSubnetRef')]"
-              }
-            }
-          }
-        ],
-        "networkSecurityGroup": {
-          "id": "[parameters('dcNSGid')]"
-        }
-      }
-    },
-    {
-      "name": "[parameters('adBDCNicName')]",
-      "type": "Microsoft.Network/networkInterfaces",
-      "location": "[parameters('location')]",
-      "apiVersion": "2015-06-15",
-      "tags": {
-        "Project": "BluePrint"
-      },
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('adBDCNICIPAddress')]",
-              "subnet": {
-                "id": "[parameters('dcSubnetRef')]"
-              }
-            }
-          }
-        ],
-        "networkSecurityGroup": {
-          "id": "[parameters('dcNSGid')]"
-        }
       }
     },
     {
@@ -253,9 +228,38 @@
           }
         ],
         "networkSecurityGroup": {
-          "id": "[parameters('mgtNSGid')]"
+            "id": "[parameters('mgtNSGid')]"
         }
       }
+    },
+    {
+        "apiVersion": "2015-05-01-preview",
+        "type": "Microsoft.Network/networkInterfaces",
+        "name": "[concat(parameters('webNICName'), copyindex())]",
+        "location": "[parameters('location')]",
+        "tags": {
+            "Project": "BluePrint"
+        },
+        "copy": {
+            "name": "nicLoopDEL",
+            "count": "[parameters('numberOfWebInstances')]"
+        },
+        "dependsOn": [],
+        "properties": {
+            "ipConfigurations": [{
+                "name": "ipconfig1",
+                "properties": {
+                    "privateIPAllocationMethod": "Static",
+                    "privateIPAddress": "[concat(split(parameters('webSubnetAddressRange'), '0/')[0], add(copyindex(), parameters('staticIPWEBStart')))]",
+                    "subnet": {
+                        "id": "[parameters('subnetRef')]"
+                    }
+                }
+            }],
+            "networkSecurityGroup": {
+                "id": "[parameters('webNSGid')]"
+            }
+        }
     }
   ],
   "outputs": {}

@@ -2,7 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sqlVMName": {
+        "sql0VMName": {
+            "type": "string"
+        },
+        "sql1VMName": {
             "type": "string"
         },
         "location": {
@@ -93,7 +96,7 @@
     "resources": [
       {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('sqlVMName'),'1/SQL1BaselineDSC')]",
+            "name": "[concat(parameters('sql1VMName'),'/SQL1BaselineDSC')]",
             "apiVersion": "2015-06-15",
             "tags": {
                 "Project": "BluePrint"
@@ -112,8 +115,8 @@
                         "clusterName": "[parameters('clusterName')]",
                         "sharePath": "[concat('\\\\',parameters('sqlwVMName'),'\\',parameters('sharePath'))]",
                         "nodes": [
-                            "[concat(parameters('sqlVMName'),'0')]",
-                            "[concat(parameters('sqlVMName'),'1')]"
+                            "[parameters('sql0VMName')]",
+                            "[parameters('sql1VMName')]"
                         ],
                         "sqlAlwaysOnEndpointName": "[parameters('sqlAOEPName')]",
                         "sqlAlwaysOnAvailabilityGroupName": "[parameters('sqlAOAGName')]",
@@ -122,11 +125,11 @@
                         "databaseNames": "AutoHa-sample",
                         "lbName": "[parameters('sqlLBName')]",
                         "lbAddress": "[parameters('sqlLBIPAddress')]",
-                        "primaryReplica": "[concat(parameters('sqlVMName'),'1')]",
-                        "secondaryReplica": "[concat(parameters('sqlVMName'),'0')]",
+                        "primaryReplica": "[parameters('sql1VMName')]",
+                        "secondaryReplica": "[parameters('sql0VMName')]",
                         "dnsServerName": "[parameters('adPDCVMName')]",
                         "adminCreds": {
-                            "userName": "[parameters('adminUserName')]",
+                            "userName": "[parameters('adminUsername')]",
                             "password": "privateSettingsRef:adminPassword"
                         },
                         "sqlServiceCreds": {
@@ -152,14 +155,14 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('sqlVMName'),'1/Antimalware')]",
+            "name": "[concat(parameters('sql1VMName'),'/Antimalware')]",
             "apiVersion": "2016-04-30-preview",
             "location": "[parameters('location')]",
             "tags": {
                 "Project": "BluePrint"
             },
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/',concat(parameters('sqlVMName'),'1'),'/extensions/SQL1BaselineDSC')]"
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('sql1VMName'),'/extensions/SQL1BaselineDSC')]"
             ],
             "properties": {
                 "publisher": "Microsoft.Azure.Security",

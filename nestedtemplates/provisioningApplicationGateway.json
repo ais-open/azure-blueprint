@@ -14,6 +14,9 @@
         "description": "Address prefix for the Virtual Network"
       }
     },
+    "vmLocation": {
+        "type": "string"
+    },
     "subnetPrefix": {
       "type": "string",
       "metadata": {
@@ -100,7 +103,7 @@
       "apiVersion": "2016-03-30",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[variables('publicIPAddressName')]",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('vmLocation')]",
       "tags": {
         "Project": "BluePrint"
       },
@@ -112,7 +115,7 @@
       "apiVersion": "[variables('apiVersion')]",
       "name": "[variables('applicationGatewayName')]",
       "type": "Microsoft.Network/applicationGateways",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('vmLocation')]",
       "tags": {
         "Project": "BluePrint"
       },

@@ -17,6 +17,22 @@ Must meet complexity requirements
 Must meet complexity requirements
 14+ characters, 2 numbers, 2 upper and lower case, and 2 special chars
 #>
+Write-Host "`n `n AZURE BLUEPRINT MULTI-TIER WEB APPLICATION SOLUTION FOR FEDRAMP: Pre-Deployment Script `n" -foregroundcolor green
+Write-Host "This script can be used for creating the necessary preliminary resources to deploy a multi-tier web application architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. See https://github.com/AppliedIS/azure-blueprint#pre-deployment for more information. `n " -foregroundcolor yellow
+
+Write-Host "Press any key to continue ..."
+
+$x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
+Write-Host "`n LOGIN TO AZURE `n" -foregroundcolor green
+$global:azureUserName = $null
+$global:azurePassword = $null
+
+function loginToAzure{
+Param(
+		[Parameter(Mandatory=$true)]
+		[int]$lginCount
+	)
 
 $global:azureUserName = $null
 $global:azurePassword = $null
@@ -46,6 +62,7 @@ loginToAzure -lginCount $lginCount
 else{
 
 	Throw "Your credentials are incorrect or invalid exceeding maximum retries. Make sure you are using your Azure Government account information"  
+
 }
 }
 
@@ -64,52 +81,59 @@ function checkPasswords
   [System.Runtime.InteropServices.Marshal]::ZeroFreeCoTaskMemUnicode($Ptr)
 
 	$passLength = 14
-
+	$isGood = 0
 	if ($pw2test.Length -ge $passLength) {
 		$isGood = 1
     If ($pw2test -match " "){
       "Password does not meet complexity requirements. Password cannot contain spaces"
       checkPasswords -name $name
+      return
     } Else {
-      $isGood++
+      $isGood = 2
     }
 		If ($pw2test -match "[^a-zA-Z0-9]"){
-			$isGood++
+			$isGood = 3
     } Else {
         "Password does not meet complexity requirements. Password must contain a special character"
         checkPasswords -name $name
+        return
     }
 		If ($pw2test -match "[0-9]") {
-			$isGood++
+			$isGood = 4
     } Else {
         "Password does not meet complexity requirements. Password must contain a numerical character"
         checkPasswords -name $name
+        return
     }
 		If ($pw2test -cmatch "[a-z]") {
-			$isGood++
+			$isGood = 5
     } Else {
       "Password must contain a lowercase letter"
         "Password does not meet complexity requirements"
         checkPasswords -name $name
+        return
     }
 		If ($pw2test -cmatch "[A-Z]"){
-			$isGood++
+			$isGood = 6
     } Else {
       "Password must contain an uppercase character"
         "Password does not meet complexity requirements"
         checkPasswords -name $name
     }
-		If ($isGood -ge 4) {
+		If ($isGood -ge 6) {
+		"ADDED PASSWORD TO KEYVAULT"
       $passwords | Add-Member -MemberType NoteProperty -Name $name -Value $password
       return
     } Else {
       "Password does not meet complexity requirements"
       checkPasswords -name $name
+      return
     }
   } Else {
 
     "Password is not long enough - Passwords must be at least " + $passLength + " characters long"
     checkPasswords -name $name
+    return
 
   }
 
@@ -222,7 +246,8 @@ function orchestration
 			 Write-Host "Set Azure Key Vault Access Policy."
 			 Write-Host "Set ServicePrincipalName: $aadClientID in Key Vault: $keyVaultName";
 			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ServicePrincipalName $aadClientID -PermissionsToKeys wrapKey -PermissionsToSecrets set;
-			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ServicePrincipalName $aadClientID -PermissionsToKeys backup,get,list -PermissionsToSecrets get,list;
+
+			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ServicePrincipalName $aadClientID -PermissionsToKeys backup,get,list,wrapKey -PermissionsToSecrets get,list,set;
 			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -EnabledForDiskEncryption;
 
             $keyEncryptionKeyName = $keyVaultName + "kek"
@@ -292,6 +317,14 @@ try{
 
 
 loginToAzure -lginCount 1
+
+Write-Host "You will now be asked to create credentials for the administrator and sql service accounts. `n"
+
+Write-Host "Press any key to continue ..."
+
+$x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
+Write-Host "`n CREATE CREDENTIALS `n" -foregroundcolor green
 
 $adminUsername = Read-Host "Enter an admin username"
 
