@@ -34,6 +34,15 @@ Param(
 		[int]$lginCount
 	)
 
+$global:azureUserName = $null
+$global:azurePassword = $null
+
+function loginToAzure{
+Param(
+		[Parameter(Mandatory=$true)]
+		[int]$lginCount
+	)
+
 $global:azureUserName = Read-Host "Enter your Azure username"
 $global:azurePassword = Read-Host -assecurestring "Enter your Azure password"
 
@@ -52,7 +61,8 @@ loginToAzure -lginCount $lginCount
 }
 else{
 
-	Throw "Your credentials are incorrect or invalid exceeding maximum retries. Make sure you are using your Azure Government account information"
+	Throw "Your credentials are incorrect or invalid exceeding maximum retries. Make sure you are using your Azure Government account information"  
+
 }
 }
 
@@ -236,6 +246,7 @@ function orchestration
 			 Write-Host "Set Azure Key Vault Access Policy."
 			 Write-Host "Set ServicePrincipalName: $aadClientID in Key Vault: $keyVaultName";
 			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ServicePrincipalName $aadClientID -PermissionsToKeys wrapKey -PermissionsToSecrets set;
+
 			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ResourceGroupName $resourceGroupName -ServicePrincipalName $aadClientID -PermissionsToKeys backup,get,list,wrapKey -PermissionsToSecrets get,list,set;
 			Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -EnabledForDiskEncryption;
 
@@ -333,3 +344,4 @@ catch{
 Write-Host $PSItem.Exception.Message
 Write-Host "Thank You"
 }
+
