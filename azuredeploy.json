@@ -2230,7 +2230,7 @@
                         "value": "[variables('artifacts').customScriptBaselineUrl]"
                     },
                     "MachinesToSetPasswordPolicy": {
-                        "value": ""
+                        "value": "[concat(variables('resourceNames').vms.adpdc,';', variables('resourceNames').vms.adbdc)]"
                     },
                     "location": {
                         "value": "[parameters('vmLocation')]"
