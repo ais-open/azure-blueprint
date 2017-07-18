@@ -28,6 +28,8 @@ Write-Host "`n LOGIN TO AZURE `n" -foregroundcolor green
 $global:azureUserName = $null
 $global:azurePassword = $null
 
+<#
+Commenting out pending pending AIS confirmation to remove
 function loginToAzure{
 Param(
 		[Parameter(Mandatory=$true)]
@@ -36,6 +38,7 @@ Param(
 
 $global:azureUserName = $null
 $global:azurePassword = $null
+#>
 
 function loginToAzure{
 Param(
