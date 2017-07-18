@@ -1,26 +1,24 @@
 # Azure Blueprint multi-tier web application solution for FedRAMP
 
-This Azure Blueprint solution automatically deploys a multi-tier web application architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. The solution consists of Azure Resource Manager (ARM) templates and PowerShell scripts that guide resource deployment and configuration. Accompanying Blueprint [compliance documentation](https://github.com/AppliedIS/azure-blueprint/wiki) is provided, showing security control inheritance from Azure and where deployed resources and configurations align with NIST SP 800-53 security controls, thereby enabling organizations to fast-track compliance obligations.
+This Azure Blueprint solution automatically deploys a multi-tier web application architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. The solution consists of Azure Resource Manager (ARM) templates and PowerShell scripts that guide resource deployment and configuration. Accompanying Azure Blueprint [compliance documentation](https://github.com/AppliedIS/azure-blueprint/wiki) is provided, indicating security control inheritance from Azure and where deployed resources and configurations align with NIST SP 800-53 security controls, thereby enabling organizations to fast-track compliance obligations. *Note: This solution deploys to Azure Government.*
 
 #### Quickstart
-1. Clone repository
-2. Run azure-blueprint/predeploy/Orchestration_InitialSetup.ps1. [Read more about pre-deployment.](#pre-deployment-script)
+1. Clone this repository to your local workstation.
+2. Run the pre-deployment PowerShell script: azure-blueprint/predeploy/Orchestration_InitialSetup.ps1. [Read more about pre-deployment.](#pre-deployment)
 	- This script will ask you to login to Azure Gov and supply a new admin username/password for user and SQL accounts.
 	- This script will create a resource group with a Key Vault -- remember the names that you choose for these items because you will need them in the next step. The script will also output a GUID that you can use in the next step.
-3. Click the button below, log in to Azure Gov portal, fill out the parameters, and click "Purchase".
+3. Click the button below, sign into the Azure portal, enter the required ARM template parameters, and click **Purchase**.
 
 	[![Deploy to Azure](http://azuredeploy.net/AzureGov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
 
 	\** You will need an SSL cert (.pfx) in 64bit encoded form along with its password before you can deploy to your Azure subscription (see [SSL cert](#ssl-certificate)...)
 
-	##### READ MORE ABOUT:
+## In this document
 
-	- [Solution Architecture](#architecture)
-	- [Pre-deployment Steps](#pre-deployment) // [Pre-deployment Script Params](#pre-deployment-script)
-	- [Deployment Steps](#deployment) // [Deployment Parameters](#deployment)
-	- [Post-deployment Steps](#post-deployment)
-	- [Advanced Configuration](#extending-the-solution-with-advanced-configuration)
-	- [Known Issues](#known-issues)
+[Architecture](#architecture)
+[Deployment instructions](#deployment-instructions)
+[Frequenty asked questions](#frequently-asked-questions)
+[Troubleshooting](#troubleshooting)
 
 ----------------------------------------------------------------
 
@@ -30,24 +28,23 @@ This solution deploys a notional architecture for a web application with a datab
 
 ![alt text](docs/n-tier-diagram.png?raw=true "Azure Blueprint FedRAMP multi-tier web application architecture")
 
-
-The architecture includes the following Azure products:
+The architecture includes the following Azure services:
 * **Virtual Machines**
-	- (1) Management/Bastion (Windows Server 2016 Datacenter)
-	- (2) Active Directory Domain Controller (Windows Server 2016 Datacenter)
-	- (2) SQL Server Cluster Node (Windows Server 2012 R2 on SQL2014SP2)
-	- (1) SQL Server Witness (Windows Server 2016 Datacenter)
+	- (1) Management/bastion (Windows Server 2016 Datacenter)
+	- (2) Active Directory domain controller (Windows Server 2016 Datacenter)
+	- (2) SQL Server cluster node (Windows Server 2012 R2 on SQL2014SP2)
+	- (1) SQL Server witness (Windows Server 2016 Datacenter)
 	- (2) Web/IIS (Windows Server 2016 Datacenter)
 * **AvailabilitySets**
-	- (1) Active Directory Domain Controllers
-	- (1) SQL Cluster Nodes and Witness
+	- (1) Active Directory domain controllers
+	- (1) SQL cluster nodes and witness
 	- (1) Web/IIS
 * **Virtual Network**
-	- (1) /16 VNet
-	- (5) /24 Subnets
-	- DNS Settings are set to both Domain Controllers
+	- (1) /16 virtual netwokrs
+	- (5) /24 subnets
+	- DNS settings are set to both domain controllers
 * **Load Balancer**
-	- (1) SQL Loadbalancer
+	- (1) SQL loadbalancer
 * **Application Gateway**
 	- (1) WAF Application Gateway
 	-- Enabled
@@ -55,27 +52,27 @@ The architecture includes the following Azure products:
 	-- Rule set: OWASP 3.0
 	-- Listener: Port 443
 * **Storage**
-    - (7) Geo-Redundant Storage accounts
+    - (7) Geo-redundant storage accounts
 * **Backup**
     - (1) Recovery Services vault
 * **Key Vault**
-	- (1) keyVault
-	-- (3) Access Policies (user, AADServicePrincipal, BackupFairFax)
+	- (1) Key Vault
+	-- (3) Access policies (user, AADServicePrincipal, BackupFairFax)
 	-- (7) Secrets (aadClientID, aadClientSecret, adminPassword, azurePassword, azureUserName, keyEncryptionKeyURL, sqlServerServiceAccountPassword)
 * **Azure Active Directory**
 * **Azure Resource Manager**
 * **Log Analytics**
 * **Automation**
-	- (1) Automation Account
+	- (1) Automation account
 * **Scheduler**
 * **Operations Management Suite**
-	- (1) OMS Workspace
+	- (1) OMS workspace
 
 ---------------------------------------------------------------
 
 ## Instructions
 
-This Azure Blueprint solution is comprised of JSON configuration files and PowerShell scripts that are handled by Azure Resource Manager's API service to deploy resources within Azure Government cloud. For more information ARM about template deployment see the following documentation:
+This Azure Blueprint solution is comprised of JSON configuration files and PowerShell scripts that are handled by Azure Resource Manager's API service to deploy resources within Azure. For more information about ARM template deployment see the following documentation:
 
 1. [Azure Resource Manager templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment)
 2. [ARM template functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-functions)
@@ -87,32 +84,31 @@ During pre-deployment you will confirm that your Azure subscription and local wo
 
 #### Azure subscription requirements
 
-This Azure Blueprint solution is designed to deploy to Azure Government regions. The solution does not currently support Azure commercial regions. For customers with a multi-tenant environment, then the account used to deploy must be a member of the Azure Active Directory associated with the subscription where this solution will be deployed.
+This Azure Blueprint solution is designed to deploy to Azure Government. The solution does not currently support Azure commercial regions. For customers with a multi-tenant environment, the account used to deploy must be a member of the Azure Active Directory associated with the subscription where this solution will be deployed.
 
 #### Local workstation requirements
 
-PowerShell is used to initiate some pre-deployment, deployment, and post-deployment tasks. PowerShell version 5.0 or greater must be installed on your local workstation. In PowerShell, you can use the following command to check the version:
+PowerShell is used to initiate some pre-deployment tasks. PowerShell version 5.0 or greater must be installed on your local workstation. In PowerShell, you can use the following command to check the version:
 
 `$PSVersionTable.psversion`
 
-In order to run the pre-deployment script, you will need to have the AzureRM modules installed (see [Installing AzureRM modules](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.1.0)).
+In order to run the pre-deployment script, you will need to have the current Azure PowerShell AzureRM modules installed (see [Installing AzureRM modules](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.1.0)).
 
 #### SSL certificate
 This solution deploys an Applicaiton Gateway and requires an SSL certificate. To generate a self-signed SSL certificate using PowerShell, run [this script](predeploy/generateCert.ps1). Note: self-signed certificates are not recommended for use in production environments.
 
 #### Pre-deployment script
 
-The pre-deployment PowerShell script will verify that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters in order:
+The pre-deployment PowerShell script will verify that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will ask you to sign into Azure and then prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters in order:
 
-* **azureUsername**: Your Azure account name (ex. someuser@contoso.onmicrosoft.com)
-* **azurePassword**: Password for the Azure account above
-* **adminUsername**: Administrator username you want to use for administrative accounts for deployed resources
-* **adminPassword**: Administrator password for local VM accounts (must complexity requirements, see below)
-* **sqlServerServiceAccountPassword**: SQL service account password (must complexity requirements, see below)
-* **subscriptionID**: To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu, and begin typing "subscription" in the filter box. Click on **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
+* **Azure username**: Your Azure username (ex. someuser@contoso.onmicrosoft.com)
+* **azure password**: Password for the Azure account above
+* **Admin username**: Administrator username you want to use for the administrator accounts on deployed virtual machines
+* **adminPassword**: Administrator password you want to use for the administrator accounts accounts on deployed virtual machines (must complexity requirements, see below)
+* **sqlServerServiceAccountPassword**: SQL service account password you want to use (must complexity requirements, see below)
+* **subscriptionId**: To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu, and begin typing "subscription" in the filter box. Click on **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
 * **resourceGroupName**: Resource group name you want to use for this deployment; must be a string of 1-90 alphanumeric characters (0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis and cannot end in a period (e.g., `blueprint-rg`).
-* **keyVaultName**: Key Vault you want to use for this deployment; must be a string 3-24 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government.
-* **aadAppName**: Name you want to use for a new Azure Active Directory application that will be created; the application client ID and client secret are needed for disk encryption.
+* **keyVaultName**: Key Vault name you want to use for this deployment; must be a string 3-24 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government.
 
 Passwords must be at least 14 characters and contain one each of: lower case character, upper case character, number, special character.
 
