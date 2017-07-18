@@ -98,7 +98,7 @@ This solution deploys an Application Gateway and requires an SSL certificate. To
 The pre-deployment PowerShell script will verify that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will ask you to sign into Azure and then prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters in order:
 
 * **Azure username**: Your Azure username (ex. someuser@contoso.onmicrosoft.com)
-* **azure password**: Password for the Azure account above
+* **Azure password**: Password for the Azure account above
 * **Admin username**: Administrator username you want to use for the administrator accounts on deployed virtual machines
 * **adminPassword**: Administrator password you want to use for the administrator accounts on deployed virtual machines (must complexity requirements, see below)
 * **sqlServerServiceAccountPassword**: SQL service account password you want to use (must complexity requirements, see below)
