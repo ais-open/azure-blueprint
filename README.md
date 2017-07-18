@@ -13,7 +13,7 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 
 [Architecture](#architecture)
 [Deployment instructions](#deployment-instructions)
-[Frequenty asked questions](#frequently-asked-questions)
+[Frequently asked questions](#frequently-asked-questions)
 [Troubleshooting](#troubleshooting)
 
 ----------------------------------------------------------------
@@ -36,11 +36,11 @@ The architecture includes the following Azure services:
 	- (1) SQL cluster nodes and witness
 	- (1) Web/IIS
 * **Virtual Network**
-	- (1) /16 virtual netwokrs
+	- (1) /16 virtual networks
 	- (5) /24 subnets
 	- DNS settings are set to both domain controllers
 * **Load Balancer**
-	- (1) SQL loadbalancer
+	- (1) SQL load balancer
 * **Application Gateway**
 	- (1) WAF Application Gateway
 	-- Enabled
@@ -76,7 +76,7 @@ This Azure Blueprint solution is comprised of JSON configuration files and Power
 
 ### PRE-DEPLOYMENT
 
-During pre-deployment you will confirm that your Azure subscription and local workstation are prepared to deploy the solution. The final pre-deployment step will run a PowerShell script that verifies setup requirements, gathers parameters and credentials, and creates resources in Azure to prepare for deployment.
+During pre-deployment, you will confirm that your Azure subscription and local workstation are prepared to deploy the solution. The final pre-deployment step will run a PowerShell script that verifies setup requirements, gathers parameters and credentials, and creates resources in Azure to prepare for deployment.
 
 #### Azure subscription requirements
 
@@ -91,7 +91,7 @@ PowerShell is used to initiate some pre-deployment tasks. PowerShell version 5.0
 In order to run the pre-deployment script, you will need to have the current Azure PowerShell AzureRM modules installed (see [Installing AzureRM modules](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.1.0)).
 
 #### SSL certificate
-This solution deploys an Applicaiton Gateway and requires an SSL certificate. To generate a self-signed SSL certificate using PowerShell, run [this script](predeploy/generateCert.ps1). Note: self-signed certificates are not recommended for use in production environments.
+This solution deploys an Application Gateway and requires an SSL certificate. To generate a self-signed SSL certificate using PowerShell, run [this script](predeploy/generateCert.ps1). Note: self-signed certificates are not recommended for use in production environments.
 
 #### Pre-deployment script
 
@@ -100,7 +100,7 @@ The pre-deployment PowerShell script will verify that the necessary Azure PowerS
 * **Azure username**: Your Azure username (ex. someuser@contoso.onmicrosoft.com)
 * **azure password**: Password for the Azure account above
 * **Admin username**: Administrator username you want to use for the administrator accounts on deployed virtual machines
-* **adminPassword**: Administrator password you want to use for the administrator accounts accounts on deployed virtual machines (must complexity requirements, see below)
+* **adminPassword**: Administrator password you want to use for the administrator accounts on deployed virtual machines (must complexity requirements, see below)
 * **sqlServerServiceAccountPassword**: SQL service account password you want to use (must complexity requirements, see below)
 * **subscriptionId**: To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu, and begin typing "subscription" in the filter box. Click on **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
 * **resourceGroupName**: Resource group name you want to use for this deployment; must be a string of 1-90 alphanumeric characters (0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis and cannot end in a period (e.g., `blueprint-rg`).
@@ -122,7 +122,7 @@ Note the resource group name and Key Vault name; these will be required during t
 
 ### DEPLOYMENT
 
-During this phase, an Azure Resource Manger (ARM) template will deploy Azure resources to your subscription and perform configuration activities.
+During this phase, an Azure Resource Manager (ARM) template will deploy Azure resources to your subscription and perform configuration activities.
 
 After clicking the Deploy to Azure Gov button, the Azure portal will open and prompt for the following settings:
 
@@ -137,7 +137,7 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 * **Key Vault Resource Group Name**: Name of the resource group created during pre-deployment
 * **Cert Data**: 64bit-encoded certificate for SSL
 * **Cert Password**: Password used to create certificate
-* **Scheduler Job Guid**: GUID for the runbook job to be started (use GUID output by pre-deployment script or run New-Guid in PowerShell)
+* **Scheduler Job GUID**: GUID for the runbook job to be started (use GUID output by pre-deployment script or run New-Guid in PowerShell)
 * **OMS Workspace Name**: Name you want to use for the Log Analytic workspace; must be a string 4-63 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government.
 * **OMS Automation Account Name**: Name you want to use for the automation account used with OMS; must be a string 6-50 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government.
 
@@ -171,7 +171,7 @@ Deploying this solution will create resources within your Azure subscription. Yo
 
 #### Extending the Solution with Advanced Configuration
 
-If you have a basic knowledge of how Azure Resource Manager (ARM) templates work, you can customize the deployment by editing  azuredeploy.json or any of the templates located in the nested templates folder. Some items you might want to edit include but are not limited to :
+If you have a basic knowledge of how Azure Resource Manager (ARM) templates work, you can customize the deployment by editing  azuredeploy.json or any of the templates located in the nested templates folder. Some items you might want to edit include but are not limited to:
 - Network Security Group rules (nestedtemplates/virtualNetworkNSG.json)
 - OMS alert rules and configuration (nestedtemplates/provisioningAutoAccOMSWorkspace)
 - Application Gateway routing rules (nestedtemplates/provisioningApplicationGateway.json)
