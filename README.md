@@ -5,8 +5,6 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 #### Quickstart
 1. Clone this repository to your local workstation.
 2. Run the pre-deployment PowerShell script: azure-blueprint/predeploy/Orchestration_InitialSetup.ps1. [Read more about pre-deployment.](#pre-deployment)
-	- This script will ask you to login to Azure Gov and supply a new admin username/password for user and SQL accounts.
-	- This script will create a resource group with a Key Vault -- remember the names that you choose for these items because you will need them in the next step. The script will also output a GUID that you can use in the next step.
 3. Click the button below, sign into the Azure portal, enter the required ARM template parameters, and click **Purchase**.
 
 	[![Deploy to Azure](http://azuredeploy.net/AzureGov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2Fazure-blueprint%2Fmaster%2Fazuredeploy.json)
@@ -74,9 +72,9 @@ The architecture includes the following Azure services:
 
 This Azure Blueprint solution is comprised of JSON configuration files and PowerShell scripts that are handled by Azure Resource Manager's API service to deploy resources within Azure. For more information about ARM template deployment see the following documentation:
 
-1. [Azure Resource Manager templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment)
-2. [ARM template functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-functions)
-3. [ARM templates and nesting resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates)
+[Azure Resource Manager templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment)
+[ARM template functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-functions)
+[ARM templates and nesting resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates)
 
 ### PRE-DEPLOYMENT
 
