@@ -11,10 +11,7 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 
 ## In this document
 
-[Architecture](#architecture)
-[Deployment instructions](#deployment-instructions)
-[Frequently asked questions](#frequently-asked-questions)
-[Troubleshooting](#troubleshooting)
+[Architecture](#architecture) | [Deployment instructions](#deployment-instructions) | [Frequently asked questions](#frequently-asked-questions) | [Troubleshooting](#troubleshooting)
 
 ----------------------------------------------------------------
 
