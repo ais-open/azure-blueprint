@@ -680,14 +680,14 @@
             "metadata": {
                 "description": "Linked Templates base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/nestedtemplates"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/staging/nestedtemplates"
         },
         "dscBaseUrl": {
             "type": "string",
             "metadata": {
                 "description": "DSC Scripts base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/DSC"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/staging/DSC"
         },
         "scriptsBaseUrl": {
             "type": "string",
@@ -695,7 +695,7 @@
                 "description": "DSC Scripts base url"
             },
 
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/postdeploy"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/staging/postdeploy"
         },
         "sqlServerVersion": {
             "type": "string",
@@ -896,7 +896,7 @@
             "applicationGatewayURL": "[concat(parameters('templatesBaseUrl'),'/provisioningApplicationGateway.json')]",
             "provisioningNetworkInterfacesUrl": "[concat(parameters('templatesBaseUrl'),'/networkInterfaces.json')]",
             "virtualNetworkNSGURL": "[concat(parameters('templatesBaseUrl'),'/virtualNetworkNSG.json')]",
-            "configureADUrl": "[concat(parameters('templatesBaseUrl'),'/configureAD.json')]",
+            "configureADUrl": "[concat(parameters('templatesBaseUrl'),'/provisionAndConfigureAD.json')]",
             "configureWebTierUrl": "[concat(parameters('templatesBaseUrl'),'/configureWebTier.json')]",
             "provisioningRCV": "[concat(parameters('templatesBaseUrl'),'/recoveryServicesVault.json')]",
             "backupVMProtectedItem": "[concat(parameters('templatesBaseUrl'),'/backupProtectedItems.json')]",
@@ -1177,68 +1177,6 @@
             }
         },
         {
-            "name": "ProvisioningApplicationGateway",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
-            "dependsOn": [
-                "Microsoft.Resources/deployments/ProvisioningNICs"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('artifacts').applicationGatewayURL]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "addressPrefix": {
-                        "value": "[parameters('virtualNetworkAddressRange')]"
-                    },
-                    "virtualNetworkName": {
-                        "value": "[variables('resourceNames').virtualNetworkNameWithSuffix]"
-                    },
-                    "vmLocation": {
-                        "value": "[parameters('vmLocation')]"
-                    },
-                    "subnetPrefix": {
-                        "value": "[parameters('appGatewaySubnet').properties.addressPrefix]"
-                    },
-                    "skuName": {
-                        "value": "[parameters('gatewaySkuName')]"
-                    },
-                    "capacity": {
-                        "value": 2
-                    },
-                    "backendIpsForPathRuleWEB": {
-                        "value": "[parameters('webIPAddresses')]"
-                    },
-                    "pathMatch1": {
-                        "value": "/WEB"
-                    },
-                    "subnetName": {
-                        "value": "[parameters('appGatewaySubnet').name]"
-                    },
-                    "wafEnabled": {
-                        "value": "[variables('wafSettings').wafEnabled]"
-                    },
-                    "wafMode": {
-                        "value": "[variables('wafSettings').wafMode]"
-                    },
-                    "wafRuleSetType": {
-                        "value": "[variables('wafSettings').wafRuleSetType]"
-                    },
-                    "wafRuleSetVersion": {
-                        "value": "[variables('wafSettings').wafRuleSetVersion]"
-                    },
-                    "certData": {
-                      "value":"[parameters('certData')]"
-                    },
-                    "certPassword": {
-                      "value":"[parameters('certPassword')]"
-                    },
-                }
-            }
-        },
-        {
             "name": "ProvisioningStorageAccounts",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1317,7 +1255,7 @@
             }
         },
         {
-            "name": "ConfigureAD",
+            "name": "ProvisionAndConfigureAD",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
@@ -1477,7 +1415,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
-                "Microsoft.Resources/deployments/ConfigureAD"
+                "Microsoft.Resources/deployments/ProvisionAndConfigureAD"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -1581,6 +1519,68 @@
             }
         },
         {
+            "name": "ProvisioningApplicationGateway",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/ProvisioningNICs"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('artifacts').applicationGatewayURL]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "addressPrefix": {
+                        "value": "[parameters('virtualNetworkAddressRange')]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[variables('resourceNames').virtualNetworkNameWithSuffix]"
+                    },
+                    "vmLocation": {
+                        "value": "[parameters('vmLocation')]"
+                    },
+                    "subnetPrefix": {
+                        "value": "[parameters('appGatewaySubnet').properties.addressPrefix]"
+                    },
+                    "skuName": {
+                        "value": "[parameters('gatewaySkuName')]"
+                    },
+                    "capacity": {
+                        "value": 2
+                    },
+                    "backendIpsForPathRuleWEB": {
+                        "value": "[parameters('webIPAddresses')]"
+                    },
+                    "pathMatch1": {
+                        "value": "/WEB"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('appGatewaySubnet').name]"
+                    },
+                    "wafEnabled": {
+                        "value": "[variables('wafSettings').wafEnabled]"
+                    },
+                    "wafMode": {
+                        "value": "[variables('wafSettings').wafMode]"
+                    },
+                    "wafRuleSetType": {
+                        "value": "[variables('wafSettings').wafRuleSetType]"
+                    },
+                    "wafRuleSetVersion": {
+                        "value": "[variables('wafSettings').wafRuleSetVersion]"
+                    },
+                    "certData": {
+                      "value":"[parameters('certData')]"
+                    },
+                    "certPassword": {
+                      "value":"[parameters('certPassword')]"
+                    },
+                }
+            }
+        },
+        {
             "name": "ProvisioningVirtualMachines",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
@@ -1589,7 +1589,7 @@
                 "Microsoft.Resources/deployments/ProvisioningNICs",
                 "Microsoft.Resources/deployments/ProvisioningStorageAccounts",
                 "Microsoft.Resources/deployments/ProvisioningAvailabilitySets",
-                "Microsoft.Resources/deployments/ConfigureAD"
+                "Microsoft.Resources/deployments/ProvisionAndConfigureAD"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -2105,7 +2105,7 @@
             }
         },
         {
-            "name": "[concat('ConfigurationOMSMonitoringSQLAD-', variables('vmNames').VMs[copyIndex()].Name)]",
+            "name": "[concat('ConfigurationOMSMonitoringSQLADMGT-', variables('vmNames').VMs[copyIndex()].Name)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "dependsOn": [
