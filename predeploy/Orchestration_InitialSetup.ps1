@@ -41,35 +41,36 @@ $global:azurePassword = $null
 #>
 
 function loginToAzure{
-Param(
-		[Parameter(Mandatory=$true)]
-		[int]$lginCount
-	)
+	Param(
+			[Parameter(Mandatory=$true)]
+			[int]$lginCount
+		)
 
-$global:azureUserName = Read-Host "Enter your Azure username"
-$global:azurePassword = Read-Host -assecurestring "Enter your Azure password"
+	$global:azureUserName = Read-Host "Enter your Azure username"
+	$global:azurePassword = Read-Host -assecurestring "Enter your Azure password"
 
-try {
+
 	$AzureAuthCreds = New-Object System.Management.Automation.PSCredential -ArgumentList @($global:azureUserName,$global:azurePassword)
 	$azureEnv = Get-AzureRmEnvironment -Name $EnvironmentName
-   Login-AzureRmAccount -EnvironmentName "AzureUSGovernment" -Credential $AzureAuthCreds
-} catch {
+	Login-AzureRmAccount -EnvironmentName "AzureUSGovernment" -Credential $AzureAuthCreds
 
-if($lginCount -lt 3){
-$lginCount = $lginCount + 1
+	if($?) {
+		Write-Host "Login successful!"
+	} else {
+		if($lginCount -lt 3){
+			$lginCount = $lginCount + 1
 
-Write-Host "Invalid Credentials! Try Logging in again"
+			Write-Host "Invalid Credentials! Try Logging in again"
 
-loginToAzure -lginCount $lginCount
+			loginToAzure -lginCount $lginCount
+		} else{
+
+			Throw "Your credentials are incorrect or invalid exceeding maximum retries. Make sure you are using your Azure Government account information"
+
+		}
+	}
 }
-else{
 
-	Throw "Your credentials are incorrect or invalid exceeding maximum retries. Make sure you are using your Azure Government account information"  
-
-}
-}
-
-}
 
 function checkPasswords
 {
@@ -347,4 +348,3 @@ catch{
 Write-Host $PSItem.Exception.Message
 Write-Host "Thank You"
 }
-
