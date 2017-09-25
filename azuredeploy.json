@@ -680,14 +680,14 @@
             "metadata": {
                 "description": "Linked Templates base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/staging/nestedtemplates"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/sqlfix/nestedtemplates"
         },
         "dscBaseUrl": {
             "type": "string",
             "metadata": {
                 "description": "DSC Scripts base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/staging/DSC"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/sqlfix/DSC"
         },
         "scriptsBaseUrl": {
             "type": "string",
@@ -695,7 +695,7 @@
                 "description": "DSC Scripts base url"
             },
 
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/staging/postdeploy"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/sqlfix/postdeploy"
         },
         "sqlServerVersion": {
             "type": "string",
