@@ -2250,6 +2250,21 @@
                     },
                     "location": {
                         "value": "[parameters('vmLocation')]"
+                    },
+                    "SQLPrimaryName": {
+                        "value": "[variables('resourceNames').vms.sql1]"
+                    },
+                    "SQLSecondaryName": {
+                        "value": "[variables('resourceNames').vms.sql0]"
+                    },
+                    "DomainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "AlwaysOnAvailabilityGroupName": {
+                        "value": "[variables('vmSettings').sql.sqlAOAGName]"
+                    },
+                    "secondarySqlCustomCMDUrl": {
+                        "value": "[variables('artifacts').secondarySqlCustomCMDUrl]"
                     }
                 }
             }

@@ -418,7 +418,9 @@ try {
                   }
               }
           }
+    }
 }
+catch{}
 
 try {
       if([string]::IsNullOrWhiteSpace($SQLSecondaryName)){
@@ -427,7 +429,9 @@ try {
           if($SQLSecondaryName -eq $MachineName){
             Invoke-Sqlcmd -InputFile ".\SQL0CustomCMD.sql" -Variable domain=$domainPrefix | Out-File -filePath "C:\MyFolder\TestSQLCmd.rpt"
           }
+      }
 }
+catch {}
 
 
 
