@@ -9,7 +9,11 @@
         [String]$AzurePassword,
         [String]$SubscriptionId,
         [String]$EnvironmentName,
-        [String]$MachinesToSetPasswordPolicy
+        [String]$MachinesToSetPasswordPolicy,
+        [String]$DomainName,
+        [String]$SQLPrimaryName,
+        [String]$SQLSecondaryName,
+        [String]$AlwaysOnAvailabilityGroupName
     )
 
     Disable-AzureRmDataCollection
@@ -372,6 +376,60 @@ try{
 }
 catch{
 }
+
+try {
+      if([string]::IsNullOrWhiteSpace($SQLPrimaryName)){
+          if($SQLPrimaryName -eq $MachineName){
+              Import-Module Sqlps -DisableNameChecking;
+              $primaryInst = "$($SQLPrimaryName).$($DomainName)"
+              $secondaryInst = "$($SQLSecondaryName).$($DomainName)"
+              $MyAgPrimaryPath = "SQLSERVER:\SQL\$($primaryInst)\Default\AvailabilityGroups\$($AlwaysOnAvailablityGroupName)"
+              $MyAgSecondaryPath = "SQLSERVER:\SQL\$($secondaryInst)\Default\AvailabilityGroups\$($AlwaysOnAvailablityGroupName)"
+
+              #Add-Type -AssemblyName "Microsoft.SqlServer.Smo"
+              [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.SqlServer.Smo");
+              import-module SQLps;
+              # Connect to the specified instance
+              $srv = new-object ('Microsoft.SqlServer.Management.Smo.Server') $primaryInst
+              New-Item "f:\backup" –type directory
+
+              New-SMBShare –Name "Backup" –Path "f:\backup"  –FullAccess contoso\sqlservicetestuser,contoso\testuser
+
+              # Cycle through the databases
+              foreach ($db in $srv.Databases) {
+                  if ($db.IsSystemObject -ne $True -and $db.Name -notlike "AutoHa*")
+                  {
+                      $dbname = $db.Name
+                      #"Changing database $dbname to set Recovery Model to Full"
+                      $db.RecoveryModel = 'Full'
+                      $db.Alter()
+                      $DatabaseBackupFile = "\\" + $primaryInst + "\Backup\" + $dbname +".bak"
+                      $LogBackupFile =   "\\" + $primaryInst + "\Backup\"  + $dbname +"_log.trn"
+
+                      Backup-SqlDatabase -Database $dbname -BackupFile $DatabaseBackupFile -ServerInstance $primaryInst
+                      Backup-SqlDatabase -Database $dbname -BackupFile $LogBackupFile -ServerInstance $primaryInst  -BackupAction Log
+
+                      Restore-SqlDatabase -Database $dbname -BackupFile $DatabaseBackupFile -ServerInstance $secondaryInst -NoRecovery
+                      Restore-SqlDatabase -Database $dbname -BackupFile $LogBackupFile -ServerInstance $secondaryInst -RestoreAction 'Log'   -NoRecovery
+
+                      Add-SqlAvailabilityDatabase -Path $MyAgPrimaryPath -Database $dbname
+                      Add-SqlAvailabilityDatabase -Path $MyAgSecondaryPath -Database $dbname
+
+                  }
+              }
+          }
+}
+
+try {
+      if([string]::IsNullOrWhiteSpace($SQLSecondaryName)){
+          Import-Module Sqlps -DisableNameChecking;
+          $domainPrefix = $DomainName.Split(".")[0]
+          if($SQLSecondaryName -eq $MachineName){
+            Invoke-Sqlcmd -InputFile ".\SQL0CustomCMD.sql" -Variable domain=$domainPrefix | Out-File -filePath "C:\MyFolder\TestSQLCmd.rpt"
+          }
+}
+
+
 
 
 # calling the configuration
