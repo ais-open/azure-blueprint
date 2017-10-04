@@ -37,24 +37,24 @@
         },
         "SQLPrimaryName": {
             "type": "string",
-            "default": ""
+            "defaultValue": ""
         },
         "SQLSecondaryName": {
             "type": "string",
-            "default": ""
+            "defaultValue": ""
 
         },
         "DomainName": {
             "type": "string",
-            "default": ""
+            "defaultValue": ""
         },
         "AlwaysOnAvailabilityGroupName": {
             "type": "string",
-            "default": ""
+            "defaultValue": ""
         },
         "secondarySqlCustomCMDUrl": {
             "type": "string",
-            "default": "" 
+            "defaultValue": "" 
         }
     },
     "variables": {
