@@ -2170,10 +2170,10 @@
                         "value": "[parameters('vmLocation')]"
                     },
                     "SQLPrimaryName": {
-                        "value": "[variables('resourceNames').sql1]"
+                        "value": "[variables('resourceNames').vms.sql1]"
                     },
                     "SQLSecondaryName": {
-                        "value": "[variables('resourceNames').sql0]"
+                        "value": "[variables('resourceNames').vms.sql0]"
                     },
                     "DomainName": {
                         "value": "[parameters('domainName')]"
