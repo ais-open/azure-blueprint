@@ -4,19 +4,28 @@
     "parameters": {
         "environmentName": {
             "type": "string",
-            "defaultValue": "AzureUSGovernment"
+            "defaultValue": "AzureUSGovernment",
+            "metadata": {
+                "description": "Assign the environment for Azure (Azure Commercial or Gov)"
+            }
         },
         "adminUsername": {
             "type": "string",
             "metadata": {
-                "description": "The name of the Administrator of the new VMs and Domain"
+                "description": "The name of the Administrator of all VMs and Domain"
             }
         },
         "keyVaultName": {
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Name of key vault used to store encrypted values for deployment. This key vault is created during predeployment steps."
+            }
         },
         "keyVaultResourceGroupName": {
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Name of the resource group that holds the key vault above"
+            }
         },
         "configureSQLAO": {
           "type": "string",
@@ -24,19 +33,25 @@
           "allowedValues": [
             "yes",
             "no"
-          ]
+          ],
+          "metadata": {
+              "description": "Choose to skip SQL Always On configuration"
+          }
         },
         "vmLocation": {
             "type": "string",
             "allowedValues": [
               "USGov Virginia",
               "USGov Iowa"
-            ]
+            ],
+            "metadata": {
+                "description": "Azure location that VMs will be deployed to"
+            }
         },
         "certData": {
           "type": "string",
           "metadata": {
-            "description": "Cert 64bit encoded .pfx file for SSL"
+            "description": "Cert 64bit encoded .pfx file for SSL. See generateCert.ps1 in ./predeploy folder"
           }
         },
         "certPassword": {
@@ -48,7 +63,7 @@
         "scheduleJobGuid": {
             "type": "string",
             "metadata": {
-                "description": "The GUID for the runbook job to be started."
+                "description": "The GUID for the runbook job to be started for Azure Automation"
             }
         },
         "omsWorkspaceName": {
@@ -60,7 +75,7 @@
         "omsAutomationAccountName": {
             "type": "string",
             "metadata": {
-                "description": "Assign a name for the Log Analytic Workspace Name"
+                "description": "Assign a name for the Automation Account name"
             }
         },
         "recoveryServicesVaultName": {
@@ -126,7 +141,6 @@
                 "description": "Number of years you want to retain the backup"
             }
         },
-
         "omsWorkspaceRegion": {
             "type": "string",
             "defaultValue": "USGov Virginia",
@@ -144,7 +158,7 @@
             ],
             "defaultValue": "PerNode",
             "metadata": {
-                "description": "Service Tier: Free, Standalone, or PerNode"
+                "description": "Service Tier for OMS: Free, Standalone, or PerNode"
             }
         },
         "dataRetention": {
@@ -158,7 +172,10 @@
         },
         "scheduleName": {
             "type": "string",
-            "defaultValue": "VM-Patching-Schedule"
+            "defaultValue": "VM-Patching-Schedule",
+            "metadata": {
+                "description": "Patching schedule name"
+            }
         },
         "exclusionPathWeb": {
             "type": "array",
@@ -475,7 +492,7 @@
                 "Standard_GS5"
             ],
             "metadata": {
-                "description": "The size of the Witness VM Created"
+                "description": "The size of the SQL Witness VM Created"
             },
             "defaultValue": "Standard_D1_v2"
         },
@@ -647,7 +664,7 @@
         "webIPAddresses": {
             "type": "array",
             "metadata": {
-                "description": "The IP address of the new backup AD VM"
+                "description": "The IP addresses of the new WEB VMs"
             },
             "defaultValue": [
                 { "IpAddress": "10.200.2.5" },
@@ -657,14 +674,14 @@
         "mgtIPAddress": {
             "type": "string",
             "metadata": {
-                "description": "The IP address of the new backup AD VM"
+                "description": "The IP address of the new MGT VM"
             },
             "defaultValue": "10.200.3.5"
         },
         "deploymentPrefix": {
             "type": "string",
             "metadata": {
-                "description": "The DNS Prefix for the Public IP Address for the Always On Cluster"
+                "description": "Naming prefix for all vms"
             },
             "defaultValue": "aodns"
         },
@@ -695,7 +712,7 @@
                 "description": "DSC Scripts base url"
             },
 
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/sqlcomplete/postdeploy"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/sqlcomplete/custom-scripts"
         },
         "sqlServerVersion": {
             "type": "string",
@@ -709,7 +726,7 @@
             "metadata": {
                 "description": "The Sql Server Version"
             },
-            "defaultValue": "SQL2014SP2-WS2012R2"
+            "defaultValue": "SQL2016-WS2012R2"
         },
         "numberOfSqlVMDisks": {
             "type": "string",
