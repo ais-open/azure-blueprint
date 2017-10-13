@@ -2,7 +2,7 @@
 
 ## Overview
 
-The IaaS web application Blueprint for FedRAMP-compliant environments provides guidance for the deployment of a FedRAMP-compliant Infrastructure-as-a-Service (IaaS) environment suitable for a simple Internet-facing web application. This solution automates deployment and configuration of Azure resources for a common reference architecture, demonstrating ways in which customers can meet specific security and compliance requirements and serves as a foundation for customers to build and configure their own solutions on Azure. The solution implements a subset of controls from the FedRAMP High baseline, based on NIST SP 800-53. For more information about FedRAMP High requirements and this solution, see [FedRAMP High Requirements - High-Level Overview](). *Note: This solution deploys to Azure Government.*
+The [Federal Risk and Authorization Management Program (FedRAMP)](https://www.fedramp.gov/) is a government-wide program that provides a standardized approach to the security of cloud services. The IaaS web application Blueprint for FedRAMP-compliant environments provides guidance for the deployment of a FedRAMP-compliant Infrastructure-as-a-Service (IaaS) environment suitable for a simple Internet-facing web application. This solution automates deployment and configuration of Azure resources for a common reference architecture, demonstrating ways in which customers can meet specific security and compliance requirements and serves as a foundation for customers to build and configure their own solutions on Azure. The solution implements a subset of controls from the FedRAMP High baseline, based on NIST SP 800-53. For more information about FedRAMP High requirements and this solution, see [FedRAMP High Requirements - High-Level Overview](). *Note: This solution deploys to Azure Government.*
 
 This architecture is intended to serve as a foundation for customers to adjust to their specific requirements and should not be used as-is in a production environment. Deploying an application into this environment without modification is not sufficient to completely meet the requirements of the FedRAMP High baseline. Please note the following:
 - This architecture provides a baseline to help customers use Microsoft Azure in a FedRAMP-compliant manner.
@@ -12,7 +12,7 @@ For a quick overview of how this solution works, watch this [video]]() explainin
 
 ## Solution components
 
-This Azure Blueprint automatically deploys an IaaS web application reference architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. The solution consists of Azure Resource Manager templates and PowerShell scripts that guide resource deployment and configuration. Accompanying Azure Blueprint [compliance documentation](https://github.com/AppliedIS/azure-blueprint/wiki) is provided, indicating security control inheritance from Azure and where deployed resources and configurations align with NIST SP 800-53 security controls, thereby enabling organizations to fast-track compliance obligations.
+This Azure Blueprint automatically deploys an IaaS web application reference architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. The solution consists of Azure Resource Manager templates and PowerShell scripts that guide resource deployment and configuration. Accompanying Azure Blueprint [compliance documentation](https://github.com/AppliedIS/azure-blueprint/wiki) is provided, indicating security control inheritance from Azure and the deployed resources and configurations that align with NIST SP 800-53 security controls, thereby enabling organizations to fast-track compliance obligations.
 
 ## Architecture diagram
 
@@ -177,6 +177,10 @@ The following OMS solutions are pre-installed as part of this solution:
 - [Azure Activity Logs](https://docs.microsoft.com/azure/log-analytics/log-analytics-activity)
 - [Change Tracking](https://docs.microsoft.com/azure/log-analytics/log-analytics-activity)
 
+## Customer responsibility matrix
+
+Customers are responsible for retaining a copy of the [Responsibility Summary Matrix](), which outlines the FedRAMP requirements that are the responsibility of the customer and those which are the responsibility of Microsoft.
+
 ## Deploy the solution
 
 This Azure Blueprint solution is comprised of JSON configuration files and PowerShell scripts that are handled by Azure Resource Manager's API service to deploy resources within Azure. For more information about ARM template deployment see the following documentation:
@@ -220,7 +224,7 @@ The pre-deployment PowerShell script will verify that the necessary Azure PowerS
 * **Admin username**: Administrator username you want to use for the administrator accounts on deployed virtual machines
 * **adminPassword**: Administrator password you want to use for the administrator accounts on deployed virtual machines (must complexity requirements, see below)
 * **sqlServerServiceAccountPassword**: SQL service account password you want to use (must complexity requirements, see below)
-* **subscriptionId**: To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu, and begin typing "subscription" in the filter box. Click on **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
+* **subscriptionId**: To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu on the left side of the portal, select "more services," and begin typing "subscription" in the filter box. Click on **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
 * **resourceGroupName**: Resource group name you want to use for this deployment; must be a string of 1-90 alphanumeric characters (0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis and cannot end in a period (e.g., `blueprint-rg`).
 * **keyVaultName**: Key Vault name you want to use for this deployment; must be a string 3-24 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government.
 
@@ -294,7 +298,7 @@ If you have a basic knowledge of how Azure Resource Manager (ARM) templates work
 - OMS alert rules and configuration (nestedtemplates/provisioningAutoAccOMSWorkspace)
 - Application Gateway routing rules (nestedtemplates/provisioningApplicationGateway.json)
 
-For more information about template deployment read the following links:
+For more information about template deployment, please refer to the following:
 
 1. [Azure Resource Manager Templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment)
 2. [ARM Template Functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-functions)
@@ -317,3 +321,11 @@ To help with deleting protected resources, use postdeploy/deleteProtectedItems.p
 1. OMS Monitoring Extension fails intermittently on different machines ([See issue #95](https://github.com/AppliedIS/azure-blueprint/issues/95)).
 2. SQL Always On configuration is currently broken for SQL2016-WS2012R2 ([See issue #73](https://github.com/AppliedIS/azure-blueprint/issues/73)).
 3. Deployment only works successfully with a new key vault (it does not work with an existing key vault). This will force the user to run the pre-deployment script to create a new resource group and key vault before each deployment.
+
+## Disclaimer
+
+- This document is for informational purposes only. MICROSOFT MAKES NO WARRANTIES, EXPRESS, IMPLIED, OR STATUTORY, AS TO THE INFORMATION IN THIS DOCUMENT. This document is provided "as-is." Information and views expressed in this document, including URL and other Internet website references, may change without notice. Customers reading this document bear the risk of using it.  
+- This document does not provide customers with any legal rights to any intellectual property in any Microsoft product or solutions.  
+- Customers may copy and use this document for internal reference purposes.  
+- NOTE: Certain recommendations in this document may result in increased data, network, or compute resource usage in Azure, and may increase a customer's Azure license or subscription costs.  
+- This architecture is intended to serve as a foundation for customers to adjust to their specific requirements and should not be used as-is in a production environment.
