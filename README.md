@@ -78,47 +78,40 @@ The architecture reduces the risk of security vulnerabilities using an Applicati
 
 #### Virtual network
 
-The foundational architecture defines a private virtual network with an address space of 10.200.0.0/16.
+The architecture defines a private virtual network with an address space of 10.200.0.0/16.
 
 #### Network security groups
 
-Each of the network tiers has a dedicated network security group (NSG):
-- A DMZ network security group for firewall and Application Gateway WAF
-- An NSG for management jumpbox (bastion host)
-- An NSG for the app service environment
+This solution deploys resources in an architecture with a separate web subnet, database subnet, Active Directory subnet, and management subnet inside of a virtual network. Subnets are logically separated by network security group rules applied to the individual subnets to restrict traffic between subnets to only that necessary for system and management functionality.
 
-Each of the NSGs have specific ports and protocols opened for the secure and correct operation of the solution. For more information, see [PCI Guidance - Network Security Groups](#network-security-groups).
+See the configuration for [Network Security Groups]() deployed with this solution. Organizations can configure Network Security groups by editing the file above using [this documentation](https://docs.microsoft.com/azure/virtual-network/virtual-networks-nsg) as a guide.
 
-Each of the NSGs have specific ports and protocols opened for the secure and
-correct working of the solution. In addition, the following configurations are enabled for each NSG:
-- Enabled [diagnostic logs and events](/azure/virtual-network/virtual-network-nsg-manage-log) are stored in storage account 
-- Connected OMS Log Analytics to the [NSG's diagnostics](https://github.com/krnese/AzureDeploy/blob/master/AzureMgmt/AzureMonitor/nsgWithDiagnostics.json)
+Each of the subnets has a dedicated network security group (NSG):
+- 1 NSG for Application Gateway (LBNSG)
+- 1 NSG for JumpBox (MGTNSG)
+- 1 NSG for Primary and Backup Domain Controllers (ADNSG)
+- 1 NSG for SQL Servers and File Share Witness (SQLNSG)
+- 1 NSG for Web Tier (WEBNSG)
 
 #### Subnets
- Ensure each subnet is associated with its corresponding NSG.
 
-#### Custom domain SSL certificates
- HTTPS traffic is enabled using a custom domain SSL certificate.
+Each subnet is associated with its corresponding NSG.
 
 ### Data at rest
 
-The architecture protects data at rest by using encryption, database auditing, and other measures.
+The architecture protects data at rest by using several encryption measures.
 
 #### Azure Storage
 
-To meet encrypted data-at-rest requirements, all [Azure Storage](https://azure.microsoft.com/services/storage/) uses [Storage Service Encryption](/azure/storage/storage-service-encryption).
+To meet data-at-rest encryption requirements, all storage accounts use [Storage Service Encryption](https://docs.microsoft.com/en-us/azure/storage/common/storage-service-encryption).
 
-#### Azure SQL Database
+#### SQL Database
 
-The Azure SQL Database instance uses the following database security measures:
+SQL Database is configured to use [Transparent Data Encryption (TDE)](https://docs.microsoft.com/sql/relational-databases/security/encryption/transparent-data-encryption), which performs real-time encryption and decryption of data and log files to protect information at rest. TDE provides assurance that stored data has not been subject to unauthorized access. 
 
-- [AD Authentication and Authorization](/azure/sql-database/sql-database-aad-authentication)
-- [SQL database auditing](/azure/sql-database/sql-database-auditing-get-started)
-- [Transparent Data Encryption](/sql/relational-databases/security/encryption/transparent-data-encryption-azure-sql)
-- [Firewall rules](/azure/sql-database/sql-database-firewall-configure),  allowing for ASE worker pools and client IP management
-- [SQL Threat Detection](/azure/sql-database/sql-database-threat-detection-get-started)
-- [Always Encrypted columns](/azure/sql-database/sql-database-always-encrypted-azure-key-vault)
-- [SQL Database dynamic data masking](/azure/sql-database/sql-database-dynamic-data-masking-get-started), using the post-deployment PowerShell script
+#### Azure Disk Encryption
+
+Azure Disk Encryption is used to encrypted Windows IaaS virtual machine disks. [Azure Disk Encryption](https://docs.microsoft.com/azure/security/azure-security-disk-encryption) leverages the BitLocker feature of Windows to provide volume encryption for OS and data disks. The solution is integrated with Azure Key Vault to help control and manage the disk-encryption keys.
 
 ### Logging and auditing
 
