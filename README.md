@@ -121,93 +121,61 @@ Azure Disk Encryption is used to encrypted Windows IaaS virtual machine disks. [
 - **Diagnostic Logs:**  [Diagnostic logs](https://docs.microsoft.com/azure/monitoring-and-diagnostics/monitoring-overview-of-diagnostic-logs) are all logs emitted by every resource. These logs include Windows event system logs, Azure storage logs, Key Vault audit logs, and Application Gateway access and firewall logs.
 - **Log Archiving:**  Azure activity logs and diagnostic logs can be connected to Azure Log Analytics for processing, storing, and dashboarding. Retention is user-configurable up to 730 day to meet organization-specific retention requirements.
 
-### Encryption and secrets management
+### Secrets management
 
-The Contoso Webstore encrypts all credit card data, and uses Azure Key Vault to manage keys, preventing retrieval of CHD.
+The solution uses Azure Key Vault to manage keys and secrets.
 
 - [Azure Key Vault](https://azure.microsoft.com/services/key-vault/) helps safeguard cryptographic keys and secrets used by cloud applications and services. 
-- [SQL TDE](/sql/relational-databases/security/encryption/transparent-data-encryption) is used to encrypt all customer cardholder data, expiry date, and CVV.
-- Data is stored on disk using [Azure Disk Encryption](/azure/security/azure-security-disk-encryption) and BitLocker.
+- The solution is integrated with Azure Key Vault to manage IaaS virtual machine disk-encryption keys and secrets.
 
 ### Identity management
 
 The following technologies provide identity management capabilities in the Azure environment.
-- [Azure Active Directory (Azure AD)](https://azure.microsoft.com/services/active-directory/) is the Microsoft's multi-tenant cloud-based directory and identity management service. All users for the solution were created in Azure Active Directory, including users accessing the SQL Database.
-- Authentication to the application is performed using Azure AD. For more information, see [Integrating applications with Azure Active Directory](/azure/active-directory/develop/active-directory-integrating-applications). Additionally, the database column encryption also uses Azure AD to authenticate the application to Azure SQL Database. For more information, see [Always Encrypted: Protect sensitive data in SQL Database](/azure/sql-database/sql-database-always-encrypted-azure-key-vault). 
-- [Azure Active Directory Identity Protection](/azure/active-directory/active-directory-identityprotection) detects potential vulnerabilities affecting your organization’s identities, configures automated responses to detected suspicious actions related to your organization’s identities, and investigates suspicious incidents and takes appropriate action to resolve them.
-- [Azure Role-based Access Control (RBAC)](/azure/active-directory/role-based-access-control-configure) enables precisely focused access management for Azure. Subscription access is limited to the subscription administrator, and Azure Key Vault access is restricted to all users.
-
-To learn more about using the security features of Azure SQL Database, see the [Contoso Clinic Demo Application](https://github.com/Microsoft/azure-sql-security-sample) sample.
+- [Azure Active Directory (Azure AD)](https://azure.microsoft.com/services/active-directory/) is Microsoft's multi-tenant cloud-based directory and identity management service.
+- Authentication to a customer-deployed web application can be performed using Azure AD. For more information, see [Integrating applications with Azure Active Directory](https://docs.microsoft.com/azure/active-directory/develop/active-directory-integrating-applications).  
+- [Azure Role-based Access Control (RBAC)](https://docs.microsoft.com/azure/active-directory/role-based-access-control-configure) enables precisely focused access management for Azure. Subscription access is limited to the subscription administrator, and access to resources can be limited based on user role.
+- A deployed IaaS Active Directory instance provides identity management at the OS-level for deployed IaaS virtual machines.
    
-### Web and compute resources
+### Compute resources
 
-#### App Service Environment
+#### Web tier
 
-[Azure App Service](/azure/app-service/) is a managed service for deploying web apps. The Contoso Webstore application is deployed as an [App Service Web App](/azure/app-service-web/app-service-web-overview).
+The solution deploys web tier virtual machines in an [Availability Set](https://docs.microsoft.com/azure/virtual-machines/windows/tutorial-availability-sets). Availability sets ensure that the virtual machines are distributed across multiple isolated hardware clusters to improve availability.
 
-[Azure App Service Environment (ASE)](/azure/app-service/app-service-environment/intro) is an App Service feature that provides a fully isolated and dedicated environment for securely running App Service apps at high scale. it is a Premium service plan used by this foundational architecture to enable PCI DSS compliance.
+#### Database tier
 
-ASEs are isolated to running only a single customer's applications, and are always deployed into a virtual network. Customers have fine-grained control over both inbound and outbound application network traffic, and applications can establish high-speed secure connections over virtual networks to on-premises corporate resources.
+The solution deploys database tier virtual machines in an Availability Set as an [AlwaysOn availability group](https://docs.microsoft.com/azure/virtual-machines/windows/sql/virtual-machines-windows-portal-sql-availability-group-overview). The Always On availability group feature provides for high-availability and disaster-recovery capabilities. 
 
-Use of ASEs for this architecture allowed for the following controls/configurations:
+#### Active Directory
 
-- Host inside a secured Virtual Network and Network security rules
-- ASE configured with Self-signed ILB certificate for HTTPS communication
-- [Internal Load Balancing mode](/azure/app-service-web/app-service-environment-with-internal-load-balancer) (mode 3)
-- Disable [TLS 1.0](/azure/app-service-web/app-service-app-service-environment-custom-settings) - a TLS protocol which is deprecated from a PCI DSS standpoint
-- Change [TLS Cipher](/azure/app-service-web/app-service-app-service-environment-custom-settings)
-- Control [inbound traffic N/W ports](/azure/app-service-web/app-service-app-service-environment-control-inbound-traffic) 
-- [WAF – Restrict Data](/azure/app-service-web/app-service-app-service-environment-web-application-firewall)
-- Allow [SQL Database traffic](/azure/app-service-web/app-service-app-service-environment-network-architecture-overview)
-
+All virtual machines deployed by the solution are domain-joined, and Active Directory group policies are used to enforce security and compliance configurations at the operating system level. Active Directory virtual machines are deployed in an Availability Set.
 
 #### Jumpbox (bastion host)
 
-As the App Service Environment is secured and locked down, there needs to be a mechanism to allow for any DevOps releases or changes that might be necessary, such as the ability to monitor the web app using Kudu. Virtual machine is secured behind NAT Load Balancer which allows you to connect VM on a port other than TCP 3389. 
+A management jumpbox (bastion host) provides a secure connection for administrators to access deployed resources. The NSG associated with the management subnet where the jumpbox virtual machine is located allows connections only on TCP port 3389 for RDP. 
 
-A virtual machine was created as a jumpbox (bastion host) with the following configurations:
+### Malware protection
 
--   [Antimalware extension](/azure/security/azure-security-antimalware)
--   [OMS extension](/azure/virtual-machines/virtual-machines-windows-extensions-oms)
--   [Azure Diagnostics extension](/azure/virtual-machines/virtual-machines-windows-extensions-diagnostics-template)
--   [Azure Disk Encryption](/azure/security/azure-security-disk-encryption) using Azure Key Vault (respects Azure Government, PCI DSS, HIPAA and other requirements).
--   An [auto-shutdown policy](https://azure.microsoft.com/blog/announcing-auto-shutdown-for-vms-using-azure-resource-manager/) to reduce consumption of virtual machine resources when not in use.
-
-### Security and malware protection
-
-[Azure Security Center](https://azure.microsoft.com/services/security-center/) provides a centralized view of the security state of all your Azure resources. At a glance, you can verify that the appropriate security controls are in place and configured correctly, and you can quickly identify any resources that require attention.  
-
-[Azure Advisor](/azure/advisor/advisor-overview) is a personalized cloud consultant that helps you follow best practices to optimize your Azure deployments. It analyzes your resource configuration and usage telemetry and then recommends solutions that can help you improve the cost effectiveness, performance, high availability, and security of your Azure resources.
-
-[Microsoft Antimalware](/azure/security/azure-security-antimalware) 
-for Azure Cloud Services and Virtual Machines is real-time protection capability that helps identify and remove viruses, spyware, and other malicious software, with configurable alerts when known malicious or unwanted software attempts to install itself or run on your Azure systems.
+[Microsoft Antimalware](https://docs.microsoft.com/en-us/azure/security/azure-security-antimalware) for Virtual Machines provides real-time protection capability that helps identify and remove viruses, spyware, and other malicious software, with configurable alerts when known malicious or unwanted software attempts to install or run on protected virtual machines.
 
 ### Operations management
 
-#### Application Insights
-
-Use [Application Insights](https://azure.microsoft.com/services/application-insights/) to gain actionable insights through application performance management and instant analytics.
-
 #### Log analytics
 
-[Log Analytics](https://azure.microsoft.com/services/log-analytics/) is a service in Operations Management Suite (OMS) that helps you collect and analyze data generated by resources in your cloud and on-premises environments.
+[Log Analytics](https://azure.microsoft.com/services/log-analytics/) is a service in Operations Management Suite (OMS) that enables collection and analysis of data generated by resources in Azure and on-premises environments.
 
 #### OMS solutions
 
-The following OMS solutions are pre-installed as part of the foundational architecture:
-- [Activity Log Analytics](/azure/monitoring-and-diagnostics/monitoring-overview-activity-logs)
-- [Azure Networking Analytics](/azure/log-analytics/log-analytics-azure-networking-analytics?toc=%2fazure%2foperations-management-suite%2ftoc.json)
-- [Azure SQL Analytics](/azure/log-analytics/log-analytics-azure-sql)
-- [Change Tracking](/azure/log-analytics/log-analytics-change-tracking?toc=%2fazure%2foperations-management-suite%2ftoc.json)
-- [Key Vault Analytics](/azure/log-analytics/log-analytics-azure-key-vault?toc=%2fazure%2foperations-management-suite%2ftoc.json)
-- [Service Map](/azure/operations-management-suite/operations-management-suite-service-map)
-- [Security and Audit](https://www.microsoft.com/cloud-platform/security-and-compliance)
-- [Antimalware](/azure/log-analytics/log-analytics-malware?toc=%2fazure%2foperations-management-suite%2ftoc.json)
-- [Update Management](/azure/operations-management-suite/oms-solution-update-management)
-
-### Security Center integration
-
-Default deployment is intended to provide a baseline of security center recommendations, indicating a healthy and secure configuration state. You can enable data collection from the Azure Security Center. For more information, see [Azure Security Center - Getting Started](/azure/security-center/security-center-get-started).
+The following OMS solutions are pre-installed as part of this solution:
+- [AD Assessment](https://docs.microsoft.com/azure/log-analytics/log-analytics-ad-assessment)
+- [Antimalware Assessment](https://docs.microsoft.com/azure/log-analytics/log-analytics-malware)
+- [Azure Automation](https://docs.microsoft.com/azure/automation/automation-hybrid-runbook-worker)
+- [Security and Audit](https://docs.microsoft.com/azure/operations-management-suite/oms-security-getting-started)
+- [SQL Assessment](https://docs.microsoft.com/azure/log-analytics/log-analytics-sql-assessment)
+- [Update Management](https://docs.microsoft.com/azure/operations-management-suite/oms-solution-update-management)
+- [Agent Health](https://docs.microsoft.com/azure/operations-management-suite/oms-solution-agenthealth)
+- [Azure Activity Logs](https://docs.microsoft.com/azure/log-analytics/log-analytics-activity)
+- [Change Tracking](https://docs.microsoft.com/azure/log-analytics/log-analytics-activity)
 
 ## Deploy the solution
 
