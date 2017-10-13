@@ -12,7 +12,7 @@ For a quick overview of how this solution works, watch this [video]() explaining
 
 ## Solution components
 
-This Azure Blueprint Automation automatically deploys an IaaS web application reference architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. The solution consists of Azure Resource Manager templates and PowerShell scripts that guide resource deployment and configuration. Accompanying Azure Blueprint [compliance documentation](#customer-responsibility-matrix) is provided, indicating security control inheritance from Azure and the deployed resources and configurations that align with NIST SP 800-53 security controls, thereby enabling organizations to fast-track compliance obligations.
+This Azure Blueprint Automation automatically deploys an IaaS web application reference architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. The solution consists of Azure Resource Manager templates and PowerShell scripts that guide resource deployment and configuration. Accompanying Azure Blueprint [compliance documentation](#compliance documentation) is provided, indicating security control inheritance from Azure and the deployed resources and configurations that align with NIST SP 800-53 security controls, thereby enabling organizations to fast-track compliance obligations.
 
 ## Architecture diagram
 
@@ -20,7 +20,8 @@ This solution deploys a reference architecture for an IaaS web application with 
 
 ![alt text](docs/n-tier-diagram.png?raw=true "IaaS web application Blueprint automation for FedRAMP-compliant environments")
 
-This solution uses the following Azure services. Details of the deployment architecture are located in the [Deployment architecture](#Deployment-architecture) section.
+This solution uses the following Azure services. Details of the deployment architecture are located in the [Deployment architecture](#deployment-architecture) section.
+
 * **Azure Virtual Machines**
 	- (1) Management/bastion (Windows Server 2016 Datacenter)
 	- (2) Active Directory domain controller (Windows Server 2016 Datacenter)
@@ -69,13 +70,11 @@ The following section details the development and implementation elements.
 
 The architecture reduces the risk of security vulnerabilities using an Application Gateway with web application firewall (WAF), and the OWASP ruleset enabled. Additional capabilities include:
 
-- [End-to-End-SSL](/azure/application-gateway/application-gateway-end-to-end-ssl-powershell)
-- Enable [SSL Offload](/azure/application-gateway/application-gateway-ssl-portal)
-- Disable [TLS v1.0 and v1.1](/azure/application-gateway/application-gateway-end-to-end-ssl-powershell)
-- [Web application firewall](/azure/application-gateway/application-gateway-webapplicationfirewall-overview) (WAF mode)
-- [Prevention mode](/azure/application-gateway/application-gateway-web-application-firewall-portal) with OWASP 3.0 ruleset
-- Enable [diagnostics logging](/azure/application-gateway/application-gateway-diagnostics)
-- [Custom health probes](/azure/application-gateway/application-gateway-create-gateway-portal)
+- [End-to-End-SSL](https://docs.microsoft.com/azure/application-gateway/application-gateway-end-to-end-ssl-powershell)
+- Enable [SSL Offload](https://docs.microsoft.com/azure/application-gateway/application-gateway-ssl-portal)
+- Disable [TLS v1.0 and v1.1](https://docs.microsoft.com/azure/application-gateway/application-gateway-end-to-end-ssl-powershell)
+- [Web application firewall](https://docs.microsoft.com/azure/application-gateway/application-gateway-web-application-firewall-overview) (WAF mode)
+- [Prevention mode](https://docs.microsoft.com/azure/application-gateway/application-gateway-web-application-firewall-portal) with OWASP 3.0 ruleset
 
 #### Virtual network
 
@@ -159,6 +158,10 @@ A management jumpbox (bastion host) provides a secure connection for administrat
 
 [Microsoft Antimalware](https://docs.microsoft.com/en-us/azure/security/azure-security-antimalware) for Virtual Machines provides real-time protection capability that helps identify and remove viruses, spyware, and other malicious software, with configurable alerts when known malicious or unwanted software attempts to install or run on protected virtual machines.
 
+### Patch management
+
+Windows virtual machines deployed by this Blueprint Automation are configured by default to receive automatic updates from Windows Update Service. This solution also deploys the OMS Azure Automation solution through which Update Deployments can be created to deploy patches to Windows servers when needed.
+
 ### Operations management
 
 #### Log analytics
@@ -178,17 +181,19 @@ The following OMS solutions are pre-installed as part of this solution:
 - [Azure Activity Logs](https://docs.microsoft.com/azure/log-analytics/log-analytics-activity)
 - [Change Tracking](https://docs.microsoft.com/azure/log-analytics/log-analytics-activity)
 
+## Compliance documentaiton
+
 ## Customer responsibility matrix
 
-Customers are responsible for retaining a copy of the [Responsibility Summary Matrix](), which outlines the FedRAMP requirements that are the responsibility of the customer and those which are the responsibility of Microsoft.
+The [customer responsibilities matrix]() lists all security controls required by the FedRAMP High baseline. The matrix denotes, for each control (or control subpart), whether implementation responsibly for the control is the responsibility of Microsoft, the customer, or shared between the two. 
+
+## Control implementation matrix
+
+The [control implementation matrix]() lists all security controls required by the FedRAMP High baseline. The matrix denotes, for each control (or control subpart) that is designated a customer-responsibly in the customer responsibilities matrix, 1) if the Blueprint Automation implements the control, and 2) a description of how the implementation aligns with the control requirement(s). This content is also available [here]().
 
 ## Deploy the solution
 
-This Azure Blueprint solution is comprised of JSON configuration files and PowerShell scripts that are handled by Azure Resource Manager's API service to deploy resources within Azure. For more information about ARM template deployment see the following documentation:
-
-[Azure Resource Manager templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment)
-[ARM template functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-functions)
-[ARM templates and nesting resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates)
+This Azure Blueprint solution is comprised of JSON configuration files and PowerShell scripts that are handled by Azure Resource Manager's API service to deploy resources within Azure. 
 
 #### Quickstart
 1. Clone this repository to your local workstation.
@@ -241,8 +246,6 @@ Passwords must be at least 14 characters and contain one each of: lower case cha
 
 Note the resource group name and Key Vault name; these will be required during the deployment phase. The script will also generate an GUID for use during the deployment phase.
 
-------------------------------------------------------------------------
-
 ### DEPLOYMENT
 
 During this phase, an Azure Resource Manager (ARM) template will deploy Azure resources to your subscription and perform configuration activities.
@@ -280,10 +283,6 @@ See [TIMELINE.md](/docs/TIMELINE.md) for a resource dependency outline.
 
 ### POST-DEPLOYMENT
 
-#### Post-deployment instructions
-
-1. Set Retention time - Set the data retention time in the OMS resource blade from 31 to 365 days to meet FedRAMP compliance
-
 #### Accessing deployed resources
 
 You can access your machines through the MGT VM that is created from the deployment. From this VM, you can remote into and access any of the VMs in the network.
@@ -301,9 +300,9 @@ If you have a basic knowledge of how Azure Resource Manager (ARM) templates work
 
 For more information about template deployment, please refer to the following:
 
-1. [Azure Resource Manager Templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment)
-2. [ARM Template Functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-functions)
-3. [ARM Templating and Nesting Resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates)
+- [Azure Resource Manager Templates](https://docs.microsoft.com/azure/azure-resource-manager/resource-group-overview#template-deployment)
+- [ARM Template Functions](https://docs.microsoft.com/azure/azure-resource-manager/resource-group-template-functions)
+- [ARM Templating and Nesting Resources](https://docs.microsoft.com/azure/azure-resource-manager/resource-group-linked-templates)
 
 If you do not want to specifically alter the template contents, you can edit the parameters section at the top level of the JSON object within azuredeploy.json.
 
@@ -319,9 +318,7 @@ To help with deleting protected resources, use postdeploy/deleteProtectedItems.p
 
 ## Known Issues
 
-1. OMS Monitoring Extension fails intermittently on different machines ([See issue #95](https://github.com/AppliedIS/azure-blueprint/issues/95)).
-2. SQL Always On configuration is currently broken for SQL2016-WS2012R2 ([See issue #73](https://github.com/AppliedIS/azure-blueprint/issues/73)).
-3. Deployment only works successfully with a new key vault (it does not work with an existing key vault). This will force the user to run the pre-deployment script to create a new resource group and key vault before each deployment.
+1. Deployment only works successfully with a new Key Vault (it does not work with an existing Key Vault).
 
 ## Disclaimer
 
