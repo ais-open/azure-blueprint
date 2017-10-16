@@ -30,79 +30,95 @@ This outline provides an overview of the deployment timeline for cloud resources
 
         a. SQL Load Balancer
 
-6. **ProvisioningApplicationGateway** (4) - 10 mins | 16 min
+6. **Storage Accounts** (5)
 
-        a. Public IP for Application Gateway
-        b. Application Gateway (6b)
+        a. 1 WEB storage account + Operational Insights configuration
+        b. 1 MGT storage account + Operational Insights configuration
+        c. 1 SQL storage account + Operational Insights configuration
+        d. 1 DC storage account + Operational Insights configuration
+        e. 1 SQL File share Witness storage account + Operational Insights configuration
+        f. 1 SQL diagnostics storage account + Operational Insights configuration
+        g. 1 DC diagnostics storage account + Operational Insights configuration
 
-7. **ProvisioningNICsSQLADMGT** (5) - 30 sec | 7 min
+7. **Availability Sets** (5)
 
-        a. Public IP for MGT/Bastion
-        b. Primary DC Network Interface
-        c. Backup DC Network Interface
-        d. SQL 0 Network Interface
-        e. SQL 1 Network Interface
-        f. SQL Witness Network Interface
-        g. MGT/Bastion Network Interface (7a)
+        a. 1 Active Directory availability set
+        b. 1 SQL availability set
+        c. 1 WEB availability set
 
-8. **ProvisioningVMsSQLADMGT** (7, 3) - 1 hr 30 mins | 1 hr 40 min
+8. **ProvisionAndConfigureAD** (6,7)
 
-        a. Domain Controller Availability Set
-        b. SQL Controller Availability Set
-        c. SQL Storage Account for sql0 and sql1 VMs
-        d. Domain Controller Storage Account for dc VMs
-        e. SQL Storage Account for sqlw VMs
-        f. MGT/Bastion Storage Account mgt VMs
-        g. Diagnostics Storage Account for dcs
-        h. Diagnostics Storage Account for sql VMs
-        i. Primary Domain Controller VM (8a, 8d, 8g)
-            I. Primary Domain Controller Baseline DSC Extension
-        j. Backup Domain Controller VM (8a, 8d, 8g, 8i)
-        k. SQL VMs (8b, 8c, 8h) \*
-        l. SQL W VM (8b, 8e, 8h)
-        m. UpdatingDNStoPrimaryADVM (8i, 8iI)
-        n. ConfiguringBackupADVM (8j, 8m)
-          I. Backup Domain Controller Baseline DSC Extension
-        o. UpdatingDNSwithBackupADVM (8n)
-        p. UpdatingSQLWNic (8k, 8l, 8o)
-        q. UpdatingSQL0Nic (8p)
-        r. UpdatingSQL1Nic (8q)
-        s. MGT/Bastion VM (8f, 8o)
-          I. Domain Join Extension for MGT/Bastion
-          II. MGT/Bastion Basline DSC Extension
-        t. PreparingAlwaysOnSqlServer (8r)
-          I. SQLW Baseline DSC Extension
-          II. SQL0 Iaas Extension
-          III. SQL1 Iaas Extension
-          IV. SQL0 Baseline DSC Extension (8tI, 8tII)
-          V. SQL0 Antimalware Extension (8tIV)
-        u. ConfiguringAlwaysOn (8t)
-          I. SQL1 Baseline DSC Extension
-          II. SQL1 Antimaleware Extension (8uI)
-        v. ConfigurationVMEncryption (8i, 8j, 8k, 8l, 8s, 8u) \*
-          I. Azure Disk Encryption Extension
-        w. BackUp Configuration (8v) \*
-          I. Recovery Services Vault Protected Items
+        a. 1 Network Interface for primary domain controller
+        b. 1 Network Interface for backup domain controller
+        c. 1 Virtual Machine as primary domain controller (a)
+        d. 1 Virtual Machine as backup domain controller (b)
+        e. 1 DSC extension to configure baseline for primary domain controller (c)
+        f. 1 deployment to update virtual network DNS with primary domain controller (e)
+        g. 1 deployment to configure backup domain controller (f)
+            i. 1 DSC extension to configure backup domain controller
+        h. 1 deployment to update virtual network DNS with backup domain controller (g)
+        i. 1 deployment for configuring encryption for domain controllers (h)
+        j. 1 deployment for configuring backup up containers for domain controllers (j)
 
-9. **WebTier** (9) - 20 mins
+9. **ProvisioningNICs** (8)
 
-        a. Web Storage Account
-        b. Web Availability Set
-        c. Web Network Interfaces \*
-        d. Web VMs (9a, 9b, 9c) \*
-          I. Domain Join Extension for Web VMs \*
-          II. Web Baseline DSC Extension (9d, 9dI)
-        e. ConfigurationVMEncryption-WEB (9dII) \*
-          I. Azure Disk Encryption Extension
-        f. BackUp Configuration (9e) \*
-          I. Recovery Services Vault Protected Items
+        a. 1 Public IP for MGT
+        b. 1 Network Interface for primary SQL
+        c. 1 Network Interface for secondary SQL
+        d. 1 Network Interface for SQL witness
+        e. 1 Network Interface for MGT
+        f. n Network Interfaces for WEB
 
-10. **ConfigurationOMSMonitoring for Web VMs** (9) \*
+10. **ProvisioningApplicationGateway**
+
+        a. 1 Public IP for Application Gateway
+        b. 1 Application Gateway (6b)
+
+11. **ProvisioningVirtualMachines** (9)
+
+        a. 1 Primary SQL VM
+        b. 1 Secondary SQL VM
+        c. 1 SQL Witness VM
+        d. 1 MGT VM
+        e. n WEB VMs
+
+12. **ConfigureMGT** (11)
+
+        a. 1 domain join extension for MGT VM
+        b. 1 DSC extension to configure baseline for MGT VM (a)
+        c. 1 deployment for configuring encryption for MGT VM (b)
+        d. 1 deployment for configuring backup up containers for MGT VM (b)
+
+13. **ConfigureSQL** (11)
+
+        a. 1 deployment to update SQL Witness network interface with domain controllers as DNS servers
+        b. 1 deployment to update primary SQL network interface with domain controllers as DNS servers (a)
+        c. 1 deployment to update secondary SQL network interface with domain controllers as DNS servers (b)
+        e. 1 deployment to prepare SQL Always On
+            i. SQL Witness baseline DSC extension
+            ii. Primary SQL IAAS extension
+            iii. Secondary SQL IAAS extension
+            iv. Primary SQL baseline DSC (i, ii)
+            v. AntiMalware Extension for primary SQL (iv)
+
+14. **ConfigureWebTier** (11)
+
+        a. n domain join extension for WEB VMs
+        b. n DSC extension to configure baseline for WEB VMs (a)
+        c. n deployment for configuring encryption for WEB VMs (b)
+        d. n deployment for configuring backup up containers for WEB VMs (b)
+
+15. **ConfigurationOMSMonitoringSQLADMGT** (12, 13, 14) \*
 
         a. Microsoft Monitoring Agent Extension
         b. Hybrid Workers Custom Script Extension (10a)
 
-11. **ConfigurationAutomationSchedules for Web VMs** (10) \*
+16. **ConfigurationOMSMonitoringWEB** (12, 13, 14) \*
+
+        a. Microsoft Monitoring Agent Extension
+        b. Hybrid Workers Custom Script Extension (10a)
+
+17. **ConfigurationAutomationSchedules** (15,16) \*
 
         a. Automation Account Schedule
         b. Automation Account Job Schedule (11a)

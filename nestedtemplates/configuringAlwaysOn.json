@@ -140,7 +140,8 @@
                             "userName": "sqlsa",
                             "password": "privateSettingsRef:sqlAuthPassword"
                         },
-                        "NumberOfDisks": "[parameters('numberOfDisks')]"
+                        "NumberOfDisks": "[parameters('numberOfDisks')]",
+                        "WorkloadType": "GENERAL"
                     }
                 },
                 "protectedSettings": {

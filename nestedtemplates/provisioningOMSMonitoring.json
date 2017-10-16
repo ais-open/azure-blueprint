@@ -34,12 +34,27 @@
         },
         "MachinesToSetPasswordPolicy": {
             "type": "string"
+        },
+        "SQLPrimaryName": {
+            "type": "string"
+        },
+        "SQLSecondaryName": {
+            "type": "string"
+        },
+        "DomainName": {
+            "type": "string"
+        },
+        "AlwaysOnAvailabilityGroupName": {
+            "type": "string"
+        },
+        "secondarySqlCustomCMDUrl": {
+            "type": "string"
         }
     },
     "variables": {
         "scriptFolder": ".",
         "scriptFileName": "customScriptBaseline.ps1",
-        "scriptParameters": "[concat('-MachineName \"' ,parameters('vmName'), '\" -ResourceGroupName \"', parameters('ResourceGroupName'), '\" -AutomationAccountName \"', parameters('AutomationAccountName'), '\" -WorkspaceName \"', parameters('workspaceName'), '\" -AzureUserName \"', parameters('AzureUserName'), '\" -AzurePassword \"', parameters('AzurePassword'),'\" -SubscriptionId \"', parameters('SubscriptionId'), '\" -EnvironmentName \"', parameters('EnvironmentName'), '\" -MachinesToSetPasswordPolicy \"', parameters('MachinesToSetPasswordPolicy'), '\"' )]"
+        "scriptParameters": "[concat('-MachineName \"', parameters('vmName'), '\" -ResourceGroupName \"', parameters('ResourceGroupName'), '\" -AutomationAccountName \"', parameters('AutomationAccountName'), '\" -WorkspaceName \"', parameters('workspaceName'), '\" -AzureUserName \"', parameters('AzureUserName'), '\" -AzurePassword \"', parameters('AzurePassword'),'\" -SubscriptionId \"', parameters('SubscriptionId'), '\" -EnvironmentName \"', parameters('EnvironmentName'), '\" -MachinesToSetPasswordPolicy \"', parameters('MachinesToSetPasswordPolicy'), '\" -SQLPrimaryName \"', parameters('SQLPrimaryName'), '\"  -SQLSecondaryName \"', parameters('SQLSecondaryName'), '\" -DomainName \"', parameters('DomainName'), '\"  -AlwaysOnAvailabilityGroupName \"', parameters('AlwaysOnAvailabilityGroupName'), '\"' )]"
     },
     "resources": [
       {
@@ -80,7 +95,8 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "[parameters('customScriptBaselineUrl')]"
+                        "[parameters('customScriptBaselineUrl')]",
+                        "[parameters('secondarySqlCustomCMDUrl')]"
                     ]
                 },
                 "protectedSettings": {
