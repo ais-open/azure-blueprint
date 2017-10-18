@@ -401,7 +401,8 @@
                 "sqlAutobackupRetentionPeriod": "2",
                 "numberOfDisks": 2,
                 "ipAddressSql0": "10.200.1.6",
-                "ipAddressSql1": "10.200.1.7"
+                "ipAddressSql1": "10.200.1.7",
+                "serviceAccountUsername": "sqlservice"
             },
             "sqlw": {
                 "imagePublisher": "MicrosoftWindowsServer",
@@ -594,7 +595,7 @@
             "resourceNames": "[variables('resourceNames')]",
             "derivedIds": "[variables('derivedIds')]",
             "vmSettings": "[variables('vmSettings')]",
-            "sqlServerServiceAccountUserName": "[parameters('sqlServerServiceAccountUserName')]",
+            "sqlServerServiceAccountUserName": "[variables('vmSettings').sql.serviceAccountUsername]",
             "numberOfSqlVMDisks": "[variables('vmSettings').sql.numberOfDisks]"
         },
         "configuringAlwaysOnInfo": {
