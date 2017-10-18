@@ -1214,7 +1214,7 @@
                         "value": "[variables('vmSettings').location]"
                     },
                     "subnetPrefix": {
-                        "value": "[variables('subnets').appGatewaySubnet.properties.addressPrefix]"
+                        "value": "[variables('subnets').appGateway.properties.addressPrefix]"
                     },
                     "skuName": {
                         "value": "[variables('resourceNames').gatewaySkuName]"
@@ -1229,7 +1229,7 @@
                         "value": "/WEB"
                     },
                     "subnetName": {
-                        "value": "[variables('subnets').appGatewaySubnet.name]"
+                        "value": "[variables('subnets').appGateway.name]"
                     },
                     "wafEnabled": {
                         "value": "[variables('wafSettings').wafEnabled]"
