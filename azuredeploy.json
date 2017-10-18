@@ -785,7 +785,7 @@
                         "value": "[variables('resourceNames').nsgs.lb]"
                     },
                     "appGatewayAddressRange": {
-                        "value": "[parameters('appGatewaySubnet').properties.addressPrefix]"
+                        "value": "[variables('subnets').appGateway.properties.addressPrefix]"
                     }
                 }
             }
@@ -1184,7 +1184,7 @@
                         "value": "[variables('derivedIds').webSubnet]"
                     },
                     "webSubnetAddressRange": {
-                        "value": "[parameters('webSubnet').properties.addressPrefix]"
+                        "value": "[variables('subnets').web.properties.addressPrefix]"
                     }
                 }
             }
@@ -1214,7 +1214,7 @@
                         "value": "[variables('vmSettings').location]"
                     },
                     "subnetPrefix": {
-                        "value": "[parameters('appGatewaySubnet').properties.addressPrefix]"
+                        "value": "[variables('subnets').appGatewaySubnet.properties.addressPrefix]"
                     },
                     "skuName": {
                         "value": "[variables('resourceNames').gatewaySkuName]"
@@ -1229,7 +1229,7 @@
                         "value": "/WEB"
                     },
                     "subnetName": {
-                        "value": "[parameters('appGatewaySubnet').name]"
+                        "value": "[variables('subnets').appGatewaySubnet.name]"
                     },
                     "wafEnabled": {
                         "value": "[variables('wafSettings').wafEnabled]"
@@ -1774,7 +1774,7 @@
                         "value": "[variables('staticIPWEBStart')]"
                     },
                     "webSubnetAddressRange": {
-                        "value": "[parameters('webSubnet').properties.addressPrefix]"
+                        "value": "[variables('subnets').web.properties.addressPrefix]"
                     },
                     "backupInfo": {
                         "value": "[variables('backupInfo')]"
