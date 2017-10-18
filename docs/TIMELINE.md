@@ -5,7 +5,7 @@ This outline provides an overview of the deployment timeline for cloud resources
 
 ### Outline
 
-1. **CreateAutomationAccountAndOMSWorkspace** - 5 mins | 5 mins
+1. **ProvisionAutomationAccountAndOMSWorkspace** - 5 mins | 5 mins
 
         a. OMS Automation Account
         b. OMS Automation Account Module - Azure Profile (1a)  
@@ -13,24 +13,24 @@ This outline provides an overview of the deployment timeline for cloud resources
         d. Operational Insights Workspaces (1a)
         e. Operational Insights Workspaces Linked Services (1d, 1a)
 
-2. **RecoverServicesVault** - 10 sec
+2. **ProvisionRecoverServicesVault** - 10 sec
 
         a. Recovery Services Vault
 
-3. **BackupPolicyCustom** (2) - 5 sec | 15 sec
+3. **ProvisionCustomBackupPolicy** (2) - 5 sec | 15 sec
 
         a.  Recovery Services Vault BackUp Policies
 
-4. **VirtualNetworkNSG** (1) - 1 min | 6 min
+4. **ProvisionVirtualNetworkNSG** (1) - 1 min | 6 min
 
         a. Network Security Groups - Application Gateway, Domain Controllers, SQL, Web Tier, MGT
         b. Virtual Network (4a)
 
-5. **SQLLoadBalancer** (4) - 10 sec | 6 min
+5. **ProvisionSQLLoadBalancer** (4) - 10 sec | 6 min
 
         a. SQL Load Balancer
 
-6. **Storage Accounts** (5)
+6. **ProvisionStorageAccounts** (5)
 
         a. 1 WEB storage account + Operational Insights configuration
         b. 1 MGT storage account + Operational Insights configuration
@@ -40,7 +40,7 @@ This outline provides an overview of the deployment timeline for cloud resources
         f. 1 SQL diagnostics storage account + Operational Insights configuration
         g. 1 DC diagnostics storage account + Operational Insights configuration
 
-7. **Availability Sets** (5)
+7. **ProvisionAvailabilitySets** (5)
 
         a. 1 Active Directory availability set
         b. 1 SQL availability set
@@ -60,7 +60,7 @@ This outline provides an overview of the deployment timeline for cloud resources
         i. 1 deployment for configuring encryption for domain controllers (h)
         j. 1 deployment for configuring backup up containers for domain controllers (j)
 
-9. **ProvisioningNICs** (8)
+9. **ProvisionNICs** (8)
 
         a. 1 Public IP for MGT
         b. 1 Network Interface for primary SQL
@@ -69,12 +69,12 @@ This outline provides an overview of the deployment timeline for cloud resources
         e. 1 Network Interface for MGT
         f. n Network Interfaces for WEB
 
-10. **ProvisioningApplicationGateway**
+10. **ProvisionApplicationGateway**
 
         a. 1 Public IP for Application Gateway
         b. 1 Application Gateway (6b)
 
-11. **ProvisioningVirtualMachines** (9)
+11. **ProvisionVirtualMachines** (9)
 
         a. 1 Primary SQL VM
         b. 1 Secondary SQL VM
@@ -101,24 +101,24 @@ This outline provides an overview of the deployment timeline for cloud resources
             iv. Primary SQL baseline DSC (i, ii)
             v. AntiMalware Extension for primary SQL (iv)
 
-14. **ConfigureWebTier** (11)
+14. **ConfigureWEB** (11)
 
         a. n domain join extension for WEB VMs
         b. n DSC extension to configure baseline for WEB VMs (a)
         c. n deployment for configuring encryption for WEB VMs (b)
         d. n deployment for configuring backup up containers for WEB VMs (b)
 
-15. **ConfigurationOMSMonitoringSQLADMGT** (12, 13, 14) \*
+15. **ConfigureOMSMonitoringSQLADMGT** (12, 13, 14) \*
 
         a. Microsoft Monitoring Agent Extension
-        b. Hybrid Workers Custom Script Extension (10a)
+        b. Custom Script Extension for Hybrid Works, GPO Policy, SQL AO configuration (10a)
 
-16. **ConfigurationOMSMonitoringWEB** (12, 13, 14) \*
+16. **ConfigureOMSMonitoringWEB** (12, 13, 14) \*
 
         a. Microsoft Monitoring Agent Extension
-        b. Hybrid Workers Custom Script Extension (10a)
+        b. Custom Script Extension for Hybrid Works, GPO Policy (10a)
 
-17. **ConfigurationAutomationSchedules** (15,16) \*
+17. **ConfigureAutomationSchedules** (15,16) \*
 
         a. Automation Account Schedule
         b. Automation Account Job Schedule (11a)
