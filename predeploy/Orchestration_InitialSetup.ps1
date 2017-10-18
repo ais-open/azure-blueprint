@@ -162,15 +162,13 @@ function Generate-Cert() {
 
 		$filePath = ".\"
 
-		$cert = New-SelfSignedCertificate -certstorelocation cert:\localmachine\my -dnsname $domain
+		$cert = New-SelfSignedCertificate -certstorelocation cert:\localmachine\my -dnsname "contoso.local"
 		$path = 'cert:\localMachine\my\' + $cert.thumbprint
 		$certPath = $filePath + '\cert.pfx'
 		$outFilePath = $filePath + '\cert.txt'
 		Export-PfxCertificate -cert $path -FilePath $certPath -Password $certPassword
 		$fileContentBytes = get-content $certPath -Encoding Byte
 		[System.Convert]::ToBase64String($fileContentBytes) | Out-File $outFilePath
-		$certText = Get-Content $outFilePath -Raw
-		return $certText[1]
 
 }
 ########################################################################################################################
@@ -311,7 +309,8 @@ function orchestration
 
 		$certPassword = New-RandomPassword
 		$secureCertPassword = ConvertTo-SecureString $certPassword -AsPlainText -Force
-		$cert = Generate-Cert -certPassword $secureCertPassword -domain $domain
+		Generate-Cert -certPassword $secureCertPassword -domain $domain
+		$certificate = Get-Content -Path $outFilePath | Out-String
 
 		Write-Host "Set Azure Key Vault Access Policy. Set AzureUserName in Key Vault: $keyVaultName";
 		$key = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name 'azureUsername' -Destination 'Software'
@@ -337,7 +336,7 @@ function orchestration
 
 		Write-Host "Set Azure Key Vault Access Policy. Set sslCert in Key Vault: $keyVaultName";
 		$key = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name 'sslCert' -Destination 'Software'
-		$sslCertSecureString = ConvertTo-SecureString "$cert" -AsPlainText -Force
+		$sslCertSecureString = ConvertTo-SecureString "$certificate" -AsPlainText -Force
 		$secret = Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'sslCert' -SecretValue $sslCertSecureString
 
 		Write-Host "Set Azure Key Vault Access Policy. Set sslCertPassword in Key Vault: $keyVaultName";
@@ -370,7 +369,7 @@ function orchestration
 		$keyEncryptionKeyUrlSecureString = ConvertTo-SecureString $keyEncryptionKeyUrl -AsPlainText -Force
 		$secret = Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'keyEncryptionKeyURL' -SecretValue $keyEncryptionKeyUrlSecureString
 	}
-			
+
 }
 
 
