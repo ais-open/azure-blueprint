@@ -388,9 +388,9 @@
                 "sqlAOAGName": "alwayson-ag",
                 "workloadType": "GENERAL",
                 "sqlAOListenerName": "alwayson-ag-listener",
-                "sqlAOEPName": "[concat(variables('prepareAlwaysOnSQLInfo').dnsLabelPrefix,'-hadr')]",
-                "sharePath": "[concat(variables('prepareAlwaysOnSQLInfo').dnsLabelPrefix,'-fsw')]",
-                "clusterName": "[concat(variables('prepareAlwaysOnSQLInfo').dnsLabelPrefix,'-fc')]",
+                "sqlAOEPName": "[concat(variables('resourceNames').alwaysOnDnsPrefix,'-hadr')]",
+                "sharePath": "[concat(variables('resourceNames').alwaysOnDnsPrefix,'-fsw')]",
+                "clusterName": "[concat(variables('resourceNames').alwaysOnDnsPrefix,'-fc')]",
                 "sqlAutobackupRetentionPeriod": "2",
                 "numberOfDisks": 2,
                 "ipAddressSql0": "10.200.1.6",
@@ -484,6 +484,7 @@
         "virtualNetworkAddressRange": "10.200.0.0/16",
         "virtualNetworkNameWithSuffix": "[concat('autohav2VNET', uniqueString(resourceGroup().id))]",
         "resourceNames": {
+            "alwaysOnDnsPrefix": "aodns",
             "gatewaySkuName": "WAF_Medium",
             "automationSchedule":"VM-Patching-Schedule",
             "omsWorkspace": "[concat(uniqueString(resourceGroup().id), 'ws', parameters('environmentPrefix'))]",
@@ -583,7 +584,6 @@
             "mgtConfigurationFunction": "MGTBaselineDSC.ps1\\MGTBaselineDSC"
         },
         "prepareAlwaysOnSQLInfo": {
-            "dnsLabelPrefix": "aodns",
             "artifacts": "[variables('artifacts')]",
             "resourceNames": "[variables('resourceNames')]",
             "derivedIds": "[variables('derivedIds')]",
