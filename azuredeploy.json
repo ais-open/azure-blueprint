@@ -304,14 +304,14 @@
             "metadata": {
                 "description": "Linked Templates base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/nestedtemplates"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/sqlcomplete/nestedtemplates"
         },
         "dscBaseUrl": {
             "type": "string",
             "metadata": {
                 "description": "DSC Scripts base url"
             },
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/DSC"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/sqlcomplete/DSC"
         },
         "scriptsBaseUrl": {
             "type": "string",
@@ -319,7 +319,7 @@
                 "description": "DSC Scripts base url"
             },
 
-            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/master/custom-scripts"
+            "defaultValue": "https://raw.githubusercontent.com/AppliedIS/azure-blueprint/sqlcomplete/custom-scripts"
         },
         "sqlServerVersion": {
             "type": "string",
