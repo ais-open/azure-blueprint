@@ -248,13 +248,6 @@
             },
             "defaultValue": "Standard_D1_v2"
         },
-        "sqlServerServiceAccountUserName": {
-            "type": "string",
-            "metadata": {
-                "description": "The SQL Server Service Account name"
-            },
-            "defaultValue": "sqlservice"
-        },
         "sqlStorageAccountType": {
             "type": "string",
             "allowedValues": [
