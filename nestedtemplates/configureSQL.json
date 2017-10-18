@@ -6,7 +6,7 @@
             "type": "string"
         },
         "adminUsername": {
-            "type": "string"
+            "type": "securestring"
         },
         "adminPassword": {
             "type": "securestring"
@@ -24,7 +24,7 @@
             "type": "string"
         },
         "domainName": {
-            "type": "string"
+            "type": "securestring"
         },
         "sqlwVMName": {
             "type": "string"

@@ -12,13 +12,13 @@
         "type": "string"
     },
     "domainName": {
-        "type": "string",
+        "type": "securestring",
         "metadata": {
           "description": "The FQDN of the AD domain"
         }
     },
     "adminUsername": {
-        "type": "string",
+        "type": "securestring",
         "metadata": {
           "description": "Username of the account on the domain"
         }

@@ -12,13 +12,13 @@
           "type": "string"
       },
       "adminUsername": {
-          "type": "string"
+          "type": "securestring"
       },
       "adminPassword": {
           "type": "securestring"
       },
       "domainName": {
-          "type": "string"
+          "type": "securestring"
       },
       "domainJoinUserName": {
           "type": "string"

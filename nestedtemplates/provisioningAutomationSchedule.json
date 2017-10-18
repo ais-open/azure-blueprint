@@ -9,7 +9,7 @@
             "type": "string"
         },
         "scheduleJobGuid": {
-            "type": "string"
+            "type": "securestring"
         },
         "computerIdList": {
             "type": "string"

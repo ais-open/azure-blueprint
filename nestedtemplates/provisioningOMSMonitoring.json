@@ -42,7 +42,7 @@
             "type": "string"
         },
         "DomainName": {
-            "type": "string"
+            "type": "securestring"
         },
         "AlwaysOnAvailabilityGroupName": {
             "type": "string"

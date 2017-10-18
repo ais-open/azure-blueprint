@@ -12,7 +12,7 @@
       "type": "string"
     },
     "adminUsername": {
-      "type": "string"
+      "type": "securestring"
     },
     "environmentPrefix": {
       "type": "string"
@@ -99,7 +99,7 @@
       "type":"string"
     },
     "domainName": {
-      "type": "string"
+      "type": "securestring"
     },
     "witnessVMSize": {
       "type": "string"
