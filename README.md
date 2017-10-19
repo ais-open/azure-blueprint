@@ -11,13 +11,16 @@ This Azure Blueprint solution automatically deploys a multi-tier web application
 
 ## In this document
 
-[Architecture](#architecture) | [Deployment instructions](#deployment-instructions) | [Frequently asked questions](#frequently-asked-questions) | [Troubleshooting](#troubleshooting)
+* [Architecture](#architecture)
+* [Deployment instructions](#deployment-instructions)
+* [Frequently asked questions](#frequently-asked-questions)
+* [Troubleshooting](#troubleshooting)
 
 ----------------------------------------------------------------
 
 ## Architecture
 
-This solution deploys a notional architecture for a web application with a database backend. The architecture includes a web tier, data tier, Active Directory infrastructure, application gateway and load balancer. Virtual machines deployed to the web and data tiers are configured in an availability set and SQL Servers are configured in an AlwaysOn availability group for high availability. Virtual machines are domain-joined, and Active Directory group policies are used to enforce security and compliance configurations at the operating system level. A management jumpbox (bastion host) provides a secure connection for administrators to access deployed resources.
+This solution deploys a notional architecture for a web application with a database backend. The architecture includes a web tier, data tier, Active Directory infrastructure, application gateway, and load balancer. Virtual machines deployed to the web and data tiers are configured in an availability set, and SQL Server instances are configured in an AlwaysOn availability group for high availability. Virtual machines are domain-joined, and Active Directory group policies are used to enforce security and compliance configurations at the operating system level. A management jumpbox (bastion host) provides a secure connection for administrators to access deployed resources.
 
 ![alt text](docs/n-tier-diagram.png?raw=true "Azure Blueprint FedRAMP multi-tier web application architecture")
 
@@ -50,8 +53,8 @@ The architecture includes the following Azure services:
     - (1) Recovery Services vault
 * **Key Vault**
 	- (1) Key Vault
-	-- (3) Access policies (user, AADServicePrincipal, BackupFairFax)
-	-- (7) Secrets (aadClientID, aadClientSecret, adminPassword, azurePassword, azureUserName, keyEncryptionKeyURL, sqlServerServiceAccountPassword)
+	  - (3) Access policies (user, AADServicePrincipal, BackupFairFax)
+	  - (7) Secrets (aadClientID, aadClientSecret, adminPassword, azurePassword, azureUserName, keyEncryptionKeyURL, sqlServerServiceAccountPassword)
 * **Azure Active Directory**
 * **Azure Resource Manager**
 * **Log Analytics**
@@ -65,55 +68,55 @@ The architecture includes the following Azure services:
 
 ## Instructions
 
-This Azure Blueprint solution is comprised of JSON configuration files and PowerShell scripts that are handled by Azure Resource Manager's API service to deploy resources within Azure. For more information about ARM template deployment see the following documentation:
+This Azure Blueprint solution is comprised of JSON configuration files and PowerShell scripts that are handled by Azure Resource Manager's API service to deploy resources within Azure. For more information about ARM template deployment, see the following documentation:
 
-[Azure Resource Manager templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment)
-[ARM template functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-functions)
-[ARM templates and nesting resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates)
+- [Azure Resource Manager templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment)
+- [ARM template functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-functions)
+- [ARM templates and nesting resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates)
 
 ### PRE-DEPLOYMENT
 
-During pre-deployment, you will confirm that your Azure subscription and local workstation are prepared to deploy the solution. The final pre-deployment step will run a PowerShell script that verifies setup requirements, gathers parameters and credentials, and creates resources in Azure to prepare for deployment.
+During pre-deployment, you will confirm that your Azure subscription and local workstation are prepared to deploy the solution. The final pre-deployment step will run a PowerShell script that verifies the setup requirements, gathers parameters and credentials, and creates resources in Azure to prepare for deployment.
 
 #### Azure subscription requirements
 
-This Azure Blueprint solution is designed to deploy to Azure Government. The solution does not currently support Azure commercial regions. For customers with a multi-tenant environment, the account used to deploy must be a member of the Azure Active Directory associated with the subscription where this solution will be deployed.
+This Azure Blueprint solution is designed to deploy to Azure Government. The solution does not currently support Azure commercial regions. For customers with a multi-tenant environment, the account used to deploy must be a member of the Azure Active Directory instance that is associated with the subscription where this solution will be deployed.
 
 #### Local workstation requirements
 
-PowerShell is used to initiate some pre-deployment tasks. PowerShell version 5.0 or greater must be installed on your local workstation. In PowerShell, you can use the following command to check the version:
+PowerShell is used to initiate some pre-deployment tasks. PowerShell version 5.0 or greater must be installed on your local workstation. In PowerShell, use the following command to check the version:
 
 `$PSVersionTable.psversion`
 
-In order to run the pre-deployment script, you will need to have the current Azure PowerShell AzureRM modules installed (see [Installing AzureRM modules](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.1.0)).
+In order to run the pre-deployment script, you must have the current Azure PowerShell AzureRM modules installed (see [Installing AzureRM modules](https://docs.microsoft.com/en-us/powershell/azure/install-azurerm-ps?view=azurermps-4.1.0)).
 
 #### SSL certificate
-This solution deploys an Application Gateway and requires an SSL certificate. To generate a self-signed SSL certificate using PowerShell, run [this script](predeploy/generateCert.ps1). Note: self-signed certificates are not recommended for use in production environments.
+This solution deploys an Application Gateway and requires an SSL certificate. To generate a self-signed SSL certificate using PowerShell, run [this script](predeploy/generateCert.ps1). Note that self-signed certificates are not recommended for use in production environments.
 
 #### Pre-deployment script
 
-The pre-deployment PowerShell script will verify that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all setup requirements are verified, the script will ask you to sign into Azure and then prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters in order:
+The pre-deployment PowerShell script will verify that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all the setup requirements are verified, the script will ask you to sign into Azure and then will prompt you for parameters and credentials to use when the solution is deployed. The script will prompt you for the following parameters, in this order:
 
 * **Azure username**: Your Azure username (ex. someuser@contoso.onmicrosoft.com)
 * **Azure password**: Password for the Azure account above
 * **Admin username**: Administrator username you want to use for the administrator accounts on deployed virtual machines
-* **adminPassword**: Administrator password you want to use for the administrator accounts on deployed virtual machines (must complexity requirements, see below)
-* **sqlServerServiceAccountPassword**: SQL service account password you want to use (must complexity requirements, see below)
-* **subscriptionId**: To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu, and begin typing "subscription" in the filter box. Click on **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
-* **resourceGroupName**: Resource group name you want to use for this deployment; must be a string of 1-90 alphanumeric characters (0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis and cannot end in a period (e.g., `blueprint-rg`).
-* **keyVaultName**: Key Vault name you want to use for this deployment; must be a string 3-24 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government.
+* **adminPassword**: Administrator password you want to use for the administrator accounts on deployed virtual machines (must meet the complexity requirements; see below)
+* **sqlServerServiceAccountPassword**: SQL service account password you want to use (must meet the complexity requirements; see below)
+* **subscriptionId**: To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu, and begin typing "subscription" in the filter box. Click **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
+* **resourceGroupName**: Resource group name you want to use for this deployment; must be a string of 1-90 alphanumeric characters (such as 0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis, and it cannot end in a period (such as `blueprint-rg`).
+* **keyVaultName**: Key Vault name you want to use for this deployment; must be a string 3-24 alphanumeric characters (such as 0-9, a-z, A-Z) and hyphens, and it must be unique across Azure Government.
 
-Passwords must be at least 14 characters and contain one each of: lower case character, upper case character, number, special character.
+Passwords must be at least 14 characters and contain one each of the following: lower case character, upper case character, number, and special character.
 
 #### Pre-deployment instructions
 
-1. Clone this GitHub repository to your local workstation
+1. Clone this GitHub repository to your local workstation:
 `git clone https://github.com/AppliedIS/azure-blueprint.git`
 2. Start PowerShell as an administrator
 3. Run Orchestration_InitialSetup.ps1
 4. Enter the parameters above when prompted
 
-Note the resource group name and Key Vault name; these will be required during the deployment phase. The script will also generate an GUID for use during the deployment phase.
+Note the resource group name and Key Vault name; these will be required during the deployment phase. The script will also generate a GUID for use during the deployment phase.
 
 ------------------------------------------------------------------------
 
@@ -121,7 +124,7 @@ Note the resource group name and Key Vault name; these will be required during t
 
 During this phase, an Azure Resource Manager (ARM) template will deploy Azure resources to your subscription and perform configuration activities.
 
-After clicking the Deploy to Azure Gov button, the Azure portal will open and prompt for the following settings:
+After clicking the Deploy to Azure Gov button, the Azure portal will open and prompt you for the following settings:
 
 **Basics**
 * **Subscription**: Choose the same subscription used during the pre-deployment phase
@@ -129,14 +132,14 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 * **Location**: Select 'USGovVirginia'
 
 **Settings**
-* **Admin Username**: Administrator username you want to use for administrative accounts for deployed resources (can be the same username as entered during pre-deployment phase)
+* **Admin Username**: Administrator username you want to use for administrative accounts for deployed resources (can be the same username you entered during the pre-deployment phase)
 * **Key Vault Name**: Name of the Key Vault created during pre-deployment
 * **Key Vault Resource Group Name**: Name of the resource group created during pre-deployment
 * **Cert Data**: 64bit-encoded certificate for SSL
-* **Cert Password**: Password used to create certificate
+* **Cert Password**: Password used to create the certificate
 * **Scheduler Job GUID**: GUID for the runbook job to be started (use GUID output by pre-deployment script or run New-Guid in PowerShell)
-* **OMS Workspace Name**: Name you want to use for the Log Analytic workspace; must be a string 4-63 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government.
-* **OMS Automation Account Name**: Name you want to use for the automation account used with OMS; must be a string 6-50 alphanumeric characters (0-9, a-z, A-Z) and hyphens and must be unique across Azure Government.
+* **OMS Workspace Name**: Name you want to use for the Log Analytic workspace; must be a string 4-63 alphanumeric characters (such as 0-9, a-z, A-Z) and hyphens, and it must be unique across Azure Government.
+* **OMS Automation Account Name**: Name you want to use for the automation account used with OMS; must be a string 6-50 alphanumeric characters (such as 0-9, a-z, A-Z) and hyphens, and it must be unique across Azure Government.
 
 #### Deployment instructions
 
@@ -156,7 +159,7 @@ See [TIMELINE.md](/docs/TIMELINE.md) for a resource dependency outline.
 
 #### Post-deployment instructions
 
-1. Set Retention time - Set the data retention time in the OMS resource blade from 31 to 365 days to meet FedRAMP compliance
+1. Set Retention time - Set the data retention time in the OMS resource blade from 31 to 365 days to meet FedRAMP compliance.
 
 #### Accessing deployed resources
 
@@ -164,16 +167,16 @@ You can access your machines through the MGT VM that is created from the deploym
 
 #### Cost
 
-Deploying this solution will create resources within your Azure subscription. You will be responsible for the costs associated with these resources, so it is important that you review the applicable pricing and legal terms associated with all resources and offerings deployed as part of this solution. For cost estimates, you can use the Azure Pricing Calculator.
+Deploying this solution will create resources within your Azure subscription. You will be responsible for the costs associated with these resources, so it is important that you review the applicable pricing and legal terms associated with all the resources and offerings deployed as part of this solution. For cost estimates, you can use the Azure Pricing Calculator.
 
 #### Extending the Solution with Advanced Configuration
 
-If you have a basic knowledge of how Azure Resource Manager (ARM) templates work, you can customize the deployment by editing  azuredeploy.json or any of the templates located in the nested templates folder. Some items you might want to edit include but are not limited to:
+If you have a basic knowledge of how Azure Resource Manager (ARM) templates work, you can customize the deployment by editing  azuredeploy.json or any of the templates located in the nested templates folder. Some items you might want to edit include, but are not limited to:
 - Network Security Group rules (nestedtemplates/virtualNetworkNSG.json)
 - OMS alert rules and configuration (nestedtemplates/provisioningAutoAccOMSWorkspace)
 - Application Gateway routing rules (nestedtemplates/provisioningApplicationGateway.json)
 
-For more information about template deployment read the following links:
+For more information about template deployment, read the following links:
 
 1. [Azure Resource Manager Templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment)
 2. [ARM Template Functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-functions)
