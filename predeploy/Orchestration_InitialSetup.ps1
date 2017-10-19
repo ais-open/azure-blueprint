@@ -144,8 +144,8 @@ Function New-RandomPassword() {
     param(
         [int]$Length = 14
     )
-    $ascii=$NULL;For ($a=33;$a –le 126;$a++) {$ascii+=,[char][byte]$a }
-    For ($loop=1; $loop –le $length; $loop++) {
+    $ascii=$NULL;For ($a=33;$a -le 126;$a++) {$ascii+=,[char][byte]$a }
+    For ($loop=1; $loop -le $length; $loop++) {
         $RandomPassword+=($ascii | GET-RANDOM)
     }
     return $RandomPassword
