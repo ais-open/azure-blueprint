@@ -169,7 +169,7 @@ function Generate-Cert() {
 		Export-PfxCertificate -cert $path -FilePath $certPath -Password $certPassword
 		$fileContentBytes = get-content $certPath -Encoding Byte
 		[System.Convert]::ToBase64String($fileContentBytes) | Out-File $outFilePath
-
+		
 }
 ########################################################################################################################
 # Create KeyVault or setup existing keyVault
