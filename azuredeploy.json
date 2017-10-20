@@ -487,8 +487,8 @@
             "alwaysOnDnsPrefix": "aodns",
             "gatewaySkuName": "WAF_Medium",
             "automationSchedule":"VM-Patching-Schedule",
-            "omsWorkspace": "[substring(concat(uniqueString(resourceGroup().id), 'ws', parameters('environmentPrefix')), 5)]",
-            "automationAccount": "[substring(concat(uniqueString(resourceGroup().id), 'aa', parameters('environmentPrefix')), 5)]",
+            "omsWorkspace": "omswsA900",
+            "automationAccount": "omsaaA900",
             "recoveryServicesVault": "AZ-RCV-01",
             "virtualNetworkNameWithSuffix": "[concat('autohav2VNET', uniqueString(resourceGroup().id))]",
             "nsgs": {
