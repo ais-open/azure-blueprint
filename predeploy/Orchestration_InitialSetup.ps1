@@ -169,7 +169,7 @@ function Generate-Cert() {
 		Export-PfxCertificate -cert $path -FilePath $certPath -Password $certPassword
 		$fileContentBytes = get-content $certPath -Encoding Byte
 		[System.Convert]::ToBase64String($fileContentBytes) | Out-File $outFilePath
-		
+
 }
 ########################################################################################################################
 # Create KeyVault or setup existing keyVault
@@ -310,7 +310,7 @@ function orchestration
 		$certPassword = New-RandomPassword
 		$secureCertPassword = ConvertTo-SecureString $certPassword -AsPlainText -Force
 		Generate-Cert -certPassword $secureCertPassword -domain $domain
-		$certificate = Get-Content -Path $outFilePath | Out-String
+		$certificate = Get-Content -Path ".\cert.txt" | Out-String
 
 		Write-Host "Set Azure Key Vault Access Policy. Set AzureUserName in Key Vault: $keyVaultName";
 		$key = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name 'azureUsername' -Destination 'Software'
