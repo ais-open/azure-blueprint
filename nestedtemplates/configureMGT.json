@@ -12,7 +12,7 @@
         "type": "string"
     },
     "domainName": {
-        "type": "securestring",
+        "type": "string",
         "metadata": {
           "description": "The FQDN of the AD domain"
         }

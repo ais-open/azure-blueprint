@@ -99,7 +99,7 @@
       "type":"string"
     },
     "domainName": {
-      "type": "securestring"
+      "type": "string"
     },
     "witnessVMSize": {
       "type": "string"

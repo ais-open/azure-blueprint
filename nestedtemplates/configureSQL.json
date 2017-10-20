@@ -24,7 +24,7 @@
             "type": "string"
         },
         "domainName": {
-            "type": "securestring"
+            "type": "string"
         },
         "sqlwVMName": {
             "type": "string"

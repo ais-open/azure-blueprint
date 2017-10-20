@@ -21,6 +21,13 @@
                 "description": "Name of the resource group that holds the key vault above"
             }
         },
+        "domainName": {
+            "type": "string",
+            "defaultValue": "contoso.local",
+            "metadata": {
+                "description": "Name of domain"
+            }
+        },
         "configureSQLAO": {
           "type": "string",
           "defaultValue": "yes",
@@ -998,12 +1005,7 @@
                         "value": "[variables('vmSettings').vmContainerName]"
                     },
                     "domainName": {
-                      "reference": {
-                        "keyVault": {
-                          "id": "[variables('derivedIds').keyVaultId]"
-                        },
-                        "secretName": "domain"
-                      }
+                        "value":"[parameters('domainName')]"
                     },
                     "updateVnetWithDNSTemplateURL": {
                         "value": "[variables('artifacts').vnetwithDNSTemplateURL]"
@@ -1409,12 +1411,7 @@
                       "value": "[variables('vmSettings').mgt.imageSKU]"
                   },
                   "domainName": {
-                    "reference": {
-                      "keyVault": {
-                        "id": "[variables('derivedIds').keyVaultId]"
-                      },
-                      "secretName": "domain"
-                    }
+                      "value": "[parameters('domainName')]"
                   },
                   "witnessVMSize": {
                       "value": "[parameters('witnessVMSize')]"
@@ -1591,12 +1588,7 @@
                       "value": "[variables('vmSettings').location]"
                     },
                     "domainName": {
-                      "reference": {
-                        "keyVault": {
-                          "id": "[variables('derivedIds').keyVaultId]"
-                        },
-                        "secretName": "domain"
-                      }
+                        "value":"[parameters('domainName')]"
                     },
                     "sqlwVMName": {
                         "value": "[variables('resourceNames').vms.sqlw]"
@@ -1758,12 +1750,7 @@
                         "value": "[variables('derivedIds').webNSG]"
                     },
                     "domainName": {
-                      "reference": {
-                        "keyVault": {
-                          "id": "[variables('derivedIds').keyVaultId]"
-                        },
-                        "secretName": "domain"
-                      }
+                        "value":"[parameters('domainName')]"
                     },
                     "webModulesURL": {
                         "value": "[variables('artifacts').webModulesURL]"
@@ -1899,13 +1886,8 @@
                     "SQLSecondaryName": {
                         "value": "[variables('resourceNames').vms.sql0]"
                     },
-                    "DomainName": {
-                      "reference": {
-                        "keyVault": {
-                          "id": "[variables('derivedIds').keyVaultId]"
-                        },
-                        "secretName": "domain"
-                      }
+                    "domainName": {
+                        "value":"[parameters('domainName')]"
                     },
                     "AlwaysOnAvailabilityGroupName": {
                         "value": "[variables('vmSettings').sql.sqlAOAGName]"
@@ -1987,12 +1969,7 @@
                         "value": "[variables('resourceNames').vms.sql0]"
                     },
                     "DomainName": {
-                      "reference": {
-                        "keyVault": {
-                          "id": "[variables('derivedIds').keyVaultId]"
-                        },
-                        "secretName": "domain"
-                      }
+                        "value":"[parameters('domainName')]"
                     },
                     "AlwaysOnAvailabilityGroupName": {
                         "value": "[variables('vmSettings').sql.sqlAOAGName]"

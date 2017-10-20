@@ -12,7 +12,7 @@
             "type": "securestring"
         },
         "domainName": {
-            "type": "securestring"
+            "type": "string"
         },
         "bdcConfigurationFunction": {
             "type": "string"
