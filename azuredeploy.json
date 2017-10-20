@@ -708,7 +708,9 @@
             "comments": "Creates an Azure Recovery Services Vault",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
-            "dependsOn": [],
+            "dependsOn": [
+              "Microsoft.Resources/deployments/ProvisionAutomationAccountAndOMSWorkspace"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
