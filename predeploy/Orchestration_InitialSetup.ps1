@@ -162,7 +162,7 @@ function Generate-Cert() {
 
 		$filePath = ".\"
 
-		$cert = New-SelfSignedCertificate -certstorelocation cert:\localmachine\my -dnsname "contoso.local"
+		$cert = New-SelfSignedCertificate -certstorelocation cert:\localmachine\my -dnsname $domain
 		$path = 'cert:\localMachine\my\' + $cert.thumbprint
 		$certPath = $filePath + '\cert.pfx'
 		$outFilePath = $filePath + '\cert.txt'
