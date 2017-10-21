@@ -496,6 +496,7 @@
             "omsWorkspace": "[substring(concat(uniqueString(resourceGroup().id), 'ws', parameters('environmentPrefix')), 5)]",
             "automationAccount": "[substring(concat(uniqueString(resourceGroup().id), 'aa', parameters('environmentPrefix')), 5)]",
             "recoveryServicesVault": "AZ-RCV-01",
+            "automationSchedule": "VM-Patching-Schedule",
             "virtualNetworkNameWithSuffix": "[concat('autohav2VNET', uniqueString(resourceGroup().id))]",
             "nsgs": {
                 "mgt": "[concat('MGTNSG', parameters('environmentPrefix'))]",
