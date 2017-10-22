@@ -111,7 +111,7 @@
         },
         "azureRmProfile": {
             "name": "AzureRm.Profile",
-            "url": "https://devopsgallerystorage.blob.core.windows.net/packages/azurerm.profile.3.0.0.nupkg"
+            "url": "https://devopsgallerystorage.blob.core.windows.net/packages/azurerm.profile.3.4.1.nupkg"
         }
 
     },
