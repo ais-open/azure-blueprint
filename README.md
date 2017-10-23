@@ -10,6 +10,8 @@ This architecture is intended to serve as a foundation for customers to adjust t
 
 For a quick overview of how this solution works, watch this [video]() explaining and demonstrating its deployment.
 
+Click [here](#deploy-the-solution) to go to the deployment instructions.
+
 ## Solution components
 
 This Azure Blueprint Automation automatically deploys an IaaS web application reference architecture with pre-configured security controls to help customers achieve compliance with FedRAMP requirements. The solution consists of Azure Resource Manager templates and PowerShell scripts that guide resource deployment and configuration. Accompanying Azure Blueprint [compliance documentation](#compliance documentation) is provided, indicating security control inheritance from Azure and the deployed resources and configurations that align with NIST SP 800-53 security controls, thereby enabling organizations to fast-track compliance obligations.
