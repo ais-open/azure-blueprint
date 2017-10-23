@@ -1262,7 +1262,7 @@
                         },
                         "secretName": "sslPassword"
                       }
-                    },
+                    }
                 }
             }
         },
