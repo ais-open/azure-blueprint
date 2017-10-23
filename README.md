@@ -218,13 +218,13 @@ PowerShell is used to initiate some pre-deployment tasks. PowerShell version 5.0
 In order to run the pre-deployment script, you must have the current Azure PowerShell AzureRM modules installed (see [Installing AzureRM modules](https://docs.microsoft.com/powershell/azure/install-azurerm-ps)).
 
 #### SSL certificate
-This solution deploys an Application Gateway and requires an SSL certificate. To generate a self-signed SSL certificate using PowerShell, run [this script](predeploy/generateCert.ps1). Note that self-signed certificates are not recommended for use in production environments.
+This solution deploys an Application Gateway and requires an SSL certificate. The pre-deployment script will generate a self-signed SSL certificate after prompting for a domain (e.g., `contoso.local`). Note that self-signed certificates are not recommended for use in production environments.
 
 #### Pre-deployment script
 
 The pre-deployment PowerShell script will verify that the necessary Azure PowerShell modules are installed. Azure PowerShell modules provide cmdlets for managing Azure resources. After all the setup requirements are verified, the script will ask you to sign into Azure and will then prompt for parameters and credentials to use when the solution is deployed. The script will prompt for the following parameters, in this order:
 
-* **Azure username**: Your Azure username (ex. someuser@contoso.onmicrosoft.com)
+* **Azure username**: Your Azure username (e.g., someuser@contoso.onmicrosoft.com)
 * **Azure password**: Password for the Azure account above
 * **Admin username**: Administrator username you want to use for the administrator accounts on deployed virtual machines
 * **adminPassword**: Administrator password you want to use for the administrator accounts on deployed virtual machines (must meet the complexity requirements; see below)
@@ -232,6 +232,7 @@ The pre-deployment PowerShell script will verify that the necessary Azure PowerS
 * **subscriptionId**: To find your Azure Government subscription ID, navigate to https://portal.azure.us and sign in. Expand the service menu on the left side of the portal, select "more services," and begin typing "subscription" in the filter box. Click **Subscriptions** to open the subscriptions blade. Note the subscription ID, which has the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
 * **resourceGroupName**: Resource group name you want to use for this deployment; must be a string of 1-90 alphanumeric characters (such as 0-9, a-z, A-Z), periods, underscores, hyphens, and parenthesis and it cannot end in a period (e.g., such as `blueprint-rg`).
 * **keyVaultName**: Key Vault name you want to use for this deployment; must be a string 3-24 alphanumeric characters (such as 0-9, a-z, A-Z) and hyphens and must be unique across Azure Government.
+* **domain**: Domain name for the self-signed SSL certificate
 
 Passwords must be at least 14 characters and contain one each of the following: lower case character, upper case character, number, and special character.
 
@@ -243,7 +244,7 @@ Passwords must be at least 14 characters and contain one each of the following: 
 3. Run Orchestration_InitialSetup.ps1
 4. Enter the parameters above when prompted
 
-Note the resource group name and Key Vault name; these will be required during the deployment phase. The script will also generate a GUID for use during the deployment phase.
+Note the resource group name, and Key Vault name, and domain name; these will be required during the deployment phase.
 
 ### DEPLOYMENT
 
@@ -257,14 +258,11 @@ After clicking the Deploy to Azure Gov button, the Azure portal will open and pr
 * **Location**: Select 'USGovVirginia'
 
 **Settings**
-* **Admin Username**: Administrator username you want to use for administrative accounts for deployed resources (can be the same username you entered during the pre-deployment phase)
 * **Key Vault Name**: Name of the Key Vault created during pre-deployment
 * **Key Vault Resource Group Name**: Name of the resource group created during pre-deployment
-* **Cert Data**: 64bit-encoded certificate for SSL
-* **Cert Password**: Password used to create the certificate
-* **Scheduler Job GUID**: GUID for the runbook job to be started (use GUID output by pre-deployment script or run New-Guid in PowerShell)
-* **OMS Workspace Name**: Name you want to use for the Log Analytic workspace; must be a string 4-63 alphanumeric characters (such as 0-9, a-z, A-Z) and hyphens and it must be unique across Azure Government.
-* **OMS Automation Account Name**: Name you want to use for the automation account used with OMS; must be a string 6-50 alphanumeric characters (such as 0-9, a-z, A-Z) and hyphens and it must be unique across Azure Government.
+* **Domain Name**: Name of the domain used to generate the self-signed SSL certificate
+
+All other settings contain default values that may be adjusted by the user.
 
 #### Deployment instructions
 
