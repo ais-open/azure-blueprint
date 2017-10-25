@@ -1878,6 +1878,9 @@
                     "MachinesToSetPasswordPolicy": {
                         "value": "[concat(variables('resourceNames').vms.adpdc,';', variables('resourceNames').vms.adbdc)]"
                     },
+                    "isIISMachine": {
+                        "value": false
+                    },
                     "location": {
                         "value": "[variables('vmSettings').location]"
                     },
@@ -1959,6 +1962,9 @@
                     },
                     "MachinesToSetPasswordPolicy": {
                         "value": ""
+                    },
+                    "isIISMachine": {
+                        "value": true
                     },
                     "location": {
                         "value": "[variables('vmSettings').location]"
