@@ -436,32 +436,28 @@ catch {}
 
 try{
     # Configure IIS
-
     if([string]::IsNullOrWhiteSpace($IISMachines)){
         $IISMachineArray = $IISMachines.Split(";")
         $index = $IISMachineArray.IndexOf($MachineName)
         if($index -gt -1){
-
-          If (-Not ( Test-Path "C:\inetpub\wwwroot\index.html" )) {
-            New-Item C:\inetpub\wwwroot\index.html -ItemType "file" | out-null
-            Set-Content C:\inetpub\wwwroot\index.html -Value @"
-            <!doctype html>
-            <html>
-            <head>
-            <title>$MachineName</title>
-            </head>
-            <body>
-            <a href="https://github.com/AppliedIS/azure-blueprint"><h1>Weclome to Azure Blueprint</h1></a>
-            To verify that the Application Gateway load balancing algorithm is working, revisit this page and ensure that you are redirected to a different machine.
-
-            <h2> This is $MachineName</h2>
-            </body>
-            </html>
-            "@
+          If (-Not ( Test-Path ".\index.html" ))
+          {
+          New-Item .\index.html -ItemType "file" | out-null
+          Set-Content .\index.html -Value @"
+          <!doctype html>
+          <html>
+          <head>
+          <title>$MachineName</title>
+          </head>
+          <body>
+          <a href="https://github.com/AppliedIS/azure-blueprint"><h1>Weclome to Azure Blueprint</h1></a>
+          <p>To verify that the Application Gateway load balancing algorithm is working, revisit this page and ensure that you are redirected to a different machine.</p>
+          <h2>This is $MachineName</h2>
+          </body>
+          </html>
+"@
           }
-
         }
-
     }
 }
 catch{
