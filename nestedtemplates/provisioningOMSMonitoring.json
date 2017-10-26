@@ -12,7 +12,7 @@
             "type": "string"
         },
         "isIISMachine": {
-            "type": "bool"
+            "type": "string"
         },
         "ResourceGroupName": {
             "type": "string"

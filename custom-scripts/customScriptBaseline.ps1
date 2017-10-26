@@ -436,7 +436,7 @@ catch {}
 
 try{
     # Configure IIS
-    if($isIISMachine){
+    if([string]::IsNullOrWhiteSpace($isIISMachine)){
       If (-Not ( Test-Path "C:\inetpub\wwwroot\index.html" ))
       {
       New-Item .\index.html -ItemType "file" | out-null
