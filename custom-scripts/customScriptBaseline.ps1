@@ -10,7 +10,7 @@
         [String]$SubscriptionId,
         [String]$EnvironmentName,
         [String]$MachinesToSetPasswordPolicy,
-        [Bool]$isIISMachine,
+        [string]$isIISMachine,
         [String]$DomainName,
         [String]$SQLPrimaryName,
         [String]$SQLSecondaryName,
