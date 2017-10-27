@@ -355,7 +355,7 @@
 try{
     # Set Password Policy
 
-    if([string]::IsNullOrWhiteSpace($MachinesToSetPasswordPolicy)){
+    if(-Not ([string]::IsNullOrWhiteSpace($MachinesToSetPasswordPolicy))){
         $adMachineArray = $MachinesToSetPasswordPolicy.Split(";")
         $index = $adMachineArray.IndexOf($MachineName)
         if($index -gt -1){
@@ -379,52 +379,51 @@ catch{
 }
 
 try {
-      if([string]::IsNullOrWhiteSpace($SQLPrimaryName)){
-          if($SQLPrimaryName -eq $MachineName){
-              Import-Module Sqlps -DisableNameChecking;
-              $primaryInst = "$($SQLPrimaryName).$($DomainName)"
-              $secondaryInst = "$($SQLSecondaryName).$($DomainName)"
-              $MyAgPrimaryPath = "SQLSERVER:\SQL\$($primaryInst)\Default\AvailabilityGroups\$($AlwaysOnAvailablityGroupName)"
-              $MyAgSecondaryPath = "SQLSERVER:\SQL\$($secondaryInst)\Default\AvailabilityGroups\$($AlwaysOnAvailablityGroupName)"
 
-              #Add-Type -AssemblyName "Microsoft.SqlServer.Smo"
-              [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.SqlServer.Smo");
-              import-module SQLps;
-              # Connect to the specified instance
-              $srv = new-object ('Microsoft.SqlServer.Management.Smo.Server') $primaryInst
-              New-Item "f:\backup" –type directory
+    if($SQLPrimaryName -eq $MachineName){
+        Import-Module Sqlps -DisableNameChecking;
+        $primaryInst = "$($SQLPrimaryName).$($DomainName)"
+        $secondaryInst = "$($SQLSecondaryName).$($DomainName)"
+        $MyAgPrimaryPath = "SQLSERVER:\SQL\$($primaryInst)\Default\AvailabilityGroups\$($AlwaysOnAvailablityGroupName)"
+        $MyAgSecondaryPath = "SQLSERVER:\SQL\$($secondaryInst)\Default\AvailabilityGroups\$($AlwaysOnAvailablityGroupName)"
 
-              New-SMBShare –Name "Backup" –Path "f:\backup"  –FullAccess contoso\sqlservicetestuser,contoso\testuser
+        #Add-Type -AssemblyName "Microsoft.SqlServer.Smo"
+        [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.SqlServer.Smo");
+        import-module SQLps;
+        # Connect to the specified instance
+        $srv = new-object ('Microsoft.SqlServer.Management.Smo.Server') $primaryInst
+        New-Item "f:\backup" –type directory
 
-              # Cycle through the databases
-              foreach ($db in $srv.Databases) {
-                  if ($db.IsSystemObject -ne $True -and $db.Name -notlike "AutoHa*")
-                  {
-                      $dbname = $db.Name
-                      #"Changing database $dbname to set Recovery Model to Full"
-                      $db.RecoveryModel = 'Full'
-                      $db.Alter()
-                      $DatabaseBackupFile = "\\" + $primaryInst + "\Backup\" + $dbname +".bak"
-                      $LogBackupFile =   "\\" + $primaryInst + "\Backup\"  + $dbname +"_log.trn"
+        New-SMBShare –Name "Backup" –Path "f:\backup"  –FullAccess contoso\sqlservicetestuser,contoso\testuser
 
-                      Backup-SqlDatabase -Database $dbname -BackupFile $DatabaseBackupFile -ServerInstance $primaryInst
-                      Backup-SqlDatabase -Database $dbname -BackupFile $LogBackupFile -ServerInstance $primaryInst  -BackupAction Log
+        # Cycle through the databases
+        foreach ($db in $srv.Databases) {
+            if ($db.IsSystemObject -ne $True -and $db.Name -notlike "AutoHa*")
+            {
+                $dbname = $db.Name
+                #"Changing database $dbname to set Recovery Model to Full"
+                $db.RecoveryModel = 'Full'
+                $db.Alter()
+                $DatabaseBackupFile = "\\" + $primaryInst + "\Backup\" + $dbname +".bak"
+                $LogBackupFile =   "\\" + $primaryInst + "\Backup\"  + $dbname +"_log.trn"
 
-                      Restore-SqlDatabase -Database $dbname -BackupFile $DatabaseBackupFile -ServerInstance $secondaryInst -NoRecovery
-                      Restore-SqlDatabase -Database $dbname -BackupFile $LogBackupFile -ServerInstance $secondaryInst -RestoreAction 'Log'   -NoRecovery
+                Backup-SqlDatabase -Database $dbname -BackupFile $DatabaseBackupFile -ServerInstance $primaryInst
+                Backup-SqlDatabase -Database $dbname -BackupFile $LogBackupFile -ServerInstance $primaryInst  -BackupAction Log
 
-                      Add-SqlAvailabilityDatabase -Path $MyAgPrimaryPath -Database $dbname
-                      Add-SqlAvailabilityDatabase -Path $MyAgSecondaryPath -Database $dbname
+                Restore-SqlDatabase -Database $dbname -BackupFile $DatabaseBackupFile -ServerInstance $secondaryInst -NoRecovery
+                Restore-SqlDatabase -Database $dbname -BackupFile $LogBackupFile -ServerInstance $secondaryInst -RestoreAction 'Log'   -NoRecovery
 
-                  }
-              }
-          }
+                Add-SqlAvailabilityDatabase -Path $MyAgPrimaryPath -Database $dbname
+                Add-SqlAvailabilityDatabase -Path $MyAgSecondaryPath -Database $dbname
+
+            }
+        }
     }
 }
 catch{}
 
 try {
-      if([string]::IsNullOrWhiteSpace($SQLSecondaryName)){
+      if(-Not ([string]::IsNullOrWhiteSpace($SQLSecondaryName))){
           Import-Module Sqlps -DisableNameChecking;
           $domainPrefix = $DomainName.Split(".")[0]
           if($SQLSecondaryName -eq $MachineName){
@@ -436,11 +435,14 @@ catch {}
 
 try{
     # Configure IIS
-    if([string]::IsNullOrWhiteSpace($isIISMachine)){
-      If (-Not ( Test-Path "C:\inetpub\wwwroot\index.html" ))
+    if(-Not ([string]::IsNullOrWhiteSpace($isIISMachine))){
+      If ((Test-Path "C:\inetpub\www\index.html")) {
+        Remove-Item –path "C:\inetpub\www\index.html"
+      }
+      If (-Not ( Test-Path "C:\inetpub\www\index.html" ))
       {
-      New-Item .\index.html -ItemType "file" | out-null
-      Set-Content C:\inetpub\wwwroot\index.html -Value @"
+      #New-Item .\index.html -ItemType "file" | out-null
+      Set-Content C:\inetpub\www\index.html -Value @"
       <!doctype html>
       <html>
       <head>
